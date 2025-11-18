@@ -140,49 +140,10 @@ h1.name {
     flex-direction: column;
 }
 
-.badges::-webkit-scrollbar {
-    display: none; /* Makes the bar invisible */
-}
 
-/* HIDE SCROLLBAR (Firefox, IE, Edge) */
-.badges {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
 /* --- BADGE SCROLLING CONTAINER --- */
 .badges {
-    margin-top: 0.5rem;
-    width: 100%;
-    
-    /* Allows scrolling horizontally */
-    overflow-x: auto; 
-    overflow-y: hidden;
-    
-    /* Vital for smooth sliding on iOS */
-    -webkit-overflow-scrolling: touch;
-    
-    /* Flex layout ensures the iframe sits correctly */
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- THE "NUCLEAR" SCROLLBAR HIDE --- */
-
-/* 1. For Chrome, Safari, Edge, and the Simulator */
-.badges::-webkit-scrollbar {
-    width: 0px;  /* Remove vertical scrollbar space */
-    height: 0px; /* Remove horizontal scrollbar space */
-    background: transparent; /* Make it see-through */
-}
-
-/* 2. For Firefox */
-.badges {
-    scrollbar-width: none;
-}
-
-/* 3. For Internet Explorer (Old) */
-.badges {
-    -ms-overflow-style: none;
+    margin-top: 2rem;
 }
 
 /* --- IFRAME STYLE --- */
