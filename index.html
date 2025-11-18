@@ -21,46 +21,267 @@
             
             <ul class="nav-links">
                 <li><a href="#about" class="active">ABOUT</a></li>
-                <li><a href="#experience">EXPERIENCE</a></li>
                 <li><a href="#education">EDUCATION</a></li>
                 <li><a href="#skills">SKILLS</a></li>
-                <li><a href="#awards">AWARDS</a></li>
+                <li><a href="#workexperience">WORK EXPERIENCE</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#competitions-awards">COMPETITIONS & AWARDS</a></li>
+                <li><a href="#certifications">CERTIFICATIONS</a></li>
+                <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
             </ul>
+
+            <div class="sidebar-action">
+                <a href="assets/Alex_Gaffen_Resume.pdf" download class="download-btn">
+                    <i class="fas fa-file-pdf"></i> Download Resume
+                </a>
+            </div>
         </nav>
 
         <main class="content">
             
             <section id="about">
                 <h1 class="name">ALEX <span class="last-name">GAFFEN</span></h1>
-                <p class="contact-info">HAMILTON, ONTARIO, CANADA<br>alexgaffen@gmail.com</p>
+                
+                <p class="contact-info">HAMILTON, ONTARIO, CANADA <br> alexgaffen@gmail.com</p>
                 
                 <p class="bio">
-                    Junior Penetration Tester, Blue Teamer, CTF Player, Bug Bounty Hunter, Cybersecurity Enthusiast, Front End Web Developer
+                    Junior Penetration Tester, Blue Teamer, CTF Player, Bug Bounty Hunter, Front End Web Developer
                 </p>
 
                 <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/alexgaffen/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.linkedin.com/in/alexgaffen" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                     <a href="https://github.com/alexgaffen" target="_blank"><i class="fab fa-github"></i></a>
                     <a href="mailto:alexgaffen@gmail.com"><i class="fas fa-envelope"></i></a>
                 </div>
 
                 <div class="badges">
-
                     <h4 class="badge-title">TRYHACKME</h4>
-                    
                     <iframe 
                         src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4127939" 
                         class="thm-badge">
-                        style="border:none;"
                     </iframe>
                 </div>
             </section>
 
             <hr>
 
-            <section id="experience">
-                <h2>EXPERIENCE</h2>
-                <p>Add your internship or work details here...</p>
+            <section id="education">
+                <h2>EDUCATION</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Honours Computer Science Co-op (B.A.Sc.)</h3>
+                        <span class="job-date">2022-Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>McMaster University, Hamilton ON</h4>
+                    </div>
+                    
+                    <p>In 4th year of study with cumulative GPA of $3.4/4.0$ across all completed semesters. Recipient of the McMaster University Award of Excellence (\$3000) for admission to an Engineering program with an admission average (97.5%) in the top 10% of admitted students.</p>
+                    
+                    <div class="relevant-courses">
+                        <h4 class="course-header">Relevant Coursework:</h4>
+                        <ul>
+                            <li><strong>Applied Cryptography (A-)</strong>: Explored cryptographic protocols for securing software interfaces and data integrity.</li>
+                            <li><strong>Computer Networks and Security (B+)</strong>: Learning network protocols and security analytics for maintaining stable, secure operational systems, and Socket Programming.</li>
+                            <li><strong>Intro to Probability (A)</strong>: Covered fundamental probability concepts, random variables, discrete and continuous distributions, expectation and variance, and conditional probability.</li>
+                            <li><strong>Syntax-Based Tools & Compilers (A+)</strong>: Designed and implemented grammar-based parsing tools, abstract syntax tree transformations, and compiler optimization passes to automate language tooling and improve code performance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="skills">
+                <h2>SKILLS</h2>
+                
+                <div class="skills-grid">
+                    
+                    <div class="skill-category">
+                        <h3>LANGUAGES & CORE</h3>
+                        <div class="skill-items">
+                            <div class="skill-box python"><i class="fab fa-python"></i> Python</div>
+                            <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C/C++</div>
+                            <div class="skill-box bash"><i class="fas fa-terminal"></i> Bash</div>
+                            <div class="skill-box frontend html"><i class="fab fa-html5"></i> HTML</div>
+                            <div class="skill-box frontend css"><i class="fab fa-css3-alt"></i> CSS</div>
+                            <div class="skill-box frontend javascript"><i class="fab fa-js"></i> JavaScript</div>
+                            <div class="skill-box oop"><i class="fas fa-laptop-code"></i> OOP/SDLC/CI/CD</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>SECURITY & NETWORKING</h3>
+                        <div class="skill-items">
+                            <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
+                            <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
+                            <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+                            <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
+                            <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
+                            <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3>TOOLS & ENVIRONMENT</h3>
+                        <div class="skill-items">
+                            <div class="skill-box linux"><i class="fab fa-linux"></i> Unix / Linux</div>
+                            <div class="skill-box git"><i class="fab fa-git-alt"></i> Git / GitHub / GitLab</div>
+                            <div class="skill-box docker"><i class="fab fa-docker"></i> Docker</div>
+                            <div class="skill-box vscode"><i class="fas fa-code"></i> VScode</div>
+                            <div class="skill-box office"><i class="fas fa-file-alt"></i> MS Office</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>INTERPERSONAL & LEADERSHIP</h3>
+                        <div class="skill-items">
+                            <div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
+                            <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
+                            <div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
+                            <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="workexperience">
+                <h2>WORK EXPERIENCE</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Web Developer Intern</h3>
+                        <span class="job-date">Summer 2024</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Bonbon Technologies, Los Angeles, California (Remote)</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box frontend html"><i class="fab fa-html5"></i> HTML</div>
+                        <div class="skill-box frontend css"><i class="fab fa-css3-alt"></i> CSS</div>
+                        <div class="skill-box frontend javascript"><i class="fab fa-js"></i> JavaScript</div>
+                        <div class="skill-box svelte"><i class="fas fa-code"></i> Svelte</div>
+                        <div class="skill-box frontend"><i class="fas fa-code-branch"></i> Front End Dev</div>
+                        <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+                    </div>
+
+                    <ul>
+                        <li>Completed a work term of 4 months during the summer of 2024.</li>
+                        <li>Consistently met project deadlines utilizing the Svelte framework, Git, and GitHub to design and deploy web components that enhanced user engagement and registration for a loyalty program.</li>
+                        <li>Showcased adaptability and initiative during last minute design changes by other departments.</li>
+                        <li>Discussed business strategy and innovative AI solutions to reach a wider audience.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Swimming Pool Supervisor</h3>
+                        <span class="job-date">Summer 2023</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>City of Ottawa, Ottawa ON</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Leadership</div>
+                        <div class="skill-box communication"><i class="fas fa-comments"></i> Mentorship</div>
+                        <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+                        <div class="skill-box management"><i class="fas fa-calendar-check"></i> Scheduling</div>
+                    </div>
+
+                    <ul>
+                        <li>Practiced strong interpersonal and leadership skills in mentoring less experienced lifeguards while having to adapt changing policy and safety standards to ensure safety for all patrons.</li>
+                        <li>Exercised patience and compassion as the mediator for conflict resolution between children.</li>
+                        <li>Adhered to safety procedures set out by City of Ottawa for working with chlorine, cleaning up dangerous objects routinely, resulting in no injuries or issues.</li>
+                        <li>Created an efficient task schedule for workers every morning to streamline opening procedures.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <hr>
+
+            <section id="projects">
+                <h2>PROJECTS</h2>
+                
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Networked Battle Game</h3>
+                        <span class="job-date">Final Project (A+)</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Course: Computer Networks and Security</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C</div>
+                        <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+                        <div class="skill-box server"><i class="fas fa-server"></i> Client-Server Architecture</div>
+                    </div>
+
+                    <ul>
+                        <li>Developed a client-server game in C as the final project for Computer Networks and Security course.</li>
+                        <li>Implemented socket programming and network protocols to manage real-time data exchange and communication between multiple clients.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Matrix Visualizer Web App</h3>
+                        <span class="job-date">Grade Received: A-</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Team Collaboration (6 members)</h4>
+                    </div>
+
+                    <div class="project-skills-list">
+                        <div class="skill-box elm"><i class="fas fa-code"></i> Elm</div>
+                        <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UX/UI Design Principles</div>
+                    </div>
+
+                    <ul>
+                        <li>Collaborated in a team of 6 to design and code graphing software using Elm language.</li>
+                        <li>Followed UX and UI design principles for ease of use and aesthetic purposes.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="competitions-awards">
+                <h2>COMPETITIONS & AWARDS</h2>
+                
+                <h4 class="course-header">ACADEMIC & CONTEST AWARDS</h4>
+                <ul class="awards-list">
+                    <li>Recipient of the McMaster University Award of Excellence (\$3000).</li>
+                    <li>2022 Euclid Math Contest (University of Waterloo) — 1st in high school.</li>
+                    <li>2021 Canadian Senior Mathematics Contest (University of Waterloo) — 1st in high school.</li>
+                </ul>
+            </section>
+
+            <hr>
+            
+            <section id="certifications">
+                <h2>CERTIFICATIONS</h2>
+                <p>This is where you can list certifications like CompTIA Security+, CEH, or other relevant badges.</p>
+                <ul class="awards-list">
+                    <li>[Placeholder for Certification 1]</li>
+                    <li>[Placeholder for Certification 2]</li>
+                </ul>
+            </section>
+
+            <hr>
+            
+            <section id="hobbies-interests">
+                <h2>HOBBIES & INTERESTS</h2>
+                <ul class="awards-list">
+                    <li>🎻 McMaster Symphony Orchestra — Violinist.</li>
+                    <li>⚽🏈🏸 McMaster Intramural Sports — Soccer, Pickleball, Football Player.</li>
+                </ul>
             </section>
 
         </main>

@@ -1,9 +1,40 @@
+/* ------------------------------------------------------------- */
 /* 1. VARIABLES & RESET */
+/* ------------------------------------------------------------- */
 :root {
-    --primary-color: #bd5d5d;
+    /* RED COLOR (Sidebar background, last name, social hover) */
+    --red-color: #bd5d5d; 
+    
+    /* GREEN COLOR (Dates, Icons, Content Underlines) */
+    --green-color: #166534; 
+    
     --text-dark: #343a40;
     --text-light: #6c757d;
-    --sidebar-width: 300px; /* INCREASED from 260px to fit new image */
+    --sidebar-width: 320px; 
+
+    /* SKILL HOVER COLORS */
+    --hover-python: #3776ab;
+    --hover-linux: #000000;
+    --hover-git: #f1502f;
+    --hover-docker: #2496ed;
+    --hover-vscode: #007acc;
+    --hover-security: #008000;
+    --hover-frontend: #e34c26; 
+    --hover-cplusplus: #659AD3; 
+    --hover-socket: #4b0082; 
+    --hover-server: #ff4500; 
+    --hover-elm: #009ACD; 
+    --hover-uxui: #007ACC;
+    --hover-bug: #C70039;
+    --hover-management: #4CAF50; 
+    --hover-communication: #5D54A4; 
+    --hover-leadership: #CCAA00; 
+    --hover-mediation: #4A90E2; 
+    
+    /* CORRECTED HOVER COLORS */
+    --hover-javascript: #d9b709; 
+    --hover-css: #1572b6; 
+    --hover-problemsolving: #6C5CE7; 
 }
 
 * {
@@ -15,41 +46,79 @@
 body {
     font-family: 'Open Sans', sans-serif;
     color: var(--text-dark);
+    line-height: 1.6;
 }
 
-/* 2. LAYOUT */
+/* ------------------------------------------------------------- */
+/* 2. LAYOUT & CORE CONTENT */
+/* ------------------------------------------------------------- */
 .container {
     display: flex;
     min-height: 100vh;
 }
 
+/* CONTENT CONTAINER */
+.content {
+    margin-left: var(--sidebar-width);
+    padding: 4rem;
+    width: 100%;
+    background-color: #fff;
+}
+
+/* SECTION HEADER STYLING */
+h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3.2rem;
+    margin-bottom: 1.5rem; 
+    color: var(--text-dark);
+    border-bottom: 4px solid var(--green-color); /* Green Underline */
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* Separator Line */
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 3rem 0;
+}
+
+/* ############################################################# */
 /* 3. SIDEBAR STYLING */
+/* ############################################################# */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: var(--primary-color);
+    background-color: var(--red-color); /* RED BACKGROUND */
     position: fixed;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    
+    justify-content: flex-start; 
     align-items: center;
+    padding-top: 3rem; 
+    
     text-align: center;
     color: white;
-    z-index: 10; /* Keeps it on top */
+    z-index: 100; 
 }
 
+/* PROFILE IMAGE */
 .profile-img {
-    width: 230px;  /* UPDATED SIZE */
-    height: 230px; /* UPDATED SIZE */
+    width: 230px; 
+    height: 230px;
     border-radius: 50%;
     border: 8px solid rgba(255, 255, 255, 0.2);
     margin-bottom: 2rem;
     object-fit: cover;
 }
 
+/* NAVIGATION LINKS */
 .nav-links {
     list-style: none;
-    width: 100%;
+    width: 90%; 
+    padding-left: 0;
+    margin-top: 1rem;
 }
 
 .nav-links li a {
@@ -59,49 +128,77 @@ body {
     font-family: 'Oswald', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
-    padding: 0.5rem 0;
-    transition: color 0.3s;
+    padding: 0.7rem 0;
+    transition: color 0.3s, background 0.3s;
 }
 
 .nav-links li a:hover, 
 .nav-links li a.active {
     color: white;
+    background: rgba(0,0,0,0.1);
 }
 
-/* 4. CONTENT STYLING */
-.content {
-    margin-left: var(--sidebar-width); /* Matches new sidebar width */
-    padding: 4rem;
-    width: 100%;
+/* DOWNLOAD BUTTON */
+.sidebar-action {
+    position: absolute;
+    bottom: 30px;
+    width: 80%;
+    text-align: center;
 }
 
+.download-btn {
+    display: block;
+    padding: 10px 15px;
+    background-color: #f8f9fa; 
+    color: var(--green-color); /* Green text */
+    border: 2px solid var(--green-color);
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.download-btn i {
+    margin-right: 8px;
+}
+
+.download-btn:hover {
+    background-color: var(--green-color); /* Green hover */
+    color: white;
+}
+
+
+/* ############################################################# */
+/* 4. ABOUT SECTION STYLING */
+/* ############################################################# */
 h1.name {
     font-family: 'Oswald', sans-serif;
-    font-size: 4rem;
+    font-size: 4.5rem;
     text-transform: uppercase;
     line-height: 1;
     margin-bottom: 0.5rem;
 }
 
 .last-name {
-    color: var(--primary-color);
+    color: var(--red-color); /* RED Last Name (GAFFEN) */
 }
 
 .contact-info {
     font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--text-light);
     margin-bottom: 2rem;
     text-transform: uppercase;
 }
 
 .bio {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     margin-bottom: 2rem;
-    max-width: 700px;
+    max-width: 750px;
 }
 
-/* 5. SOCIAL ICONS */
+/* SOCIAL ICONS */
 .social-icons {
     margin-bottom: 3rem;
 }
@@ -110,54 +207,312 @@ h1.name {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     background-color: #495057;
     color: white;
     border-radius: 50%;
     margin-right: 1rem;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     transition: background-color 0.3s;
 }
 
 .social-icons a:hover {
-    background-color: var(--primary-color);
+    background-color: var(--red-color); /* RED social hover */
 }
 
-/* 6. BADGES & IFRAME */
-/* --- BADGE SCROLLING FIX --- */
+/* BADGES & IFRAME */
 .badges {
     margin-top: 0.5rem;
     width: 100%;
-    overflow-x: auto; /* Allows scrolling if content is too wide */
-    
-    /* SMOOTH SCROLLING FOR IOS */
+    overflow-x: auto; 
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch; 
-    
-    /* HIDE SCROLLBAR (Chrome, Safari, Opera) */
     display: flex;
     flex-direction: column;
+    margin-bottom: 0.5rem; /* REDUCED SPACE under badge */
 }
 
-
-/* --- BADGE SCROLLING CONTAINER --- */
+/* HIDES THE VISIBLE SCROLLBAR TRACK */
+.badges::-webkit-scrollbar {
+    width: 0px; 
+    height: 0px; 
+    background: transparent;
+}
 .badges {
-    margin-top: 2rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-/* --- IFRAME STYLE --- */
+.badge-title {
+    /* REMOVED: .badge-title is now unused in HTML, but kept styling clean */
+    width: 100%;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
 .thm-badge {
     border: none;
     width: 100%;
-    /* Keep strict max-width to ensure it fits layout logic */
     max-width: 450px; 
     height: 128px;
     border-radius: 8px;
-    flex-shrink: 0; /* Prevents the flex container from squishing it */
+    flex-shrink: 0;
+    
+    /* REMOVED: Badge Hover Effect */
+    transition: none; 
+    box-shadow: none; 
 }
-/* 7. RESPONSIVENESS (Mobile) */
+
+.thm-badge:hover {
+    /* ENSURE no hover effect remains */
+    transform: none; 
+    box-shadow: none; 
+}
+
+
+/* ############################################################# */
+/* 5. WORK EXPERIENCE, EDUCATION, PROJECTS (Common Styling) */
+/* ############################################################# */
+
+.job-item {
+    margin-bottom: 3rem; 
+    padding: 1rem 0;
+    border-left: 3px solid #eee; 
+    padding-left: 20px;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: baseline; 
+    margin-bottom: 0.2rem;
+}
+
+.job-item h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.7rem; 
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-dark);
+}
+
+.job-sub h4 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.job-date {
+    color: var(--green-color); /* Green dates */
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.job-item ul {
+    list-style: disc;
+    padding-left: 25px;
+    margin-top: 0.5rem;
+    color: #555;
+}
+
+/* EDUCATION Specific - Relevant Courses */
+.relevant-courses {
+    margin-top: 1.5rem;
+    padding-left: 1.5rem;
+    border-left: 3px solid var(--green-color); /* Green border */
+}
+
+.course-header {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+/* BOLDING THE COURSE NAMES */
+.relevant-courses ul li strong {
+    font-weight: 700; 
+    color: var(--text-dark); 
+}
+
+/* IN-LINE PROJECT SKILLS STYLING */
+.project-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    padding-left: 20px;
+}
+
+/* Reusing skill-box styling, but making them slightly smaller */
+.project-skills-list .skill-box {
+    padding: 0.4rem 0.7rem; 
+    font-size: 0.9rem;
+    border-color: #ddd; 
+    color: var(--text-dark); 
+}
+
+.project-skills-list .skill-box i {
+    color: var(--green-color); /* Default Green icons */
+    font-size: 1rem;
+}
+
+/* ############################################################# */
+/* 6. SKILLS SECTION & DYNAMIC HOVER COLORS */
+/* ############################################################# */
+
+.skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.skill-category h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    color: var(--green-color); /* Green sub-headers */
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.skill-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 1rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.skill-box {
+    background-color: #f8f9fa;
+    padding: 0.8rem 1.2rem;
+    border-radius: 5px;
+    font-weight: 600;
+    color: var(--text-dark);
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    display: flex; 
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.skill-box i {
+    color: var(--green-color); /* Green icons */
+    font-size: 1.2rem;
+}
+
+/* Default Hover state for skill boxes */
+.skill-box:hover {
+    color: white !important; 
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+.skill-box:hover i {
+    color: white !important;
+}
+
+/* --- TEXT VISIBILITY OVERRIDES (Force Dark Text on Light/Mid Tones) --- */
+
+.skill-box.javascript:hover,
+.skill-box.leadership:hover,
+.skill-box.mediation:hover,
+.skill-box.elm:hover,
+.skill-box.frontend:hover, 
+.skill-box.problem-solving:hover { 
+    color: var(--text-dark) !important; 
+}
+.skill-box.javascript:hover i,
+.skill-box.leadership:hover i,
+.skill-box.mediation:hover i,
+.skill-box.elm:hover i,
+.skill-box.frontend:hover i,
+.skill-box.problem-solving:hover i {
+    color: var(--text-dark) !important;
+}
+
+/* Skill-specific hover colors based on logo */
+.skill-box.python:hover { background-color: var(--hover-python); }
+.skill-box.cplusplus:hover { background-color: var(--hover-cplusplus); }
+.skill-box.bash:hover { background-color: var(--hover-linux); } 
+.skill-box.frontend.html:hover { background-color: var(--hover-frontend); }
+.skill-box.frontend.css:hover { background-color: var(--hover-css); } 
+.skill-box.frontend.javascript:hover { background-color: var(--hover-javascript); } 
+.skill-box.oop:hover { background-color: #000000; } 
+.skill-box.security:hover { background-color: var(--hover-security); }
+.skill-box.networking:hover { background-color: #004d40; } 
+.skill-box.plug:hover { background-color: var(--hover-socket); }
+.skill-box.cisco:hover { background-color: #1aa0d6; } 
+.skill-box.osi:hover { background-color: #8b4513; } 
+.skill-box.linux:hover { background-color: var(--hover-linux); }
+.skill-box.git:hover { background-color: var(--hover-git); }
+.skill-box.docker:hover { background-color: var(--hover-docker); }
+.skill-box.vscode:hover { background-color: var(--hover-vscode); }
+.skill-box.office:hover { background-color: #217346; } 
+.skill-box.svelte:hover { background-color: #ff3e00; }
+.skill-box.bug:hover { background-color: var(--hover-bug); }
+.skill-box.server:hover { background-color: var(--hover-server); }
+.skill-box.elm:hover { background-color: var(--hover-elm); }
+.skill-box.uxui:hover { background-color: var(--hover-uxui); }
+.skill-box.communication:hover { background-color: var(--hover-communication); }
+.skill-box.leadership:hover { background-color: var(--hover-leadership); }
+.skill-box.mediation:hover { background-color: var(--hover-mediation); }
+.skill-box.management:hover { background-color: var(--hover-management); }
+.skill-box.problem-solving:hover { background-color: var(--hover-problemsolving); }
+
+
+/* ############################################################# */
+/* 7. AWARDS, CERTS, HOBBIES LIST STYLING */
+/* ############################################################# */
+
+.awards-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.awards-list li {
+    font-size: 1.1rem;
+    padding: 10px 0;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+    border-left: 3px solid var(--text-light);
+    padding-left: 20px;
+}
+
+.awards-list li:before {
+    content: "\f054"; /* Right arrow icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--green-color); /* Green icon before list item */
+    margin-right: 10px;
+    font-size: 0.9rem;
+    position: relative;
+    left: -20px; 
+}
+
+.awards-list li:last-child {
+    border-bottom: none;
+}
+
+
+/* ############################################################# */
+/* 8. RESPONSIVENESS (Mobile View) */
+/* ############################################################# */
 @media (max-width: 900px) {
+    /* Layout Collapse */
     .container {
         flex-direction: column;
     }
@@ -167,11 +522,7 @@ h1.name {
         width: 100%;
         height: auto;
         padding: 3rem 0;
-    }
-    
-    .profile-img {
-        width: 200px; /* Slightly smaller on mobile to fit better */
-        height: 200px;
+        z-index: 10;
     }
     
     .content {
@@ -179,7 +530,38 @@ h1.name {
         padding: 2rem;
     }
 
+    /* Text & Image Size Adjustments */
+    .profile-img {
+        width: 180px;
+        height: 180px;
+    }
+    
     h1.name {
         font-size: 3rem;
+    }
+
+    /* Fixes for overlapping content and buttons */
+    .job-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .job-date {
+        margin-top: 0.3rem;
+    }
+
+    /* Fixes for Download Button */
+    .sidebar-action {
+        position: relative;
+        width: 90%;
+        margin: 1.5rem auto 0;
+        bottom: auto;
+    }
+    
+    /* Fix for small phones (iPhone SE) padding issue */
+    @media (max-width: 400px) {
+        .content {
+            padding: 1.5rem 1rem; 
+        }
     }
 }
