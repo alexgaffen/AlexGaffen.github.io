@@ -55,7 +55,6 @@
                 </div>
 
                 <div class="badges">
-                    <h4 class="badge-title">TRYHACKME</h4>
                     <iframe 
                         src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4127939" 
                         class="thm-badge">
@@ -65,7 +64,7 @@
 
             <hr>
 
-            <section id="education">
+            <section id="education" class="hidden">
                 <h2>EDUCATION</h2>
 
                 <div class="job-item">
@@ -74,6 +73,7 @@
                         <span class="job-date">2022-Present</span>
                     </div>
                     <div class="job-sub">
+                        <img src="assets/mcmaster.png" alt="McMaster University" class="edu-logo">
                         <h4>McMaster University, Hamilton ON</h4>
                     </div>
                     
@@ -88,12 +88,20 @@
                             <li><strong>Syntax-Based Tools & Compilers (A+)</strong>: Designed and implemented grammar-based parsing tools, abstract syntax tree transformations, and compiler optimization passes to automate language tooling and improve code performance.</li>
                         </ul>
                     </div>
+
+                    <div class="relevant-courses">
+                        <h4 class="course-header">Clubs & Activities:</h4>
+                        <ul>
+                            <li><strong>McMaster Cyber Society</strong>: Active member collaborating with peers to solve Capture The Flag (CTF) challenges, share security knowledge, and participate in team-based competitions.</li>
+                        </ul>
+                    </div>
+
                 </div>
             </section>
 
             <hr>
 
-            <section id="skills">
+            <section id="skills" class="hidden">
                 <h2>SKILLS</h2>
                 
                 <div class="skills-grid">
@@ -149,7 +157,7 @@
 
             <hr>
             
-            <section id="workexperience">
+            <section id="workexperience" class="hidden">
                 <h2>WORK EXPERIENCE</h2>
 
                 <div class="job-item">
@@ -205,8 +213,38 @@
             
             <hr>
 
-            <section id="projects">
+            <section id="projects" class="hidden">
                 <h2>PROJECTS</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>
+                            Mock Market
+                            <a href="https://github.com/alexgaffen/investor-practice-website" target="_blank" class="project-link" title="View Source Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </h3>
+                        <span class="job-date">Personal Project</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Full Stack Investor Practice Website</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box react"><i class="fab fa-react"></i> React</div>
+                        <div class="skill-box node"><i class="fab fa-node-js"></i> Node.js</div>
+                        <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C++</div>
+                        <div class="skill-box docker"><i class="fab fa-docker"></i> Docker</div>
+                        <div class="skill-box firebase"><i class="fas fa-fire"></i> Firebase</div>
+                    </div>
+
+                    <ul>
+                        <li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
+                        <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
+                        <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
+                        <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
+                    </ul>
+                </div>
                 
                 <div class="job-item">
                     <div class="job-header">
@@ -231,7 +269,12 @@
 
                 <div class="job-item">
                     <div class="job-header">
-                        <h3>Matrix Visualizer Web App</h3>
+                        <h3>
+                            Matrix Visualizer Web App
+                            <a href="https://github.com/singk17/MathVisualizer" target="_blank" class="project-link" title="View Source Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </h3>
                         <span class="job-date">Grade Received: A-</span>
                     </div>
                     <div class="job-sub">
@@ -252,7 +295,7 @@
 
             <hr>
 
-            <section id="competitions-awards">
+            <section id="competitions-awards" class="hidden">
                 <h2>COMPETITIONS & AWARDS</h2>
                 
                 <h4 class="course-header">ACADEMIC & CONTEST AWARDS</h4>
@@ -265,7 +308,7 @@
 
             <hr>
             
-            <section id="certifications">
+            <section id="certifications" class="hidden">
                 <h2>CERTIFICATIONS</h2>
                 <p>This is where you can list certifications like CompTIA Security+, CEH, or other relevant badges.</p>
                 <ul class="awards-list">
@@ -276,16 +319,29 @@
 
             <hr>
             
-            <section id="hobbies-interests">
+            <section id="hobbies-interests" class="hidden">
                 <h2>HOBBIES & INTERESTS</h2>
                 <ul class="awards-list">
-                    <li>🎻 McMaster Symphony Orchestra — Violinist.</li>
-                    <li>⚽🏈🏸 McMaster Intramural Sports — Soccer, Pickleball, Football Player.</li>
+                    <li>🎻 McMaster Symphony Orchestra — Violinist</li>
+                    <li>⚽🏈🏸 McMaster Intramural Team Sports — Soccer, Pickleball, Football</li>
                 </ul>
             </section>
 
         </main>
     </div>
+    
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
 
 </body>
 </html>

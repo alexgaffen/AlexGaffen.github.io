@@ -10,7 +10,7 @@
     
     --text-dark: #343a40;
     --text-light: #6c757d;
-    --sidebar-width: 320px; 
+    --sidebar-width: 340px; 
 
     /* SKILL HOVER COLORS */
     --hover-python: #3776ab;
@@ -34,7 +34,10 @@
     /* CORRECTED HOVER COLORS */
     --hover-javascript: #d9b709; 
     --hover-css: #1572b6; 
-    --hover-problemsolving: #6C5CE7; 
+    --hover-problemsolving: #6C5CE7;
+    --hover-react: #61DAFB;   
+    --hover-node: #339933;    
+    --hover-firebase: #FFCA28; 
 }
 
 * {
@@ -71,7 +74,7 @@ h2 {
     font-size: 3.2rem;
     margin-bottom: 1.5rem; 
     color: var(--text-dark);
-    border-bottom: 4px solid var(--green-color); /* Green Underline */
+    border-bottom: 4px solid var(--green-color); 
     padding-bottom: 0.5rem;
     display: inline-block;
 }
@@ -83,12 +86,28 @@ hr {
     margin: 3rem 0;
 }
 
+/* *************************************************************** */
+/* NEW: SCROLL REVEAL ANIMATION CLASSES */
+/* *************************************************************** */
+
+.hidden {
+    opacity: 0;
+    /* Increased vertical slide distance for clearer effect */
+    transform: translateY(50px); 
+    transition: all 0.8s ease-out; 
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0); 
+}
+
 /* ############################################################# */
-/* 3. SIDEBAR STYLING */
+/* 3. SIDEBAR STYLING (Vertical Shrinking Implemented) */
 /* ############################################################# */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: var(--red-color); /* RED BACKGROUND */
+    background-color: var(--red-color); 
     position: fixed;
     height: 100vh;
     display: flex;
@@ -105,8 +124,8 @@ hr {
 
 /* PROFILE IMAGE */
 .profile-img {
-    width: 230px; 
-    height: 230px;
+    width: 250px; 
+    height: 250px;
     border-radius: 50%;
     border: 8px solid rgba(255, 255, 255, 0.2);
     margin-bottom: 2rem;
@@ -150,7 +169,7 @@ hr {
     display: block;
     padding: 10px 15px;
     background-color: #f8f9fa; 
-    color: var(--green-color); /* Green text */
+    color: var(--green-color); 
     border: 2px solid var(--green-color);
     border-radius: 5px;
     text-decoration: none;
@@ -164,13 +183,51 @@ hr {
 }
 
 .download-btn:hover {
-    background-color: var(--green-color); /* Green hover */
+    background-color: var(--green-color); 
     color: white;
+}
+
+/* *************************************************************** */
+/* MEDIA QUERIES FOR VERTICAL SHRINKING */
+/* *************************************************************** */
+
+@media (max-height: 900px) {
+    .sidebar {
+        padding-top: 2rem; 
+    }
+    .profile-img {
+        width: 220px; 
+        height: 220px;
+        margin-bottom: 1.5rem;
+    }
+    .nav-links li a {
+        padding: 0.6rem 0; 
+        font-size: 0.95rem; 
+    }
+}
+
+@media (max-height: 750px) {
+    .sidebar {
+        padding-top: 1rem; 
+    }
+    .profile-img {
+        width: 170px; 
+        height: 170px;
+        margin-bottom: 1rem;
+    }
+    .nav-links li a {
+        padding: 0.4rem 0; 
+        font-size: 0.9rem;
+    }
+    .sidebar-action {
+        bottom: 15px; 
+        margin-bottom: 15px;
+    }
 }
 
 
 /* ############################################################# */
-/* 4. ABOUT SECTION STYLING */
+/* 4. ABOUT SECTION STYLING (Content Area) */
 /* ############################################################# */
 h1.name {
     font-family: 'Oswald', sans-serif;
@@ -181,7 +238,7 @@ h1.name {
 }
 
 .last-name {
-    color: var(--red-color); /* RED Last Name (GAFFEN) */
+    color: var(--red-color); 
 }
 
 .contact-info {
@@ -219,7 +276,7 @@ h1.name {
 }
 
 .social-icons a:hover {
-    background-color: var(--red-color); /* RED social hover */
+    background-color: var(--red-color); 
 }
 
 /* BADGES & IFRAME */
@@ -231,10 +288,9 @@ h1.name {
     -webkit-overflow-scrolling: touch; 
     display: flex;
     flex-direction: column;
-    margin-bottom: 0.5rem; /* REDUCED SPACE under badge */
+    margin-bottom: 0.5rem; 
 }
 
-/* HIDES THE VISIBLE SCROLLBAR TRACK */
 .badges::-webkit-scrollbar {
     width: 0px; 
     height: 0px; 
@@ -246,7 +302,6 @@ h1.name {
 }
 
 .badge-title {
-    /* REMOVED: .badge-title is now unused in HTML, but kept styling clean */
     width: 100%;
     font-family: 'Oswald', sans-serif;
     font-size: 1rem;
@@ -263,14 +318,11 @@ h1.name {
     height: 128px;
     border-radius: 8px;
     flex-shrink: 0;
-    
-    /* REMOVED: Badge Hover Effect */
     transition: none; 
     box-shadow: none; 
 }
 
 .thm-badge:hover {
-    /* ENSURE no hover effect remains */
     transform: none; 
     box-shadow: none; 
 }
@@ -302,6 +354,34 @@ h1.name {
     color: var(--text-dark);
 }
 
+/* PROJECT GITHUB LINK STYLING */
+.project-link {
+    color: var(--text-dark);
+    margin-left: 12px;
+    font-size: 2rem; 
+    transition: all 0.3s ease;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.project-link:hover {
+    color: var(--green-color); 
+    transform: scale(1.2); 
+}
+
+.job-sub {
+    display: flex;
+    align-items: center;
+}
+
+/* McMaster Logo Styling */
+.edu-logo {
+    height: 40px;
+    width: auto;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
 .job-sub h4 {
     font-family: 'Oswald', sans-serif;
     font-size: 1.2rem;
@@ -309,10 +389,11 @@ h1.name {
     font-weight: 500;
     margin-bottom: 1rem;
     text-transform: uppercase;
+    margin: 0; 
 }
 
 .job-date {
-    color: var(--green-color); /* Green dates */
+    color: var(--green-color); 
     font-family: 'Oswald', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
@@ -329,7 +410,7 @@ h1.name {
 .relevant-courses {
     margin-top: 1.5rem;
     padding-left: 1.5rem;
-    border-left: 3px solid var(--green-color); /* Green border */
+    border-left: 3px solid var(--green-color); 
 }
 
 .course-header {
@@ -365,7 +446,7 @@ h1.name {
 }
 
 .project-skills-list .skill-box i {
-    color: var(--green-color); /* Default Green icons */
+    color: var(--green-color); 
     font-size: 1rem;
 }
 
@@ -382,7 +463,7 @@ h1.name {
 .skill-category h3 {
     font-family: 'Oswald', sans-serif;
     font-size: 1.2rem;
-    color: var(--green-color); /* Green sub-headers */
+    color: var(--green-color); 
     margin-bottom: 1rem;
     border-bottom: 2px solid #eee;
     padding-bottom: 0.5rem;
@@ -410,7 +491,7 @@ h1.name {
 }
 
 .skill-box i {
-    color: var(--green-color); /* Green icons */
+    color: var(--green-color); 
     font-size: 1.2rem;
 }
 
@@ -425,13 +506,13 @@ h1.name {
 }
 
 /* --- TEXT VISIBILITY OVERRIDES (Force Dark Text on Light/Mid Tones) --- */
-
 .skill-box.javascript:hover,
 .skill-box.leadership:hover,
 .skill-box.mediation:hover,
 .skill-box.elm:hover,
 .skill-box.frontend:hover, 
-.skill-box.problem-solving:hover { 
+.skill-box.problem-solving:hover,
+.skill-box.firebase:hover { 
     color: var(--text-dark) !important; 
 }
 .skill-box.javascript:hover i,
@@ -439,7 +520,8 @@ h1.name {
 .skill-box.mediation:hover i,
 .skill-box.elm:hover i,
 .skill-box.frontend:hover i,
-.skill-box.problem-solving:hover i {
+.skill-box.problem-solving:hover i,
+.skill-box.firebase:hover i {
     color: var(--text-dark) !important;
 }
 
@@ -471,6 +553,9 @@ h1.name {
 .skill-box.mediation:hover { background-color: var(--hover-mediation); }
 .skill-box.management:hover { background-color: var(--hover-management); }
 .skill-box.problem-solving:hover { background-color: var(--hover-problemsolving); }
+.skill-box.react:hover { background-color: var(--hover-react); }
+.skill-box.node:hover { background-color: var(--hover-node); }
+.skill-box.firebase:hover { background-color: var(--hover-firebase); }
 
 
 /* ############################################################# */
@@ -488,8 +573,8 @@ h1.name {
     padding: 10px 0;
     margin-bottom: 5px;
     color: var(--text-dark);
-    border-left: 3px solid var(--text-light);
-    padding-left: 20px;
+    /* BORDER LEFT REMOVED */
+    padding-left: 0; 
 }
 
 .awards-list li:before {
@@ -500,7 +585,6 @@ h1.name {
     margin-right: 10px;
     font-size: 0.9rem;
     position: relative;
-    left: -20px; 
 }
 
 .awards-list li:last-child {
