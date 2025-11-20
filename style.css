@@ -246,7 +246,7 @@ h1.name {
     font-size: 1.3rem;
     color: var(--text-light);
     margin-bottom: 2rem;
-    text-transform: uppercase;
+    /* REMOVED: text-transform: uppercase; to allow mixed case */
 }
 
 .bio {
