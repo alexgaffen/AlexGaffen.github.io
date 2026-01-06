@@ -649,3 +649,74 @@ h1.name {
         }
     }
 }
+
+/* --- ABOUT SECTION STYLES --- */
+
+/* Center the name and contact info */
+#about {
+    text-align: left; /* Keep left alignment for readability, or change to center */
+    max-width: 800px; /* Prevents text from stretching too wide on big screens */
+}
+
+.name {
+    font-size: 3.5rem;
+    font-family: 'Oswald', sans-serif;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    color: #333; /* Dark grey for contrast */
+}
+
+.contact-info {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center; /* Vertically aligns text and flag */
+}
+
+.flag-icon {
+    height: 18px;
+    width: auto;
+    margin-left: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* --- NEW BIO STYLES --- */
+
+.bio-container {
+    background-color: #f9f9f9; /* Very light grey background to separate it */
+    border-left: 4px solid #0056b3; /* Blue accent bar on the left */
+    padding: 1.5rem 2rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 2rem;
+}
+
+.bio-container p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.7; /* Makes text easier to read */
+    color: #444;
+    margin-bottom: 1.2rem;
+}
+
+.bio-container p:last-child {
+    margin-bottom: 0;
+}
+
+/* Highlight keywords */
+.bio-container strong {
+    color: #0056b3;
+    font-weight: 600;
+}
+
+.bio-cta a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.bio-cta a:hover {
+    border-bottom: 2px solid #0056b3;
+}
