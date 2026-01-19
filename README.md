@@ -52,4 +52,4 @@ To view this project locally on your machine:
 - **Email:** alexgaffen@gmail.com
 
 ---
-&copy; 2025 Alex Gaffen
+&copy; 2026 Alex Gaffen
