@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 </head>
@@ -31,6 +32,11 @@
             </ul>
 
             <div class="sidebar-action">
+                <div class="sidebar-socials">
+                    <a href="https://www.linkedin.com/in/alexgaffen" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/alexgaffen" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="mailto:alexgaffen@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
                 <a href="assets/Alex_Gaffen_Resume.pdf" download class="download-btn">
                     <i class="fas fa-file-pdf"></i> Download Resume
                 </a>
@@ -40,7 +46,13 @@
         <main class="content">
             
             <section id="about">
-                <h1 class="name">ALEX <span class="last-name">GAFFEN</span></h1>
+                <div class="name-row">
+                    <h1 class="name">ALEX <span class="last-name">GAFFEN</span></h1>
+                    <iframe 
+                        src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4127939" 
+                        class="thm-badge-inline">
+                    </iframe>
+                </div>
                 
                 <p class="contact-info" style="text-transform: none;">
                     📍 Greater Toronto Area, Canada 
@@ -65,23 +77,12 @@
     </p>
 </div>
 
-                <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/alexgaffen" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://github.com/alexgaffen" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="mailto:alexgaffen@gmail.com"><i class="fas fa-envelope"></i></a>
-                </div>
 
-                <div class="badges">
-                    <iframe 
-                        src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4127939" 
-                        class="thm-badge">
-                    </iframe>
-                </div>
             </section>
 
             <hr>
 
-            <section id="education" class="hidden">
+            <section id="education" class="hidden section-burgundy">
                 <h2>EDUCATION</h2>
 
                 <div class="job-item">
@@ -106,21 +107,6 @@
                         </ul>
                     </div>
 
-                    <div class="relevant-courses">
-                        <h4 class="course-header">Clubs & Activities:</h4>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li>
-                                <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                                    <img src="assets/cyberclublogo.jpg" alt="Cyber Society" style="height: 40px; width: auto; margin-right: 12px; border-radius: 4px;">
-                                    <strong style="font-size: 1.1rem; color: var(--text-dark);">McMaster Cyber Society</strong>
-                                </div>
-                                <p style="margin-top: 0; padding-left: 5px; color: #555; line-height: 1.5;">
-                                    Active member collaborating with peers to solve Capture The Flag (CTF) challenges, share security knowledge, and participate in team-based competitions.
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-
                 </div>
             </section>
 
@@ -132,20 +118,27 @@
                 <div class="skills-grid">
                     
                     <div class="skill-category">
-                        <h3>LANGUAGES & CORE</h3>
+                        <h3>PROGRAMMING LANGUAGES & TOOLS</h3>
                         <div class="skill-items">
-                            <div class="skill-box python"><i class="fab fa-python"></i> Python</div>
-                            <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C/C++</div>
-                            <div class="skill-box bash"><i class="fas fa-terminal"></i> Bash</div>
-                            <div class="skill-box frontend html"><i class="fab fa-html5"></i> HTML</div>
-                            <div class="skill-box frontend css"><i class="fab fa-css3-alt"></i> CSS</div>
-                            <div class="skill-box frontend javascript"><i class="fab fa-js"></i> JavaScript</div>
-                            <div class="skill-box oop"><i class="fas fa-laptop-code"></i> OOP/SDLC/CI/CD</div>
+                            <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                            <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
+                            <div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
+                            <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+                            <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+                            <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+                            <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                            <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                            <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+                            <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
+                            <div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
+                            <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                            <div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
+                            <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
                         </div>
                     </div>
 
                     <div class="skill-category">
-                        <h3>SECURITY & NETWORKING</h3>
+                        <h3>CYBERSECURITY & NETWORKING</h3>
                         <div class="skill-items">
                             <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
                             <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
@@ -153,17 +146,6 @@
                             <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
                             <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
                             <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
-                        </div>
-                    </div>
-                    
-                    <div class="skill-category">
-                        <h3>TOOLS & ENVIRONMENT</h3>
-                        <div class="skill-items">
-                            <div class="skill-box linux"><i class="fab fa-linux"></i> Unix / Linux</div>
-                            <div class="skill-box git"><i class="fab fa-git-alt"></i> Git / GitHub / GitLab</div>
-                            <div class="skill-box docker"><i class="fab fa-docker"></i> Docker</div>
-                            <div class="skill-box vscode"><i class="fas fa-code"></i> VScode</div>
-                            <div class="skill-box office"><i class="fas fa-file-alt"></i> MS Office</div>
                         </div>
                     </div>
 
@@ -195,10 +177,10 @@
                     </div>
                     
                     <div class="project-skills-list">
-                        <div class="skill-box frontend html"><i class="fab fa-html5"></i> HTML</div>
-                        <div class="skill-box frontend css"><i class="fab fa-css3-alt"></i> CSS</div>
-                        <div class="skill-box frontend javascript"><i class="fab fa-js"></i> JavaScript</div>
-                        <div class="skill-box svelte"><i class="fas fa-code"></i> Svelte</div>
+                        <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+                        <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+                        <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+                        <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
                         <div class="skill-box frontend"><i class="fas fa-code-branch"></i> Front End Dev</div>
                         <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
                     </div>
@@ -234,10 +216,8 @@
                         <li>Created an efficient task schedule for workers every morning to streamline opening procedures.</li>
                     </ul>
                 </div>
-            </section>
-            
-            <hr>
-            <div class="job-item">
+
+                <div class="job-item">
                     <div class="job-header">
                         <h3>Computer Science High School Tutor</h3>
                         <span class="job-date">Fall 2022</span>
@@ -248,8 +228,8 @@
                     
                     <div class="project-skills-list">
                         <div class="skill-box communication"><i class="fas fa-chalkboard-teacher"></i> Teaching</div>
-                        <div class="skill-box python"><i class="fab fa-python"></i> Python</div>
-                        <div class="skill-box java"><i class="fab fa-java"></i> Java</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box java"><i class="devicon-java-plain colored"></i> Java</div>
                         <div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
                         <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
                     </div>
@@ -261,7 +241,11 @@
                         <li>Customized lesson plans to adapt to the student’s learning pace, resulting in improved academic performance and confidence in completing major capstone projects.</li>
                     </ul>
                 </div>
-            <section id="projects" class="hidden">
+            </section>
+
+            <hr>
+
+            <section id="projects" class="hidden section-orange">
                 <h2>PROJECTS</h2>
 
                 <div class="job-item">
@@ -279,11 +263,11 @@
                     </div>
                     
                     <div class="project-skills-list">
-                        <div class="skill-box react"><i class="fab fa-react"></i> React</div>
-                        <div class="skill-box node"><i class="fab fa-node-js"></i> Node.js</div>
-                        <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C++</div>
-                        <div class="skill-box docker"><i class="fab fa-docker"></i> Docker</div>
-                        <div class="skill-box firebase"><i class="fas fa-fire"></i> Firebase</div>
+                        <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                        <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                        <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
+                        <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                        <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
                     </div>
 
                     <ul>
@@ -291,6 +275,34 @@
                         <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
                         <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
                         <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>
+                            Ghost Shell
+                            <a href="https://github.com/alexgaffen" target="_blank" class="project-link" title="View Source Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </h3>
+                        <span class="job-date">Personal Project</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Autonomous AI Honeypot Agent</h4>
+                    </div>
+
+                    <div class="project-skills-list">
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box go"><i class="devicon-go-original-wordmark colored"></i> Go</div>
+                        <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                        <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Linux</div>
+                        <div class="skill-box ssh"><i class="fas fa-terminal"></i> SSH</div>
+                    </div>
+
+                    <ul>
+                        <li>Developing an autonomous AI agent in Python that prototypes intelligent automation by planning and executing commands via an LLM-driven reasoning loop.</li>
+                        <li>Built a custom Go-based terminal emulator and virtual honey-filesystem to provide a high-fidelity, sandboxed environment for capturing and analyzing malicious activity.</li>
                     </ul>
                 </div>
                 
@@ -304,7 +316,7 @@
                     </div>
                     
                     <div class="project-skills-list">
-                        <div class="skill-box cplusplus"><i class="fab fa-cuttlefish"></i> C</div>
+                        <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C</div>
                         <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
                         <div class="skill-box server"><i class="fas fa-server"></i> Client-Server Architecture</div>
                     </div>
@@ -330,7 +342,7 @@
                     </div>
 
                     <div class="project-skills-list">
-                        <div class="skill-box elm"><i class="fas fa-code"></i> Elm</div>
+                        <div class="skill-box elm"><i class="devicon-elm-plain colored"></i> Elm</div>
                         <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UX/UI Design Principles</div>
                     </div>
 
@@ -345,39 +357,154 @@
 
             <section id="competitions-awards" class="hidden">
                 <h2>COMPETITIONS & AWARDS</h2>
-                
-                <h4 class="course-header">ACADEMIC & CONTEST AWARDS</h4>
-                <ul class="awards-list">
-                    <li>Recipient of the McMaster University Award of Excellence ($3000).</li>
-                    <li>2022 Euclid Math Contest (University of Waterloo) — 1st in high school.</li>
-                    <li>2021 Canadian Senior Mathematics Contest (University of Waterloo) — 1st in high school.</li>
-                </ul>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster University Award of Excellence</h3>
+                        <span class="job-date">2023</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>McMaster University — Entrance Scholarship ($3,000)</h4>
+                    </div>
+                    <ul>
+                        <li>Awarded for outstanding academic achievement upon admission.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Euclid Mathematics Contest</h3>
+                        <span class="job-date">2022</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>University of Waterloo — 1st Place in School</h4>
+                    </div>
+                    <ul>
+                        <li>Achieved the highest score among all participants at my high school in this nationally recognized contest.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Canadian Senior Mathematics Contest</h3>
+                        <span class="job-date">2021</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>University of Waterloo — 1st Place in School</h4>
+                    </div>
+                    <ul>
+                        <li>Earned the top score at my high school in the CSMC, a national-level competition for senior students.</li>
+                    </ul>
+                </div>
             </section>
 
             <hr>
             
             <section id="certifications" class="hidden">
                 <h2>CERTIFICATIONS</h2>
-                <ul class="awards-list">
-                    <li>[Placeholder for Certification 1]</li>
-                    <li>[Placeholder for Certification 2]</li>
-                </ul>
+                <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
+                    Currently pursuing the following certifications to deepen my expertise in AI/ML.
+                </p>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Deep Learning Specialization</h3>
+                        <span class="job-date">Dec 2025 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>DeepLearning.AI (Coursera) — 5-Course Specialization by Andrew Ng</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box"><i class="devicon-tensorflow-original colored"></i> TensorFlow</div>
+                        <div class="skill-box"><i class="devicon-keras-plain colored"></i> Keras</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                    </div>
+                    <ul>
+                        <li>Neural Networks & Deep Learning — foundations of deep learning and neural network architectures.</li>
+                        <li>Improving Deep Neural Networks — hyperparameter tuning, regularization, and optimization (Adam, RMSprop, batch norm).</li>
+                        <li>Structuring Machine Learning Projects — ML strategy, error analysis, and transfer learning best practices.</li>
+                        <li>Convolutional Neural Networks (CNNs) — image recognition, object detection (YOLO), and neural style transfer.</li>
+                        <li>Sequence Models (RNNs/LSTMs) — NLP, attention mechanisms, and transformer architectures.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>PyTorch for Deep Learning</h3>
+                        <span class="job-date">Dec 2025 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>DeepLearning.AI (Coursera)</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box"><i class="devicon-pytorch-original colored"></i> PyTorch</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                    </div>
+                    <ul>
+                        <li>Building and training neural networks using PyTorch's dynamic computational graphs.</li>
+                        <li>Implementing CNNs, RNNs, and custom model architectures with torch.nn modules.</li>
+                        <li>GPU-accelerated training, model evaluation, and deployment workflows.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Machine Learning A-Z: AI, Python & R</h3>
+                        <span class="job-date">Dec 2024 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Udemy — Kirill Eremenko & Hadelin de Ponteves</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box"><i class="devicon-r-plain colored"></i> R</div>
+                        <div class="skill-box"><i class="fas fa-chart-line"></i> Scikit-learn</div>
+                    </div>
+                    <ul>
+                        <li>Regression, classification, clustering, and association rule learning with real-world datasets.</li>
+                        <li>Dimensionality reduction (PCA, LDA), model selection, and boosting (XGBoost).</li>
+                        <li>Natural Language Processing and reinforcement learning fundamentals.</li>
+                    </ul>
+                </div>
             </section>
 
             <hr>
             
             <section id="hobbies-interests" class="hidden">
                 <h2>HOBBIES & INTERESTS</h2>
-                <ul class="awards-list">
-                    <li>🎻 McMaster Symphony Orchestra — Violinist</li>
-                    <li>⚽🏈🏸 McMaster Intramural Team Sports — Soccer, Pickleball, Football</li>
-                </ul>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster Symphony Orchestra</h3>
+                        <span class="job-date">2022 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4><i class="fas fa-music" style="margin-right: 0.4rem;"></i>Violinist</h4>
+                    </div>
+                    <ul>
+                        <li>Perform as a violinist with the McMaster Symphony Orchestra, rehearsing and performing orchestral repertoire throughout the academic year.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster Intramural Team Sports</h3>
+                        <span class="job-date">2023 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4><i class="fas fa-futbol" style="margin-right: 0.4rem;"></i>Soccer, Pickleball, Football</h4>
+                    </div>
+                    <ul>
+                        <li>Compete in intramural leagues across multiple sports, fostering teamwork and sportsmanship in a competitive environment.</li>
+                    </ul>
+                </div>
             </section>
 
         </main>
     </div>
     
     <script>
+        // Scroll reveal animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -388,6 +515,34 @@
 
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
+
+        // Scroll-spy: highlight active nav link based on scroll position
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('section[id]');
+
+        function updateActiveNav() {
+            const scrollPos = window.scrollY + 120;
+
+            let currentId = '';
+            sections.forEach((section) => {
+                if (section.offsetTop <= scrollPos) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+
+            // If at the very top, default to about
+            if (window.scrollY < 50) currentId = 'about';
+
+            navLinks.forEach((link) => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
     </script>
 
 </body>

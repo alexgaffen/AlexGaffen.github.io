@@ -2,14 +2,21 @@
 /* 1. VARIABLES & RESET */
 /* ------------------------------------------------------------- */
 :root {
-    /* RED COLOR (Sidebar background, last name, social hover) */
-    --red-color: #bd5d5d; 
+    /* SIDEBAR (GitHub Dark Panel) */
+    --red-color: #161b22; 
     
-    /* GREEN COLOR (Dates, Icons, Content Underlines) */
-    --green-color: #166534; 
+    /* GITHUB BLUE ACCENT (Dates, Icons, Underlines, Links) */
+    --green-color: #58a6ff;
+
+    /* SECTION ACCENT COLORS */
+    --burgundy: #a51c30;
+    --orange: #f0883e;
     
-    --text-dark: #343a40;
-    --text-light: #6c757d;
+    --text-dark: #e6edf3;
+    --text-light: #8b949e;
+    --bg-dark: #0d1117;
+    --bg-card: #161b22;
+    --border-dark: #30363d;
     --sidebar-width: 340px; 
 
     /* SKILL HOVER COLORS */
@@ -50,6 +57,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     color: var(--text-dark);
     line-height: 1.6;
+    background-color: var(--bg-dark);
 }
 
 /* ------------------------------------------------------------- */
@@ -65,7 +73,7 @@ body {
     margin-left: var(--sidebar-width);
     padding: 4rem;
     width: 100%;
-    background-color: #fff;
+    background-color: var(--bg-dark);
 }
 
 /* SECTION HEADER STYLING */
@@ -73,7 +81,7 @@ h2 {
     font-family: 'Oswald', sans-serif;
     font-size: 3.2rem;
     margin-bottom: 1.5rem; 
-    color: var(--text-dark);
+    color: #f0f6fc;
     border-bottom: 4px solid var(--green-color); 
     padding-bottom: 0.5rem;
     display: inline-block;
@@ -82,7 +90,7 @@ h2 {
 /* Separator Line */
 hr {
     border: 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-dark);
     margin: 3rem 0;
 }
 
@@ -119,17 +127,21 @@ hr {
     
     text-align: center;
     color: white;
-    z-index: 100; 
+    z-index: 100;
+    border-right: 2px solid var(--border-dark);
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.4);
 }
 
 /* PROFILE IMAGE */
 .profile-img {
-    width: 250px; 
-    height: 250px;
+    width: 220px; 
+    height: 220px;
     border-radius: 50%;
-    border: 8px solid rgba(255, 255, 255, 0.2);
+    border: 4px solid var(--green-color);
     margin-bottom: 2rem;
     object-fit: cover;
+    object-position: 65% 45%;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
 }
 
 /* NAVIGATION LINKS */
@@ -143,7 +155,7 @@ hr {
 .nav-links li a {
     display: block;
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
     font-family: 'Oswald', sans-serif;
     font-weight: 700;
     letter-spacing: 1px;
@@ -153,11 +165,11 @@ hr {
 
 .nav-links li a:hover, 
 .nav-links li a.active {
-    color: white;
-    background: rgba(0,0,0,0.1);
+    color: var(--green-color);
+    background: rgba(88, 166, 255, 0.08);
 }
 
-/* DOWNLOAD BUTTON */
+/* DOWNLOAD BUTTON & SIDEBAR SOCIALS */
 .sidebar-action {
     position: absolute;
     bottom: 30px;
@@ -165,14 +177,59 @@ hr {
     text-align: center;
 }
 
+.sidebar-socials {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-badge {
+    margin-bottom: 0.8rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.thm-badge-sidebar {
+    border: none;
+    width: 90%;
+    height: 90px;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.sidebar-socials a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--bg-dark);
+    color: var(--green-color);
+    border: 1px solid var(--border-dark);
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.sidebar-socials a:hover {
+    background-color: rgba(88, 166, 255, 0.15);
+    color: var(--orange);
+    border-color: var(--orange);
+    transform: scale(1.1);
+}
+
 .download-btn {
     display: block;
     padding: 10px 15px;
-    background-color: #f8f9fa; 
-    color: var(--green-color); 
-    border: 2px solid var(--green-color);
-    border-radius: 5px;
+    background-color: var(--green-color); 
+    color: #0d1117; 
+    border: 1px solid var(--green-color);
+    border-radius: 6px;
     text-decoration: none;
+    font-weight: 700;
     font-family: 'Open Sans', sans-serif;
     font-weight: 700;
     transition: all 0.3s ease;
@@ -183,8 +240,9 @@ hr {
 }
 
 .download-btn:hover {
-    background-color: var(--green-color); 
-    color: white;
+    background-color: var(--orange); 
+    color: #0d1117;
+    border-color: var(--orange);
 }
 
 /* *************************************************************** */
@@ -235,10 +293,32 @@ h1.name {
     text-transform: uppercase;
     line-height: 1;
     margin-bottom: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+}
+
+.thm-badge-inline {
+    border: none;
+    width: 420px;
+    height: 120px;
+    border-radius: 6px;
+    background: transparent;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+    top: 8px;
+    left: 1rem;
 }
 
 .last-name {
-    color: var(--red-color); 
+    color: var(--green-color); 
 }
 
 .contact-info {
@@ -266,17 +346,20 @@ h1.name {
     align-items: center;
     width: 55px;
     height: 55px;
-    background-color: #495057;
-    color: white;
+    background-color: var(--bg-card);
+    color: var(--text-dark);
     border-radius: 50%;
     margin-right: 1rem;
     text-decoration: none;
     font-size: 1.3rem;
     transition: background-color 0.3s;
+    border: 1px solid var(--border-dark);
 }
 
 .social-icons a:hover {
-    background-color: var(--red-color); 
+    background-color: var(--green-color);
+    color: var(--bg-dark);
+    border-color: var(--green-color);
 }
 
 /* BADGES & IFRAME */
@@ -334,9 +417,11 @@ h1.name {
 
 .job-item {
     margin-bottom: 3rem; 
-    padding: 1rem 0;
-    border-left: 3px solid #eee; 
+    padding: 1.5rem;
+    border-left: 3px solid var(--green-color); 
     padding-left: 20px;
+    background-color: var(--bg-card);
+    border-radius: 0 6px 6px 0;
 }
 
 .job-header {
@@ -351,17 +436,19 @@ h1.name {
     font-size: 1.7rem; 
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--text-dark);
+    color: #f0f6fc;
 }
 
 /* PROJECT GITHUB LINK STYLING */
 .project-link {
-    color: var(--text-dark);
-    margin-left: 12px;
-    font-size: 2rem; 
+    color: var(--text-light);
+    margin-left: 10px;
+    font-size: 1.5rem; 
     transition: all 0.3s ease;
-    vertical-align: middle;
+    vertical-align: baseline;
     display: inline-block;
+    position: relative;
+    top: 2px;
 }
 
 .project-link:hover {
@@ -399,18 +486,26 @@ h1.name {
     font-weight: 600;
 }
 
+.job-item p {
+    color: #c9d1d9;
+}
+
 .job-item ul {
     list-style: disc;
     padding-left: 25px;
     margin-top: 0.5rem;
-    color: #555;
+    color: #c9d1d9;
 }
 
 /* EDUCATION Specific - Relevant Courses */
 .relevant-courses {
     margin-top: 1.5rem;
     padding-left: 1.5rem;
-    border-left: 3px solid var(--green-color); 
+    border-left: 3px solid var(--green-color);
+}
+
+.relevant-courses ul li {
+    color: #c9d1d9;
 }
 
 .course-header {
@@ -441,11 +536,11 @@ h1.name {
 .project-skills-list .skill-box {
     padding: 0.4rem 0.7rem; 
     font-size: 0.9rem;
-    border-color: #ddd; 
+    border-color: var(--border-dark); 
     color: var(--text-dark); 
 }
 
-.project-skills-list .skill-box i {
+.project-skills-list .skill-box i:not(.colored) {
     color: var(--green-color); 
     font-size: 1rem;
 }
@@ -465,7 +560,7 @@ h1.name {
     font-size: 1.2rem;
     color: var(--green-color); 
     margin-bottom: 1rem;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid var(--border-dark);
     padding-bottom: 0.5rem;
     display: inline-block;
 }
@@ -478,19 +573,19 @@ h1.name {
 }
 
 .skill-box {
-    background-color: #f8f9fa;
+    background-color: var(--bg-card);
     padding: 0.8rem 1.2rem;
     border-radius: 5px;
     font-weight: 600;
     color: var(--text-dark);
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--border-dark);
     transition: all 0.3s ease;
     display: flex; 
     align-items: center;
     gap: 0.8rem;
 }
 
-.skill-box i {
+.skill-box i:not(.colored) {
     color: var(--green-color); 
     font-size: 1.2rem;
 }
@@ -499,7 +594,8 @@ h1.name {
 .skill-box:hover {
     color: white !important; 
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    border-color: transparent;
 }
 .skill-box:hover i {
     color: white !important;
@@ -512,8 +608,9 @@ h1.name {
 .skill-box.elm:hover,
 .skill-box.frontend:hover, 
 .skill-box.problem-solving:hover,
-.skill-box.firebase:hover { 
-    color: var(--text-dark) !important; 
+.skill-box.firebase:hover,
+.skill-box.react:hover { 
+    color: #0d1117 !important; 
 }
 .skill-box.javascript:hover i,
 .skill-box.leadership:hover i,
@@ -521,8 +618,9 @@ h1.name {
 .skill-box.elm:hover i,
 .skill-box.frontend:hover i,
 .skill-box.problem-solving:hover i,
-.skill-box.firebase:hover i {
-    color: var(--text-dark) !important;
+.skill-box.firebase:hover i,
+.skill-box.react:hover i {
+    color: #0d1117 !important;
 }
 
 /* Skill-specific hover colors based on logo */
@@ -663,15 +761,15 @@ h1.name {
     font-family: 'Oswald', sans-serif;
     margin-bottom: 0.5rem;
     line-height: 1.1;
-    color: #333; /* Dark grey for contrast */
+    color: var(--text-dark);
 }
 
 .contact-info {
     font-size: 1.1rem;
-    color: #666;
+    color: var(--text-light);
     margin-bottom: 2rem;
     display: flex;
-    align-items: center; /* Vertically aligns text and flag */
+    align-items: center;
 }
 
 .flag-icon {
@@ -684,18 +782,19 @@ h1.name {
 /* --- NEW BIO STYLES --- */
 
 .bio-container {
-    background-color: #f9f9f9; /* Very light grey background to separate it */
-    border-left: 4px solid #0056b3; /* Blue accent bar on the left */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    border-left: 4px solid var(--green-color);
     padding: 1.5rem 2rem;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 6px 6px 0;
     margin-bottom: 2rem;
 }
 
 .bio-container p {
     font-family: 'Open Sans', sans-serif;
     font-size: 1.05rem;
-    line-height: 1.7; /* Makes text easier to read */
-    color: #444;
+    line-height: 1.7;
+    color: #c9d1d9;
     margin-bottom: 1.2rem;
 }
 
@@ -705,12 +804,12 @@ h1.name {
 
 /* Highlight keywords */
 .bio-container strong {
-    color: #0056b3;
+    color: var(--green-color);
     font-weight: 600;
 }
 
 .bio-cta a {
-    color: #0056b3;
+    color: var(--green-color);
     text-decoration: none;
     font-weight: 700;
     border-bottom: 2px solid transparent;
@@ -718,5 +817,36 @@ h1.name {
 }
 
 .bio-cta a:hover {
-    border-bottom: 2px solid #0056b3;
+    border-bottom: 2px solid var(--green-color);
+}
+
+/* ############################################################# */
+/* SECTION-SPECIFIC ACCENT COLORS */
+/* ############################################################# */
+
+/* Education — Harvard Burgundy */
+.section-burgundy h2 { border-bottom-color: var(--burgundy); }
+.section-burgundy .job-item { border-left-color: var(--burgundy); }
+.section-burgundy .job-date { color: var(--burgundy); }
+.section-burgundy .relevant-courses { border-left-color: var(--burgundy); }
+.section-burgundy .skill-box i:not(.colored),
+.section-burgundy .project-skills-list .skill-box i:not(.colored) { color: var(--burgundy); }
+
+/* Projects — Orange */
+.section-orange h2 { border-bottom-color: var(--orange); }
+.section-orange .job-item { border-left-color: var(--orange); }
+.section-orange .job-date { color: var(--orange); }
+.section-orange .skill-box i:not(.colored),
+.section-orange .project-skills-list .skill-box i:not(.colored) { color: var(--orange); }
+
+/* Devicon sizing in skill boxes */
+.skill-box i[class^="devicon"],
+.skill-box i[class*=" devicon"] {
+    font-size: 1.4rem;
+}
+
+/* Force white for dark-on-dark logos */
+.skill-box .devicon-bash-plain,
+.skill-box .devicon-linux-plain {
+    color: #e6edf3 !important;
 }
