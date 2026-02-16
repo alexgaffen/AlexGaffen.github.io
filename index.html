@@ -1,10 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen | Portfolio</title>
     
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); // TODO: Replace G-XXXXXXXXXX with your GA4 Measurement ID
+    </script>
+
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="style.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -17,7 +27,7 @@
     <div class="container">
         <nav class="sidebar">
             <div class="profile-container">
-                <img src="assets/profile.jpg" alt="Alex Gaffen" class="profile-img">
+                <img src="assets/Headshot.jpg" alt="Alex Gaffen" class="profile-img">
             </div>
             
             <ul class="nav-links">
@@ -30,6 +40,15 @@
                 <li><a href="#certifications">CERTIFICATIONS</a></li>
                 <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
             </ul>
+
+            <div class="sidebar-theme-toggle">
+                <span class="theme-label"><i class="fas fa-moon"></i></span>
+                <label class="theme-switch" title="Toggle light/dark mode">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="theme-label"><i class="fas fa-sun"></i></span>
+            </div>
 
             <div class="sidebar-action">
                 <div class="sidebar-socials">
@@ -47,28 +66,23 @@
         <main class="content">
             
             <section id="about">
-                <h1 class="name">ALEX <span class="last-name">GAFFEN</span></h1>
+                <h1 class="name">Alex <span class="last-name">Gaffen</span></h1>
+                <p class="tagline">💻 Computer Science · 🔐 Cybersecurity · 🧠 AI</p>
                 
-                <p class="contact-info" style="text-transform: none;">
-                    📍 Greater Toronto Area, Canada 
-                    <img src="assets/canadaflag.png" alt="Canada" style="height: 20px; vertical-align: middle; margin-left: 5px; position: relative; bottom: 2px;">
-                </p>
+                <div class="location-tags">
+                    <span class="location-tag"><i class="fas fa-map-marker-alt"></i> Greater Toronto Area</span>
+                    <span class="location-tag"><i class="fas fa-map-marker-alt"></i> Hamilton</span>
+                    <span class="location-tag"><i class="fas fa-map-marker-alt"></i> Ottawa</span>
+                    <img src="assets/canadaflag.png" alt="Canada" class="location-flag">
+                </div>
                 
 <div class="bio-container">
     <p class="bio-intro">
-        As a 4th year <strong>CS student @ McMaster U</strong>, I am driven by the challenge of building secure and efficient systems. My technical foundation is built on <strong>C/C++ and Python</strong>, with deep proficiency in Linux environments and Git version control.
-    </p>
-
-    <p class="bio-focus">
-        My primary focus lies at the intersection of <strong>AI & Cybersecurity</strong>. I am passionate about understanding vulnerabilities and developing robust solutions to protect digital infrastructure. I am constantly upskilling to stay ahead of the curve in this rapidly evolving field.
+        4th year CS student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>and in Linux, and I'm especially interested in <strong>AI and cybersecurity</strong>: understanding how systems break and how to make them stronger.
     </p>
 
     <p class="bio-personal">
-        Beyond the terminal, I believe in the importance of discipline and precision. These are traits I cultivate through <strong>high-level athletics and playing the violin</strong>. I bring this same level of dedication and rhythm to my code.
-    </p>
-
-    <p class="bio-cta">
-        I am currently seeking opportunities to contribute to innovative security and development teams. <a href="#contact">Let’s connect!</a>
+        Outside of code, I play violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural sports</strong>. I'm currently looking for opportunities in AI Research & Engineering, and Cybersecurity. <a href="mailto:alexgaffen@gmail.com">Let's connect!</a>
     </p>
 </div>
 
@@ -78,7 +92,7 @@
             <hr>
 
             <section id="education" class="hidden section-burgundy">
-                <h2>EDUCATION</h2>
+                <h2><i class="fas fa-graduation-cap section-icon"></i>EDUCATION</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -122,7 +136,7 @@
             <hr>
 
             <section id="skills" class="hidden">
-                <h2>SKILLS</h2>
+                <h2><i class="fas fa-cogs section-icon"></i>SKILLS</h2>
                 
                 <div class="skills-grid">
                     
@@ -174,11 +188,11 @@
             <hr>
             
             <section id="workexperience" class="hidden section-teal">
-                <h2>WORK EXPERIENCE</h2>
+                <h2><i class="fas fa-briefcase section-icon"></i>WORK EXPERIENCE</h2>
 
                 <div class="job-item">
                     <div class="job-header">
-                        <h3>Web Developer Intern</h3>
+                        <h3>Front End Developer Intern</h3>
                         <span class="job-date">Summer 2024</span>
                     </div>
                     <div class="job-sub">
@@ -204,7 +218,7 @@
 
                 <div class="job-item">
                     <div class="job-header">
-                        <h3>Swimming Pool Supervisor</h3>
+                        <h3>Lifeguard & Pool Supervisor</h3>
                         <span class="job-date">Summer 2023</span>
                     </div>
                     <div class="job-sub">
@@ -255,7 +269,7 @@
             <hr>
 
             <section id="projects" class="hidden section-orange">
-                <h2>PROJECTS</h2>
+                <h2><i class="fas fa-code section-icon"></i>PROJECTS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -365,7 +379,7 @@
             <hr>
 
             <section id="competitions-awards" class="hidden section-gold">
-                <h2>COMPETITIONS & AWARDS</h2>
+                <h2><i class="fas fa-trophy section-icon"></i>COMPETITIONS & AWARDS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -410,7 +424,7 @@
             <hr>
             
             <section id="certifications" class="hidden section-purple">
-                <h2>CERTIFICATIONS</h2>
+                <h2><i class="fas fa-certificate section-icon"></i>CERTIFICATIONS</h2>
                 <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
                     Currently pursuing the following certifications to deepen my expertise in AI/ML.
                 </p>
@@ -480,7 +494,7 @@
             <hr>
             
             <section id="hobbies-interests" class="hidden section-coral">
-                <h2>HOBBIES & INTERESTS</h2>
+                <h2><i class="fas fa-heart section-icon"></i>HOBBIES & INTERESTS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -509,21 +523,65 @@
                 </div>
             </section>
 
+            <footer class="site-footer">
+                <p>&copy; 2026 Alex Gaffen. All rights reserved.</p>
+            </footer>
+
         </main>
     </div>
     
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
     <script>
-        // Scroll reveal animation
+        // Always start at the top on page load/refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
+        // Scroll reveal animation with staggered children
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('show');
+                    // Stagger child job-items
+                    const children = entry.target.querySelectorAll('.job-item');
+                    children.forEach((child, i) => {
+                        child.style.transitionDelay = `${i * 0.12}s`;
+                        child.classList.add('show-child');
+                    });
                 }
             });
         });
 
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlEl = document.documentElement;
+
+        // Check for saved preference, default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            htmlEl.setAttribute('data-theme', 'light');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                htmlEl.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
 
         // Scroll-spy: highlight active nav link based on scroll position
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -552,6 +610,58 @@
 
         window.addEventListener('scroll', updateActiveNav);
         updateActiveNav();
+
+        // Smooth scroll with offset for sidebar nav links so section h2 sits below header
+        const NAV_OFFSET = 120; // matches the scroll-spy offset
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                e.preventDefault();
+                const targetId = href.slice(1);
+                const target = document.getElementById(targetId);
+                if (!target) return;
+                const offset = (targetId === 'about') ? 0 : NAV_OFFSET;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top: top, behavior: 'smooth' });
+                // Update URL without jumping
+                history.pushState(null, '', '#' + targetId);
+                // ensure nav active updates after scroll settles
+                setTimeout(updateActiveNav, 300);
+            });
+        });
+
+        // Handle direct links on page load (preserve offset)
+        if (location.hash) {
+            const id = location.hash.slice(1);
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = (id === 'about') ? 0 : NAV_OFFSET;
+                const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo(0, top);
+            }
+        }
+
+        // Scroll progress bar & back-to-top button
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+
+            // Show/hide back-to-top button
+            if (scrollTop > 400) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     </script>
 
 </body>
