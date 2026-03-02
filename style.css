@@ -173,12 +173,13 @@ hr {
 /* PROFILE IMAGE */
 .profile-img {
     width: 220px; 
-    height: auto;
+    height: 280px;
     border-radius: 10px;
     border: 4px solid var(--green-color);
     margin-top: 0;
     margin-bottom: 1.2rem;
     object-fit: cover;
+    object-position: center top;
     box-shadow: 0 0 20px rgba(88, 166, 255, 0.2);
 }
 
