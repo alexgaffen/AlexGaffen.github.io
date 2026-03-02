@@ -268,14 +268,9 @@
             <section id="projects" class="hidden section-orange">
                 <h2><i class="fas fa-code section-icon"></i>PROJECTS</h2>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/investor-practice-website" data-hover-text="View on GitHub">
                     <div class="job-header">
-                        <h3>
-                            Mock Market
-                            <a href="https://github.com/alexgaffen/investor-practice-website" target="_blank" class="project-link" title="View Source Code">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </h3>
+                        <h3>Mock Market</h3>
                         <span class="job-date">Personal Project</span>
                     </div>
                     <div class="job-sub">
@@ -298,14 +293,9 @@
                     </ul>
                 </div>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen" data-hover-text="View on GitHub">
                     <div class="job-header">
-                        <h3>
-                            Ghost Shell
-                            <a href="https://github.com/alexgaffen" target="_blank" class="project-link" title="View Source Code">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </h3>
+                        <h3>Ghost Shell</h3>
                         <span class="job-date">Personal Project</span>
                     </div>
                     <div class="job-sub">
@@ -347,14 +337,9 @@
                     </ul>
                 </div>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://github.com/singk17/MathVisualizer" data-hover-text="View on GitHub">
                     <div class="job-header">
-                        <h3>
-                            Matrix Visualizer Web App
-                            <a href="https://github.com/singk17/MathVisualizer" target="_blank" class="project-link" title="View Source Code">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </h3>
+                        <h3>Matrix Visualizer Web App</h3>
                         <span class="job-date">Grade Received: A-</span>
                     </div>
                     <div class="job-sub">
@@ -426,7 +411,7 @@
                     Currently pursuing the following certifications to deepen my expertise in AI/ML.
                 </p>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://www.coursera.org/specializations/deep-learning" data-hover-text="View on Coursera">
                     <div class="job-header">
                         <h3>Deep Learning Specialization</h3>
                         <span class="job-date">Dec 2025 – Present</span>
@@ -448,7 +433,7 @@
                     </ul>
                 </div>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://www.coursera.org/professional-certificates/pytorch-for-deep-learning" data-hover-text="View on Coursera">
                     <div class="job-header">
                         <h3>PyTorch for Deep Learning</h3>
                         <span class="job-date">Dec 2025 – Present</span>
@@ -467,7 +452,7 @@
                     </ul>
                 </div>
 
-                <div class="job-item">
+                <div class="job-item clickable-card" data-href="https://www.udemy.com/course/machinelearning/" data-hover-text="View on Udemy">
                     <div class="job-header">
                         <h3>Machine Learning A-Z: AI, Python & R</h3>
                         <span class="job-date">Dec 2024 – Present</span>
@@ -528,6 +513,7 @@
     </div>
     
     <div class="scroll-progress" id="scrollProgress"></div>
+    <div id="cardHoverHint" class="card-hover-hint" aria-hidden="true"></div>
 
     <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" title="Back to top">
@@ -559,16 +545,57 @@
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
 
+        // Clickable cards (projects + certifications)
+        const clickableCards = document.querySelectorAll('.clickable-card[data-href]');
+        const hoverHint = document.getElementById('cardHoverHint');
+        const supportsHover = window.matchMedia('(hover: hover)').matches;
+
+        function openCardLink(url) {
+            if (!url) return;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        clickableCards.forEach((card) => {
+            card.setAttribute('role', 'link');
+            card.setAttribute('tabindex', '0');
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('a, button')) return;
+                openCardLink(card.dataset.href);
+            });
+
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openCardLink(card.dataset.href);
+                }
+            });
+
+            if (supportsHover && hoverHint) {
+                card.addEventListener('mouseenter', () => {
+                    hoverHint.textContent = card.dataset.hoverText || 'Open link';
+                    hoverHint.classList.add('visible');
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    hoverHint.style.left = `${e.clientX + 18}px`;
+                    hoverHint.style.top = `${e.clientY + 18}px`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    hoverHint.classList.remove('visible');
+                });
+            }
+        });
+
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         const htmlEl = document.documentElement;
 
-        // Check for saved preference, default to dark
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        if (savedTheme === 'light') {
-            htmlEl.setAttribute('data-theme', 'light');
-            themeToggle.checked = true;
-        }
+        // Always default to dark mode on page load
+        htmlEl.removeAttribute('data-theme');
+        themeToggle.checked = false;
+        localStorage.setItem('theme', 'dark');
 
         themeToggle.addEventListener('change', () => {
             if (themeToggle.checked) {
