@@ -789,11 +789,7 @@ h1.name {
         padding: 2rem;
     }
 
-    /* Text & Image Size Adjustments */
-    .profile-img {
-        width: 180px;
-        height: 180px;
-    }
+    /* Text Size Adjustments */
     
     h1.name {
         font-size: 3rem;
@@ -997,16 +993,30 @@ h1.name {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.6rem;
     margin-top: 1rem;
     width: 90%;
 }
 
-.theme-label {
-    font-size: 1rem;
-    color: var(--text-light);
-    min-width: 20px;
-    user-select: none;
+/* Sidebar on left (desktop): pin toggle to viewport top-right */
+@media (min-width: 901px) {
+    .sidebar-theme-toggle {
+        position: fixed;
+        top: 0.45rem;
+        right: 0.55rem;
+        margin-top: 0;
+        width: auto;
+        z-index: 1000;
+    }
+}
+
+/* Sidebar on top (mobile/tablet): keep original in-flow placement */
+@media (max-width: 900px) {
+    .sidebar-theme-toggle {
+        position: static;
+        margin-top: 1rem;
+        width: 90%;
+        z-index: auto;
+    }
 }
 
 .theme-switch {
