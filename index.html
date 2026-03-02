@@ -33,10 +33,10 @@
             <ul class="nav-links">
                 <li><a href="#about" class="active">ABOUT</a></li>
                 <li><a href="#education">EDUCATION</a></li>
-                <li><a href="#skills">SKILLS</a></li>
                 <li><a href="#workexperience">WORK EXPERIENCE</a></li>
                 <li><a href="#projects">PROJECTS</a></li>
                 <li><a href="#competitions-awards">COMPETITIONS & AWARDS</a></li>
+                <li><a href="#skills">SKILLS</a></li>
                 <li><a href="#certifications">CERTIFICATIONS</a></li>
                 <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
             </ul>
@@ -131,58 +131,6 @@
             </section>
 
             <hr>
-
-            <section id="skills" class="hidden">
-                <h2><i class="fas fa-cogs section-icon"></i>SKILLS</h2>
-                
-                <div class="skills-grid">
-                    
-                    <div class="skill-category">
-                        <h3>PROGRAMMING LANGUAGES & TOOLS</h3>
-                        <div class="skill-items">
-                            <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                            <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
-                            <div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
-                            <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
-                            <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
-                            <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
-                            <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
-                            <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
-                            <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
-                            <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
-                            <div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
-                            <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
-                            <div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
-                            <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>CYBERSECURITY & NETWORKING</h3>
-                        <div class="skill-items">
-                            <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
-                            <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
-                            <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
-                            <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
-                            <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
-                            <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>INTERPERSONAL & LEADERSHIP</h3>
-                        <div class="skill-items">
-                            <div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
-                            <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
-                            <div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
-                            <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <hr>
             
             <section id="workexperience" class="hidden section-teal">
                 <h2><i class="fas fa-briefcase section-icon"></i>WORK EXPERIENCE</h2>
@@ -269,31 +217,39 @@
                 <h2><i class="fas fa-code section-icon"></i>PROJECTS</h2>
 
                 <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/investor-practice-website" data-hover-text="View on GitHub">
-                    <div class="job-header">
-                        <h3>Mock Market</h3>
-                        <span class="job-date">Personal Project</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Full Stack Investor Practice Website</h4>
-                    </div>
-                    
-                    <div class="project-skills-list">
-                        <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
-                        <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
-                        <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
-                        <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
-                        <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
-                    </div>
+                    <div class="project-card-layout">
+                        <div class="project-card-text">
+                            <div class="job-header">
+                                <h3>Mock Market</h3>
+                                <span class="job-date">Personal Project</span>
+                            </div>
+                            <div class="job-sub">
+                                <h4>Full Stack Investor Practice Website</h4>
+                            </div>
+                            
+                            <div class="project-skills-list">
+                                <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                                <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                                <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
+                                <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                                <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+                            </div>
 
-                    <ul>
-                        <li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
-                        <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
-                        <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
-                        <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
-                    </ul>
+                            <ul>
+                                <li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
+                                <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
+                                <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
+                                <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
+                            </ul>
+                        </div>
+                        <div class="project-preview-gallery">
+                            <img src="assets/mock-market-home.png" alt="Mock Market Home Page" class="project-preview-img">
+                            <img src="assets/mock-market-analyze.jpg" alt="Mock Market Analysis View" class="project-preview-img">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen" data-hover-text="View on GitHub">
+                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/GhostShell" data-hover-text="View on GitHub">
                     <div class="job-header">
                         <h3>Ghost Shell</h3>
                         <span class="job-date">Personal Project</span>
@@ -400,6 +356,58 @@
                     <ul>
                         <li>Earned the top score at my high school in the CSMC, a national-level competition for senior students.</li>
                     </ul>
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="skills" class="hidden">
+                <h2><i class="fas fa-cogs section-icon"></i>SKILLS</h2>
+                
+                <div class="skills-grid">
+                    
+                    <div class="skill-category">
+                        <h3>PROGRAMMING LANGUAGES & TOOLS</h3>
+                        <div class="skill-items">
+                            <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                            <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
+                            <div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
+                            <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+                            <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+                            <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+                            <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                            <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                            <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+                            <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
+                            <div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
+                            <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                            <div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
+                            <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>CYBERSECURITY & NETWORKING</h3>
+                        <div class="skill-items">
+                            <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
+                            <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
+                            <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+                            <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
+                            <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
+                            <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>INTERPERSONAL & LEADERSHIP</h3>
+                        <div class="skill-items">
+                            <div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
+                            <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
+                            <div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
+                            <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
