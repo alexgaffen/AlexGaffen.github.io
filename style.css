@@ -87,6 +87,16 @@ body {
     position: relative;
 }
 
+@media (min-width: 901px) {
+    .sidebar {
+        width: min(var(--sidebar-width), 340px);
+    }
+
+    .content {
+        margin-left: min(var(--sidebar-width), 340px);
+    }
+}
+
 /* SECTION HEADER STYLING */
 h2 {
     font-family: 'Oswald', sans-serif;
@@ -1042,6 +1052,27 @@ h1.name {
     border: 2px solid #58a6ff;
     transition: background-color 0.35s ease, border-color 0.35s ease;
     box-shadow: 0 0 8px rgba(88, 166, 255, 0.25);
+    overflow: hidden;
+}
+
+.toggle-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    line-height: 1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.icon-moon {
+    left: 6px;
+    color: #ffffff;
+}
+
+.icon-sun {
+    right: 6px;
+    color: #ffd76a;
 }
 
 .slider::before {
@@ -1066,6 +1097,14 @@ h1.name {
 
 .theme-switch input:checked + .slider::before {
     transform: translateX(24px);
+}
+
+.theme-switch input:checked + .slider .icon-moon {
+    color: #ffffff;
+}
+
+.theme-switch input:checked + .slider .icon-sun {
+    color: #fff2b0;
 }
 
 /* ############################################################# */
