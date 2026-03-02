@@ -310,32 +310,49 @@ hr {
         padding-top: 2rem; 
     }
     .profile-img {
-        width: 220px; 
-        height: 220px;
-        margin-bottom: 1.5rem;
+        width: 200px; 
+        height: 200px;
+        margin-bottom: 1rem;
     }
     .nav-links li a {
-        padding: 0.6rem 0; 
-        font-size: 0.95rem; 
+        padding: 0.5rem 1rem; 
+        font-size: 0.92rem; 
     }
 }
 
 @media (max-height: 750px) {
     .sidebar {
-        padding-top: 1rem; 
+        padding-top: 1.5rem; 
     }
     .profile-img {
-        width: 170px; 
-        height: 170px;
-        margin-bottom: 1rem;
+        width: 160px; 
+        height: 160px;
+        margin-bottom: 0.8rem;
     }
     .nav-links li a {
-        padding: 0.4rem 0; 
-        font-size: 0.9rem;
+        padding: 0.35rem 1rem; 
+        font-size: 0.85rem;
     }
     .sidebar-action {
         bottom: 15px; 
-        margin-bottom: 15px;
+    }
+}
+
+@media (max-height: 650px) {
+    .sidebar {
+        padding-top: 1rem; 
+    }
+    .profile-img {
+        width: 130px; 
+        height: 130px;
+        margin-bottom: 0.5rem;
+    }
+    .nav-links li a {
+        padding: 0.25rem 0.8rem; 
+        font-size: 0.8rem;
+    }
+    .sidebar-action {
+        bottom: 10px; 
     }
 }
 
