@@ -118,7 +118,7 @@ h2 {
 /* Separator Line */
 hr {
     border: 0;
-    border-top: 1px solid var(--border-dark);
+    border-top: 3px solid var(--border-dark);
     margin: 3rem 0;
 }
 
@@ -173,10 +173,10 @@ hr {
 /* PROFILE IMAGE */
 .profile-img {
     width: 220px; 
-    height: 320px;
+    height: 290px;
     border-radius: 10px;
     border: 4px solid var(--green-color);
-    margin-top: 0;
+    margin-top: 0.6rem;
     margin-bottom: 1.2rem;
     object-fit: cover;
     object-position: center top;
@@ -188,7 +188,11 @@ hr {
     list-style: none;
     width: 90%; 
     padding-left: 0;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
     margin-top: 0.5rem;
+    border-top: 2px solid var(--border-dark);
+    border-bottom: 2px solid var(--border-dark);
 }
 
 .nav-links li a {
@@ -994,7 +998,7 @@ h1.name {
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    margin-top: 0.6rem;
+    margin-top: 1rem;
     width: 90%;
 }
 
@@ -1060,10 +1064,10 @@ h1.name {
 [data-theme="light"] {
     --text-dark: #1f2328;
     --text-light: #656d76;
-    --bg-dark: #ffffff;
-    --bg-card: #f6f8fa;
-    --border-dark: #d0d7de;
-    --red-color: #f6f8fa;
+    --bg-dark: #eef2f6;
+    --bg-card: #e6ebf1;
+    --border-dark: #bcc6d1;
+    --red-color: #e1e7ee;
 }
 
 [data-theme="light"] body {
