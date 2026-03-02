@@ -615,11 +615,14 @@
                 const targetId = href.slice(1);
                 const target = document.getElementById(targetId);
                 if (!target) return;
-                const offset = (targetId === 'about') ? 0 : NAV_OFFSET;
-                const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-                window.scrollTo({ top: top, behavior: 'smooth' });
-                // Update URL without jumping
-                history.pushState(null, '', '#' + targetId);
+                if (targetId === 'about') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+                // Keep URL clean (no hash fragment)
+                history.replaceState(null, '', window.location.pathname + window.location.search);
                 // ensure nav active updates after scroll settles
                 setTimeout(updateActiveNav, 300);
             });
@@ -630,10 +633,14 @@
             const id = location.hash.slice(1);
             const el = document.getElementById(id);
             if (el) {
-                const offset = (id === 'about') ? 0 : NAV_OFFSET;
-                const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
-                window.scrollTo(0, top);
+                if (id === 'about') {
+                    window.scrollTo(0, 0);
+                } else {
+                    const top = el.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo(0, top);
+                }
             }
+            history.replaceState(null, '', window.location.pathname + window.location.search);
         }
 
         // Scroll progress bar & back-to-top button
