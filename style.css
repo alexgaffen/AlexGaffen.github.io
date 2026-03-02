@@ -264,29 +264,7 @@ hr {
     transform: scale(1.1);
 }
 
-.download-btn {
-    display: block;
-    padding: 10px 15px;
-    background-color: var(--green-color); 
-    color: #0d1117; 
-    border: 1px solid var(--green-color);
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 700;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 700;
-    transition: all 0.3s ease;
-}
 
-.download-btn i {
-    margin-right: 8px;
-}
-
-.download-btn:hover {
-    background-color: var(--orange); 
-    color: #0d1117;
-    border-color: var(--orange);
-}
 
 /* TryHackMe icon in sidebar socials */
 .thm-icon {
@@ -1156,10 +1134,6 @@ h1.name {
 [data-theme="light"] .sidebar-socials a {
     background-color: #ffffff;
     border-color: var(--border-dark);
-}
-
-[data-theme="light"] .download-btn {
-    color: #ffffff;
 }
 
 [data-theme="light"] .profile-img {
