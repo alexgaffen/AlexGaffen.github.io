@@ -527,6 +527,10 @@ h1.name {
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
 }
 
+.single-preview-gallery {
+    width: 260px;
+}
+
 @media (max-width: 700px) {
     .project-card-layout {
         flex-direction: column;
@@ -537,6 +541,17 @@ h1.name {
     }
     .project-preview-img {
         width: 48%;
+    }
+}
+
+@media (max-width: 700px) {
+    .single-preview-gallery {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .single-preview-gallery .project-preview-img {
+        width: 100%;
     }
 }
 
@@ -592,7 +607,8 @@ h1.name {
 .job-header {
     display: flex;
     justify-content: space-between; 
-    align-items: baseline; 
+    align-items: baseline;
+    gap: 1rem;
     margin-bottom: 0.2rem;
 }
 
@@ -602,6 +618,15 @@ h1.name {
     font-weight: 700;
     text-transform: uppercase;
     color: #f0f6fc;
+}
+
+.job-date {
+    color: var(--green-color); 
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* PROJECT GITHUB LINK STYLING */
@@ -642,13 +667,6 @@ h1.name {
     margin-bottom: 1rem;
     text-transform: uppercase;
     margin: 0; 
-}
-
-.job-date {
-    color: var(--green-color); 
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
 }
 
 .job-item p {
@@ -840,6 +858,9 @@ h1.name {
 .skill-box.react:hover { background-color: var(--hover-react); }
 .skill-box.node:hover { background-color: var(--hover-node); }
 .skill-box.firebase:hover { background-color: var(--hover-firebase); }
+.skill-box.flask:hover { background-color: #000000; }
+.skill-box.architecture:hover { background-color: #6C5CE7; }
+.skill-box.algorithms:hover { background-color: #2E86C1; }
 
 
 /* ############################################################# */
@@ -904,14 +925,9 @@ h1.name {
         font-size: 3rem;
     }
 
-    /* Fixes for overlapping content and buttons */
+    /* Keep dates right-aligned, allow wrapping on small screens */
     .job-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .job-date {
-        margin-top: 0.3rem;
+        flex-wrap: wrap;
     }
 
     /* Fixes for Download Button */
