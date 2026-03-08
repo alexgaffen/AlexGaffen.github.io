@@ -559,6 +559,29 @@
     <button class="back-to-top" id="backToTop" title="Back to top">
         <i class="fas fa-arrow-up"></i>
     </button>
+
+    <!-- Mobile Nav Menu Button -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" title="Open navigation" aria-label="Open navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile Nav Panel -->
+    <div class="mobile-nav-panel" id="mobileNavPanel">
+        <button class="mobile-nav-close" id="mobileNavClose" title="Close navigation" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="mobile-nav-links">
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#education">EDUCATION</a></li>
+            <li><a href="#workexperience">WORK EXPERIENCE</a></li>
+            <li><a href="#projects">PROJECTS</a></li>
+            <li><a href="#competitions-awards">COMPETITIONS & AWARDS</a></li>
+            <li><a href="#skills">SKILLS</a></li>
+            <li><a href="#certifications">CERTIFICATIONS</a></li>
+            <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
+        </ul>
+    </div>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     
     <script>
         // Always start at the top on page load/refresh
@@ -733,6 +756,64 @@
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        // Mobile nav menu toggle
+        const mobileNavToggle = document.getElementById('mobileNavToggle');
+        const mobileNavPanel = document.getElementById('mobileNavPanel');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const sidebar = document.querySelector('.sidebar');
+
+        function openMobileNav() {
+            mobileNavPanel.classList.add('open');
+            mobileNavOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileNav() {
+            mobileNavPanel.classList.remove('open');
+            mobileNavOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        mobileNavToggle.addEventListener('click', openMobileNav);
+        mobileNavClose.addEventListener('click', closeMobileNav);
+        mobileNavOverlay.addEventListener('click', closeMobileNav);
+
+        // Close panel and scroll on link click
+        mobileNavPanel.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                e.preventDefault();
+                closeMobileNav();
+                const targetId = href.slice(1);
+                const target = document.getElementById(targetId);
+                if (!target) return;
+                if (targetId === 'about') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            });
+        });
+
+        // Show/hide mobile nav toggle based on scroll past sidebar
+        function updateMobileNavToggle() {
+            if (window.innerWidth > 900) {
+                mobileNavToggle.classList.remove('visible');
+                return;
+            }
+            const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
+            if (window.scrollY > sidebarBottom) {
+                mobileNavToggle.classList.add('visible');
+            } else {
+                mobileNavToggle.classList.remove('visible');
+            }
+        }
+        window.addEventListener('scroll', updateMobileNavToggle);
+        window.addEventListener('resize', updateMobileNavToggle);
     </script>
 
 </body>
