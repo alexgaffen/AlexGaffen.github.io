@@ -310,12 +310,9 @@ hr::before {
     list-style: none;
     width: 90%;
     padding-left: 0;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    margin-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 -4px 12px -4px rgba(255, 255, 255, 0.15), 0 4px 12px -4px rgba(255, 255, 255, 0.15);
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    margin-top: 0.5rem;
 }
 
 .nav-links li a {
@@ -326,21 +323,21 @@ hr::before {
     font-weight: 600;
     letter-spacing: 0.06em;
     padding: 0.7rem 1rem;
-    transition: color 0.25s, background 0.25s, border-left 0.25s, box-shadow 0.25s;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
+    transition: color 0.25s, background 0.25s, border-top 0.25s, border-bottom 0.25s, box-shadow 0.25s;
     position: relative;
     border-radius: 6px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 
 .nav-links li a:hover, 
 .nav-links li a.active {
     color: #ffffff;
     background: var(--accent-dim);
-    border-left: 3px solid var(--green-color);
-    border-right: 3px solid transparent;
     border-radius: 6px;
-    box-shadow: 0 0 20px -5px var(--accent-glow), inset 0 0 12px -6px var(--accent-glow);
+    border-top: 1px solid var(--green-color);
+    border-bottom: 1px solid var(--green-color);
+    box-shadow: 0 -4px 15px -4px var(--accent-glow), 0 4px 15px -4px var(--accent-glow), inset 0 0 12px -6px var(--accent-glow);
 }
 
 /* DOWNLOAD BUTTON & SIDEBAR SOCIALS */
@@ -523,7 +520,7 @@ h1.name {
     font-weight: 700;
     line-height: 1.35;
     margin-bottom: 0.6rem;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.06em;
     max-width: 100%;
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     overflow: visible;
@@ -1343,7 +1340,7 @@ h1.name {
     font-weight: 700;
     margin-bottom: 0.5rem;
     line-height: 1.35;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.06em;
     color: var(--text-dark);
     overflow: visible;
 }
@@ -1437,6 +1434,8 @@ h1.name {
     box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
     position: relative;
     overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .bio-container::before {
@@ -1732,7 +1731,6 @@ h1.name {
 [data-theme="light"] .nav-links li a.active {
     color: #1a1108;
     background: rgba(139, 90, 43, 0.12);
-    border-left-color: var(--green-color);
     box-shadow: 0 0 0 1px rgba(139, 90, 43, 0.15), 0 10px 24px -16px rgba(139, 90, 43, 0.3);
 }
 
@@ -1991,7 +1989,7 @@ h1.name {
     background: linear-gradient(135deg, rgba(3, 7, 18, 0.95), rgba(15, 23, 42, 0.92));
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid #ffffff;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     align-items: center;
@@ -2012,7 +2010,6 @@ h1.name {
 }
 
 .mobile-top-brand {
-    font-family: var(--font-head);
     font-size: 1rem;
     font-weight: 700;
     color: var(--text-dark);
@@ -2118,7 +2115,7 @@ h1.name {
     width: 280px;
     height: 100vh;
     background-color: var(--red-color);
-    border-left: 2px solid var(--border-dark);
+    border-left: 1px solid #ffffff;
     z-index: 1002;
     display: flex;
     flex-direction: column;
@@ -2170,18 +2167,18 @@ h1.name {
     font-size: 1.1rem;
     letter-spacing: 0.05em;
     padding: 0.85rem 1rem;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
-    transition: color 0.25s, background 0.25s, border-left 0.25s, box-shadow 0.25s;
+    transition: color 0.25s, background 0.25s, border-top 0.25s, border-bottom 0.25s, box-shadow 0.25s;
     border-radius: 6px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 
 .mobile-nav-links li a:hover {
     color: #ffffff;
     background: var(--accent-dim);
-    border-left: 3px solid var(--green-color);
-    border-right: 3px solid transparent;
-    box-shadow: 0 0 20px -5px var(--accent-glow);
+    border-top: 1px solid var(--green-color);
+    border-bottom: 1px solid var(--green-color);
+    box-shadow: 0 -4px 15px -4px var(--accent-glow), 0 4px 15px -4px var(--accent-glow), inset 0 0 12px -6px var(--accent-glow);
 }
 
 [data-theme="light"] .mobile-nav-toggle {

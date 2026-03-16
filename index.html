@@ -59,7 +59,7 @@
                 <li><a href="#competitions-awards">AWARDS</a></li>
                 <li><a href="#skills">SKILLS</a></li>
                 <li><a href="#certifications">CERTIFICATIONS</a></li>
-                <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
+                <li><a href="#hobbies-interests">INTERESTS</a></li>
             </ul>
 
             <div class="sidebar-theme-toggle">
@@ -589,7 +589,7 @@
             <hr>
             
             <section id="hobbies-interests" class="hidden section-coral">
-                <h2>HOBBIES & INTERESTS</h2>
+                <h2>INTERESTS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -1612,11 +1612,12 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting && !entry.target.dataset.hacked) {
                         entry.target.dataset.hacked = "true";
+                        const originalHtml = entry.target.innerHTML;
                         const originalText = entry.target.innerText;
                         let iteration = 0;
-                        
-                        // Set fixed number of frames for max ~1.8 second load time (60 frames at 30ms)
-                        const totalFrames = 60; 
+
+                        // Set fixed number of frames for max ~1.5 second load time (50 frames at 30ms)
+                        const totalFrames = 50; 
                         const increment = Math.max(originalText.length / totalFrames, 1);
                         
                         const interval = setInterval(() => {
@@ -1636,13 +1637,9 @@
                             
                             if (iteration >= originalText.length) { 
                                 clearInterval(interval);
-                                entry.target.innerText = originalText;
+                                entry.target.innerHTML = originalHtml; // Restore original HTML (bolding/links)
                             }
                             
-                            iteration += increment;
-                        }, 30);
-                    }
-                });
             }, { threshold: 0.1 });
             
             hackerElements.forEach(el => hackerObserver.observe(el));
