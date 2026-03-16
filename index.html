@@ -24,6 +24,9 @@
 </head>
 <body>
 
+    <div class="about-theme-fx" aria-hidden="true">
+        <canvas id="themeFxCanvas"></canvas>
+    </div>
     <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
     <!-- Top social bar (desktop only) -->
@@ -53,7 +56,7 @@
                 <li><a href="#education">EDUCATION</a></li>
                 <li><a href="#workexperience">EXPERIENCE</a></li>
                 <li><a href="#projects">PROJECTS</a></li>
-                <li><a href="#competitions-awards">COMPETITIONS & AWARDS</a></li>
+                <li><a href="#competitions-awards">AWARDS</a></li>
                 <li><a href="#skills">SKILLS</a></li>
                 <li><a href="#certifications">CERTIFICATIONS</a></li>
                 <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
@@ -73,13 +76,14 @@
                         <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" fill="none" stroke="currentColor" stroke-width="1" opacity="0.15"/>
                     </svg>
                     <div class="star-indicator"></div>
-                    <button class="star-slot" data-theme="light" data-slot="0" title="Light Mode"><i class="fas fa-sun"></i></button>
-                    <button class="star-slot" data-theme="ocean" data-slot="1" title="Ocean"><i class="fas fa-water"></i></button>
-                    <button class="star-slot" data-theme="ember" data-slot="2" title="Ember"><i class="fas fa-fire"></i></button>
-                    <button class="star-slot" data-theme="dark" data-slot="3" title="Dark Mode"><i class="fas fa-moon"></i></button>
-                    <button class="star-slot" data-theme="forest" data-slot="4" title="Forest"><i class="fas fa-leaf"></i></button>
-                    <button class="star-slot" data-theme="aurora" data-slot="5" title="Aurora"><i class="fas fa-star"></i></button>
+                    <button class="star-slot" data-theme="light" data-slot="0" title="Light Mode (1)"><i class="fas fa-sun"></i></button>
+                    <button class="star-slot" data-theme="ocean" data-slot="1" title="Ocean (2)"><i class="fas fa-water"></i></button>
+                    <button class="star-slot" data-theme="ember" data-slot="2" title="Ember (3)"><i class="fas fa-fire"></i></button>
+                    <button class="star-slot" data-theme="dark" data-slot="3" title="Dark Mode (4)"><i class="fas fa-moon"></i></button>
+                    <button class="star-slot" data-theme="forest" data-slot="4" title="Forest (5)"><i class="fas fa-leaf"></i></button>
+                    <button class="star-slot" data-theme="aurora" data-slot="5" title="Aurora (6)"><i class="fas fa-star"></i></button>
                 </div>
+
             </div>
 
             <div class="sidebar-action">
@@ -100,12 +104,9 @@
                     <div class="grid-lights">
                     </div>
                 </div>
-                <div class="about-theme-fx" aria-hidden="true">
-                    <canvas id="themeFxCanvas"></canvas>
-                </div>
                 <div class="about-layout">
                 <div class="about-content">
-                    <h1 class="name">Alex <span class="last-name">Gaffen</span></h1>
+                    <h1 class="name">Alex <span class="last-name" data-text="Gaffen">Gaffen</span></h1>
                     <p class="main-subheading">Software Engineer, Developer &amp; Researcher</p>
                     <p class="tagline"> 🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🧬 Bioinformatics</p>
                     <p class="location-line"><i class="fas fa-map-marker-alt"></i> Toronto / Ottawa, ON, Canada</p>
@@ -162,7 +163,7 @@
             <hr>
 
             <section id="education" class="hidden section-burgundy">
-                <h2><i class="fas fa-graduation-cap section-icon"></i>EDUCATION</h2>
+                <h2>EDUCATION</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -181,21 +182,21 @@
                     <div class="relevant-courses">
                         <h4 class="course-header">Relevant Coursework:</h4>
                         <ul>
-                            <li><strong>🔐 (A-) COMPSCI 4CR3: Applied Cryptography</strong></li>
-                            <li><strong>🔧 (A+) COMPSCI 3TB3: Syntax-Based Tools &amp; Compilers</strong></li>
-                            <li><strong>🌍 (B+) COMPSCI 3N03: Computer Networks and Security</strong></li>
-                            <li><strong>🧠 (A-) COMPSCI 3MI3: Principles of Programming Languages</strong></li>
-                            <li><strong>⚙️ (A-) COMPSCI 3SH3: Operating Systems</strong></li>
-                            <li><strong>🧮 (A+) COMPSCI 2XC3: Algorithms and Software Design</strong></li>
-                            <li><strong>🖥️ (A-) COMPSCI 2GA3: Computer Architecture</strong></li>
-                            <li><strong>🌐 (A-) COMPSCI 1XD3: Intro to Software Using Web Programming</strong></li>
-                            <li><strong>🛠️ (A+) COMPSCI 1XC3: Development Basics</strong></li>
-                            <li><strong>💻 (A) COMPSCI 1MD3: Introduction to Programming</strong></li>
-                            <li><strong>🔢 (A) COMPSCI 1DM3: Discrete Math for Computer Science</strong></li>
-                            <li><strong>🎲 (A) STATS 2D03: Intro to Probability</strong></li>
-                            <li><strong>📊 (A-) MATH 1ZB3: Engineering Mathematics II-A</strong></li>
-                            <li><strong>➗ (A) MATH 1ZA3: Engineering Mathematics I</strong></li>
-                            <li><strong>📐 (A-) MATH 1B03: Linear Algebra 1</strong></li>
+                            <li>🔐 (A-) COMPSCI 4CR3: Applied Cryptography</li>
+                            <li>🔧 (A+) COMPSCI 3TB3: Syntax-Based Tools &amp; Compilers</li>
+                            <li>🌍 (B+) COMPSCI 3N03: Computer Networks and Security</li>
+                            <li>🧠 (A-) COMPSCI 3MI3: Principles of Programming Languages</li>
+                            <li>⚙️ (A-) COMPSCI 3SH3: Operating Systems</li>
+                            <li>🧮 (A+) COMPSCI 2XC3: Algorithms and Software Design</li>
+                            <li>🖥️ (A-) COMPSCI 2GA3: Computer Architecture</li>
+                            <li>🌐 (A-) COMPSCI 1XD3: Intro to Software Using Web Programming</li>
+                            <li>🛠️ (A+) COMPSCI 1XC3: Development Basics</li>
+                            <li>💻 (A) COMPSCI 1MD3: Introduction to Programming</li>
+                            <li>🔢 (A) COMPSCI 1DM3: Discrete Math for Computer Science</li>
+                            <li>🎲 (A) STATS 2D03: Intro to Probability</li>
+                            <li>📊 (A-) MATH 1ZB3: Engineering Mathematics II-A</li>
+                            <li>➗ (A) MATH 1ZA3: Engineering Mathematics I</li>
+                            <li>📐 (A-) MATH 1B03: Linear Algebra 1</li>
                         </ul>
                     </div>
 
@@ -205,7 +206,7 @@
             <hr>
             
             <section id="workexperience" class="hidden section-teal">
-                <h2><i class="fas fa-briefcase section-icon"></i>EXPERIENCE</h2>
+                <h2></i>EXPERIENCE</h2>
 
                 <div class="job-item">
                     <div class="project-card-layout">
@@ -318,7 +319,7 @@
             <hr>
 
             <section id="projects" class="hidden section-orange">
-                <h2><i class="fas fa-code section-icon"></i>PROJECTS</h2>
+                <h2>PROJECTS</h2>
 
                 <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/investor-practice-website" data-hover-text="View on GitHub">
                     <div class="project-card-layout">
@@ -421,7 +422,7 @@
             <hr>
 
             <section id="competitions-awards" class="hidden section-gold">
-                <h2><i class="fas fa-trophy section-icon"></i>COMPETITIONS & AWARDS</h2>
+                <h2>AWARDS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -466,7 +467,7 @@
             <hr>
             
             <section id="skills" class="hidden">
-                <h2><i class="fas fa-cogs section-icon"></i>SKILLS</h2>
+                <h2>SKILLS</h2>
                 
                 <div class="skills-grid">
                     
@@ -518,7 +519,7 @@
             <hr>
             
             <section id="certifications" class="hidden section-purple">
-                <h2><i class="fas fa-certificate section-icon"></i>CERTIFICATIONS</h2>
+                <h2>CERTIFICATIONS</h2>
                 <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
                     Currently pursuing the following certifications to deepen my expertise in AI/ML.
                 </p>
@@ -588,7 +589,7 @@
             <hr>
             
             <section id="hobbies-interests" class="hidden section-coral">
-                <h2><i class="fas fa-heart section-icon"></i>HOBBIES & INTERESTS</h2>
+                <h2>HOBBIES & INTERESTS</h2>
 
                 <div class="job-item">
                     <div class="job-header">
@@ -622,7 +623,9 @@
             <section id="contact" class="hidden">
                 <h2>GET IN TOUCH</h2>
                 <div class="contact-section">
-                    <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <form class="contact-form" action="https://formspree.io/f/mqeyyljp" method="POST">
+                        <input type="hidden" name="_subject" value="New message from alexgaffen.com">
+                        <input type="text" name="_gotcha" style="display:none">
                         <div class="contact-form-row">
                             <div class="form-group">
                                 <label for="contact-name">Name</label>
@@ -657,8 +660,16 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Mobile Nav Menu Button -->
-    <button class="mobile-nav-toggle" id="mobileNavToggle" title="Open navigation" aria-label="Open navigation">
+    <!-- Mobile Top Bar (shows on scroll-up past sidebar) -->
+    <div class="mobile-top-bar" id="mobileTopBar">
+        <a href="#" class="mobile-top-brand" id="mobileTopBrand">alexgaffen.com</a>
+        <button class="mobile-top-hamburger" id="mobileTopHamburger" title="Open navigation" aria-label="Open navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Nav Menu Button (legacy, hidden — replaced by mobile top bar) -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" title="Open navigation" aria-label="Open navigation" style="display:none!important">
         <i class="fas fa-bars"></i>
     </button>
 
@@ -672,7 +683,7 @@
             <li><a href="#education">EDUCATION</a></li>
             <li><a href="#workexperience">EXPERIENCE</a></li>
             <li><a href="#projects">PROJECTS</a></li>
-            <li><a href="#competitions-awards">COMPETITIONS & AWARDS</a></li>
+            <li><a href="#competitions-awards">AWARDS</a></li>
             <li><a href="#skills">SKILLS</a></li>
             <li><a href="#certifications">CERTIFICATIONS</a></li>
             <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
@@ -704,6 +715,27 @@
 
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
+
+        // Lock about section visibility after intro animations finish
+        setTimeout(() => {
+            const ac = document.querySelector('.about-content');
+            if (ac) {
+                ac.style.animation = 'none';
+                ac.style.opacity = '1';
+                ac.style.transform = 'none';
+                ac.querySelectorAll('.name, .main-subheading, .tagline, .location-line, .bio-container').forEach(el => {
+                    el.style.animation = 'none';
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                });
+            }
+            const ah = document.querySelector('.about-highlights');
+            if (ah) {
+                ah.style.animation = 'none';
+                ah.style.opacity = '1';
+                ah.style.transform = 'none';
+            }
+        }, 1500);
 
         // Clickable cards (projects + certifications)
         const clickableCards = document.querySelectorAll('.clickable-card[data-href]');
@@ -788,6 +820,24 @@
             });
         });
 
+        // Keyboard shortcuts: 1-6 switch themes, ArrowUp scrolls to top (desktop)
+        const themeKeys = ['light', 'ocean', 'ember', 'dark', 'forest', 'aurora'];
+        document.addEventListener('keydown', (e) => {
+            // Ignore when typing in an input/textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            const keyNum = parseInt(e.key);
+            if (keyNum >= 1 && keyNum <= 6) {
+                const themeName = themeKeys[keyNum - 1];
+                const slot = document.querySelector('.star-slot[data-theme="' + themeName + '"]');
+                if (slot) slot.click();
+            }
+            if (e.key === 'ArrowUp' && window.innerWidth > 900) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
         // Scroll-spy: highlight active nav link based on scroll position
         const navLinks = document.querySelectorAll('.nav-links a');
         const sections = document.querySelectorAll('section[id]');
@@ -854,26 +904,14 @@
             history.replaceState(null, '', window.location.pathname + window.location.search);
         }
 
-        // Scroll progress bar & back-to-top button
+        // Scroll progress bar & back-to-top button (desktop only)
         const scrollProgress = document.getElementById('scrollProgress');
         const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            scrollProgress.style.width = scrollPercent + '%';
-
-            // Show/hide back-to-top button
-            if (scrollTop > 400) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        });
-
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        const mobileTopBar = document.getElementById('mobileTopBar');
+        const mobileTopBrand = document.getElementById('mobileTopBrand');
+        const mobileTopHamburger = document.getElementById('mobileTopHamburger');
+        let lastScrollY = window.scrollY;
+        let mobileBarVisible = false;
 
         // Mobile nav menu toggle
         const mobileNavToggle = document.getElementById('mobileNavToggle');
@@ -881,6 +919,49 @@
         const mobileNavClose = document.getElementById('mobileNavClose');
         const mobileNavOverlay = document.getElementById('mobileNavOverlay');
         const sidebar = document.querySelector('.sidebar');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+
+            const delta = scrollTop - lastScrollY;
+            lastScrollY = scrollTop;
+
+            // Desktop: show/hide back-to-top arrow
+            if (window.innerWidth > 900) {
+                if (scrollTop > 400) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            }
+
+            // Mobile: show/hide top bar when scrolling up past sidebar
+            if (window.innerWidth <= 900) {
+                const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
+                if (scrollTop <= sidebarBottom) {
+                    mobileBarVisible = false;
+                } else if (delta < -3) {
+                    mobileBarVisible = true;
+                } else if (delta > 5) {
+                    mobileBarVisible = false;
+                }
+                mobileTopBar.classList.toggle('visible', mobileBarVisible);
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile top bar — brand scrolls to top, hamburger opens nav
+        mobileTopBrand.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        mobileTopHamburger.addEventListener('click', openMobileNav);
 
         function openMobileNav() {
             mobileNavPanel.classList.add('open');
@@ -916,22 +997,6 @@
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             });
         });
-
-        // Show/hide mobile nav toggle based on scroll past sidebar
-        function updateMobileNavToggle() {
-            if (window.innerWidth > 900) {
-                mobileNavToggle.classList.remove('visible');
-                return;
-            }
-            const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
-            if (window.scrollY > sidebarBottom) {
-                mobileNavToggle.classList.add('visible');
-            } else {
-                mobileNavToggle.classList.remove('visible');
-            }
-        }
-        window.addEventListener('scroll', updateMobileNavToggle);
-        window.addEventListener('resize', updateMobileNavToggle);
 
         // Cursor glow — AI-style follow effect (only when hover capable)
         const cursorGlow = document.getElementById('cursorGlow');
@@ -1061,16 +1126,13 @@
             const canvas = document.getElementById('themeFxCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const about = document.getElementById('about');
-            if (!about) return;
 
             let W = 0, H = 0, particles = [], animId = null, currentTheme = 'dark';
             const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
             function resize() {
-                const rect = about.getBoundingClientRect();
-                W = rect.width;
-                H = rect.height;
+                W = window.innerWidth;
+                H = window.innerHeight;
                 canvas.width = W * DPR;
                 canvas.height = H * DPR;
                 canvas.style.width = W + 'px';
