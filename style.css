@@ -308,13 +308,14 @@ hr::before {
 /* NAVIGATION LINKS */
 .nav-links {
     list-style: none;
-    width: 90%; 
+    width: 90%;
     padding-left: 0;
-    padding-top: 0.7rem;
-    padding-bottom: 0.7rem;
-    margin-top: 0.5rem;
-    border-top: 2px solid var(--border-dark);
-    border-bottom: 2px solid var(--border-dark);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 12px -4px rgba(255, 255, 255, 0.15), 0 4px 12px -4px rgba(255, 255, 255, 0.15);
 }
 
 .nav-links li a {
@@ -1167,7 +1168,12 @@ h1.name {
     .container {
         flex-direction: column;
     }
-    
+
+    .profile-img {
+        width: 146px;
+        height: 193px;
+    }
+
     .sidebar {
         position: relative;
         width: 100%;
@@ -1318,15 +1324,13 @@ h1.name {
     z-index: 2;
     max-width: 800px;
     width: 100%;
-    animation: aboutFadeIn 1s ease-out forwards;
-    opacity: 1 !important;
 }
 
-.about-content .name { animation: aboutFadeIn 0.8s ease-out 0.1s forwards; }
-.about-content .main-subheading { animation: aboutFadeIn 0.8s ease-out 0.16s forwards; }
-.about-content .tagline { animation: aboutFadeIn 0.8s ease-out 0.2s forwards; }
-.about-content .location-line { animation: aboutFadeIn 0.8s ease-out 0.25s forwards; }
-.about-content .bio-container { animation: aboutFadeIn 0.9s ease-out 0.35s forwards; }
+.about-content .name { opacity: 1; }
+.about-content .main-subheading { opacity: 1; }
+.about-content .tagline { opacity: 1; }
+.about-content .location-line { opacity: 1; }
+.about-content .bio-container { opacity: 1; }
 
 @keyframes aboutFadeIn {
     from { opacity: 0; transform: translateY(12px); }
@@ -2357,7 +2361,23 @@ html.theme-transitioning *::after {
     display: flex;
     gap: 2.5rem;
     align-items: stretch;
-    width: 100%;
+    width: calc(100% - 10px);
+    margin: 0 auto;
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+.about-layout::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    background: linear-gradient(135deg, rgba(88, 166, 255, 0.4), var(--green-color));
+    z-index: -1;
+    border-radius: 16px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    padding: 2px;
 }
 
 .about-layout .about-content {
@@ -2375,7 +2395,6 @@ html.theme-transitioning *::after {
     justify-content: space-between;
     gap: 0.8rem;
     padding-top: 0;
-    animation: aboutFadeIn 0.9s ease-out 0.4s both;
 }
 
 .highlight-card {
