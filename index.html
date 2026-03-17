@@ -185,22 +185,11 @@
             100% { background-position: 0% 50%; }
         }
 
-                @keyframes textAppear {
-            to { opacity: 1; }
+                .box-inner-content {
+            opacity: 1;
         }
 
-        .box-inner-content {
-            opacity: 0;
-            animation: textAppear 0.2s forwards;
-            animation-delay: 2.2s;
-        }
-
-        /* Hacker decoding effect class */
-        .hacker-text {
-            /* Placeholder for JS targeting */
-            display: inline-block;
-            min-height: 1em;
-        }
+        /* Outline decoding effect class removed */
 </style>
 </head>
 <body>
@@ -221,11 +210,11 @@
                         <span style="margin-top:0.4em; display: block;">🧬 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
                     </span>
                     
-                    <p class="bio-intro hacker-text">
+                    <p class="bio-intro">
                         Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
                     </p>
 
-                    <p class="bio-personal hacker-text">
+                    <p class="bio-personal">
                         I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
                         </p>
                 </div>
@@ -247,58 +236,7 @@
     </div>
 
 
-    <script>
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
-        const targets = document.querySelectorAll('.hacker-text');
-        
-        targets.forEach(el => {
-            const originalHTML = el.innerHTML;
-            const textOnly = el.textContent || el.innerText;
-            el.dataset.originalHtml = originalHTML;
-            el.dataset.textOnly = textOnly;
-            el.style.display = 'inline-block';
-            el.style.minHeight = '1em';
-        });
 
-        setTimeout(() => {
-            targets.forEach(el => triggerHackerEffect(el));
-        }, 2200);
 
-        function triggerHackerEffect(el) {
-            const textToAnimate = el.dataset.textOnly;
-            const originalHTML = el.dataset.originalHtml;
-            let iterations = 0;
-            
-            el.innerHTML = textToAnimate.replace(/./g, char => {
-                 if(char === ' ' || char === '\n') return char;
-                 return letters[Math.floor(Math.random() * letters.length)];
-            });
-            
-            const interval = setInterval(() => {
-                let currentStr = "";
-                for(let i = 0; i < textToAnimate.length; i++) {
-                    const char = textToAnimate[i];
-                    if(char === ' ' || char === '\n') {
-                        currentStr += char;
-                        continue;
-                    }
-                    if(i < iterations) {
-                        currentStr += char;
-                    } else {
-                        currentStr += letters[Math.floor(Math.random() * letters.length)];
-                    }
-                }
-                el.innerText = currentStr;
-                
-                if(iterations >= textToAnimate.length) {
-                    clearInterval(interval);
-                    el.innerHTML = originalHTML;
-                }
-                iterations += 3;
-            }, 30);
-        }
-        
-
-    </script>
 </body>
 </html>
