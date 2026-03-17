@@ -142,7 +142,64 @@
                 font-size: 2.5rem;
             }
         }
-    </style>
+    
+        /* GLISTENING BOX STYLES */
+        .glistening-box {
+            position: relative;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 16px;
+            padding: 2.5em;
+            color: #e2e8f0; 
+            margin-bottom: 3.5em;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.3);
+            z-index: 1;
+        }
+
+        .glistening-box::before {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            z-index: -1;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6);
+            background-size: 300% 300%;
+            animation: glisten 6s ease-in-out infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes glisten {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glistening-box strong {
+            background-color: rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 0 4px;
+        }
+
+        .glistening-box span {
+            color: #e2e8f0 !important;
+        }
+
+        .glistening-box p {
+            color: #e2e8f0;
+        }
+
+        .glistening-box a {
+            color: #f1f5f9;
+            box-shadow: 2px 2px 0px #a855f7 !important;
+            border: 1px solid #3b82f6 !important;
+            transition: all 0.2s;
+        }
+
+        .glistening-box a:hover {
+            box-shadow: 4px 4px 0px #3b82f6 !important;
+            border-color: #a855f7 !important;
+            background: rgba(255,255,255,0.1);
+        }
+</style>
 </head>
 <body>
 
@@ -153,19 +210,19 @@
 
     <div id="main-wrapper">
         <div class="main-content">
-            <div style="margin-bottom: 3.5em;">
+            <div class="glistening-box">
                 <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
                 <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
                     Software Engineer, Developer & Researcher <br> 
                     <span style="margin-top:0.4em; display: block;">🧬 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
                 </span>
                 
-                <p class="bio-intro">
+                <p class="bio-intro hacker-text">
                     Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
                 </p>
 
-                <p class="bio-personal">
-                    Outside of code, I play violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural sports</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
+                <p class="bio-personal hacker-text">
+                    I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
                     <br><br>
                     <a href="mailto:alexgaffen@gmail.com" style="font-size: 0.9em; box-shadow: 2px 2px 0px #000; border: 1px solid #000; padding: 4px 8px; margin-top: 10px; display: inline-block;">Let's connect!</a>
                 </p>
@@ -186,5 +243,68 @@
         </div>
     </div>
 
+
+    <script>
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
+        const targets = document.querySelectorAll('.hacker-text');
+        
+        targets.forEach(el => {
+            const originalHTML = el.innerHTML;
+            const textOnly = el.textContent || el.innerText;
+            el.dataset.originalHtml = originalHTML;
+            el.dataset.textOnly = textOnly;
+            el.style.display = 'inline-block';
+            el.style.minHeight = '1em';
+        });
+
+        setTimeout(() => {
+            targets.forEach(el => triggerHackerEffect(el));
+        }, 2200);
+
+        function triggerHackerEffect(el) {
+            const textToAnimate = el.dataset.textOnly;
+            const originalHTML = el.dataset.originalHtml;
+            let iterations = 0;
+            
+            el.innerHTML = textToAnimate.replace(/./g, char => {
+                 if(char === ' ' || char === '\n') return char;
+                 return letters[Math.floor(Math.random() * letters.length)];
+            });
+            
+            const interval = setInterval(() => {
+                let currentStr = "";
+                for(let i = 0; i < textToAnimate.length; i++) {
+                    const char = textToAnimate[i];
+                    if(char === ' ' || char === '\n') {
+                        currentStr += char;
+                        continue;
+                    }
+                    if(i < iterations) {
+                        currentStr += char;
+                    } else {
+                        currentStr += letters[Math.floor(Math.random() * letters.length)];
+                    }
+                }
+                el.innerText = currentStr;
+                
+                if(iterations >= textToAnimate.length) {
+                    clearInterval(interval);
+                    el.innerHTML = originalHTML;
+                }
+                iterations += 3;
+            }, 30);
+        }
+        
+        const box = document.querySelector('.glistening-box');
+        if(box) {
+            box.addEventListener('mouseenter', () => {
+                targets.forEach(el => {
+                    if(el.innerHTML === el.dataset.originalHtml) {
+                        triggerHackerEffect(el);
+                    }
+                });
+            });
+        }
+    </script>
 </body>
 </html>
