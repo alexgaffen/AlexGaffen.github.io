@@ -24,8 +24,8 @@
     --bg-card: rgba(15, 23, 42, 0.6);
     --bg-card-solid: #0f172a;
     --border-dark: #1e293b;
-    --sidebar-width: 340px;
-    
+    --sidebar-width: clamp(260px, 25vw, 340px);
+
     /* Glass & depth */
     --glass: rgba(15, 23, 42, 0.75);
     --glass-border: rgba(148, 163, 184, 0.12);
@@ -135,11 +135,11 @@ body::before {
 
 @media (min-width: 901px) {
     .sidebar {
-        width: min(var(--sidebar-width), 340px);
+        width: var(--sidebar-width);
     }
 
     .content {
-        margin-left: min(var(--sidebar-width), 340px);
+        margin-left: var(--sidebar-width);
     }
 }
 
@@ -235,7 +235,6 @@ hr::before {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow-y: auto;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     text-align: center;
@@ -1169,8 +1168,8 @@ h1.name {
     }
 
     .profile-img {
-        width: 120px;
-        height: 160px;
+        width: 140px;
+        height: 185px;
     }
 
     .sidebar {
