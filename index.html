@@ -1604,6 +1604,50 @@
             // Initial state
             startFx(document.documentElement.getAttribute('data-theme') || 'dark');
 
+            // Hacker Text Effect
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+            const hackerElements = document.querySelectorAll('.bio-intro, .bio-personal');
+            
+            const hackerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.hacked) {
+                        entry.target.dataset.hacked = "true";
+                        const originalText = entry.target.innerText;
+                        let iteration = 0;
+                        
+                        // Set fixed number of frames for max ~1.8 second load time (60 frames at 30ms)
+                        const totalFrames = 60; 
+                        const increment = Math.max(originalText.length / totalFrames, 1);
+                        
+                        const interval = setInterval(() => {
+                            entry.target.innerText = originalText
+                                .split("")
+                                .map((letter, index) => {
+                                    if (index < iteration) {
+                                        return originalText[index];
+                                    }
+                                    // Preserve spaces & newlines so the text box doesn't jitter or change size
+                                    if (originalText[index] === ' ' || originalText[index] === '\n') {
+                                        return originalText[index];
+                                    }
+                                    return letters[Math.floor(Math.random() * letters.length)];
+                                })
+                                .join("");
+                            
+                            if (iteration >= originalText.length) { 
+                                clearInterval(interval);
+                                entry.target.innerText = originalText;
+                            }
+                            
+                            iteration += increment;
+                        }, 30);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            hackerElements.forEach(el => hackerObserver.observe(el));
+        })();
+    </script>
 
 </body>
 </html>
