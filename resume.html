@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Gaffen | Portfolio</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); // TODO: Replace G-XXXXXXXXXX with your GA4 Measurement ID
+    </script>
+
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="about-theme-fx" aria-hidden="true">
+        <canvas id="themeFxCanvas"></canvas>
+    </div>
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+    <!-- Top social bar (desktop only) -->
+    <div class="top-social-bar" id="topSocialBar">
+        <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" class="top-social-link social-linkedin">
+            <i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/alexgaffen" target="_blank" class="top-social-link social-github">
+            <i class="fab fa-github"></i><span>GitHub</span>
+        </a>
+        <a href="mailto:alexgaffen@gmail.com" class="top-social-link social-email">
+            <i class="fas fa-envelope"></i><span>Email</span>
+        </a>
+        <a href="https://tryhackme.com/p/alexgaffen" target="_blank" class="top-social-link social-thm">
+            <img src="https://assets.tryhackme.com/img/favicon.png" alt="TryHackMe" class="thm-icon-topbar"><span>TryHackMe</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="profile-container">
+                <img src="assets/Headshot.jpg" alt="Alex Gaffen" class="profile-img">
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#about" class="active">ABOUT</a></li>
+                <li><a href="#education">EDUCATION</a></li>
+                <li><a href="#workexperience">EXPERIENCE</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#competitions-awards">AWARDS</a></li>
+                <li><a href="#skills">SKILLS</a></li>
+                <li><a href="#certifications">CERTIFICATIONS</a></li>
+                <li><a href="#hobbies-interests">INTERESTS</a></li>
+            </ul>
+
+            <div class="sidebar-theme-toggle">
+                <div class="star-toggle" id="starToggle">
+                    <svg class="star-lines" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Spokes from center to each point -->
+                        <line x1="50" y1="50" x2="50" y2="12" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <line x1="50" y1="50" x2="83" y2="31" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <line x1="50" y1="50" x2="83" y2="69" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <line x1="50" y1="50" x2="50" y2="88" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <line x1="50" y1="50" x2="17" y2="69" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <line x1="50" y1="50" x2="17" y2="31" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
+                        <!-- Outline connecting adjacent points (hexagon perimeter) -->
+                        <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" fill="none" stroke="currentColor" stroke-width="1" opacity="0.15"/>
+                    </svg>
+                    <div class="star-indicator"></div>
+                    <button class="star-slot" data-theme="light" data-slot="0" title="Light Mode (1)"><i class="fas fa-sun"></i></button>
+                    <button class="star-slot" data-theme="ocean" data-slot="1" title="Ocean (2)"><i class="fas fa-water"></i></button>
+                    <button class="star-slot" data-theme="ember" data-slot="2" title="Ember (3)"><i class="fas fa-fire"></i></button>
+                    <button class="star-slot" data-theme="dark" data-slot="3" title="Dark Mode (4)"><i class="fas fa-moon"></i></button>
+                    <button class="star-slot" data-theme="forest" data-slot="4" title="Forest (5)"><i class="fas fa-leaf"></i></button>
+                    <button class="star-slot" data-theme="aurora" data-slot="5" title="Aurora (6)"><i class="fas fa-star"></i></button>
+                </div>
+
+            </div>
+
+            <div class="sidebar-action">
+                <div class="sidebar-socials">
+                    <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-github" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="mailto:alexgaffen@gmail.com" class="social-email" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-thm" title="TryHackMe"><img src="https://assets.tryhackme.com/img/favicon.png" alt="TryHackMe" class="thm-icon"></a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            
+            <section id="about">
+                <div class="about-bg" aria-hidden="true">
+                    <div class="about-grid"></div>
+                    <div class="grid-lights">
+                    </div>
+                </div>
+                <div class="about-layout">
+                <div class="about-content">
+                    <h1 class="name">Alex <span class="last-name" data-text="Gaffen">Gaffen</span></h1>
+                    <p class="main-subheading">Software Engineer, Developer &amp; Researcher</p>
+                    <p class="tagline"> 🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🧬 Bioinformatics</p>
+                    <p class="location-line"><i class="fas fa-map-marker-alt"></i> Toronto / Ottawa, ON, Canada</p>
+                    <div class="bio-container">
+    <p class="bio-intro">
+        Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
+    </p>
+
+    <p class="bio-personal">
+        Outside of code, I play violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural sports</strong>. I'm currently seeking opportunities in <strong>AI Research &amp; Engineering</strong> and <strong>Cybersecurity</strong>. <a href="mailto:alexgaffen@gmail.com">Let's connect!</a>
+    </p>
+</div>
+                </div>
+                <div class="about-highlights">
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-code"></i></div>
+                        <div class="highlight-text">
+                            <span class="highlight-number">5+</span>
+                            <span class="highlight-label">Years Coding</span>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-briefcase"></i></div>
+                        <div class="highlight-text">
+                            <span class="highlight-number">4</span>
+                            <span class="highlight-label">Work Experiences</span>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-project-diagram"></i></div>
+                        <div class="highlight-text">
+                            <span class="highlight-number">5+</span>
+                            <span class="highlight-label">Projects Built</span>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-certificate"></i></div>
+                        <div class="highlight-text">
+                            <span class="highlight-number">3</span>
+                            <span class="highlight-label">Certifications</span>
+                        </div>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="highlight-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="highlight-text">
+                            <span class="highlight-number">4</span>
+                            <span class="highlight-label">Awards</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="education" class="hidden section-burgundy">
+                <h2>EDUCATION</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Honours Computer Science Co-op (B.A.Sc.)</h3>
+                        <span class="job-date">2022-Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <img src="assets/mcmaster.png" alt="McMaster University" class="edu-logo">
+                        <h4>McMaster University, Hamilton ON</h4>
+                    </div>
+                    
+                    <div class="edu-stats">
+                        <span class="edu-badge">📅 Currently Enrolled in 4th Year</span>
+                    </div>
+                    
+                    <div class="relevant-courses">
+                        <h4 class="course-header">Relevant Coursework:</h4>
+                        <ul>
+                            <li>🔐 (A-) COMPSCI 4CR3: Applied Cryptography</li>
+                            <li>🔧 (A+) COMPSCI 3TB3: Syntax-Based Tools &amp; Compilers</li>
+                            <li>🌍 (B+) COMPSCI 3N03: Computer Networks and Security</li>
+                            <li>🧠 (A-) COMPSCI 3MI3: Principles of Programming Languages</li>
+                            <li>⚙️ (A-) COMPSCI 3SH3: Operating Systems</li>
+                            <li>🧮 (A+) COMPSCI 2XC3: Algorithms and Software Design</li>
+                            <li>🖥️ (A-) COMPSCI 2GA3: Computer Architecture</li>
+                            <li>🌐 (A-) COMPSCI 1XD3: Intro to Software Using Web Programming</li>
+                            <li>🛠️ (A+) COMPSCI 1XC3: Development Basics</li>
+                            <li>💻 (A) COMPSCI 1MD3: Introduction to Programming</li>
+                            <li>🔢 (A) COMPSCI 1DM3: Discrete Math for Computer Science</li>
+                            <li>🎲 (A) STATS 2D03: Intro to Probability</li>
+                            <li>📊 (A-) MATH 1ZB3: Engineering Mathematics II-A</li>
+                            <li>➗ (A) MATH 1ZA3: Engineering Mathematics I</li>
+                            <li>📐 (A-) MATH 1B03: Linear Algebra 1</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="workexperience" class="hidden section-teal">
+                <h2></i>EXPERIENCE</h2>
+
+                <div class="job-item">
+                    <div class="project-card-layout">
+                        <div class="project-card-text">
+                            <div class="job-header">
+                                <h3>AI &amp; Full Stack Developer - Undergraduate Research Assistant</h3>
+                                <span class="job-date">Jan. 2026 – Present</span>
+                            </div>
+                            <div class="job-sub">
+                                <h4>McMaster University – Wang Lab, Hamilton, ON</h4>
+                            </div>
+
+                            <div class="project-skills-list">
+                                <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                                <div class="skill-box flask"><i class="fas fa-flask"></i> Flask</div>
+                                <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                                <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UI/UX</div>
+                                <div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
+                                <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+                                <div class="skill-box architecture"><i class="fas fa-project-diagram"></i> Software Architecture</div>
+                            </div>
+
+                            <ul>
+                                <li>Architecting an end-to-end AI-powered clinical tool alongside PhD researchers for automated liver fibrosis quantification and diagnosis from medical imaging.</li>
+                                <li>Building the full stack application with a React frontend and Python/Flask backend, integrating deep learning models into a streamlined diagnostic pipeline.</li>
+                            </ul>
+                        </div>
+                        <div class="project-preview-gallery single-preview-gallery">
+                            <img src="assets/aifibrosis.png" alt="AI liver fibrosis clinical tool preview" class="project-preview-img" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Front End Developer Intern</h3>
+                        <span class="job-date">Summer 2024</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Bonbon Technologies, Los Angeles, California (Remote)</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+                        <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+                        <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+                        <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+                        <div class="skill-box frontend"><i class="fas fa-code-branch"></i> Front End Dev</div>
+                        <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+                    </div>
+
+                    <ul>
+                        <li>Completed a work term of 4 months during the summer of 2024.</li>
+                        <li>Consistently met project deadlines utilizing the Svelte framework, Git, and GitHub to design and deploy web components that enhanced user engagement and registration for a loyalty program.</li>
+                        <li>Showcased adaptability and initiative during last minute design changes by other departments.</li>
+                        <li>Discussed business strategy and innovative AI solutions to reach a wider audience.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Lifeguard & Pool Supervisor</h3>
+                        <span class="job-date">Summer 2023</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>City of Ottawa, Ottawa ON</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Leadership</div>
+                        <div class="skill-box communication"><i class="fas fa-comments"></i> Mentorship</div>
+                        <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+                        <div class="skill-box management"><i class="fas fa-calendar-check"></i> Scheduling</div>
+                    </div>
+
+                    <ul>
+                        <li>Practiced strong interpersonal and leadership skills in mentoring less experienced lifeguards while having to adapt changing policy and safety standards to ensure safety for all patrons.</li>
+                        <li>Exercised patience and compassion as the mediator for conflict resolution between children.</li>
+                        <li>Adhered to safety procedures set out by City of Ottawa for working with chlorine, cleaning up dangerous objects routinely, resulting in no injuries or issues.</li>
+                        <li>Created an efficient task schedule for workers every morning to streamline opening procedures.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Computer Science High School Tutor</h3>
+                        <span class="job-date">Fall 2022</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Hamilton, ON (Remote)</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box communication"><i class="fas fa-chalkboard-teacher"></i> Teaching</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box java"><i class="devicon-java-plain colored"></i> Java</div>
+                        <div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
+                        <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+                    </div>
+
+                    <ul>
+                        <li>Delivered comprehensive instruction on the Ontario ICS3U and ICS4U curriculum, covering fundamental programming concepts and logic.</li>
+                        <li>Facilitated deep technical understanding by breaking down complex algorithms, memory management concepts, and data structures into digestible, practical examples.</li>
+                        <li>Cultivated independent problem-solving skills through guided debugging sessions and code reviews, emphasizing clean syntax and efficient software design principles.</li>
+                        <li>Customized lesson plans to adapt to the student’s learning pace, resulting in improved academic performance and confidence in completing major capstone projects.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="projects" class="hidden section-orange">
+                <h2>PROJECTS</h2>
+
+                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/investor-practice-website" data-hover-text="View on GitHub">
+                    <div class="project-card-layout">
+                        <div class="project-card-text">
+                            <div class="job-header">
+                                <h3>Mock Market</h3>
+                                <span class="job-date">Personal Project</span>
+                            </div>
+                            <div class="job-sub">
+                                <h4>Full Stack Investor Practice Website</h4>
+                            </div>
+                            
+                            <div class="project-skills-list">
+                                <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                                <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                                <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
+                                <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                                <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+                            </div>
+
+                            <ul>
+                                <li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
+                                <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
+                                <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
+                                <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
+                            </ul>
+                        </div>
+                        <div class="project-preview-gallery">
+                            <img src="assets/mock-market-home.png" alt="Mock Market Home Page" class="project-preview-img">
+                            <img src="assets/mock-market-analyze.jpg" alt="Mock Market Analysis View" class="project-preview-img">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/GhostShell" data-hover-text="View on GitHub">
+                    <div class="job-header">
+                        <h3>Ghost Shell</h3>
+                        <span class="job-date">Personal Project</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Autonomous AI Honeypot Agent</h4>
+                    </div>
+
+                    <div class="project-skills-list">
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box go"><i class="devicon-go-original-wordmark colored"></i> Go</div>
+                        <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                        <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Linux</div>
+                        <div class="skill-box ssh"><i class="fas fa-terminal"></i> SSH</div>
+                    </div>
+
+                    <ul>
+                        <li>Developing an autonomous AI agent in Python that prototypes intelligent automation by planning and executing commands via an LLM-driven reasoning loop.</li>
+                        <li>Built a custom Go-based terminal emulator and virtual honey-filesystem to provide a high-fidelity, sandboxed environment for capturing and analyzing malicious activity.</li>
+                    </ul>
+                </div>
+                
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Networked Battle Game</h3>
+                        <span class="job-date">Final Project (A+)</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Course: Computer Networks and Security</h4>
+                    </div>
+                    
+                    <div class="project-skills-list">
+                        <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C</div>
+                        <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+                        <div class="skill-box server"><i class="fas fa-server"></i> Client-Server Architecture</div>
+                    </div>
+
+                    <ul>
+                        <li>Developed a client-server game in C as the final project for Computer Networks and Security course.</li>
+                        <li>Implemented socket programming and network protocols to manage real-time data exchange and communication between multiple clients.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item clickable-card" data-href="https://github.com/singk17/MathVisualizer" data-hover-text="View on GitHub">
+                    <div class="job-header">
+                        <h3>Matrix Visualizer Web App</h3>
+                        <span class="job-date">Grade Received: A-</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Team Collaboration (6 members)</h4>
+                    </div>
+
+                    <div class="project-skills-list">
+                        <div class="skill-box elm"><i class="devicon-elm-plain colored"></i> Elm</div>
+                        <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UX/UI Design Principles</div>
+                    </div>
+
+                    <ul>
+                        <li>Collaborated in a team of 6 to design and code graphing software using Elm language.</li>
+                        <li>Followed UX and UI design principles for ease of use and aesthetic purposes.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="competitions-awards" class="hidden section-gold">
+                <h2>AWARDS</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster University Award of Excellence</h3>
+                        <span class="job-date">2023</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>McMaster University — Entrance Scholarship ($3,000)</h4>
+                    </div>
+                    <ul>
+                        <li>Awarded for outstanding academic achievement upon admission.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Euclid Mathematics Contest</h3>
+                        <span class="job-date">2022</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>University of Waterloo — 1st Place in School</h4>
+                    </div>
+                    <ul>
+                        <li>Achieved the highest score among all participants at my high school in this nationally recognized contest.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>Canadian Senior Mathematics Contest</h3>
+                        <span class="job-date">2021</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>University of Waterloo — 1st Place in School</h4>
+                    </div>
+                    <ul>
+                        <li>Earned the top score at my high school in the CSMC, a national-level competition for senior students.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="skills" class="hidden">
+                <h2>SKILLS</h2>
+                
+                <div class="skills-grid">
+                    
+                    <div class="skill-category">
+                        <h3>PROGRAMMING LANGUAGES & TOOLS</h3>
+                        <div class="skill-items">
+                            <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                            <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
+                            <div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
+                            <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+                            <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+                            <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+                            <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+                            <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+                            <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+                            <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
+                            <div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
+                            <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+                            <div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
+                            <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>CYBERSECURITY & NETWORKING</h3>
+                        <div class="skill-items">
+                            <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
+                            <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
+                            <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+                            <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
+                            <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
+                            <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>INTERPERSONAL & LEADERSHIP</h3>
+                        <div class="skill-items">
+                            <div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
+                            <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
+                            <div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
+                            <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="certifications" class="hidden section-purple">
+                <h2>CERTIFICATIONS</h2>
+                <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
+                    Currently pursuing the following certifications to deepen my expertise in AI/ML.
+                </p>
+
+                <div class="job-item clickable-card" data-href="https://www.coursera.org/specializations/deep-learning" data-hover-text="View on Coursera">
+                    <div class="job-header">
+                        <h3>Deep Learning Specialization</h3>
+                        <span class="job-date">Dec 2025 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>DeepLearning.AI (Coursera) — 5-Course Specialization by Andrew Ng</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box"><i class="devicon-tensorflow-original colored"></i> TensorFlow</div>
+                        <div class="skill-box"><i class="devicon-keras-plain colored"></i> Keras</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                    </div>
+                    <ul>
+                        <li>Neural Networks & Deep Learning — foundations of deep learning and neural network architectures.</li>
+                        <li>Improving Deep Neural Networks — hyperparameter tuning, regularization, and optimization (Adam, RMSprop, batch norm).</li>
+                        <li>Structuring Machine Learning Projects — ML strategy, error analysis, and transfer learning best practices.</li>
+                        <li>Convolutional Neural Networks (CNNs) — image recognition, object detection (YOLO), and neural style transfer.</li>
+                        <li>Sequence Models (RNNs/LSTMs) — NLP, attention mechanisms, and transformer architectures.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item clickable-card" data-href="https://www.coursera.org/professional-certificates/pytorch-for-deep-learning" data-hover-text="View on Coursera">
+                    <div class="job-header">
+                        <h3>PyTorch for Deep Learning</h3>
+                        <span class="job-date">Dec 2025 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>DeepLearning.AI (Coursera)</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box"><i class="devicon-pytorch-original colored"></i> PyTorch</div>
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                    </div>
+                    <ul>
+                        <li>Building and training neural networks using PyTorch's dynamic computational graphs.</li>
+                        <li>Implementing CNNs, RNNs, and custom model architectures with torch.nn modules.</li>
+                        <li>GPU-accelerated training, model evaluation, and deployment workflows.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item clickable-card" data-href="https://www.udemy.com/course/machinelearning/" data-hover-text="View on Udemy">
+                    <div class="job-header">
+                        <h3>Machine Learning A-Z: AI, Python & R</h3>
+                        <span class="job-date">Dec 2024 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4>Udemy — Kirill Eremenko & Hadelin de Ponteves</h4>
+                    </div>
+                    <div class="project-skills-list">
+                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+                        <div class="skill-box"><i class="devicon-r-plain colored"></i> R</div>
+                        <div class="skill-box"><i class="fas fa-chart-line"></i> Scikit-learn</div>
+                    </div>
+                    <ul>
+                        <li>Regression, classification, clustering, and association rule learning with real-world datasets.</li>
+                        <li>Dimensionality reduction (PCA, LDA), model selection, and boosting (XGBoost).</li>
+                        <li>Natural Language Processing and reinforcement learning fundamentals.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+            
+            <section id="hobbies-interests" class="hidden section-coral">
+                <h2>INTERESTS</h2>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster Symphony Orchestra</h3>
+                        <span class="job-date">2022 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4><i class="fas fa-music" style="margin-right: 0.4rem;"></i>Violinist</h4>
+                    </div>
+                    <ul>
+                        <li>Perform as a violinist with the McMaster Symphony Orchestra, rehearsing and performing orchestral repertoire throughout the academic year.</li>
+                    </ul>
+                </div>
+
+                <div class="job-item">
+                    <div class="job-header">
+                        <h3>McMaster Intramural Team Sports</h3>
+                        <span class="job-date">2023 – Present</span>
+                    </div>
+                    <div class="job-sub">
+                        <h4><i class="fas fa-futbol" style="margin-right: 0.4rem;"></i>Soccer, Pickleball, Football</h4>
+                    </div>
+                    <ul>
+                        <li>Compete in intramural leagues across multiple sports, fostering teamwork and sportsmanship in a competitive environment.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <hr>
+
+            <section id="contact" class="hidden">
+                <h2>GET IN TOUCH</h2>
+                <div class="contact-section">
+                    <form class="contact-form" action="https://formspree.io/f/mqeyyljp" method="POST">
+                        <input type="hidden" name="_subject" value="New message from alexgaffen.com">
+                        <input type="text" name="_gotcha" style="display:none">
+                        <div class="contact-form-row">
+                            <div class="form-group">
+                                <label for="contact-name">Name</label>
+                                <input type="text" id="contact-name" name="name" required placeholder="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email</label>
+                                <input type="email" id="contact-email" name="email" required placeholder="your@email.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" name="message" required placeholder="Your message..." rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="contact-submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
+            </section>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 Alex Gaffen. All rights reserved.</p>
+            </footer>
+
+        </main>
+    </div>
+    
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div id="cardHoverHint" class="card-hover-hint" aria-hidden="true"></div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Mobile Top Bar (shows on scroll-up past sidebar) -->
+    <div class="mobile-top-bar" id="mobileTopBar">
+        <a href="#" class="mobile-top-brand" id="mobileTopBrand">alexgaffen.com</a>
+        <button class="mobile-top-hamburger" id="mobileTopHamburger" title="Open navigation" aria-label="Open navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Nav Menu Button (legacy, hidden — replaced by mobile top bar) -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" title="Open navigation" aria-label="Open navigation" style="display:none!important">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile Nav Panel -->
+    <div class="mobile-nav-panel" id="mobileNavPanel">
+        <button class="mobile-nav-close" id="mobileNavClose" title="Close navigation" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="mobile-nav-links">
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#education">EDUCATION</a></li>
+            <li><a href="#workexperience">EXPERIENCE</a></li>
+            <li><a href="#projects">PROJECTS</a></li>
+            <li><a href="#competitions-awards">AWARDS</a></li>
+            <li><a href="#skills">SKILLS</a></li>
+            <li><a href="#certifications">CERTIFICATIONS</a></li>
+            <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
+        </ul>
+    </div>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+    
+    <script>
+        // Always start at the top on page load/refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
+        // Scroll reveal animation with staggered children
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    // Stagger child job-items
+                    const children = entry.target.querySelectorAll('.job-item');
+                    children.forEach((child, i) => {
+                            child.style.transitionDelay = `${i * 0.18}s`;
+                        child.classList.add('show-child');
+                    });
+                }
+            });
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+        // Lock about section visibility after intro animations finish
+        setTimeout(() => {
+            const ac = document.querySelector('.about-content');
+            if (ac) {
+                ac.style.animation = 'none';
+                ac.style.opacity = '1';
+                ac.style.transform = 'none';
+                ac.querySelectorAll('.name, .main-subheading, .tagline, .location-line, .bio-container').forEach(el => {
+                    el.style.animation = 'none';
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                });
+            }
+            const ah = document.querySelector('.about-highlights');
+            if (ah) {
+                ah.style.animation = 'none';
+                ah.style.opacity = '1';
+                ah.style.transform = 'none';
+            }
+        }, 1500);
+
+        // Clickable cards (projects + certifications)
+        const clickableCards = document.querySelectorAll('.clickable-card[data-href]');
+        const hoverHint = document.getElementById('cardHoverHint');
+        const supportsHover = window.matchMedia('(hover: hover)').matches;
+
+        function openCardLink(url) {
+            if (!url) return;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        clickableCards.forEach((card) => {
+            card.setAttribute('role', 'link');
+            card.setAttribute('tabindex', '0');
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('a, button')) return;
+                openCardLink(card.dataset.href);
+            });
+
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openCardLink(card.dataset.href);
+                }
+            });
+
+            if (supportsHover && hoverHint) {
+                card.addEventListener('mouseenter', () => {
+                    hoverHint.textContent = card.dataset.hoverText || 'Open link';
+                    hoverHint.classList.add('visible');
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    hoverHint.style.left = `${e.clientX + 18}px`;
+                    hoverHint.style.top = `${e.clientY + 18}px`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    hoverHint.classList.remove('visible');
+                });
+            }
+        });
+
+        // Star theme toggle
+        const htmlEl = document.documentElement;
+        const starSlots = document.querySelectorAll('.star-slot');
+        const starIndicator = document.querySelector('.star-indicator');
+
+        function moveIndicator(slot) {
+            const slotIndex = parseInt(slot.dataset.slot);
+            const angle = slotIndex * 60 - 90; // start from top, 60° apart
+            const rad = angle * Math.PI / 180;
+            const radius = 38;
+            const cx = 50 + radius * Math.cos(rad);
+            const cy = 50 + radius * Math.sin(rad);
+            starIndicator.style.left = cx + '%';
+            starIndicator.style.top = cy + '%';
+        }
+
+        // Default to dark mode
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        const defaultSlot = document.querySelector('.star-slot[data-theme="dark"]');
+        defaultSlot.classList.add('active');
+        moveIndicator(defaultSlot);
+
+        starSlots.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+                htmlEl.classList.add('theme-transitioning');
+                starSlots.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                moveIndicator(btn);
+                if (theme === 'dark') {
+                    htmlEl.removeAttribute('data-theme');
+                } else {
+                    htmlEl.setAttribute('data-theme', theme);
+                }
+                localStorage.setItem('theme', theme);
+                setTimeout(() => htmlEl.classList.remove('theme-transitioning'), 700);
+            });
+        });
+
+        // Keyboard shortcuts: 1-6 switch themes, ArrowUp scrolls to top (desktop)
+        const themeKeys = ['light', 'ocean', 'ember', 'dark', 'forest', 'aurora'];
+        document.addEventListener('keydown', (e) => {
+            // Ignore when typing in an input/textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            const keyNum = parseInt(e.key);
+            if (keyNum >= 1 && keyNum <= 6) {
+                const themeName = themeKeys[keyNum - 1];
+                const slot = document.querySelector('.star-slot[data-theme="' + themeName + '"]');
+                if (slot) slot.click();
+            }
+            if (e.key === 'ArrowUp' && window.innerWidth > 900) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        // Scroll-spy: highlight active nav link based on scroll position
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('section[id]');
+
+        function updateActiveNav() {
+            const scrollPos = window.scrollY + 120;
+
+            let currentId = '';
+            sections.forEach((section) => {
+                if (section.offsetTop <= scrollPos) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+
+            // If at the very top, default to about
+            if (window.scrollY < 50) currentId = 'about';
+
+            navLinks.forEach((link) => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav);
+        updateActiveNav();
+
+        // Smooth scroll with offset for sidebar nav links so section h2 sits below header
+        const NAV_OFFSET = 120; // matches the scroll-spy offset
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                e.preventDefault();
+                const targetId = href.slice(1);
+                const target = document.getElementById(targetId);
+                if (!target) return;
+                if (targetId === 'about') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+                // Keep URL clean (no hash fragment)
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+                // ensure nav active updates after scroll settles
+                setTimeout(updateActiveNav, 300);
+            });
+        });
+
+        // Handle direct links on page load (preserve offset)
+        if (location.hash) {
+            const id = location.hash.slice(1);
+            const el = document.getElementById(id);
+            if (el) {
+                if (id === 'about') {
+                    window.scrollTo(0, 0);
+                } else {
+                    const top = el.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo(0, top);
+                }
+            }
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+
+        // Scroll progress bar & back-to-top button (desktop only)
+        const scrollProgress = document.getElementById('scrollProgress');
+        const backToTop = document.getElementById('backToTop');
+        const mobileTopBar = document.getElementById('mobileTopBar');
+        const mobileTopBrand = document.getElementById('mobileTopBrand');
+        const mobileTopHamburger = document.getElementById('mobileTopHamburger');
+        let lastScrollY = window.scrollY;
+        let mobileBarVisible = false;
+
+        // Mobile nav menu toggle
+        const mobileNavToggle = document.getElementById('mobileNavToggle');
+        const mobileNavPanel = document.getElementById('mobileNavPanel');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const sidebar = document.querySelector('.sidebar');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+
+            const delta = scrollTop - lastScrollY;
+            lastScrollY = scrollTop;
+
+            // Desktop: show/hide back-to-top arrow
+            if (window.innerWidth > 900) {
+                if (scrollTop > 400) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            }
+
+            // Mobile: show/hide top bar when scrolling up past sidebar
+            if (window.innerWidth <= 900) {
+                const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
+                if (scrollTop <= sidebarBottom) {
+                    mobileBarVisible = false;
+                } else if (delta < -3) {
+                    mobileBarVisible = true;
+                } else if (delta > 5) {
+                    mobileBarVisible = false;
+                }
+                mobileTopBar.classList.toggle('visible', mobileBarVisible);
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile top bar — brand scrolls to top, hamburger opens nav
+        mobileTopBrand.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        mobileTopHamburger.addEventListener('click', openMobileNav);
+
+        function openMobileNav() {
+            mobileNavPanel.classList.add('open');
+            mobileNavOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileNav() {
+            mobileNavPanel.classList.remove('open');
+            mobileNavOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        mobileNavToggle.addEventListener('click', openMobileNav);
+        mobileNavClose.addEventListener('click', closeMobileNav);
+        mobileNavOverlay.addEventListener('click', closeMobileNav);
+
+        // Close panel and scroll on link click
+        mobileNavPanel.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (!href || !href.startsWith('#')) return;
+                e.preventDefault();
+                closeMobileNav();
+                const targetId = href.slice(1);
+                const target = document.getElementById(targetId);
+                if (!target) return;
+                if (targetId === 'about') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+                history.replaceState(null, '', window.location.pathname + window.location.search);
+            });
+        });
+
+        // Cursor glow — AI-style follow effect (only when hover capable)
+        const cursorGlow = document.getElementById('cursorGlow');
+        if (cursorGlow && window.matchMedia('(hover: hover)').matches) {
+            const size = 420;
+            const half = size / 2;
+            let raf = 0;
+            let x = -999, y = -999;
+            document.addEventListener('mousemove', (e) => {
+                if (raf) cancelAnimationFrame(raf);
+                raf = requestAnimationFrame(() => {
+                    x += (e.clientX - x) * 0.14;
+                    y += (e.clientY - y) * 0.14;
+                    cursorGlow.style.left = (x - half) + 'px';
+                    cursorGlow.style.top = (y - half) + 'px';
+                    cursorGlow.style.opacity = '0.55';
+                    raf = 0;
+                });
+            });
+            document.addEventListener('mouseleave', () => { cursorGlow.style.opacity = '0'; });
+        } else if (cursorGlow) {
+            cursorGlow.style.display = 'none';
+        }
+
+        // About grid lights — simple linear streaks that travel one direction and fade in/out
+        (function initAboutGridLights() {
+            if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+            const about = document.getElementById('about');
+            if (!about) return;
+            const container = about.querySelector('.grid-lights');
+            if (!container) return;
+
+            const gridSize = 64;
+
+            function rand(min, max) { return min + Math.random() * (max - min); }
+            function snap(n) { return Math.round(n / gridSize) * gridSize; }
+
+            const lights = [];
+            const MAX_LIGHTS = 14;
+
+            function spawnLight() {
+                const rect = about.getBoundingClientRect();
+                const w = Math.max(200, rect.width);
+                const h = Math.max(200, rect.height);
+
+                const isHorizontal = Math.random() < 0.5;
+                const el = document.createElement('span');
+                el.className = 'grid-light';
+
+                let x, y, dx, dy, travel;
+                if (isHorizontal) {
+                    y = snap(rand(0, h));
+                    const goRight = Math.random() < 0.5;
+                    x = goRight ? -10 : w + 10;
+                    dx = goRight ? 1 : -1;
+                    dy = 0;
+                    travel = w + 20;
+                    el.style.width = '18px';
+                    el.style.height = '3px';
+                    el.style.borderRadius = '2px';
+                } else {
+                    x = snap(rand(0, w));
+                    const goDown = Math.random() < 0.5;
+                    y = goDown ? -10 : h + 10;
+                    dx = 0;
+                    dy = goDown ? 1 : -1;
+                    travel = h + 20;
+                    el.style.width = '3px';
+                    el.style.height = '18px';
+                    el.style.borderRadius = '2px';
+                }
+
+                container.appendChild(el);
+                const speed = rand(60, 140);
+                lights.push({ el, x, y, dx, dy, speed, traveled: 0, maxTravel: travel, opacity: 0, phase: 'in' });
+            }
+
+            // Spawn initial batch
+            for (let i = 0; i < 8; i++) spawnLight();
+
+            let last = performance.now();
+            function tick(now) {
+                const dt = Math.min(0.05, (now - last) / 1000);
+                last = now;
+
+                // Spawn new lights periodically
+                if (lights.length < MAX_LIGHTS && Math.random() < dt * 2.5) {
+                    spawnLight();
+                }
+
+                for (let i = lights.length - 1; i >= 0; i--) {
+                    const s = lights[i];
+                    const move = s.speed * dt;
+                    s.x += s.dx * move;
+                    s.y += s.dy * move;
+                    s.traveled += move;
+
+                    // Fade in/out
+                    const progress = s.traveled / s.maxTravel;
+                    if (progress < 0.15) {
+                        s.opacity = progress / 0.15;
+                    } else if (progress > 0.85) {
+                        s.opacity = (1 - progress) / 0.15;
+                    } else {
+                        s.opacity = 1;
+                    }
+
+                    s.el.style.transform = `translate3d(${s.x}px, ${s.y}px, 0)`;
+                    s.el.style.opacity = Math.max(0, Math.min(1, s.opacity));
+
+                    // Remove when done
+                    if (s.traveled >= s.maxTravel) {
+                        s.el.remove();
+                        lights.splice(i, 1);
+                    }
+                }
+
+                requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        })();
+
+        // ═══════════════════════════════════════════════════════
+        // THEMED CANVAS EFFECTS for Ocean / Ember / Forest / Aurora
+        // ═══════════════════════════════════════════════════════
+        (function initThemeFx() {
+            const canvas = document.getElementById('themeFxCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let W = 0, H = 0, particles = [], animId = null, currentTheme = 'dark';
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+            function resize() {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W * DPR;
+                canvas.height = H * DPR;
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            }
+
+            function rand(a, b) { return a + Math.random() * (b - a); }
+            function randInt(a, b) { return Math.floor(rand(a, b + 1)); }
+
+            // ──── OCEAN: ripple rings + floating bubbles + wave lines ────
+            function spawnOcean() {
+                particles = [];
+                // Ripple rings
+                for (let i = 0; i < 6; i++) {
+                    particles.push({
+                        type: 'ripple', x: rand(0, W), y: rand(0, H),
+                        r: rand(0, 30), maxR: rand(60, 140),
+                        speed: rand(15, 35), opacity: rand(0.3, 0.6),
+                        color: ['rgba(34,211,238,', 'rgba(56,189,248,', 'rgba(14,165,233,'][randInt(0,2)]
+                    });
+                }
+                // Floating bubbles
+                for (let i = 0; i < 30; i++) {
+                    particles.push({
+                        type: 'bubble', x: rand(0, W), y: rand(0, H),
+                        r: rand(1.5, 5), vy: rand(-12, -30), vx: rand(-4, 4),
+                        wobble: rand(0, Math.PI * 2), wobbleSpeed: rand(1, 3),
+                        opacity: rand(0.15, 0.5),
+                        color: ['rgba(34,211,238,', 'rgba(56,189,248,', 'rgba(125,211,252,'][randInt(0,2)]
+                    });
+                }
+                // Wave lines
+                for (let i = 0; i < 4; i++) {
+                    particles.push({
+                        type: 'wave', y: rand(H * 0.2, H * 0.8),
+                        phase: rand(0, Math.PI * 2), speed: rand(0.3, 0.8),
+                        amp: rand(8, 20), freq: rand(0.005, 0.015),
+                        opacity: rand(0.06, 0.14),
+                        color: 'rgba(34,211,238,'
+                    });
+                }
+            }
+
+            function drawOcean(dt) {
+                for (const p of particles) {
+                    if (p.type === 'ripple') {
+                        p.r += p.speed * dt;
+                        const life = p.r / p.maxR;
+                        const alpha = p.opacity * (1 - life);
+                        if (p.r >= p.maxR) {
+                            p.r = 0; p.x = rand(0, W); p.y = rand(0, H);
+                            p.maxR = rand(60, 140);
+                        }
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.strokeStyle = p.color + alpha.toFixed(3) + ')';
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    } else if (p.type === 'bubble') {
+                        p.wobble += p.wobbleSpeed * dt;
+                        p.y += p.vy * dt;
+                        p.x += Math.sin(p.wobble) * 0.5;
+                        if (p.y < -10) { p.y = H + 10; p.x = rand(0, W); }
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color + p.opacity.toFixed(3) + ')';
+                        ctx.fill();
+                        // Highlight
+                        ctx.beginPath();
+                        ctx.arc(p.x - p.r * 0.3, p.y - p.r * 0.3, p.r * 0.3, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(255,255,255,' + (p.opacity * 0.5).toFixed(3) + ')';
+                        ctx.fill();
+                    } else if (p.type === 'wave') {
+                        p.phase += p.speed * dt;
+                        ctx.beginPath();
+                        for (let x = 0; x <= W; x += 4) {
+                            const y = p.y + Math.sin(x * p.freq + p.phase) * p.amp;
+                            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+                        }
+                        ctx.strokeStyle = p.color + p.opacity.toFixed(3) + ')';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // ──── EMBER: sparks, fire particles, hot embers, heat shimmer ────
+            function spawnEmber() {
+                particles = [];
+                // Rising sparks
+                for (let i = 0; i < 50; i++) {
+                    particles.push({
+                        type: 'spark', x: rand(0, W), y: rand(H * 0.3, H),
+                        vx: rand(-8, 8), vy: rand(-60, -20),
+                        size: rand(1, 3.5), life: 0, maxLife: rand(2, 5),
+                        color: ['#f97316', '#ef4444', '#eab308', '#fb923c', '#fbbf24'][randInt(0,4)],
+                        flicker: rand(0, Math.PI * 2)
+                    });
+                }
+                // Glowing embers (larger, slower)
+                for (let i = 0; i < 12; i++) {
+                    particles.push({
+                        type: 'ember', x: rand(0, W), y: rand(H * 0.5, H),
+                        vx: rand(-3, 3), vy: rand(-15, -5),
+                        size: rand(3, 7), life: 0, maxLife: rand(4, 8),
+                        pulse: rand(0, Math.PI * 2),
+                        color: ['#f97316', '#ef4444', '#dc2626'][randInt(0,2)]
+                    });
+                }
+                // Heat shimmer zones
+                for (let i = 0; i < 3; i++) {
+                    particles.push({
+                        type: 'heatShimmer', x: rand(W * 0.1, W * 0.9), y: H,
+                        width: rand(80, 200), height: rand(H * 0.4, H * 0.7),
+                        phase: rand(0, Math.PI * 2), speed: rand(2, 4)
+                    });
+                }
+            }
+
+            function drawEmber(dt) {
+                // Bottom fire glow
+                const grd = ctx.createLinearGradient(0, H, 0, H * 0.5);
+                grd.addColorStop(0, 'rgba(249,115,22,0.12)');
+                grd.addColorStop(0.4, 'rgba(239,68,68,0.04)');
+                grd.addColorStop(1, 'transparent');
+                ctx.fillStyle = grd;
+                ctx.fillRect(0, H * 0.5, W, H * 0.5);
+
+                for (const p of particles) {
+                    if (p.type === 'spark') {
+                        p.life += dt;
+                        p.flicker += dt * 12;
+                        p.x += p.vx * dt;
+                        p.vy += rand(-5, 5) * dt; // turbulence
+                        p.y += p.vy * dt;
+                        p.vx += rand(-10, 10) * dt;
+                        const lifeRatio = p.life / p.maxLife;
+                        if (p.life >= p.maxLife) {
+                            p.life = 0; p.x = rand(0, W); p.y = rand(H * 0.4, H);
+                            p.vx = rand(-8, 8); p.vy = rand(-60, -20);
+                        }
+                        const alpha = (1 - lifeRatio) * (0.5 + Math.sin(p.flicker) * 0.3);
+                        const sz = p.size * (1 - lifeRatio * 0.5);
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.globalAlpha = Math.max(0, alpha);
+                        ctx.fill();
+                        // Glow
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, sz * 3, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.globalAlpha = Math.max(0, alpha * 0.15);
+                        ctx.fill();
+                        ctx.globalAlpha = 1;
+                    } else if (p.type === 'ember') {
+                        p.life += dt;
+                        p.pulse += dt * 2;
+                        p.x += p.vx * dt + Math.sin(p.pulse * 1.5) * 0.3;
+                        p.y += p.vy * dt;
+                        if (p.life >= p.maxLife) {
+                            p.life = 0; p.x = rand(0, W); p.y = rand(H * 0.5, H);
+                            p.vy = rand(-15, -5);
+                        }
+                        const lifeRatio = p.life / p.maxLife;
+                        const alpha = (1 - lifeRatio) * (0.5 + Math.sin(p.pulse) * 0.2);
+                        const sz = p.size * (0.5 + Math.sin(p.pulse) * 0.3);
+                        // Outer glow
+                        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, sz * 4);
+                        g.addColorStop(0, p.color);
+                        g.addColorStop(1, 'transparent');
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, sz * 4, 0, Math.PI * 2);
+                        ctx.fillStyle = g;
+                        ctx.globalAlpha = Math.max(0, alpha * 0.3);
+                        ctx.fill();
+                        // Core
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+                        ctx.fillStyle = '#fef3c7';
+                        ctx.globalAlpha = Math.max(0, alpha);
+                        ctx.fill();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+
+            // ──── FOREST: leaves, fireflies, grass blades, pollen ────
+            function spawnForest() {
+                particles = [];
+                // Fireflies
+                for (let i = 0; i < 20; i++) {
+                    particles.push({
+                        type: 'firefly', x: rand(0, W), y: rand(0, H),
+                        vx: rand(-10, 10), vy: rand(-10, 10),
+                        size: rand(2, 4), pulse: rand(0, Math.PI * 2),
+                        pulseSpeed: rand(1.5, 4), driftAngle: rand(0, Math.PI * 2),
+                        driftSpeed: rand(0.3, 1),
+                        color: ['rgba(74,222,128,', 'rgba(34,197,94,', 'rgba(134,239,172,'][randInt(0,2)]
+                    });
+                }
+                // Falling leaves
+                for (let i = 0; i < 10; i++) {
+                    particles.push({
+                        type: 'leaf', x: rand(0, W), y: rand(-50, H),
+                        vx: rand(5, 20), vy: rand(10, 30),
+                        rot: rand(0, Math.PI * 2), rotSpeed: rand(-2, 2),
+                        size: rand(5, 12), wobble: rand(0, Math.PI * 2),
+                        wobbleSpeed: rand(1, 3),
+                        color: ['#4ade80', '#22c55e', '#86efac', '#16a34a'][randInt(0,3)]
+                    });
+                }
+                // Pollen / spores
+                for (let i = 0; i < 25; i++) {
+                    particles.push({
+                        type: 'pollen', x: rand(0, W), y: rand(0, H),
+                        vx: rand(-4, 8), vy: rand(-6, -1),
+                        size: rand(1, 2.5), opacity: rand(0.15, 0.4),
+                        drift: rand(0, Math.PI * 2), driftSpeed: rand(0.5, 2)
+                    });
+                }
+            }
+
+            function drawForest(dt) {
+                for (const p of particles) {
+                    if (p.type === 'firefly') {
+                        p.pulse += p.pulseSpeed * dt;
+                        p.driftAngle += p.driftSpeed * dt;
+                        p.x += (p.vx + Math.cos(p.driftAngle) * 15) * dt;
+                        p.y += (p.vy + Math.sin(p.driftAngle) * 15) * dt;
+                        // Wrap
+                        if (p.x < -20) p.x = W + 20;
+                        if (p.x > W + 20) p.x = -20;
+                        if (p.y < -20) p.y = H + 20;
+                        if (p.y > H + 20) p.y = -20;
+                        const brightness = 0.3 + Math.sin(p.pulse) * 0.35 + 0.35;
+                        // Glow
+                        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6);
+                        g.addColorStop(0, p.color + (brightness * 0.5).toFixed(3) + ')');
+                        g.addColorStop(1, p.color + '0)');
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size * 6, 0, Math.PI * 2);
+                        ctx.fillStyle = g;
+                        ctx.fill();
+                        // Core
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color + brightness.toFixed(3) + ')';
+                        ctx.fill();
+                    } else if (p.type === 'leaf') {
+                        p.wobble += p.wobbleSpeed * dt;
+                        p.rot += p.rotSpeed * dt;
+                        p.x += (p.vx + Math.sin(p.wobble) * 12) * dt;
+                        p.y += p.vy * dt;
+                        if (p.y > H + 20) { p.y = -20; p.x = rand(0, W); }
+                        if (p.x > W + 20) p.x = -20;
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate(p.rot);
+                        ctx.globalAlpha = 0.35;
+                        // Simple leaf shape
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, p.size, p.size * 0.4, 0, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                        // Stem
+                        ctx.beginPath();
+                        ctx.moveTo(-p.size, 0);
+                        ctx.lineTo(p.size, 0);
+                        ctx.strokeStyle = '#16a34a';
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                        ctx.restore();
+                    } else if (p.type === 'pollen') {
+                        p.drift += p.driftSpeed * dt;
+                        p.x += (p.vx + Math.sin(p.drift) * 5) * dt;
+                        p.y += (p.vy + Math.cos(p.drift) * 3) * dt;
+                        if (p.y < -10) { p.y = H + 10; p.x = rand(0, W); }
+                        if (p.x > W + 10) p.x = -10;
+                        if (p.x < -10) p.x = W + 10;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = 'rgba(134,239,172,' + p.opacity.toFixed(3) + ')';
+                        ctx.fill();
+                    }
+                }
+            }
+
+            // ──── AURORA: stars, shooting stars, nebula clouds, aurora bands ────
+            function spawnAurora() {
+                particles = [];
+                // Static twinkling stars
+                for (let i = 0; i < 80; i++) {
+                    particles.push({
+                        type: 'star', x: rand(0, W), y: rand(0, H),
+                        size: rand(0.5, 2.5),
+                        pulse: rand(0, Math.PI * 2), pulseSpeed: rand(0.8, 3),
+                        baseOpacity: rand(0.2, 0.7),
+                        color: Math.random() < 0.6 ? 'rgba(255,255,255,' : 
+                               Math.random() < 0.5 ? 'rgba(192,132,252,' : 'rgba(168,85,247,'
+                    });
+                }
+                // Shooting stars (periodic)
+                for (let i = 0; i < 3; i++) {
+                    particles.push({
+                        type: 'shootingStar',
+                        x: rand(0, W), y: rand(0, H * 0.4),
+                        vx: rand(150, 350), vy: rand(60, 150),
+                        length: rand(40, 100), life: 0,
+                        maxLife: rand(0.6, 1.2),
+                        delay: rand(i * 3, i * 3 + 5),
+                        waiting: true
+                    });
+                }
+                // Nebula / aurora bands
+                for (let i = 0; i < 4; i++) {
+                    particles.push({
+                        type: 'aurora',
+                        y: rand(H * 0.1, H * 0.7),
+                        phase: rand(0, Math.PI * 2),
+                        speed: rand(0.15, 0.4),
+                        amp: rand(15, 40),
+                        thickness: rand(30, 60),
+                        opacity: rand(0.03, 0.07),
+                        color: [
+                            [139, 92, 246], [192, 132, 252],
+                            [168, 85, 247], [124, 58, 237]
+                        ][i % 4],
+                        freq: rand(0.003, 0.008)
+                    });
+                }
+            }
+
+            function drawAurora(dt) {
+                // Aurora bands first (behind everything)
+                for (const p of particles) {
+                    if (p.type === 'aurora') {
+                        p.phase += p.speed * dt;
+                        ctx.beginPath();
+                        ctx.moveTo(0, p.y + Math.sin(p.phase) * p.amp);
+                        for (let x = 0; x <= W; x += 3) {
+                            const y = p.y + Math.sin(x * p.freq + p.phase) * p.amp +
+                                      Math.sin(x * p.freq * 2.5 + p.phase * 1.5) * p.amp * 0.3;
+                            ctx.lineTo(x, y);
+                        }
+                        ctx.lineTo(W, p.y + p.thickness + Math.sin(W * p.freq + p.phase) * p.amp);
+                        for (let x = W; x >= 0; x -= 3) {
+                            const y = p.y + p.thickness + Math.sin(x * p.freq + p.phase + 0.5) * p.amp * 0.7 +
+                                      Math.sin(x * p.freq * 2 + p.phase * 1.3) * p.amp * 0.2;
+                            ctx.lineTo(x, y);
+                        }
+                        ctx.closePath();
+                        const g = ctx.createLinearGradient(0, p.y - p.amp, 0, p.y + p.thickness + p.amp);
+                        const [r, gg, b] = p.color;
+                        g.addColorStop(0, `rgba(${r},${gg},${b},0)`);
+                        g.addColorStop(0.3, `rgba(${r},${gg},${b},${p.opacity})`);
+                        g.addColorStop(0.7, `rgba(${r},${gg},${b},${p.opacity * 0.7})`);
+                        g.addColorStop(1, `rgba(${r},${gg},${b},0)`);
+                        ctx.fillStyle = g;
+                        ctx.fill();
+                    }
+                }
+                // Stars
+                for (const p of particles) {
+                    if (p.type === 'star') {
+                        p.pulse += p.pulseSpeed * dt;
+                        const alpha = p.baseOpacity + Math.sin(p.pulse) * 0.25;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color + Math.max(0, alpha).toFixed(3) + ')';
+                        ctx.fill();
+                        // Cross glint on brighter stars
+                        if (p.size > 1.5 && alpha > 0.5) {
+                            ctx.strokeStyle = p.color + (alpha * 0.3).toFixed(3) + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(p.x - p.size * 3, p.y);
+                            ctx.lineTo(p.x + p.size * 3, p.y);
+                            ctx.moveTo(p.x, p.y - p.size * 3);
+                            ctx.lineTo(p.x, p.y + p.size * 3);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                // Shooting stars
+                for (const p of particles) {
+                    if (p.type === 'shootingStar') {
+                        if (p.waiting) {
+                            p.delay -= dt;
+                            if (p.delay <= 0) {
+                                p.waiting = false;
+                                p.life = 0;
+                                p.x = rand(-50, W * 0.3);
+                                p.y = rand(0, H * 0.3);
+                            }
+                            continue;
+                        }
+                        p.life += dt;
+                        p.x += p.vx * dt;
+                        p.y += p.vy * dt;
+                        const lifeRatio = p.life / p.maxLife;
+                        const alpha = lifeRatio < 0.1 ? lifeRatio / 0.1 : 
+                                      lifeRatio > 0.6 ? (1 - lifeRatio) / 0.4 : 1;
+                        // Trail
+                        const angle = Math.atan2(p.vy, p.vx);
+                        const tailX = p.x - Math.cos(angle) * p.length;
+                        const tailY = p.y - Math.sin(angle) * p.length;
+                        const g = ctx.createLinearGradient(tailX, tailY, p.x, p.y);
+                        g.addColorStop(0, 'rgba(192,132,252,0)');
+                        g.addColorStop(1, `rgba(255,255,255,${(alpha * 0.8).toFixed(3)})`);
+                        ctx.beginPath();
+                        ctx.moveTo(tailX, tailY);
+                        ctx.lineTo(p.x, p.y);
+                        ctx.strokeStyle = g;
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                        // Head
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,255,255,${(alpha).toFixed(3)})`;
+                        ctx.fill();
+
+                        if (p.life >= p.maxLife) {
+                            p.waiting = true;
+                            p.delay = rand(4, 10);
+                        }
+                    }
+                }
+            }
+
+            // ──── ENGINE ────
+            const themeFns = {
+                ocean:  { spawn: spawnOcean,  draw: drawOcean },
+                ember:  { spawn: spawnEmber,  draw: drawEmber },
+                forest: { spawn: spawnForest, draw: drawForest },
+                aurora: { spawn: spawnAurora, draw: drawAurora }
+            };
+
+            function startFx(theme) {
+                if (animId) { cancelAnimationFrame(animId); animId = null; }
+                currentTheme = theme;
+                if (!themeFns[theme]) { particles = []; return; }
+                resize();
+                themeFns[theme].spawn();
+                let last = performance.now();
+                function loop(now) {
+                    const dt = Math.min(0.1, (now - last) / 1000);
+                    last = now;
+                    ctx.clearRect(0, 0, W, H);
+                    themeFns[theme].draw(dt);
+                    animId = requestAnimationFrame(loop);
+                }
+                animId = requestAnimationFrame(loop);
+            }
+
+            // Observe theme changes
+            const observer = new MutationObserver(() => {
+                const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+                if (theme !== currentTheme) startFx(theme);
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+            window.addEventListener('resize', () => {
+                if (themeFns[currentTheme]) resize();
+            });
+
+            // Initial state
+            startFx(document.documentElement.getAttribute('data-theme') || 'dark');
+
+            // Hacker Text Effect
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+            const hackerElements = document.querySelectorAll('.bio-intro, .bio-personal');
+            
+            const hackerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.dataset.hacked) {
+                        entry.target.dataset.hacked = "true";
+                        const originalText = entry.target.innerText;
+                        let iteration = 0;
+                        
+                        // Set fixed number of frames for max ~1.8 second load time (60 frames at 30ms)
+                        const totalFrames = 60; 
+                        const increment = Math.max(originalText.length / totalFrames, 1);
+                        
+                        const interval = setInterval(() => {
+                            entry.target.innerText = originalText
+                                .split("")
+                                .map((letter, index) => {
+                                    if (index < iteration) {
+                                        return originalText[index];
+                                    }
+                                    // Preserve spaces & newlines so the text box doesn't jitter or change size
+                                    if (originalText[index] === ' ' || originalText[index] === '\n') {
+                                        return originalText[index];
+                                    }
+                                    return letters[Math.floor(Math.random() * letters.length)];
+                                })
+                                .join("");
+                            
+                            if (iteration >= originalText.length) { 
+                                clearInterval(interval);
+                                entry.target.innerText = originalText;
+                            }
+                            
+                            iteration += increment;
+                        }, 30);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            hackerElements.forEach(el => hackerObserver.observe(el));
+        })();
+    </script>
+
+</body>
+</html>
