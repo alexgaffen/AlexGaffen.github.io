@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,11 +12,12 @@
             --link-color: #0f0f0f;
             --link-hover: #d62020;
             --border-color: #d1cdc2;
+            --nav-bg: rgba(252, 239, 212, 0.9);
         }
 
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
             line-height: 1.6;
@@ -29,6 +30,12 @@
             margin-bottom: 2em;
             padding-bottom: 1em;
             border-bottom: 2px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -57,13 +64,37 @@
             box-shadow: 2px 2px 0px var(--text-color);
         }
 
-        a:hover {
+        a:hover:not(.photo-card) {
             color: var(--link-hover);
         }
         
         a.back-btn:hover {
             box-shadow: 4px 4px 0px var(--link-hover);
             border-color: var(--link-hover);
+        }
+
+        /* Filter Navigation */
+        .filter-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--text-color);
+            padding: 6px 12px;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
         }
 
         .content-area {
@@ -75,39 +106,96 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        
+        /* Modern Photo Grid */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
             margin-top: 2em;
         }
+
         .photo-card {
-            border: 2px solid var(--text-color);
-            background: #fff;
-            padding: 8px;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            border: none;
+            background: transparent;
+            padding: 0;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            display: block;
         }
+
         .photo-card:hover {
             transform: translateY(-5px);
-            box-shadow: 6px 8px 0px rgba(0,0,0,0.15);
         }
-        .photo-placeholder {
+
+        .photo-image {
             width: 100%;
             aspect-ratio: 4/3;
-            background: #eee;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-card:hover .photo-image {
+            transform: scale(1.03);
+        }
+
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 15px 15px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            pointer-events: none;
+        }
+
+        .photo-card:hover .photo-info {
+            opacity: 1;
+        }
+
+        .photo-title {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 2px;
+            text-transform: none;
+            letter-spacing: 0;
+            color: #fff;
+        }
+
+        .photo-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8em;
+            opacity: 0.9;
+            text-transform: none;
+            color: #ddd;
+        }
+        
+        .placeholder-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: #e0d5be;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px dashed #ccc;
-            margin-bottom: 8px;
-            color: #999;
-        }
-        .photo-caption {
-            font-size: 0.85em;
-            font-style: italic;
+            border-radius: 8px;
             text-align: center;
+            font-style: italic;
+            color: #8c826e;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
     </style>
@@ -115,39 +203,112 @@
 <body>
 
     <header>
-        <h1>Photography</h1>
-        <a href="index.html" class="back-btn">&lt; BACK</a>
+        <div class="header-top">
+            <h1>Photography</h1>
+            <a href="index.html" class="back-btn">&lt; BACK</a>
+        </div>
+        <div class="filter-nav">
+            <button class="filter-btn active" onclick="filterPhotos('all')">All</button>
+            <button class="filter-btn" onclick="filterPhotos('sf')">San Francisco</button>
+            <button class="filter-btn" onclick="filterPhotos('banff')">Banff (Upcoming Trip)</button>
+        </div>
     </header>
 
     <div class="content-area">
-        <p>A collection of my recent shots.</p>
 
-        <h2 style="font-family: 'Press Start 2P', monospace; font-size: 1.1em; margin-top: 2em; margin-bottom: 0.5em;">San Francisco</h2>
-        <p style="font-size: 0.9em; opacity: 0.8; margin-top: 0; margin-bottom: 1.5em; font-style: italic;">These photos were shot on my Samsung S10.</p>
-        
-        <div class="photo-grid">
-            <a href="photography/s10/ggbridge.jpg" target="_blank" class="photo-card" style="text-decoration: none; color: inherit; display: block;">
-                <div class="photo-placeholder" style="background-image: url('photography/s10/ggbridge.jpg'); background-size: cover; background-position: center; color: transparent;">1</div>
-                <div class="photo-caption" style="font-family: 'Space Mono', monospace;">Golden Gate Bridge</div>
+        <div class="photo-grid" id="gallery">
+            <!-- San Francisco Set -->
+            <a href="photography/s10/ggbridge.jpg" target="_blank" class="photo-card" data-loc="sf">
+                <img src="photography/s10/ggbridge.jpg" alt="Golden Gate Bridge" class="photo-image">
+                <div class="photo-info">
+                    <div class="photo-title">Golden Gate Bridge</div>
+                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                </div>
             </a>
-            <a href="photography/s10/alcatraz.jpg" target="_blank" class="photo-card" style="text-decoration: none; color: inherit; display: block;">
-                <div class="photo-placeholder" style="background-image: url('photography/s10/alcatraz.jpg'); background-size: cover; background-position: center; color: transparent;">2</div>
-                <div class="photo-caption" style="font-family: 'Space Mono', monospace;">Alcatraz</div>
+            
+            <a href="photography/s10/alcatraz.jpg" target="_blank" class="photo-card" data-loc="sf">
+                <img src="photography/s10/alcatraz.jpg" alt="Alcatraz" class="photo-image">
+                <div class="photo-info">
+                    <div class="photo-title">Alcatraz</div>
+                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                </div>
             </a>
-            <a href="photography/s10/oaklandfromSF.jpg" target="_blank" class="photo-card" style="text-decoration: none; color: inherit; display: block;">
-                <div class="photo-placeholder" style="background-image: url('photography/s10/oaklandfromSF.jpg'); background-size: cover; background-position: center; color: transparent;">3</div>
-                <div class="photo-caption" style="font-family: 'Space Mono', monospace;">Oakland from SF</div>
+
+            <a href="photography/s10/oaklandfromSF.jpg" target="_blank" class="photo-card" data-loc="sf">
+                <img src="photography/s10/oaklandfromSF.jpg" alt="Oakland from SF" class="photo-image">
+                <div class="photo-info">
+                    <div class="photo-title">Secondary View - Oakland</div>
+                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                </div>
             </a>
-            <a href="photography/s10/SFgardens.jpg" target="_blank" class="photo-card" style="text-decoration: none; color: inherit; display: block;">
-                <div class="photo-placeholder" style="background-image: url('photography/s10/SFgardens.jpg'); background-size: cover; background-position: center; color: transparent;">4</div>
-                <div class="photo-caption" style="font-family: 'Space Mono', monospace;">SF Gardens</div>
+
+            <a href="photography/s10/SFgardens.jpg" target="_blank" class="photo-card" data-loc="sf">
+                <img src="photography/s10/SFgardens.jpg" alt="SF Gardens" class="photo-image">
+                <div class="photo-info">
+                    <div class="photo-title">Botanical Scenery</div>
+                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                </div>
             </a>
-            <a href="photography/s10/SFslopes.jpg" target="_blank" class="photo-card" style="text-decoration: none; color: inherit; display: block;">
-                <div class="photo-placeholder" style="background-image: url('photography/s10/SFslopes.jpg'); background-size: cover; background-position: center; color: transparent;">5</div>
-                <div class="photo-caption" style="font-family: 'Space Mono', monospace;">SF Slopes</div>
+
+            <a href="photography/s10/SFslopes.jpg" target="_blank" class="photo-card" data-loc="sf">
+                <img src="photography/s10/SFslopes.jpg" alt="SF Slopes" class="photo-image">
+                <div class="photo-info">
+                    <div class="photo-title">City Slopes</div>
+                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                </div>
             </a>
+
+            <!-- Banff Placeholders -->
+            <div class="photo-card" data-loc="banff">
+                <div class="placeholder-image">
+                    [ Coming Soon: Lake Louise ]
+                </div>
+                <div class="photo-info">
+                    <div class="photo-title">Lake Louise</div>
+                    <div class="photo-meta">Banff National Park</div>
+                </div>
+            </div>
+
+            <div class="photo-card" data-loc="banff">
+                <div class="placeholder-image">
+                    [ Coming Soon: Moraine Lake ]
+                </div>
+                <div class="photo-info">
+                    <div class="photo-title">Moraine Lake</div>
+                    <div class="photo-meta">Banff National Park</div>
+                </div>
+            </div>
+            
+            <div class="photo-card" data-loc="banff">
+                <div class="placeholder-image">
+                    [ Coming Soon: Scenic Peaks ]
+                </div>
+                <div class="photo-info">
+                    <div class="photo-title">Mountain Ranges</div>
+                    <div class="photo-meta">Banff National Park</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <script>
+        function filterPhotos(loc) {
+            const cards = document.querySelectorAll('.photo-card');
+            const btns = document.querySelectorAll('.filter-btn');
+            
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (loc === 'all' || card.dataset.loc === loc) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
+
