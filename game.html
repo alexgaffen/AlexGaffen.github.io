@@ -1,84 +1,310 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easter Egg Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Easter Egg Ascent</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root { --bg-color: #fcefd4; --text-color: #0f0f0f; }
-        body { font-family: 'Space Mono', Courier, monospace; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; box-sizing: border-box; overflow: hidden; }
-        .back-btn { position: absolute; top: 20px; left: 20px; font-family: 'Press Start 2P'; font-size: 1rem; color: var(--text-color); text-decoration: none; border: 2px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color); padding: 10px; z-index: 100; }
-        canvas { border: 2px solid var(--text-color); box-shadow: 4px 4px 0 var(--text-color); background-color: #fff; max-width: 90vw; max-height: 70vh; }
-        #score { font-family: 'Press Start 2P'; margin-bottom: 20px; }
-        @media (max-width: 800px) { canvas { width: 90vw; height: 90vw; } }
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Space Mono', Courier, monospace;
+            overflow: hidden; touch-action: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .back-btn {
+            position: absolute; top: 20px; left: 20px;
+            font-family: 'Press Start 2P', monospace; font-size: 0.8rem;
+            color: var(--text-color); text-decoration: none;
+            border: 2px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
+            padding: 10px 15px; z-index: 100;
+            background: rgba(252, 239, 212, 0.9);
+            transition: all 0.2s ease;
+        }
+        .back-btn:active { box-shadow: 0px 0px 0 var(--text-color); transform: translate(2px, 2px); }
+        #ui-layer {
+            position: absolute; top: 25px; right: 20px;
+            font-family: 'Press Start 2P', monospace; font-size: 1.2rem;
+            text-align: right; pointer-events: none; z-index: 90;
+        }
+        #instructions {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            font-size: 0.9rem; text-align: center; pointer-events: none; opacity: 0.8;
+        }
+        canvas {
+            display: block;
+            border: 4px solid var(--text-color);
+            box-shadow: 6px 6px 0 var(--text-color);
+            background: #fff;
+            background-image: radial-gradient(circle at 50% 50%, #fdfdfd 0%, #e0e0e0 100%);
+            max-width: 95vw; max-height: 85vh;
+        }
+        #gameover {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--bg-color); padding: 30px;
+            border: 4px solid var(--text-color); box-shadow: 5px 5px 0 var(--text-color);
+            text-align: center; z-index: 200; display: none;
+            font-family: 'Press Start 2P', monospace;
+        }
+        #gameover h2 { margin-top: 0; color: #d62020; font-size: 1.5rem; }
+        .restart-btn {
+            font-family: 'Press Start 2P', monospace; margin-top: 20px;
+            border: 2px solid var(--text-color); background: #fff;
+            padding: 10px 20px; cursor: pointer; box-shadow: 2px 2px 0 var(--text-color);
+        }
+        .restart-btn:active { box-shadow: 0 0 0 var(--text-color); transform: translate(2px, 2px); }
     </style>
 </head>
 <body>
     <a href="index.html" class="back-btn">&lt; BACK</a>
-    <div id="score">SCORE: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <p style="margin-top:20px;text-align:center;font-size:0.8rem;">Tap the screen or use arrow keys to change direction</p>
+    <div id="ui-layer">SCORE: <span id="scoreEl">0</span></div>
+    <div id="instructions">TAP, CLICK, OR SPACE TO BOOST</div>
+    
+    <canvas id="game"></canvas>
+
+    <div id="gameover">
+        <h2>CRASHED!</h2>
+        <p style="font-family:'Space Mono';font-size:1.2rem;">Score: <span id="finalScore"></span></p>
+        <button class="restart-btn" onclick="resetGame()">PLAY AGAIN</button>
+    </div>
+
     <script>
-        const canvas = document.getElementById('gameCanvas');
+        const canvas = document.getElementById('game');
         const ctx = canvas.getContext('2d');
-        const gridSize = 20;
-        let snake = [{x: 200, y: 200}];
-        let food = {x: 100, y: 100};
-        let dx = 0; let dy = -gridSize;
-        let score = 0;
-        let gameLoop;
+        let width, height;
         
-        function drawRect(c, x, y, size) { ctx.fillStyle = c; ctx.fillRect(x, y, size, size); }
-        function main() {
-            if(hasGameEnded()) return;
-            gameLoop = setTimeout(function() {
-                ctx.clearRect(0,0, canvas.width, canvas.height);
-                drawFood(); advanceSnake(); drawSnake(); main();
-            }, 100);
+        function resize() {
+            width = Math.min(window.innerWidth * 0.95, 800);
+            height = Math.min(window.innerHeight * 0.85, 600);
+            canvas.width = width;
+            canvas.height = height;
         }
-        function drawFood() { drawRect('red', food.x, food.y, gridSize); }
-        function advanceSnake() {
-            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-            snake.unshift(head);
-            if(head.x === food.x && head.y === food.y) {
-                score += 10; document.getElementById('score').innerText = 'SCORE: ' + score; generateFood();
-            } else { snake.pop(); }
-        }
-        function drawSnake() { snake.forEach(part => drawRect('#0f0f0f', part.x, part.y, gridSize)); }
-        function hasGameEnded() {
-            for(let i=4; i<snake.length; i++) { if(snake[i].x===snake[0].x && snake[i].y===snake[0].y) return true; }
-            const hitLeftWall = snake[0].x < 0; const hitRightWall = snake[0].x >= canvas.width;
-            const hitTopWall = snake[0].y < 0; const hitBottomWall = snake[0].y >= canvas.height;
-            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
-        }
-        function generateFood() {
-            food.x = Math.round((Math.random()*(canvas.width - gridSize))/gridSize)*gridSize;
-            food.y = Math.round((Math.random()*(canvas.height - gridSize))/gridSize)*gridSize;
-        }
-        document.addEventListener('keydown', e => {
-            const LEFT=37, RIGHT=39, UP=38, DOWN=40;
-            if(e.keyCode===LEFT && dx!==gridSize) { dx=-gridSize; dy=0; }
-            if(e.keyCode===UP && dy!==gridSize) { dx=0; dy=-gridSize; }
-            if(e.keyCode===RIGHT && dx!==-gridSize) { dx=gridSize; dy=0; }
-            if(e.keyCode===DOWN && dy!==-gridSize) { dx=0; dy=gridSize; }
-        });
-        canvas.addEventListener('touchstart', e => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            const tapX = touch.clientX - rect.left;
-            const tapY = touch.clientY - rect.top;
-            const head = snake[0];
-            if (Math.abs(tapX - head.x) > Math.abs(tapY - head.y)) {
-                if (tapX > head.x && dx !== -gridSize) { dx = gridSize; dy = 0; }
-                else if (tapX < head.x && dx !== gridSize) { dx = -gridSize; dy = 0; }
-            } else {
-                if (tapY > head.y && dy !== -gridSize) { dx = 0; dy = gridSize; }
-                else if (tapY < head.y && dy !== gridSize) { dx = 0; dy = -gridSize; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Game State
+        let frames = 0;
+        let score = 0;
+        let currentState = 'start'; // start, play, over
+        let particles = [];
+        let obstacles = [];
+        
+        // Egg Object
+        const egg = {
+            x: 100, y: 150, radiusX: 15, radiusY: 20,
+            velocity: 0, gravity: 0.35, jump: -6.5,
+            rotation: 0,
+            draw: function() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                this.rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (this.velocity * 0.1)));
+                ctx.rotate(this.rotation);
+                
+                // Fancy Egg pattern
+                const grad = ctx.createLinearGradient(-this.radiusX, -this.radiusY, this.radiusX, this.radiusY);
+                grad.addColorStop(0, '#ff0055'); grad.addColorStop(0.3, '#ffaa00');
+                grad.addColorStop(0.6, '#00ffaa'); grad.addColorStop(1, '#5500ff');
+                
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.radiusX, this.radiusY, 0, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                
+                // Decorations
+                ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-13, -5); ctx.lineTo(13, -5);
+                ctx.moveTo(-15, 5); ctx.lineTo(15, 5);
+                ctx.stroke();
+
+                ctx.lineWidth = 3; ctx.strokeStyle = '#0f0f0f';
+                ctx.strokeRect(-this.radiusX, -this.radiusY, 0, 0); // Hack to trigger some sharp edges if needed
+                
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.radiusX, this.radiusY, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.restore();
+            },
+            update: function() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                
+                // Floor collision
+                if (this.y + this.radiusY >= height) {
+                    this.y = height - this.radiusY;
+                    gameOver();
+                }
+                // Ceiling collision
+                if (this.y - this.radiusY <= 0) {
+                    this.y = this.radiusY;
+                    this.velocity = 0;
+                }
+            },
+            boost: function() {
+                this.velocity = this.jump;
+                // Emit particles
+                for(let i=0; i<5; i++) {
+                    particles.push(new Particle(this.x - 10, this.y + 15));
+                }
             }
-        });
-        generateFood(); main();
+        };
+
+        // Particle Class
+        class Particle {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.vx = (Math.random() - 0.5) * 3 - 2;
+                this.vy = Math.random() * 3 + 1;
+                this.life = 1;
+                this.decay = Math.random() * 0.05 + 0.02;
+                this.color = hsl( + Math.random()*360 + , 100%, 60%);
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                this.life -= this.decay;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = Math.max(0, this.life);
+                ctx.fillRect(this.x, this.y, 4, 4);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Obstacle Class
+        class Obstacle {
+            constructor() {
+                this.x = width;
+                this.w = 40 + Math.random() * 30;
+                this.gap = 130 + Math.random() * 40;
+                this.topH = 50 + Math.random() * (height - this.gap - 100);
+                this.bottomY = this.topH + this.gap;
+                this.bottomH = height - this.bottomY;
+                this.speed = 3.5 + (score * 0.1); // difficulty scaling
+                this.passed = false;
+            }
+            update() {
+                this.x -= this.speed;
+                if (!this.passed && this.x + this.w < egg.x) {
+                    score++;
+                    document.getElementById('scoreEl').innerText = score;
+                    this.passed = true;
+                }
+                // Collision
+                let eLeft = egg.x - egg.radiusX + 5;
+                let eRight = egg.x + egg.radiusX - 5;
+                let eTop = egg.y - egg.radiusY + 5;
+                let eBot = egg.y + egg.radiusY - 5;
+                
+                if (eRight > this.x && eLeft < this.x + this.w) {
+                    if (eTop < this.topH || eBot > this.bottomY) {
+                        gameOver();
+                    }
+                }
+            }
+            draw() {
+                ctx.fillStyle = '#0f0f0f';
+                // Top pillar
+                ctx.fillRect(this.x, 0, this.w, this.topH);
+                // Bottom pillar
+                ctx.fillRect(this.x, this.bottomY, this.w, this.bottomH);
+                
+                // Tech stripes
+                ctx.fillStyle = '#d62020';
+                ctx.fillRect(this.x, this.topH - 10, this.w, 10);
+                ctx.fillRect(this.x, this.bottomY, this.w, 10);
+            }
+        }
+
+        function spawnObstacle() {
+            if (frames % Math.max(60, 110 - score*2) === 0) {
+                obstacles.push(new Obstacle());
+            }
+        }
+
+        function handleInput(e) {
+            if (e.type === 'keydown' && e.code !== 'Space') return;
+            if (e.type !== 'keydown') e.preventDefault();
+            
+            if (currentState === 'start' || currentState === 'over') {
+                if (currentState === 'over' && document.getElementById('gameover').style.display !== 'none') {
+                    // Prevent immediate restart
+                    return; 
+                }
+                if (currentState === 'start') currentState = 'play';
+            }
+            if (currentState === 'play') {
+                egg.boost();
+                document.getElementById('instructions').style.opacity = 0;
+            }
+        }
+
+        window.addEventListener('keydown', handleInput);
+        canvas.addEventListener('mousedown', handleInput);
+        canvas.addEventListener('touchstart', handleInput, {passive: false});
+
+        function gameOver() {
+            currentState = 'over';
+            document.getElementById('gameover').style.display = 'block';
+            document.getElementById('finalScore').innerText = score;
+            // Explosion particles
+            for(let i=0; i<30; i++) particles.push(new Particle(egg.x, egg.y));
+        }
+
+        function resetGame() {
+            egg.y = height/2; egg.velocity = 0;
+            obstacles = []; particles = [];
+            score = 0; frames = 0;
+            document.getElementById('scoreEl').innerText = score;
+            document.getElementById('gameover').style.display = 'none';
+            currentState = 'play';
+            egg.boost();
+        }
+
+        function loop() {
+            requestAnimationFrame(loop);
+            
+            ctx.clearRect(0, 0, width, height);
+
+            if (currentState === 'play') {
+                egg.update();
+                spawnObstacle();
+            }
+
+            // Draw Background grid
+            ctx.strokeStyle = 'rgba(0,0,0,0.05)'; ctx.lineWidth = 1;
+            ctx.beginPath();
+            for(let x=0; x<width; x+=40) { ctx.moveTo(x,0); ctx.lineTo(x,height); }
+            for(let y=0; y<height; y+=40) { ctx.moveTo(0,y); ctx.lineTo(width,y); }
+            ctx.stroke();
+
+            // Handle Particles
+            for(let i = particles.length-1; i >= 0; i--) {
+                let p = particles[i];
+                p.update(); p.draw();
+                if(p.life <= 0) particles.splice(i, 1);
+            }
+
+            // Handle Obstacles
+            for(let i = obstacles.length-1; i >= 0; i--) {
+                let obs = obstacles[i];
+                if (currentState === 'play') obs.update();
+                obs.draw();
+                if (obs.x + obs.w < 0) obstacles.splice(i, 1);
+            }
+
+            if (currentState !== 'over' || particles.length > 0) {
+                 egg.draw();
+            }
+            
+            if (currentState === 'play') frames++;
+        }
+
+        loop();
     </script>
 </body>
 </html>
