@@ -82,6 +82,7 @@
         }
         
         .filter-btn {
+            color: var(--text-color);
             background: transparent;
             border: 1px solid var(--text-color);
             padding: 6px 12px;
@@ -215,6 +216,9 @@
     </header>
 
     <div class="content-area">
+        <p style="margin-top: 0; margin-bottom: 2em; opacity: 0.9; font-size: 1.05em; max-width: 800px; color: var(--text-color);">
+            A collection of pictures I've taken on various trips. I currently shoot on my phone, but I plan to upgrade to a dedicated camera very soon!
+        </p>
 
         <div class="photo-grid" id="gallery">
             <!-- San Francisco Set -->
@@ -309,17 +313,59 @@
             });
         }
     
+        
+        let currentPhotos = [];
+        let currentIndex = 0;
+
         function openModal(imgSrc, title, meta) {
             const modal = document.getElementById('photo-modal');
             const modalImg = document.getElementById('modal-img');
             const captionText = document.getElementById('modal-caption');
             
+            // Gather all visible photos to allow navigation
+            currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.hidden)'));
+            
+            // Find current index
+            currentIndex = currentPhotos.findIndex(card => {
+                // simple hack: find card that has this image
+                return card.getAttribute('onclick').includes(imgSrc);
+            });
+            if (currentIndex === -1) currentIndex = 0; // fallback
+
             modal.style.display = "block";
             modalImg.src = imgSrc;
-            captionText.innerHTML = "<strong>" + title + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + meta + "</span>";
+            
+            // Restart animation by cloning
+            const newImg = modalImg.cloneNode(true);
+            modalImg.parentNode.replaceChild(newImg, modalImg);
+            
+            document.getElementById('modal-caption').innerHTML = "<strong>" + title + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + meta + "</span>";
             
             // disable body scroll
             document.body.style.overflow = "hidden";
+        }
+        
+        function changePhoto(n) {
+            if (currentPhotos.length === 0) return;
+            currentIndex += n;
+            if (currentIndex >= currentPhotos.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = currentPhotos.length - 1;
+            
+            const card = currentPhotos[currentIndex];
+            const onclickText = card.getAttribute('onclick');
+            
+            // parse the arguments from onclick="openModal('src', 'title', 'meta')"
+            const matches = onclickText.match(/openModal\('([^']*)',\s*'([^']*)',\s*'([^']*)'\)/);
+            if (matches && matches.length >= 4) {
+                const modalImg = document.getElementById('modal-img');
+                modalImg.src = matches[1];
+                
+                // clone to trigger animation again
+                const newImg = modalImg.cloneNode(true);
+                modalImg.parentNode.replaceChild(newImg, modalImg);
+
+                document.getElementById('modal-caption').innerHTML = "<strong>" + matches[2] + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + matches[3] + "</span>";
+            }
         }
         
         function closeModal() {
@@ -335,21 +381,31 @@
             }
         }
         
-        // Close on escape key
+        // Keydown events for arrows and escape
         document.addEventListener('keydown', function(event){
-            if(event.key === "Escape"){
-                closeModal();
+            const modal = document.getElementById('photo-modal');
+            if (modal.style.display === "block") {
+                if(event.key === "Escape"){
+                    closeModal();
+                } else if (event.key === "ArrowRight") {
+                    changePhoto(1);
+                } else if (event.key === "ArrowLeft") {
+                    changePhoto(-1);
+                }
             }
         });
+</script>
 
-    </script>
-
+    
     <!-- Lightbox Modal -->
     <div id="photo-modal" class="modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
+        <button class="modal-nav prev" onclick="changePhoto(-1)">&#10094;</button>
         <img class="modal-content" id="modal-img">
+        <button class="modal-nav next" onclick="changePhoto(1)">&#10095;</button>
         <div id="modal-caption"></div>
     </div>
+
 
     <style>
         /* Lightbox Modal Styles */
@@ -366,6 +422,37 @@
             background-color: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(5px);
         }
+        
+        .modal-nav {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 40px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.3);
+            border: none;
+            z-index: 1001;
+            text-decoration: none;
+        }
+        .modal-nav:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        .modal-nav.prev {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .modal-nav.next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
         .modal-content {
             margin: auto;
             display: block;
@@ -376,8 +463,8 @@
             animation: zoomIn 0.3s ease;
         }
         @keyframes zoomIn {
-            from {transform:scale(0.95); opacity:0;}
-            to {transform:scale(1); opacity:1;}
+            from {transform:scale(0.95); opacity:0; filter: blur(10px);}
+            to {transform:scale(1); opacity:1; filter: blur(0);}
         }
         #modal-caption {
             margin: auto;
