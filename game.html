@@ -161,7 +161,7 @@
                 this.vy = Math.random() * 3 + 1;
                 this.life = 1;
                 this.decay = Math.random() * 0.05 + 0.02;
-                this.color = hsl( + Math.random()*360 + , 100%, 60%);
+                this.color = 'hsl(' + Math.random()*360 + ', 100%, 60%)';
             }
             update() {
                 this.x += this.vx; this.y += this.vy;
@@ -228,7 +228,9 @@
 
         function handleInput(e) {
             if (e.type === 'keydown' && e.code !== 'Space') return;
-            if (e.type !== 'keydown') e.preventDefault();
+            if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'button') return;
+            if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'a') return;
+            e.preventDefault();
             
             if (currentState === 'start' || currentState === 'over') {
                 if (currentState === 'over' && document.getElementById('gameover').style.display !== 'none') {
@@ -243,9 +245,9 @@
             }
         }
 
-        window.addEventListener('keydown', handleInput);
-        canvas.addEventListener('mousedown', handleInput);
-        canvas.addEventListener('touchstart', handleInput, {passive: false});
+        window.addEventListener('keydown', handleInput, {passive: false});
+        window.addEventListener('mousedown', handleInput, {passive: false});
+        window.addEventListener('touchstart', handleInput, {passive: false});
 
         function gameOver() {
             currentState = 'over';
