@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f7f3e8; /* Nice warm beige */
-            --text-color: #000000;
-            --link-color: #0366d6;
-            --link-hover: #005cc5;
+            --bg-color: #fcefd4; /* Nice warm beige */
+            --text-color: #0f0f0f;
+            --link-color: #0f0f0f;
+            --link-hover: #d62020;
             --border-color: #d1cdc2;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-family: 'Space Mono', 'Courier New', Courier, monospace;
             max-width: 800px;
             margin: 60px auto;
             padding: 0 20px;
@@ -24,21 +25,72 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+
+        /* 
+         * Layout visibility is hidden initially until animation completes
+         */
+        #main-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            opacity: 0;
+            animation: fadeInContent 1s forwards ease-in-out;
+            animation-delay: 2.3s; /* Waits for balloon drop */
+        }
+
+        @keyframes fadeInContent {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SUPPLY DROP ANIMATION */
+        .supply-drop {
+            position: fixed;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 3rem;
+            line-height: 1.1;
+            z-index: 1000;
+            animation: dropIn 2.5s forwards ease-in;
+        }
+
+        @keyframes dropIn {
+            0% { top: -150px; opacity: 1; text-shadow: 0 50px 20px rgba(0,0,0,0); }
+            50% { top: 40vh; opacity: 1; text-shadow: 0 5px 10px rgba(0,0,0,0.2); }
+            55% { top: 40vh; opacity: 1; transform: translateX(-50%) scale(1.15, 0.85); }
+            65% { top: 40vh; opacity: 1; transform: translateX(-50%) scale(0.95, 1.05); }
+            75% { top: 40vh; opacity: 1; transform: translateX(-50%) scale(1); }
+            95% { top: 40vh; opacity: 1; transform: translateX(-50%) scale(1.5); filter: blur(0px); }
+            100% { top: 40vh; opacity: 0; transform: translateX(-50%) scale(2); filter: blur(4px); display: none; }
         }
 
         p {
-            font-size: 1.1em;
-            margin-bottom: 1.5em;
+            font-size: 1.05em;
+            margin-bottom: 2em;
+        }
+
+        p.bio-intro, p.bio-personal {
+            margin-bottom: 1.2em;
         }
 
         a {
             color: var(--link-color);
             text-decoration: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7em;
+            line-height: 2;
+            text-transform: uppercase;
         }
 
         a:hover {
-            text-decoration: underline;
             color: var(--link-hover);
+            text-decoration: underline;
         }
 
         ul {
@@ -48,8 +100,7 @@
         }
 
         ul li {
-            margin-bottom: 0.6em;
-            font-size: 1.05em;
+            margin-bottom: 1.2em;
         }
 
         .main-content {
@@ -64,49 +115,76 @@
 
         .nav-links {
             margin-top: 2.5em;
-            border-top: 1px solid var(--border-color);
-            padding-top: 1.5em;
+            padding-top: 2.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
         }
 
-        .nav-links li {
-            margin-bottom: 0.8em;
+        strong {
+            font-weight: bold;
+            background-color: rgba(5, 5, 5, 0.08); /* light highlight behind bold text */
+            padding: 0 4px;
         }
 
         @media (max-width: 600px) {
-            body {
+            #main-wrapper {
                 flex-direction: column;
                 margin: 40px auto;
             }
             .sidebar {
                 text-align: left;
                 margin-top: 40px;
-                border-top: 1px solid var(--border-color);
+                border-top: 1px dashed var(--border-color);
                 padding-top: 20px;
+            }
+            .supply-drop {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="main-content">
-        <p>
-            <span style="font-size: 2.2em; font-weight: 600; letter-spacing: -0.02em; display: block; margin-bottom: 0.3em; line-height: 1.1;">Alex Gaffen</span>
-            Hello! I'm an Honours Computer Science Co-op student at McMaster University. 
-            I'm exploring the intersection of AI with robotics, bioinformatics, and cybersecurity.
-        </p>
 
-        <ul class="nav-links">
-            <li><a href="resume.html">Resume</a></li>
-            <li><a href="photography.html">Photography</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="mailto:alexgaffen@gmail.com">Contact</a></li>
-        </ul>
+    <!-- Supply Drop Animation -->
+    <div class="supply-drop">
+        🎈<br>📦
     </div>
 
-    <div class="sidebar">
-        <ul>
-            <li><a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            <li><a href="https://www.linkedin.com/in/alex-gaffen-b46182236/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        </ul>
+    <div id="main-wrapper">
+        <div class="main-content">
+            <div style="margin-bottom: 3.5em;">
+                <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
+                <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
+                    Software Engineer, Developer & Researcher <br> 
+                    <span style="margin-top:0.4em; display: block;">🧬 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
+                </span>
+                
+                <p class="bio-intro">
+                    Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
+                </p>
+
+                <p class="bio-personal">
+                    Outside of code, I play violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural sports</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
+                    <br><br>
+                    <a href="mailto:alexgaffen@gmail.com" style="font-size: 0.9em; box-shadow: 2px 2px 0px #000; border: 1px solid #000; padding: 4px 8px; margin-top: 10px; display: inline-block;">Let's connect!</a>
+                </p>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="resume.html">> RESUME [■]</a></li>
+                <li><a href="photography.html">> PHOTOGRAPHY [■]</a></li>
+                <li><a href="blog.html">> BLOG [■]</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar">
+            <ul style="display: flex; flex-direction: column; gap: 1.2em;">
+                <li><a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">GITHUB</a></li>
+                <li><a href="https://www.linkedin.com/in/alex-gaffen-b46182236/" target="_blank" rel="noopener noreferrer">LINKEDIN</a></li>
+            </ul>
+        </div>
     </div>
+
 </body>
 </html>
