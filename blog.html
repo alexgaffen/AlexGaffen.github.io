@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Gaffen - Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fcefd4;
+            --text-color: #0f0f0f;
+            --link-color: #0f0f0f;
+            --link-hover: #d62020;
+            --border-color: #d1cdc2;
+        }
+
+        body {
+            font-family: 'Space Mono', 'Courier New', Courier, monospace;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        header {
+            margin-bottom: 2em;
+            padding-bottom: 1em;
+            border-bottom: 2px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+        
+        a.back-btn {
+            border: 2px solid var(--text-color);
+            padding: 8px 12px;
+            box-shadow: 2px 2px 0px var(--text-color);
+        }
+
+        a:hover {
+            color: var(--link-hover);
+        }
+        
+        a.back-btn:hover {
+            box-shadow: 4px 4px 0px var(--link-hover);
+            border-color: var(--link-hover);
+        }
+
+        .content-area {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        .post-list {
+            list-style: none;
+            padding: 0;
+        }
+        .post-item {
+            border-left: 2px solid var(--text-color);
+            padding-left: 20px;
+            margin-bottom: 2.5em;
+            position: relative;
+        }
+        .post-item::before {
+            content: '>';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            color: var(--text-color);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            background: var(--bg-color);
+            padding: 2px 0;
+        }
+        .post-date {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6em;
+            color: var(--text-color);
+            opacity: 0.6;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .post-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+        .post-title a {
+            font-family: 'Space Mono', monospace;
+            font-size: 1em;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .post-excerpt {
+            margin: 0;
+            opacity: 0.85;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Blog</h1>
+        <a href="index.html" class="back-btn">&lt; BACK</a>
+    </header>
+
+    <div class="content-area">
+        <p>Thoughts on tech, AI, cybersecurity, and navigating life as a developer.</p>
+        
+        <ul class="post-list">
+            <li class="post-item">
+                <span class="post-date">OCT 24, 2024</span>
+                <h2 class="post-title"><a href="#">Breaking down my recent AI project</a></h2>
+                <p class="post-excerpt">A deep dive into the architecture and challenges of building large-scale data pipelines for local ML inference. Here's what I learned...</p>
+            </li>
+            <li class="post-item">
+                <span class="post-date">SEP 12, 2024</span>
+                <h2 class="post-title"><a href="#">Why C/C++ is still relevant in the age of Rust</a></h2>
+                <p class="post-excerpt">Exploring the gritty details of memory management and when it makes sense to stick to the classics for system-level robust tooling...</p>
+            </li>
+            <li class="post-item">
+                <span class="post-date">AUG 05, 2024</span>
+                <h2 class="post-title"><a href="#">My homelab setup and network security</a></h2>
+                <p class="post-excerpt">How I isolated my services, set up a custom firewall structure, and learned penetration testing basics in the process.</p>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
