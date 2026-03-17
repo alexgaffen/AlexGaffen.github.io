@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen - Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fcefd4;
-            --text-color: #0f0f0f;
-            --link-color: #0f0f0f;
-            --link-hover: #d62020;
-            --border-color: #d1cdc2;
+            --bg-color: #0d0d0d;
+            --text-color: #f0f0f0;
+            --link-color: #f0f0f0;
+            --link-hover: #a855f7;
+            --border-color: #333;
             --nav-bg: rgba(252, 239, 212, 0.9);
         }
 
@@ -29,7 +29,7 @@
         header {
             margin-bottom: 2em;
             padding-bottom: 1em;
-            border-bottom: 2px dashed var(--border-color);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -42,26 +42,26 @@
         }
 
         h1 {
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Inter', sans-serif;
             font-size: 1.5em;
-            text-transform: uppercase;
+            
             margin: 0;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px; font-weight: 800;
         }
 
         a {
             color: var(--link-color);
             text-decoration: none;
-            font-family: 'Press Start 2P', monospace;
+            font-family: 'Inter', sans-serif;
             font-size: 0.7em;
-            text-transform: uppercase;
+            
             transition: all 0.2s ease;
         }
         
         a.back-btn {
-            border: 2px solid var(--text-color);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
             padding: 8px 12px;
-            box-shadow: 2px 2px 0px var(--text-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         a:hover:not(.photo-card) {
@@ -69,7 +69,7 @@
         }
         
         a.back-btn:hover {
-            box-shadow: 4px 4px 0px var(--link-hover);
+            box-shadow: 0 6px 15px rgba(168, 85, 247, 0.4); border-color: rgba(168, 85, 247, 0.7);
             border-color: var(--link-hover);
         }
 
@@ -182,14 +182,14 @@
         .placeholder-image {
             width: 100%;
             aspect-ratio: 4/3;
-            background: #e0d5be;
+            background: #1a1a1a;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
             text-align: center;
             font-style: italic;
-            color: #8c826e;
+            color: #666;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -218,50 +218,50 @@
 
         <div class="photo-grid" id="gallery">
             <!-- San Francisco Set -->
-            <a href="photography/s10/ggbridge.jpg" target="_blank" class="photo-card" data-loc="sf">
+            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/ggbridge.jpg', 'Golden Gate Bridge', 'San Francisco · Shot on S10')" style="cursor: pointer;">
                 <img src="photography/s10/ggbridge.jpg" alt="Golden Gate Bridge" class="photo-image">
                 <div class="photo-info">
                     <div class="photo-title">Golden Gate Bridge</div>
                     <div class="photo-meta">San Francisco · Shot on S10</div>
                 </div>
-            </a>
+            </div>
             
-            <a href="photography/s10/alcatraz.jpg" target="_blank" class="photo-card" data-loc="sf">
+            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/alcatraz.jpg', 'Alcatraz', 'San Francisco · Shot on S10')" style="cursor: pointer;">
                 <img src="photography/s10/alcatraz.jpg" alt="Alcatraz" class="photo-image">
                 <div class="photo-info">
                     <div class="photo-title">Alcatraz</div>
                     <div class="photo-meta">San Francisco · Shot on S10</div>
                 </div>
-            </a>
+            </div>
 
-            <a href="photography/s10/oaklandfromSF.jpg" target="_blank" class="photo-card" data-loc="sf">
+            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/oaklandfromSF.jpg', 'Secondary View - Oakland', 'San Francisco · Shot on S10')" style="cursor: pointer;">
                 <img src="photography/s10/oaklandfromSF.jpg" alt="Oakland from SF" class="photo-image">
                 <div class="photo-info">
                     <div class="photo-title">Secondary View - Oakland</div>
                     <div class="photo-meta">San Francisco · Shot on S10</div>
                 </div>
-            </a>
+            </div>
 
-            <a href="photography/s10/SFgardens.jpg" target="_blank" class="photo-card" data-loc="sf">
+            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/SFgardens.jpg', 'Botanical Scenery', 'San Francisco · Shot on S10')" style="cursor: pointer;">
                 <img src="photography/s10/SFgardens.jpg" alt="SF Gardens" class="photo-image">
                 <div class="photo-info">
                     <div class="photo-title">Botanical Scenery</div>
                     <div class="photo-meta">San Francisco · Shot on S10</div>
                 </div>
-            </a>
+            </div>
 
-            <a href="photography/s10/SFslopes.jpg" target="_blank" class="photo-card" data-loc="sf">
+            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/SFslopes.jpg', 'City Slopes', 'San Francisco · Shot on S10')" style="cursor: pointer;">
                 <img src="photography/s10/SFslopes.jpg" alt="SF Slopes" class="photo-image">
                 <div class="photo-info">
                     <div class="photo-title">City Slopes</div>
                     <div class="photo-meta">San Francisco · Shot on S10</div>
                 </div>
-            </a>
+            </div>
 
             <!-- Banff Placeholders -->
             <div class="photo-card" data-loc="banff">
                 <div class="placeholder-image">
-                    [ Coming Soon: Lake Louise ]
+                    Lake Louise
                 </div>
                 <div class="photo-info">
                     <div class="photo-title">Lake Louise</div>
@@ -271,7 +271,7 @@
 
             <div class="photo-card" data-loc="banff">
                 <div class="placeholder-image">
-                    [ Coming Soon: Moraine Lake ]
+                    Moraine Lake
                 </div>
                 <div class="photo-info">
                     <div class="photo-title">Moraine Lake</div>
@@ -281,7 +281,7 @@
             
             <div class="photo-card" data-loc="banff">
                 <div class="placeholder-image">
-                    [ Coming Soon: Scenic Peaks ]
+                    Scenic Peaks
                 </div>
                 <div class="photo-info">
                     <div class="photo-title">Mountain Ranges</div>
@@ -308,7 +308,107 @@
                 }
             });
         }
+    
+        function openModal(imgSrc, title, meta) {
+            const modal = document.getElementById('photo-modal');
+            const modalImg = document.getElementById('modal-img');
+            const captionText = document.getElementById('modal-caption');
+            
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+            captionText.innerHTML = "<strong>" + title + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + meta + "</span>";
+            
+            // disable body scroll
+            document.body.style.overflow = "hidden";
+        }
+        
+        function closeModal() {
+            document.getElementById('photo-modal').style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+        
+        // Close on clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('photo-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Close on escape key
+        document.addEventListener('keydown', function(event){
+            if(event.key === "Escape"){
+                closeModal();
+            }
+        });
+
     </script>
+
+    <!-- Lightbox Modal -->
+    <div id="photo-modal" class="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="modal-caption"></div>
+    </div>
+
+    <style>
+        /* Lightbox Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn {
+            from {transform:scale(0.95); opacity:0;}
+            to {transform:scale(1); opacity:1;}
+        }
+        #modal-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 15px 0;
+            font-family: 'Space Mono', monospace;
+            height: 150px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
 </body>
 </html>
 
