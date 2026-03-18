@@ -59,7 +59,6 @@
         }
         
         .connect-btn {
-            opacity: 0;
             animation: slideInLeft 0.8s both cubic-bezier(0.25, 1, 0.5, 1);
             animation-delay: 2.4s;
         }
@@ -236,6 +235,11 @@
                    </div>
               </div>
           </div>
+            <div class="control-btns">
+    <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔊 ON</button>
+    <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙 THEME</button>
+</div>
+
 
         <div class="sidebar">
             <ul class="nav-links" style="display: flex; flex-direction: column; gap: 1.2em; margin-top: 0; padding-top: 0;">
@@ -361,17 +365,14 @@
     #term-input { background: transparent; border: none; color: #0f0; font-family: 'Space Mono', monospace; flex: 1; outline: none; font-size: 1.2rem; text-shadow: 0 0 5px #0f0; }
     
     @media (max-width: 800px) {
-        .control-btns { top: 10px; right: 10px; }
-        .control-btn { font-size: 0.6rem; padding: 6px 8px; }
+        .control-btns { position: static; justify-content: center; margin-top: -10px; margin-bottom: 20px; }
+        .control-btn { font-size: 0.7rem; padding: 10px 15px; }
     }
 </style>
 
 <!-- 10X COOLER ELEMENTS -->
 <div class="scanlines"></div>
-<div class="control-btns">
-    <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔊 MUTE</button>
-    <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙 THEME</button>
-</div>
+
 
 <div id="terminal-overlay">
     <div id="term-output">Initializing secure connection...\n[OK] Welcome to Alex Gaffen's Hidden Terminal.\nType 'help' for a list of commands.</div>
@@ -399,7 +400,7 @@
     }
 
     // 2. AUDIO SYNTH
-    let audioEnabled = false; // Start muted so it's not annoying
+    let audioEnabled = true; // Sounds on by default
     let audioCtx = null;
     function playSound(type) {
         if (!audioEnabled) return;
@@ -430,6 +431,7 @@
 
     const audioBtn = document.getElementById('audio-btn');
     if (audioBtn) {
+        audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
         audioBtn.addEventListener('click', () => {
             audioEnabled = !audioEnabled;
             if(audioEnabled) playSound('click');
