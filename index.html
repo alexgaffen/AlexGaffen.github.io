@@ -291,5 +291,222 @@
 
 
 
-</body>
+
+    <style>
+    /* 10X COOLER INJECTIONS */
+    body.hacker-mode {
+        --bg-color: #0a0a0a !important;
+        --text-color: #33ff33 !important;
+        --link-color: #33ff33 !important;
+        --link-hover: #ffffff !important;
+        --border-color: #1a4a1a !important;
+    }
+    body.hacker-mode .glistening-box {
+        background: #000 padding-box, linear-gradient(135deg, #00ff00, #003300, #00ff00) border-box !important;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
+        border: 4px solid transparent !important;
+    }
+    body.hacker-mode .balloon {
+        filter: invert(1) hue-rotate(90deg); /* Make balloon match hacker mode vaguely */
+    }
+    .scanlines {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0; z-index: 998; transition: opacity 0.3s;
+    }
+    body.hacker-mode .scanlines { opacity: 1; }
+    
+    @keyframes glitch-skew {
+        0% { transform: skew(0deg); }
+        20% { transform: skew(-10deg); text-shadow: -2px 0 red, 2px 0 #00ffff; }
+        40% { transform: skew(10deg); text-shadow: 2px 0 red, -2px 0 #00ffff; }
+        60% { transform: skew(0deg); text-shadow: none; }
+        80% { transform: skew(5deg); text-shadow: -1px 0 #00ff00, 1px 0 red; }
+        100% { transform: skew(0deg); }
+    }
+    .nav-links a:hover, .connect-btn:hover {
+        animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    }
+    
+    .control-btns {
+        position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 999;
+    }
+    .control-btn {
+        background: rgba(0,0,0,0.02); border: 2px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
+        color: var(--text-color); font-family: 'Press Start 2P', monospace; font-size: 0.8rem;
+        padding: 8px 12px; cursor: pointer; transition: all 0.2s;
+    }
+    .control-btn:active { box-shadow: 0 0 0 var(--text-color); transform: translate(2px, 2px); }
+
+    @keyframes crtTurnOff {
+        0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+        40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
+        70% { transform: scale(0, 0.005); opacity: 0.5; filter: brightness(5); background: white; }
+        100% { transform: scale(0, 0); opacity: 0; filter: brightness(0); background: white; }
+    }
+    body.crt-temp-off {
+        animation: crtTurnOff 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        pointer-events: none;
+    }
+    
+    #terminal-overlay {
+        display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.95); z-index: 1000; color: #0f0; font-family: 'Space Mono', monospace;
+        padding: 40px; box-sizing: border-box; flex-direction: column; font-size: 1.2rem;
+    }
+    #term-output { flex: 1; overflow-y: auto; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; text-shadow: 0 0 5px #0f0; }
+    #term-input-line { display: flex; align-items: center; }
+    #term-prompt { margin-right: 15px; text-shadow: 0 0 5px #0f0; }
+    #term-input { background: transparent; border: none; color: #0f0; font-family: 'Space Mono', monospace; flex: 1; outline: none; font-size: 1.2rem; text-shadow: 0 0 5px #0f0; }
+    </style>
+
+    <!-- 10X COOLER ELEMENTS -->
+    <div class="scanlines"></div>
+    <div class="control-btns">
+        <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔊</button>
+        <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙</button>
+    </div>
+
+    <div id="terminal-overlay">
+        <div id="term-output">Initializing secure connection...\n[OK] Welcome to Alex Gaffen's Hidden Terminal.\nType 'help' for a list of commands.</div>
+        <div id="term-input-line">
+            <span id="term-prompt">alex@sys:~$</span>
+            <input type="text" id="term-input" autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        // 1. TILT EFFECT
+        const glistenBox = document.querySelector('.glistening-box');
+        document.addEventListener('mousemove', (e) => {
+            if(window.innerWidth < 800) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = -(window.innerHeight / 2 - e.pageY) / 50; // Inverted for natural physical tilt
+            glistenBox.style.transform = perspective(1000px) rotateY(deg) rotateX(deg);
+        });
+        glistenBox.addEventListener('mouseenter', () => { glistenBox.style.transition = 'none'; });
+        glistenBox.addEventListener('mouseleave', () => { 
+            glistenBox.style.transition = 'transform 0.5s ease'; 
+            glistenBox.style.transform = perspective(1000px) rotateY(0deg) rotateX(0deg); 
+        });
+
+        // 2. AUDIO SYNTH
+        let audioEnabled = true;
+        let audioCtx = null;
+        function playSound(type) {
+            if (!audioEnabled) return;
+            try {
+                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                if (type === 'hover') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'click') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                }
+            } catch(e) {}
+        }
+
+        document.getElementById('audio-btn').addEventListener('click', () => {
+            playSound('click');
+            audioEnabled = !audioEnabled;
+            document.getElementById('audio-btn').innerText = audioEnabled ? '🔊' : '🔇';
+        });
+
+        // 3. THEME TOGGLE
+        let hackerMode = false;
+        document.getElementById('theme-btn').addEventListener('click', () => {
+            playSound('click');
+            hackerMode = !hackerMode;
+            if(hackerMode) {
+                document.body.classList.add('hacker-mode');
+                document.getElementById('theme-btn').innerText = '☀️';
+            } else {
+                document.body.classList.remove('hacker-mode');
+                document.getElementById('theme-btn').innerText = '🌙';
+            }
+        });
+
+        // 4. CRT PAGE TRANSITION & HOVER AUDIO
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => playSound('hover'));
+            if(el.tagName.toLowerCase() === 'a') {
+                el.addEventListener('click', (e) => {
+                    playSound('click');
+                    if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#')) return;
+                    e.preventDefault();
+                    document.body.classList.add('crt-temp-off');
+                    setTimeout(() => { window.location.href = el.href; }, 450);
+                });
+            }
+        });
+
+        // 5. HIDDEN TERMINAL
+        const terminal = document.getElementById('terminal-overlay');
+        const termInput = document.getElementById('term-input');
+        const termOutput = document.getElementById('term-output');
+        let keyBuffer = '';
+        
+        window.addEventListener('keydown', (e) => {
+            if(terminal.style.display === 'flex') {
+                if(e.key === 'Escape') {
+                    terminal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    termInput.value = '';
+                }
+                return;
+            }
+            
+            keyBuffer += e.key.toLowerCase();
+            if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
+            
+            if(keyBuffer.includes('hack') || keyBuffer.includes('sudo')) {
+                keyBuffer = '';
+                playSound('click');
+                terminal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => termInput.focus(), 100);
+            }
+        });
+
+        termInput.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                const val = termInput.value.trim();
+                if(!val) return;
+                termOutput.innerHTML += \n<span style="color:#fff">> </span>\n;
+                let response = '';
+                const lowered = val.toLowerCase();
+                if(lowered === 'help') {
+                    response = 'Commands:\n  whoami      Display user information\n  skills      Show technology stack\n  clear       Clear terminal output\n  close       Exit the terminal system\n  launch_game Deploy Easter Egg payload';
+                }
+                else if(lowered === 'whoami') response = 'Alex Gaffen.\n4th-year CS student at McMaster.\nFocus: Bioinformatics / Cyber / AI Engineer.';
+                else if(lowered === 'skills') response = 'Languages: C/C++, Python, JS, HTML/CSS\nEnvs: Linux, Bash\nInterests: Security, Robotics, AI';
+                else if(lowered === 'clear') { termOutput.innerHTML = ''; response = ''; }
+                else if(lowered === 'exit' || lowered === 'close') { terminal.style.display = 'none'; document.body.style.overflow = 'auto'; response=''; }
+                else if(lowered === 'launch_game') { response = 'Launching...'; setTimeout(()=>window.location.href='game.html',500); }
+                else response = Command not found: . Type 'help' for syntax.;
+                
+                if(response) termOutput.innerHTML += response;
+                termInput.value = '';
+                termOutput.scrollTop = termOutput.scrollHeight;
+            }
+        });
+        terminal.addEventListener('click', () => termInput.focus());
+
+    </script>
+    </body>
+    
 </html>
