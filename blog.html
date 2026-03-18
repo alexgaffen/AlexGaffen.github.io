@@ -152,5 +152,41 @@
         </ul>
     </div>
 
+
+    <!-- CRT TRANSITION SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if we came from another page on our site
+            const isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
+            if (isLocalReferrer) {
+                document.body.classList.add('crt-temp-on');
+                setTimeout(() => { document.body.classList.remove('crt-temp-on'); }, 500);
+            }
+            
+            document.querySelectorAll('a').forEach(el => {
+                // Ignore if it has an existing click handler doing this via inline or index.js
+                // Actually for other pages we need this. For index.html, it already does it, but we can override it if we are careful, or just let other pages have it.
+                if (!el.getAttribute('data-crt-bound')) {
+                    el.setAttribute('data-crt-bound', 'true');
+                    el.addEventListener('click', (e) => {
+                        if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#') || !el.href) {
+                            return; // let default happen
+                        }
+                        // Check if it's the same origin
+                        try {
+                            const url = new URL(el.href);
+                            if (url.origin === window.location.origin || el.href.startsWith('/') || el.href.startsWith('.')) {
+                                e.preventDefault();
+                                document.body.classList.remove('crt-temp-on');
+                                document.body.classList.add('crt-temp-off');
+                                setTimeout(() => { window.location.href = el.href; }, 450);
+                            }
+                        } catch(err) {}
+                    });
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
