@@ -233,9 +233,9 @@
             e.preventDefault();
             
             if (currentState === 'start' || currentState === 'over') {
-                if (currentState === 'over' && document.getElementById('gameover').style.display !== 'none') {
-                    // Prevent immediate restart
-                    return; 
+                if (currentState === 'over') {
+                    resetGame();
+                    return;
                 }
                 if (currentState === 'start') currentState = 'play';
             }

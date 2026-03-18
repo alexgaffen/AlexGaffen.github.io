@@ -2206,13 +2206,57 @@ h1.name {
         right: 0;
         z-index: 999;
         height: 44px;
-        justify-content: stretch;
         align-items: stretch;
         background: linear-gradient(135deg, rgba(3, 7, 18, 0.95), rgba(15, 23, 42, 0.92));
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 2px solid rgba(34, 211, 238, 0.3);
         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(34, 211, 238, 0.08);
+    }
+
+    .top-bar-identity {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0 1.2rem;
+        white-space: nowrap;
+        border-right: 1px solid rgba(34, 211, 238, 0.2);
+        position: relative;
+    }
+
+    .top-bar-identity::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 15%;
+        height: 70%;
+        width: 1px;
+        background: linear-gradient(180deg, transparent, rgba(34, 211, 238, 0.6), rgba(168, 85, 247, 0.4), rgba(34, 211, 238, 0.6), transparent);
+        animation: glisten 3s ease-in-out infinite;
+    }
+
+    .top-bar-name {
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #22d3ee;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .top-bar-title {
+        font-family: var(--font-head);
+        font-weight: 500;
+        font-size: 0.78rem;
+        color: #a855f7;
+        letter-spacing: 0.04em;
+        opacity: 0.85;
+    }
+
+    .top-bar-links {
+        display: flex;
+        flex: 1;
+        align-items: stretch;
     }
 
     .top-social-link {
@@ -2259,6 +2303,59 @@ h1.name {
 
     .top-social-link span {
         text-transform: uppercase;
+    }
+
+    /* ESC button */
+    .top-bar-esc {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0 1.2rem;
+        text-decoration: none;
+        font-family: var(--font-head);
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+        background: rgba(148, 163, 184, 0.08);
+        border-left: 1px solid rgba(148, 163, 184, 0.2);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .top-bar-esc::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 15%;
+        height: 70%;
+        width: 1px;
+        background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.5), transparent);
+        animation: glisten 3s ease-in-out infinite;
+    }
+
+    .top-bar-esc:hover {
+        color: #f1f5f9;
+        background: rgba(239, 68, 68, 0.15);
+        box-shadow: inset 0 -2px 0 #ef4444;
+    }
+
+    .esc-label {
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.72rem;
+        background: rgba(148, 163, 184, 0.08);
+    }
+
+    .top-bar-esc:hover .esc-label {
+        border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .top-bar-esc i {
+        font-size: 0.85rem;
     }
 
     /* LinkedIn */
@@ -2332,6 +2429,30 @@ h1.name {
 
 [data-theme="light"] .top-social-link {
     border-right-color: rgba(140, 120, 90, 0.12);
+}
+
+[data-theme="light"] .top-bar-name {
+    color: #0e7490;
+}
+
+[data-theme="light"] .top-bar-title {
+    color: #7c3aed;
+}
+
+[data-theme="light"] .top-bar-identity::after,
+[data-theme="light"] .top-social-link::after,
+[data-theme="light"] .top-bar-esc::before {
+    background: linear-gradient(180deg, transparent, rgba(140, 120, 90, 0.4), transparent);
+}
+
+[data-theme="light"] .top-bar-esc {
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.06);
+    border-left-color: rgba(140, 120, 90, 0.15);
+}
+
+[data-theme="light"] .esc-label {
+    border-color: rgba(100, 116, 139, 0.25);
 }
 
 [data-theme="light"] .thm-icon-topbar {
@@ -2881,131 +3002,340 @@ body.crt-temp-on {
 }
 
 
-/* ========================================================= */
-/* RESUME REDESIGN - TIMELINE SCROLL LIGHT EFFECT            */
-/* ========================================================= */
-.main-content {
-    max-width: 1200px !important;
-}
 
+/* ========================================================= */
+/* RESUME REDESIGN - DUAL COLUMN TIMELINE WITH LIGHT SWEEP   */
+/* ========================================================= */
+
+/* Each section becomes a timeline container */
 section {
     display: flex !important;
     flex-direction: column !important;
     position: relative;
-    padding-left: 60px; 
+    padding-left: 0 !important;
     margin-bottom: 60px;
 }
 
 section > h2 {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     font-size: 1.4rem;
     padding-bottom: 5px;
     display: flex;
     align-items: center;
-    margin-left: -60px; 
 }
 
-/* The vertical timeline line */
+/* Timeline wrapper: each job-item becomes a row with left info + dot + right card */
+.job-item {
+    display: grid !important;
+    grid-template-columns: 200px 60px 1fr;
+    grid-template-rows: auto;
+    gap: 0;
+    align-items: start;
+    background: transparent !important;
+    border: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 0 0 0 !important;
+    position: relative;
+    box-shadow: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+    overflow: visible !important;
+}
+
+/* Remove the old ::before (timeline dot) and ::after (light sweep) from the grid wrapper */
+.job-item::before,
+.job-item::after {
+    display: none !important;
+}
+
+/* Disable old hover effects on the grid wrapper */
+.job-item:hover {
+    box-shadow: none !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    transform: none !important;
+}
+.job-item:hover::before {
+    display: none !important;
+}
+
+/* ---- LEFT COLUMN: Date + Sub info ---- */
+.job-header {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 15px;
+}
+
+.job-header h3 {
+    display: none; /* Title moves to the card */
+}
+
+.job-date {
+    font-size: 1.05rem !important;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.job-sub {
+    grid-column: 1;
+    text-align: right;
+    padding-right: 20px;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.job-sub h4 {
+    font-size: 0.85rem !important;
+    margin: 0;
+}
+
+.job-sub .edu-logo {
+    display: none;
+}
+
+/* ---- CENTER COLUMN: Timeline spine + dot ---- */
+.job-item > .job-header::after {
+    content: '';
+    position: absolute;
+    left: calc(200px + 24px); /* center of 60px column */
+    top: 18px;
+    width: 14px;
+    height: 14px;
+    background: var(--bg-dark);
+    border: 3px solid var(--green-color);
+    border-radius: 50%;
+    z-index: 5;
+    transition: background 0.3s, box-shadow 0.5s, transform 0.3s;
+}
+
+/* Timeline vertical line - drawn by section */
 section::before {
     content: '';
     position: absolute;
-    left: 20px;
-    top: 50px; 
-    bottom: 0;
+    left: calc(200px + 30px); /* center of the dot column */
+    top: 55px;
+    bottom: 10px;
     width: 2px;
-    background: var(--border-color);
+    background: linear-gradient(to bottom, var(--green-color), var(--border-dark) 80%, transparent);
+    z-index: 1;
 }
 
-.job-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 25px;
-    margin: 0 0 35px 0 !important;
-    position: relative;
-    width: 100%;
-    
-    /* Scroll slide effect base state */
-    opacity: 0;
-    transform: translateX(80px);
-    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s, background-color 0.3s;
-    overflow: hidden; /* For the light beam sweep limits */
-}
-
-/* Timeline Dot */
-.job-item::before {
-    content: '';
-    position: absolute;
-    left: -48px; /* Alignment with line */
-    top: 35px;
-    width: 12px;
-    height: 12px;
-    background: var(--bg-color);
-    border: 3px solid var(--green-color);
-    border-radius: 50%;
-    z-index: 2;
-    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
-}
-
-.job-item:hover::before {
+/* Active dot glow when card is in view */
+.job-item.in-view > .job-header::after {
     background: var(--green-color);
-    box-shadow: 0 0 12px var(--green-color);
-    transform: scale(1.3);
+    box-shadow: 0 0 15px var(--green-color), 0 0 30px rgba(34, 211, 238, 0.3);
+    transform: scale(1.2);
 }
 
-/* When intersecting the viewport */
-.job-item.in-view {
+/* ---- RIGHT COLUMN: Content card ---- */
+.tl-card {
+    grid-column: 3;
+    grid-row: 1 / 5;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-left: 3px solid var(--green-color);
+    border-radius: 12px;
+    padding: 22px 25px;
+    margin-bottom: 35px;
+    position: relative;
+    overflow: hidden;
+
+    /* Slide-in from right */
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
+}
+
+.job-item.in-view .tl-card {
     opacity: 1;
     transform: translateX(0);
 }
 
-/* Cool Light Sweep Effect */
-.job-item::after {
+.tl-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--glass-border);
+}
+
+/* Card title (duplicated from h3) */
+.tl-card-title {
+    font-family: var(--font-head);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-dark);
+}
+
+/* Light sweep on the card */
+.tl-card::after {
     content: '';
     position: absolute;
     top: 0; left: -100%;
-    width: 30%; height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+    width: 40%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
     transform: skewX(-25deg);
     pointer-events: none;
     z-index: 10;
 }
-.job-item.in-view::after {
-    animation: slideLight 1.2s forwards cubic-bezier(0.25, 1, 0.5, 1);
-    animation-delay: 0.3s;
-}
-
-body.hacker-mode .job-item::after {
-    background: linear-gradient(to right, transparent, rgba(0, 255, 0, 0.25), transparent);
+.job-item.in-view .tl-card::after {
+    animation: slideLight 1.4s forwards cubic-bezier(0.25, 1, 0.5, 1);
+    animation-delay: 0.4s;
 }
 
 @keyframes slideLight {
     0% { left: -100%; opacity: 1; }
-    80% { opacity: 0.8; }
+    80% { opacity: 0.7; }
     100% { left: 200%; opacity: 0; }
 }
 
-.job-item:hover {
-    box-shadow: 0 12px 30px rgba(0, 255, 0, 0.15);
-    background: #0f1419;
-    border-color: #0f0;
-    transform: translateY(-4px) !important;
-}
+/* Section-specific dot colors */
+.section-burgundy .job-item > .job-header::after { border-color: var(--burgundy); }
+.section-burgundy .job-item.in-view > .job-header::after { background: var(--burgundy); box-shadow: 0 0 15px var(--burgundy); }
+.section-burgundy section::before, .section-burgundy::before { background: linear-gradient(to bottom, var(--burgundy), var(--border-dark) 80%, transparent) !important; }
+.section-burgundy .tl-card { border-left-color: var(--burgundy); }
+.section-burgundy .tl-progress-line { background: var(--burgundy); box-shadow: 0 0 8px var(--burgundy); }
 
-body.hacker-mode .job-item:hover {
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-    background: #000;
-}
+.section-teal .job-item > .job-header::after { border-color: var(--teal); }
+.section-teal .job-item.in-view > .job-header::after { background: var(--teal); box-shadow: 0 0 15px var(--teal); }
+.section-teal::before { background: linear-gradient(to bottom, var(--teal), var(--border-dark) 80%, transparent) !important; }
+.section-teal .tl-card { border-left-color: var(--teal); }
+.section-teal .tl-progress-line { background: var(--teal); box-shadow: 0 0 8px var(--teal); }
 
-.project-skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 15px 0;
-}
+.section-orange .job-item > .job-header::after { border-color: var(--orange); }
+.section-orange .job-item.in-view > .job-header::after { background: var(--orange); box-shadow: 0 0 15px var(--orange); }
+.section-orange::before { background: linear-gradient(to bottom, var(--orange), var(--border-dark) 80%, transparent) !important; }
+.section-orange .tl-card { border-left-color: var(--orange); }
+.section-orange .tl-progress-line { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
 
-/* Override skills grid section */
+.section-gold .job-item > .job-header::after { border-color: var(--gold); }
+.section-gold .job-item.in-view > .job-header::after { background: var(--gold); box-shadow: 0 0 15px var(--gold); }
+.section-gold::before { background: linear-gradient(to bottom, var(--gold), var(--border-dark) 80%, transparent) !important; }
+.section-gold .tl-card { border-left-color: var(--gold); }
+.section-gold .tl-progress-line { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+
+.section-purple .job-item > .job-header::after { border-color: var(--purple); }
+.section-purple .job-item.in-view > .job-header::after { background: var(--purple); box-shadow: 0 0 15px var(--purple); }
+.section-purple::before { background: linear-gradient(to bottom, var(--purple), var(--border-dark) 80%, transparent) !important; }
+.section-purple .tl-card { border-left-color: var(--purple); }
+.section-purple .tl-progress-line { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
+
+.section-coral .job-item > .job-header::after { border-color: var(--coral); }
+.section-coral .job-item.in-view > .job-header::after { background: var(--coral); box-shadow: 0 0 15px var(--coral); }
+.section-coral::before { background: linear-gradient(to bottom, var(--coral), var(--border-dark) 80%, transparent) !important; }
+.section-coral .tl-card { border-left-color: var(--coral); }
+.section-coral .tl-progress-line { background: var(--coral); box-shadow: 0 0 8px var(--coral); }
+
+/* Override skills section (no timeline there) */
 #skills::before { display: none !important; }
 #skills { padding-left: 0 !important; }
-#skills h2 { margin-left: 0 !important; }
+#skills .job-item { display: block !important; }
+#contact::before { display: none !important; }
+#contact { padding-left: 0 !important; }
+#contact .job-item { display: block !important; }
 
+/* Progress line that fills as you scroll */
+.tl-progress-line {
+    position: absolute;
+    left: calc(200px + 30px);
+    top: 55px;
+    width: 2px;
+    height: 0;
+    background: var(--green-color);
+    z-index: 2;
+    transition: height 0.15s linear;
+    box-shadow: 0 0 8px var(--green-color);
+}
+
+/* Project images inside timeline cards */
+.project-demo-wrap {
+    margin-top: 15px;
+}
+.tl-card .project-preview-gallery {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.tl-card .project-preview-img {
+    max-width: 48%;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+.tl-card .single-preview-gallery .project-preview-img {
+    max-width: 100%;
+}
+
+/* Project demo videos */
+.project-demo {
+    position: relative;
+    margin-top: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+.demo-video {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+}
+/* Fallback: if video fails to load, hide the container */
+.demo-video:not([src]):not(:has(source)) {
+    display: none;
+}
+.demo-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(34, 211, 238, 0.9);
+    color: #0f1419;
+    font-family: var(--font-head);
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: demoPulse 2s ease-in-out infinite;
+}
+@keyframes demoPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Radar chart container */
+#radarChart {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 900px) {
+    .job-item {
+        grid-template-columns: 1fr !important;
+    }
+    .job-header {
+        text-align: left !important;
+        padding-right: 0 !important;
+        padding-left: 10px;
+    }
+    .job-sub {
+        text-align: left !important;
+        padding-right: 0 !important;
+        padding-left: 10px;
+    }
+    .job-header h3 { display: block !important; }
+    .tl-card-title { display: none !important; }
+    .tl-card {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+    section::before { display: none !important; }
+    .job-item > .job-header::after { display: none !important; }
+    .tl-progress-line { display: none !important; }
+}
