@@ -1,6 +1,19 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        if (sessionStorage.getItem("site_visited") || document.referrer.indexOf(window.location.host) !== -1) {
+            document.documentElement.classList.add("no-intro");
+        } else {
+            sessionStorage.setItem("site_visited", "true");
+        }
+    </script>
+    <style>
+        html.no-intro .glistening-box { animation: glisten 6s ease-in-out infinite !important; transform: none !important; opacity: 1 !important; margin-bottom: 1.5em !important; }
+        html.no-intro .nav-links li { animation: none !important; opacity: 1 !important; transform: none !important; }
+        html.no-intro #connect-wrapper { animation: none !important; opacity: 1 !important; transform: none !important; }
+    </style>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen</title>
@@ -216,7 +229,7 @@
                         I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
                         </p>
 
-                        <div style="animation: slideInLeft 0.8s both cubic-bezier(0.25, 1, 0.5, 1); animation-delay: 2.4s; display: inline-block;"><a href="mailto:alexgaffen@gmail.com" class="connect-btn" style="opacity: 1; font-size: 0.85em; margin-bottom: 0em; margin-top: 0.5em; color: var(--link-color); box-shadow: 2px 2px 0px var(--text-color); border: 2px solid var(--text-color); padding: 8px 12px; display: inline-block; transition: all 0.2s; font-family: 'Press Start 2P', monospace; text-transform: uppercase;">> Let's connect!</a></div>
+                        <div id="connect-wrapper" style="animation: slideInLeft 0.8s both cubic-bezier(0.25, 1, 0.5, 1); animation-delay: 2.4s; display: inline-block;"><a href="mailto:alexgaffen@gmail.com" class="connect-btn" style="opacity: 1; font-size: 0.85em; margin-bottom: 0em; margin-top: 0.5em; color: var(--link-color); box-shadow: 2px 2px 0px var(--text-color); border: 2px solid var(--text-color); padding: 8px 12px; display: inline-block; transition: all 0.2s; font-family: 'Press Start 2P', monospace; text-transform: uppercase;">> Let's connect!</a></div>
                    </div>
               </div>
           </div>

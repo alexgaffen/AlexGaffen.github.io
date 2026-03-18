@@ -2853,16 +2853,14 @@ html.theme-transitioning *::after {
 
 
 @keyframes crtTurnOff {
-    0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
-    40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
-    70% { transform: scale(0, 0.005); opacity: 0.5; filter: brightness(5); background: white; }
-    100% { transform: scale(0, 0); opacity: 0; filter: brightness(0); background: white; }
+    0% { transform: scale(1); opacity: 1; filter: brightness(1); border-radius: 0; }
+    50% { transform: scale(0.6); opacity: 1; filter: brightness(3); border-radius: 20px; }
+    100% { transform: scale(0); opacity: 0; filter: brightness(6); background: white; border-radius: 50%; }
 }
 @keyframes crtTurnOn {
-    0% { transform: scale(0, 0); opacity: 0; filter: brightness(0); background: white; }
-    30% { transform: scale(0, 0.005); opacity: 0.5; filter: brightness(5); background: white; }
-    60% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
-    100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+    0% { transform: scale(0); opacity: 0; filter: brightness(6); background: white; border-radius: 50%; }
+    50% { transform: scale(0.6); opacity: 1; filter: brightness(3); border-radius: 20px; }
+    100% { transform: scale(1); opacity: 1; filter: brightness(1); border-radius: 0; }
 }
 body.crt-temp-off {
     animation: crtTurnOff 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
@@ -2882,60 +2880,116 @@ body.crt-temp-on {
     100% { transform: skew(0deg); }
 }
 
-/* ========================================================= */
-/* RESUME REDESIGN - BENTO BOX COMPACT HOVER STYLE           */
-/* ========================================================= */
 
-/* Convert main column into grid flow */
+/* ========================================================= */
+/* RESUME REDESIGN - TIMELINE SCROLL LIGHT EFFECT            */
+/* ========================================================= */
 .main-content {
-    max-width: 1300px !important;
+    max-width: 1200px !important;
 }
 
 section {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-    align-items: start;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
+    padding-left: 60px; 
+    margin-bottom: 60px;
 }
 
 section > h2 {
-    grid-column: 1 / -1;
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     font-size: 1.4rem;
-    border-bottom: 1px dashed var(--border-color);
     padding-bottom: 5px;
     display: flex;
     align-items: center;
+    margin-left: -60px; 
 }
 
-section > h2 i {
-    margin-right: 10px;
+/* The vertical timeline line */
+section::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 50px; 
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
 }
 
 .job-item {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 20px;
-    margin: 0 !important;
+    padding: 25px;
+    margin: 0 0 35px 0 !important;
     position: relative;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 100%;
     
-    /* Smooth height transition using max-height */
-    max-height: 110px;
-    overflow: hidden;
-    transition: max-height 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    /* Scroll slide effect base state */
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s, background-color 0.3s;
+    overflow: hidden; /* For the light beam sweep limits */
+}
+
+/* Timeline Dot */
+.job-item::before {
+    content: '';
+    position: absolute;
+    left: -48px; /* Alignment with line */
+    top: 35px;
+    width: 12px;
+    height: 12px;
+    background: var(--bg-color);
+    border: 3px solid var(--green-color);
+    border-radius: 50%;
+    z-index: 2;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.job-item:hover::before {
+    background: var(--green-color);
+    box-shadow: 0 0 12px var(--green-color);
+    transform: scale(1.3);
+}
+
+/* When intersecting the viewport */
+.job-item.in-view {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Cool Light Sweep Effect */
+.job-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 30%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: skewX(-25deg);
+    pointer-events: none;
+    z-index: 10;
+}
+.job-item.in-view::after {
+    animation: slideLight 1.2s forwards cubic-bezier(0.25, 1, 0.5, 1);
+    animation-delay: 0.3s;
+}
+
+body.hacker-mode .job-item::after {
+    background: linear-gradient(to right, transparent, rgba(0, 255, 0, 0.25), transparent);
+}
+
+@keyframes slideLight {
+    0% { left: -100%; opacity: 1; }
+    80% { opacity: 0.8; }
+    100% { left: 200%; opacity: 0; }
 }
 
 .job-item:hover {
-    max-height: 800px;
-    transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0, 255, 0, 0.15);
-    background: #0f1419; /* dark */
+    background: #0f1419;
     border-color: #0f0;
-    z-index: 10;
+    transform: translateY(-4px) !important;
 }
 
 body.hacker-mode .job-item:hover {
@@ -2943,71 +2997,6 @@ body.hacker-mode .job-item:hover {
     background: #000;
 }
 
-/* Hide inner details until hovered */
-.job-item ul, 
-.job-item .project-skills-list, 
-.job-item .relevant-courses, 
-.job-item .edu-stats,
-.job-item .project-card-layout > .project-card-image {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease 0s, transform 0.4s ease 0s;
-    pointer-events: none;
-}
-
-.job-item:hover ul, 
-.job-item:hover .project-skills-list, 
-.job-item:hover .relevant-courses, 
-.job-item:hover .edu-stats,
-.job-item:hover .project-card-layout > .project-card-image {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
-    pointer-events: auto;
-}
-
-/* Header compression */
-.job-header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5px;
-}
-.job-header h3 {
-    font-size: 1.1rem;
-    margin: 0 0 5px 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.job-item:hover .job-header h3 {
-    white-space: normal;
-}
-.job-date {
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-.job-sub {
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-/* Fix grid overlap if they use absolute or flex */
-.project-card-layout {
-    display: flex;
-    flex-direction: column;
-}
-.project-card-text {
-    width: 100%;
-}
-
-/* Small adjustments for layout icons */
-.job-sub .edu-logo {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-    vertical-align: middle;
-}
-/* Ensure project skill boxes don't overflow */
 .project-skills-list {
     display: flex;
     flex-wrap: wrap;
@@ -3015,16 +3004,8 @@ body.hacker-mode .job-item:hover {
     margin: 15px 0;
 }
 
-/* Make skills grid too! */
-#skills {
-    display: flex !important;
-    flex-direction: column;
-}
-.skills-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.skill-category {
-    margin-bottom: 20px;
-}
+/* Override skills grid section */
+#skills::before { display: none !important; }
+#skills { padding-left: 0 !important; }
+#skills h2 { margin-left: 0 !important; }
+
