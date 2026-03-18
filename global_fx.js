@@ -12,46 +12,7 @@ console.log(`%c
  INIT SEQUENCE SECURE... //10x Developer Mode Engaged
 `, "color: #0f0; font-family: monospace; font-size: 14px; text-shadow: 0 0 5px #0f0;");
 
-// Neon Cursor Follower
-document.addEventListener("DOMContentLoaded", () => {
-    const cursor = document.createElement("div");
-    cursor.style.position = "fixed";
-    cursor.style.width = "8px";
-    cursor.style.height = "8px";
-    cursor.style.borderRadius = "50%";
-    cursor.style.backgroundColor = "#0f0";
-    cursor.style.boxShadow = "0 0 10px #0f0, 0 0 20px #0f0";
-    cursor.style.pointerEvents = "none";
-    cursor.style.transform = "translate(-50%, -50%)";
-    cursor.style.zIndex = "10000";
-    cursor.style.transition = "width 0.2s, height 0.2s, background-color 0.2s";
-    document.body.appendChild(cursor);
 
-    document.addEventListener("mousemove", (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-    });
-
-    document.querySelectorAll("a, button").forEach(el => {
-        el.addEventListener("mouseenter", () => {
-            cursor.style.width = "20px";
-            cursor.style.height = "20px";
-            cursor.style.backgroundColor = "transparent";
-            cursor.style.border = "2px solid #0f0";
-        });
-        el.addEventListener("mouseleave", () => {
-            cursor.style.width = "8px";
-            cursor.style.height = "8px";
-            cursor.style.backgroundColor = "#0f0";
-            cursor.style.border = "none";
-        });
-    });
-
-    // Custom CSS to hide default cursor
-    const style = document.createElement('style');
-    style.innerHTML = `* { cursor: none !important; }`;
-    document.head.appendChild(style);
-});
 
 // CRT TV Hum Audio
 const playTvStatic = () => {
@@ -95,36 +56,7 @@ document.addEventListener("click", (e) => {
 // Play static on initial load transition
 if (document.referrer.indexOf(window.location.host) !== -1) {
     playTvStatic();
-}
-
-
-// GitHub Activity Feed
-document.addEventListener("DOMContentLoaded", () => {
-    const feed = document.getElementById("github-feed");
-    if (!feed) return;
-    
-    fetch("https://api.github.com/users/alexgaffen/events/public")
-        .then(res => res.json())
-        .then(data => {
-            const pushes = data.filter(e => e.type === "PushEvent").slice(0, 3);
-            feed.innerHTML = "";
-            if (pushes.length === 0) {
-                feed.innerHTML = "<span>> No recent activity offline.</span>";
-                return;
-            }
-            pushes.forEach(p => {
-                const repo = p.repo.name.split("/")[1];
-                const msg = p.payload.commits[0] ? p.payload.commits[0].message.split("\n")[0] : "Update refs";
-                const hash = p.payload.commits[0] ? p.payload.commits[0].sha.substring(0,6) : "000000";
-                feed.innerHTML += `<div class="gh-commit" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">> [${repo}] ${hash}: ${msg}</div>`;
-            });
-        })
-        .catch(err => {
-            feed.innerHTML = "<span style='color:red;'>> Connection refused.</span>";
-        });
-});
-
-// Glitch Skill Bars in Resume
+}// Glitch Skill Bars in Resume
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".skill-box").forEach(box => {
         // Prevent re-applying
