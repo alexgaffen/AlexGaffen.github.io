@@ -2871,3 +2871,13 @@ body.crt-temp-off {
 body.crt-temp-on {
     animation: crtTurnOn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
 }
+
+/* Glitch Animation Global */
+@keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-10deg); text-shadow: -2px 0 red, 2px 0 #00ffff; }
+    40% { transform: skew(10deg); text-shadow: 2px 0 red, -2px 0 #00ffff; }
+    60% { transform: skew(0deg); text-shadow: none; }
+    80% { transform: skew(5deg); text-shadow: -1px 0 #00ff00, 1px 0 red; }
+    100% { transform: skew(0deg); }
+}
