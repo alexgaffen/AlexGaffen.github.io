@@ -292,7 +292,8 @@
 
 
 
-    <style>
+    
+<style>
     /* 10X COOLER INJECTIONS */
     body.hacker-mode {
         --bg-color: #0a0a0a !important;
@@ -307,7 +308,7 @@
         border: 4px solid transparent !important;
     }
     body.hacker-mode .balloon {
-        filter: invert(1) hue-rotate(90deg); /* Make balloon match hacker mode vaguely */
+        filter: invert(1) hue-rotate(90deg);
     }
     .scanlines {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -325,7 +326,7 @@
         100% { transform: skew(0deg); }
     }
     .nav-links a:hover, .connect-btn:hover {
-        animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite !important;
     }
     
     .control-btns {
@@ -358,155 +359,183 @@
     #term-input-line { display: flex; align-items: center; }
     #term-prompt { margin-right: 15px; text-shadow: 0 0 5px #0f0; }
     #term-input { background: transparent; border: none; color: #0f0; font-family: 'Space Mono', monospace; flex: 1; outline: none; font-size: 1.2rem; text-shadow: 0 0 5px #0f0; }
-    </style>
+    
+    @media (max-width: 800px) {
+        .control-btns { top: 10px; right: 10px; }
+        .control-btn { font-size: 0.6rem; padding: 6px 8px; }
+    }
+</style>
 
-    <!-- 10X COOLER ELEMENTS -->
-    <div class="scanlines"></div>
-    <div class="control-btns">
-        <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔊</button>
-        <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙</button>
+<!-- 10X COOLER ELEMENTS -->
+<div class="scanlines"></div>
+<div class="control-btns">
+    <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔊 MUTE</button>
+    <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙 THEME</button>
+</div>
+
+<div id="terminal-overlay">
+    <div id="term-output">Initializing secure connection...\n[OK] Welcome to Alex Gaffen's Hidden Terminal.\nType 'help' for a list of commands.</div>
+    <div id="term-input-line">
+        <span id="term-prompt">alex@sys:~$</span>
+        <input type="text" id="term-input" autocomplete="off" spellcheck="false" autofocus>
     </div>
+</div>
 
-    <div id="terminal-overlay">
-        <div id="term-output">Initializing secure connection...\n[OK] Welcome to Alex Gaffen's Hidden Terminal.\nType 'help' for a list of commands.</div>
-        <div id="term-input-line">
-            <span id="term-prompt">alex@sys:~$</span>
-            <input type="text" id="term-input" autocomplete="off" spellcheck="false">
-        </div>
-    </div>
-
-    <script>
-        // 1. TILT EFFECT
-        const glistenBox = document.querySelector('.glistening-box');
+<script>
+    // 1. TILT EFFECT
+    const glistenBox = document.querySelector('.glistening-box');
+    if (glistenBox) {
         document.addEventListener('mousemove', (e) => {
             if(window.innerWidth < 800) return;
             const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
-            const yAxis = -(window.innerHeight / 2 - e.pageY) / 50; // Inverted for natural physical tilt
-            glistenBox.style.transform = perspective(1000px) rotateY(deg) rotateX(deg);
+            const yAxis = -(window.innerHeight / 2 - e.pageY) / 50; 
+            glistenBox.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
         glistenBox.addEventListener('mouseenter', () => { glistenBox.style.transition = 'none'; });
         glistenBox.addEventListener('mouseleave', () => { 
             glistenBox.style.transition = 'transform 0.5s ease'; 
-            glistenBox.style.transform = perspective(1000px) rotateY(0deg) rotateX(0deg); 
+            glistenBox.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`; 
         });
+    }
 
-        // 2. AUDIO SYNTH
-        let audioEnabled = true;
-        let audioCtx = null;
-        function playSound(type) {
-            if (!audioEnabled) return;
-            try {
-                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if(audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                if (type === 'hover') {
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.05);
-                    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-                } else if (type === 'click') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-                }
-            } catch(e) {}
-        }
+    // 2. AUDIO SYNTH
+    let audioEnabled = false; // Start muted so it's not annoying
+    let audioCtx = null;
+    function playSound(type) {
+        if (!audioEnabled) return;
+        try {
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            if (type === 'hover') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } else if (type === 'click') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            }
+        } catch(e) {}
+    }
 
-        document.getElementById('audio-btn').addEventListener('click', () => {
-            playSound('click');
+    const audioBtn = document.getElementById('audio-btn');
+    if (audioBtn) {
+        audioBtn.addEventListener('click', () => {
             audioEnabled = !audioEnabled;
-            document.getElementById('audio-btn').innerText = audioEnabled ? '🔊' : '🔇';
+            if(audioEnabled) playSound('click');
+            audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
         });
+    }
 
-        // 3. THEME TOGGLE
-        let hackerMode = false;
-        document.getElementById('theme-btn').addEventListener('click', () => {
+    // 3. THEME TOGGLE
+    let hackerMode = false;
+    const themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
             playSound('click');
             hackerMode = !hackerMode;
             if(hackerMode) {
                 document.body.classList.add('hacker-mode');
-                document.getElementById('theme-btn').innerText = '☀️';
+                themeBtn.innerText = '☀️ NORMAL';
             } else {
                 document.body.classList.remove('hacker-mode');
-                document.getElementById('theme-btn').innerText = '🌙';
+                themeBtn.innerText = '🌙 HACKER';
             }
         });
+    }
 
-        // 4. CRT PAGE TRANSITION & HOVER AUDIO
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => playSound('hover'));
-            if(el.tagName.toLowerCase() === 'a') {
-                el.addEventListener('click', (e) => {
+    // 4. CRT PAGE TRANSITION & HOVER AUDIO
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => playSound('hover'));
+        if(el.tagName.toLowerCase() === 'a') {
+            el.addEventListener('click', (e) => {
+                if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#')) {
                     playSound('click');
-                    if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#')) return;
-                    e.preventDefault();
-                    document.body.classList.add('crt-temp-off');
-                    setTimeout(() => { window.location.href = el.href; }, 450);
-                });
-            }
-        });
-
-        // 5. HIDDEN TERMINAL
-        const terminal = document.getElementById('terminal-overlay');
-        const termInput = document.getElementById('term-input');
-        const termOutput = document.getElementById('term-output');
-        let keyBuffer = '';
-        
-        window.addEventListener('keydown', (e) => {
-            if(terminal.style.display === 'flex') {
-                if(e.key === 'Escape') {
-                    terminal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                    termInput.value = '';
+                    return;
                 }
-                return;
+                e.preventDefault();
+                playSound('click');
+                document.body.classList.add('crt-temp-off');
+                setTimeout(() => { window.location.href = el.href; }, 450);
+            });
+        }
+    });
+
+    // 5. HIDDEN TERMINAL
+    const terminal = document.getElementById('terminal-overlay');
+    const termInput = document.getElementById('term-input');
+    const termOutput = document.getElementById('term-output');
+    let keyBuffer = '';
+    
+    window.addEventListener('keydown', (e) => {
+        if(terminal && terminal.style.display === 'flex') {
+            if(e.key === 'Escape') {
+                terminal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                termInput.value = '';
             }
-            
+            return;
+        }
+        
+        if (e.key && e.key.length === 1) {
             keyBuffer += e.key.toLowerCase();
             if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
             
             if(keyBuffer.includes('hack') || keyBuffer.includes('sudo')) {
                 keyBuffer = '';
                 playSound('click');
-                terminal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => termInput.focus(), 100);
+                if (terminal) {
+                    terminal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    setTimeout(() => termInput.focus(), 100);
+                }
             }
-        });
+        }
+    });
 
+    if (termInput) {
         termInput.addEventListener('keydown', (e) => {
             if(e.key === 'Enter') {
                 const val = termInput.value.trim();
                 if(!val) return;
-                termOutput.innerHTML += \n<span style="color:#fff">> </span>\n;
+                
+                termOutput.innerHTML += "\n<span style='color:#fff'>> " + val + "</span>\n";
                 let response = '';
                 const lowered = val.toLowerCase();
-                if(lowered === 'help') {
-                    response = 'Commands:\n  whoami      Display user information\n  skills      Show technology stack\n  clear       Clear terminal output\n  close       Exit the terminal system\n  launch_game Deploy Easter Egg payload';
-                }
-                else if(lowered === 'whoami') response = 'Alex Gaffen.\n4th-year CS student at McMaster.\nFocus: Bioinformatics / Cyber / AI Engineer.';
-                else if(lowered === 'skills') response = 'Languages: C/C++, Python, JS, HTML/CSS\nEnvs: Linux, Bash\nInterests: Security, Robotics, AI';
-                else if(lowered === 'clear') { termOutput.innerHTML = ''; response = ''; }
-                else if(lowered === 'exit' || lowered === 'close') { terminal.style.display = 'none'; document.body.style.overflow = 'auto'; response=''; }
-                else if(lowered === 'launch_game') { response = 'Launching...'; setTimeout(()=>window.location.href='game.html',500); }
-                else response = Command not found: . Type 'help' for syntax.;
                 
-                if(response) termOutput.innerHTML += response;
+                if (lowered === 'help') {
+                    response = 'Commands:\n  whoami      Display user information\n  skills      Show technology stack\n  clear       Clear terminal output\n  close       Exit the terminal system\n  launch_game Deploy Easter Egg payload';
+                } else if (lowered === 'whoami') {
+                    response = 'Alex Gaffen.\n4th-year CS student at McMaster.\nFocus: Bioinformatics / Cyber / AI Engineer.';
+                } else if (lowered === 'skills') {
+                    response = 'Languages: C/C++, Python, JS, HTML/CSS\nEnvs: Linux, Bash\nInterests: Security, Robotics, AI';
+                } else if (lowered === 'clear') {
+                    termOutput.innerHTML = ''; response = '';
+                } else if (lowered === 'exit' || lowered === 'close') {
+                    terminal.style.display = 'none'; document.body.style.overflow = 'auto'; response='';
+                } else if (lowered === 'launch_game') {
+                    response = 'Launching...'; setTimeout(() => window.location.href='game.html', 500);
+                } else {
+                    response = "Command not found: " + val + ". Type 'help' for syntax.";
+                }
+                
+                if (response) termOutput.innerHTML += response;
                 termInput.value = '';
                 termOutput.scrollTop = termOutput.scrollHeight;
             }
         });
         terminal.addEventListener('click', () => termInput.focus());
-
-    </script>
-    </body>
-    
+    }
+</script>
+</body>
 </html>
