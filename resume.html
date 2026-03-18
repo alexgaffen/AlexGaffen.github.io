@@ -1,638 +1,558 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Gaffen | Portfolio</title>
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alex Gaffen | Portfolio</title>
+<!-- Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-XXXXXXXXXX'); // TODO: Replace G-XXXXXXXXXX with your GA4 Measurement ID
     </script>
-
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link rel="stylesheet" href="style.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link href="assets/favicon.png" rel="icon" type="image/png"/>
+<link href="style.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;display=swap" rel="stylesheet"/>
 </head>
 <body>
-
-    <div class="about-theme-fx" aria-hidden="true">
-        <canvas id="themeFxCanvas"></canvas>
-    </div>
-    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-    <!-- Top social bar (desktop only) -->
-    <div class="top-social-bar" id="topSocialBar">
-        <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" class="top-social-link social-linkedin">
-            <i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
-        </a>
-        <a href="https://github.com/alexgaffen" target="_blank" class="top-social-link social-github">
-            <i class="fab fa-github"></i><span>GitHub</span>
-        </a>
-        <a href="mailto:alexgaffen@gmail.com" class="top-social-link social-email">
-            <i class="fas fa-envelope"></i><span>Email</span>
-        </a>
-        <a href="https://tryhackme.com/p/alexgaffen" target="_blank" class="top-social-link social-thm">
-            <img src="https://assets.tryhackme.com/img/favicon.png" alt="TryHackMe" class="thm-icon-topbar"><span>TryHackMe</span>
-        </a>
-    </div>
-
-    <div class="container">
-        <nav class="sidebar">
-            <div class="profile-container">
-                <img src="assets/Headshot.jpg" alt="Alex Gaffen" class="profile-img">
-            </div>
-            
-            <ul class="nav-links">
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="#education" class="active">EDUCATION</a></li>
-                <li><a href="#workexperience">EXPERIENCE</a></li>
-                <li><a href="#projects">PROJECTS</a></li>
-                <li><a href="#competitions-awards">AWARDS</a></li>
-                <li><a href="#skills">SKILLS</a></li>
-                <li><a href="#certifications">CERTIFICATIONS</a></li>
-                <li><a href="#hobbies-interests">INTERESTS</a></li>
-            </ul>
-
-            <div class="sidebar-theme-toggle">
-                <div class="star-toggle" id="starToggle">
-                    <svg class="star-lines" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Spokes from center to each point -->
-                        <line x1="50" y1="50" x2="50" y2="12" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <line x1="50" y1="50" x2="83" y2="31" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <line x1="50" y1="50" x2="83" y2="69" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <line x1="50" y1="50" x2="50" y2="88" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <line x1="50" y1="50" x2="17" y2="69" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <line x1="50" y1="50" x2="17" y2="31" stroke="currentColor" stroke-width="1.5" opacity="0.25"/>
-                        <!-- Outline connecting adjacent points (hexagon perimeter) -->
-                        <polygon points="50,12 83,31 83,69 50,88 17,69 17,31" fill="none" stroke="currentColor" stroke-width="1" opacity="0.15"/>
-                    </svg>
-                    <div class="star-indicator"></div>
-                    <button class="star-slot" data-theme="light" data-slot="0" title="Light Mode (1)"><i class="fas fa-sun"></i></button>
-                    <button class="star-slot" data-theme="ocean" data-slot="1" title="Ocean (2)"><i class="fas fa-water"></i></button>
-                    <button class="star-slot" data-theme="ember" data-slot="2" title="Ember (3)"><i class="fas fa-fire"></i></button>
-                    <button class="star-slot" data-theme="dark" data-slot="3" title="Dark Mode (4)"><i class="fas fa-moon"></i></button>
-                    <button class="star-slot" data-theme="forest" data-slot="4" title="Forest (5)"><i class="fas fa-leaf"></i></button>
-                    <button class="star-slot" data-theme="aurora" data-slot="5" title="Aurora (6)"><i class="fas fa-star"></i></button>
+<div aria-hidden="true" class="about-theme-fx">
+<canvas id="themeFxCanvas"></canvas>
+</div>
+<div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
+<!-- Sticky top bar (desktop only) -->
+<div class="top-social-bar" id="topSocialBar">
+<div class="top-bar-identity">
+<span class="top-bar-name">Alex Gaffen</span>
+</div>
+<div class="top-bar-links">
+<a class="top-social-link social-linkedin" href="https://www.linkedin.com/in/alexgaffen" target="_blank">
+<i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
+</a>
+<a class="top-social-link social-github" href="https://github.com/alexgaffen" target="_blank">
+<i class="fab fa-github"></i><span>GitHub</span>
+</a>
+<a class="top-social-link social-email" href="mailto:alexgaffen@gmail.com">
+<i class="fas fa-envelope"></i><span>Email</span>
+</a>
+<a class="top-social-link social-thm" href="https://tryhackme.com/p/alexgaffen" target="_blank">
+<img alt="TryHackMe" class="thm-icon-topbar" src="https://assets.tryhackme.com/img/favicon.png"/><span>TryHackMe</span>
+</a>
+</div>
+<a class="top-bar-esc" href="index.html" title="Back to Home">
+<span class="esc-label">ESC</span><i class="fas fa-xmark"></i>
+</a>
+</div>
+<div class="container">
+<nav class="sidebar">
+<div class="profile-container">
+<img alt="Alex Gaffen" class="profile-img" src="assets/Headshot.jpg"/>
+</div>
+<ul class="nav-links">
+<li><a class="active" href="#education">EDUCATION</a></li>
+<li><a href="#workexperience">EXPERIENCE</a></li>
+<li><a href="#projects">PROJECTS</a></li>
+<li><a href="#competitions-awards">AWARDS</a></li>
+<li><a href="#skills">SKILLS</a></li>
+<li><a href="#certifications">CERTIFICATIONS</a></li>
+<li><a href="#hobbies-interests">INTERESTS</a></li>
+</ul>
+<div class="sidebar-theme-toggle">
+<div class="star-toggle" id="starToggle">
+<svg class="star-lines" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Spokes from center to each point -->
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="50" y2="12"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="83" y1="50" y2="31"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="83" y1="50" y2="69"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="50" y2="88"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="17" y1="50" y2="69"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="17" y1="50" y2="31"></line>
+<!-- Outline connecting adjacent points (hexagon perimeter) -->
+<polygon fill="none" opacity="0.15" points="50,12 83,31 83,69 50,88 17,69 17,31" stroke="currentColor" stroke-width="1"></polygon>
+</svg>
+<div class="star-indicator"></div>
+<button class="star-slot" data-slot="0" data-theme="light" title="Light Mode (1)"><i class="fas fa-sun"></i></button>
+<button class="star-slot" data-slot="1" data-theme="ocean" title="Ocean (2)"><i class="fas fa-water"></i></button>
+<button class="star-slot" data-slot="2" data-theme="ember" title="Ember (3)"><i class="fas fa-fire"></i></button>
+<button class="star-slot" data-slot="3" data-theme="dark" title="Dark Mode (4)"><i class="fas fa-moon"></i></button>
+<button class="star-slot" data-slot="4" data-theme="forest" title="Forest (5)"><i class="fas fa-leaf"></i></button>
+<button class="star-slot" data-slot="5" data-theme="aurora" title="Aurora (6)"><i class="fas fa-star"></i></button>
+</div>
+</div>
+<div class="sidebar-action">
+<div class="sidebar-socials">
+<a class="social-linkedin" href="https://www.linkedin.com/in/alexgaffen" rel="noopener noreferrer" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+<a class="social-github" href="https://github.com/alexgaffen" rel="noopener noreferrer" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+<a class="social-email" href="mailto:alexgaffen@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+<a class="social-thm" href="https://tryhackme.com/p/alexgaffen" rel="noopener noreferrer" target="_blank" title="TryHackMe"><img alt="TryHackMe" class="thm-icon" src="https://assets.tryhackme.com/img/favicon.png"/></a>
+</div>
+</div>
+</nav>
+<main class="content">
+<section class="hidden section-burgundy" id="education">
+<h2>EDUCATION</h2>
+<div class="job-item">
+<div class="job-header">
+<h3>Honours Computer Science Co-op (B.A.Sc.)</h3>
+<span class="job-date">2022-Present</span>
+</div>
+<div class="job-sub">
+<img alt="McMaster University" class="edu-logo" src="assets/mcmaster.png"/>
+<h4>McMaster University, Hamilton ON</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Honours Computer Science Co-op (B.A.Sc.)</div><div class="edu-stats">
+<span class="edu-badge">📅 Currently Enrolled in 4th Year</span>
+</div><div class="relevant-courses">
+<h4 class="course-header">Relevant Coursework:</h4>
+<ul>
+<li>🔐 (A-) COMPSCI 4CR3: Applied Cryptography</li>
+<li>🔧 (A+) COMPSCI 3TB3: Syntax-Based Tools &amp; Compilers</li>
+<li>🌍 (B+) COMPSCI 3N03: Computer Networks and Security</li>
+<li>🧠 (A-) COMPSCI 3MI3: Principles of Programming Languages</li>
+<li>⚙️ (A-) COMPSCI 3SH3: Operating Systems</li>
+<li>🧮 (A+) COMPSCI 2XC3: Algorithms and Software Design</li>
+<li>🖥️ (A-) COMPSCI 2GA3: Computer Architecture</li>
+<li>🌐 (A-) COMPSCI 1XD3: Intro to Software Using Web Programming</li>
+<li>🛠️ (A+) COMPSCI 1XC3: Development Basics</li>
+<li>💻 (A) COMPSCI 1MD3: Introduction to Programming</li>
+<li>🔢 (A) COMPSCI 1DM3: Discrete Math for Computer Science</li>
+<li>🎲 (A) STATS 2D03: Intro to Probability</li>
+<li>📊 (A-) MATH 1ZB3: Engineering Mathematics II-A</li>
+<li>➗ (A) MATH 1ZA3: Engineering Mathematics I</li>
+<li>📐 (A-) MATH 1B03: Linear Algebra 1</li>
+</ul>
+</div></div>
                 </div>
-
-            </div>
-
-            <div class="sidebar-action">
-                <div class="sidebar-socials">
-                    <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-github" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="mailto:alexgaffen@gmail.com" class="social-email" title="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer" class="social-thm" title="TryHackMe"><img src="https://assets.tryhackme.com/img/favicon.png" alt="TryHackMe" class="thm-icon"></a>
-                </div>
-            </div>
-        </nav>
-
-        <main class="content">
-            <header class="resume-header" style="margin-bottom: 50px; padding: 30px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; border: 1px dashed var(--accent-light);">
-                <h1 style="font-size: 3rem; margin-bottom: 0.2em; font-family: 'Syne', sans-serif; color: white;">Alex Gaffen</h1>
-                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;">Software Engineer, Developer & Researcher</p>
-                <a href="index.html" style="display: inline-block; color: var(--accent-light); text-decoration: none; border: 1px solid var(--accent-light); padding: 5px 15px; border-radius: 5px; font-size: 0.9em; transition: background 0.3s;"><i class="fas fa-arrow-left"></i> Back to Home terminal</a>
-            </header>
-            
-            <section id="education" class="hidden section-burgundy">
-                <h2>EDUCATION</h2>
-
-                <div class="job-item">
+</section>
+<hr/>
+<section class="hidden section-teal" id="workexperience">
+<h2>EXPERIENCE</h2>
+<div class="job-item">
                     <div class="job-header">
-                        <h3>Honours Computer Science Co-op (B.A.Sc.)</h3>
-                        <span class="job-date">2022-Present</span>
-                    </div>
+<h3>AI &amp; Full Stack Developer - Undergraduate Research Assistant</h3>
+<span class="job-date">Jan. 2026 – Present</span>
+</div>
                     <div class="job-sub">
-                        <img src="assets/mcmaster.png" alt="McMaster University" class="edu-logo">
-                        <h4>McMaster University, Hamilton ON</h4>
-                    </div>
-                    
-                    <div class="edu-stats">
-                        <span class="edu-badge">📅 Currently Enrolled in 4th Year</span>
-                    </div>
-                    
-                    <div class="relevant-courses">
-                        <h4 class="course-header">Relevant Coursework:</h4>
-                        <ul>
-                            <li>🔐 (A-) COMPSCI 4CR3: Applied Cryptography</li>
-                            <li>🔧 (A+) COMPSCI 3TB3: Syntax-Based Tools &amp; Compilers</li>
-                            <li>🌍 (B+) COMPSCI 3N03: Computer Networks and Security</li>
-                            <li>🧠 (A-) COMPSCI 3MI3: Principles of Programming Languages</li>
-                            <li>⚙️ (A-) COMPSCI 3SH3: Operating Systems</li>
-                            <li>🧮 (A+) COMPSCI 2XC3: Algorithms and Software Design</li>
-                            <li>🖥️ (A-) COMPSCI 2GA3: Computer Architecture</li>
-                            <li>🌐 (A-) COMPSCI 1XD3: Intro to Software Using Web Programming</li>
-                            <li>🛠️ (A+) COMPSCI 1XC3: Development Basics</li>
-                            <li>💻 (A) COMPSCI 1MD3: Introduction to Programming</li>
-                            <li>🔢 (A) COMPSCI 1DM3: Discrete Math for Computer Science</li>
-                            <li>🎲 (A) STATS 2D03: Intro to Probability</li>
-                            <li>📊 (A-) MATH 1ZB3: Engineering Mathematics II-A</li>
-                            <li>➗ (A) MATH 1ZA3: Engineering Mathematics I</li>
-                            <li>📐 (A-) MATH 1B03: Linear Algebra 1</li>
-                        </ul>
-                    </div>
-
+<h4>McMaster University – Wang Lab, Hamilton, ON</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">AI &amp; Full Stack Developer - Undergraduate Research Assistant</div><div class="project-skills-list">
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+<div class="skill-box flask"><i class="fas fa-flask"></i> Flask</div>
+<div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+<div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UI/UX</div>
+<div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
+<div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+<div class="skill-box architecture"><i class="fas fa-project-diagram"></i> Software Architecture</div>
+</div><ul>
+<li>Architecting an end-to-end AI-powered clinical tool alongside PhD researchers for automated liver fibrosis quantification and diagnosis from medical imaging.</li>
+<li>Building the full stack application with a React frontend and Python/Flask backend, integrating deep learning models into a streamlined diagnostic pipeline.</li>
+</ul><div class="project-demo-wrap">
+<div class="project-preview-gallery single-preview-gallery">
+</div>
+<div class="project-demo">
+<video autoplay muted loop playsinline class="demo-video" poster="assets/aifibrosis.png">
+<source src="assets/demos/aifibrosis-demo.mp4" type="video/mp4">
+</video>
+</div>
+</div></div>
                 </div>
-            </section>
-
-            <hr>
-            
-            <section id="workexperience" class="hidden section-teal">
-                <h2></i>EXPERIENCE</h2>
-
-                <div class="job-item">
-                    <div class="project-card-layout">
-                        <div class="project-card-text">
-                            <div class="job-header">
-                                <h3>AI &amp; Full Stack Developer - Undergraduate Research Assistant</h3>
-                                <span class="job-date">Jan. 2026 – Present</span>
-                            </div>
-                            <div class="job-sub">
-                                <h4>McMaster University – Wang Lab, Hamilton, ON</h4>
-                            </div>
-
-                            <div class="project-skills-list">
-                                <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                                <div class="skill-box flask"><i class="fas fa-flask"></i> Flask</div>
-                                <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
-                                <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UI/UX</div>
-                                <div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
-                                <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
-                                <div class="skill-box architecture"><i class="fas fa-project-diagram"></i> Software Architecture</div>
-                            </div>
-
-                            <ul>
-                                <li>Architecting an end-to-end AI-powered clinical tool alongside PhD researchers for automated liver fibrosis quantification and diagnosis from medical imaging.</li>
-                                <li>Building the full stack application with a React frontend and Python/Flask backend, integrating deep learning models into a streamlined diagnostic pipeline.</li>
-                            </ul>
-                        </div>
-                        <div class="project-preview-gallery single-preview-gallery">
-                            <img src="assets/aifibrosis.png" alt="AI liver fibrosis clinical tool preview" class="project-preview-img" loading="lazy">
-                        </div>
-                    </div>
+<div class="job-item">
+<div class="job-header">
+<h3>Front End Developer Intern</h3>
+<span class="job-date">Summer 2024</span>
+</div>
+<div class="job-sub">
+<h4>Bonbon Technologies, Los Angeles, California (Remote)</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Front End Developer Intern</div><div class="project-skills-list">
+<div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+<div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+<div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+<div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+<div class="skill-box frontend"><i class="fas fa-code-branch"></i> Front End Dev</div>
+<div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+</div><ul>
+<li>Completed a work term of 4 months during the summer of 2024.</li>
+<li>Consistently met project deadlines utilizing the Svelte framework, Git, and GitHub to design and deploy web components that enhanced user engagement and registration for a loyalty program.</li>
+<li>Showcased adaptability and initiative during last minute design changes by other departments.</li>
+<li>Discussed business strategy and innovative AI solutions to reach a wider audience.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item">
+<div class="job-item">
+<div class="job-header">
+<h3>Lifeguard &amp; Pool Supervisor</h3>
+<span class="job-date">Summer 2023</span>
+</div>
+<div class="job-sub">
+<h4>City of Ottawa, Ottawa ON</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Lifeguard &amp; Pool Supervisor</div><div class="project-skills-list">
+<div class="skill-box leadership"><i class="fas fa-users-cog"></i> Leadership</div>
+<div class="skill-box communication"><i class="fas fa-comments"></i> Mentorship</div>
+<div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+<div class="skill-box management"><i class="fas fa-calendar-check"></i> Scheduling</div>
+</div><ul>
+<li>Practiced strong interpersonal and leadership skills in mentoring less experienced lifeguards while having to adapt changing policy and safety standards to ensure safety for all patrons.</li>
+<li>Exercised patience and compassion as the mediator for conflict resolution between children.</li>
+<li>Adhered to safety procedures set out by City of Ottawa for working with chlorine, cleaning up dangerous objects routinely, resulting in no injuries or issues.</li>
+<li>Created an efficient task schedule for workers every morning to streamline opening procedures.</li>
+</ul></div>
+                </div>
+<div class="job-item">
+<div class="job-header">
+<h3>Computer Science High School Tutor</h3>
+<span class="job-date">Fall 2022</span>
+</div>
+<div class="job-sub">
+<h4>Hamilton, ON (Remote)</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Computer Science High School Tutor</div><div class="project-skills-list">
+<div class="skill-box communication"><i class="fas fa-chalkboard-teacher"></i> Teaching</div>
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+<div class="skill-box java"><i class="devicon-java-plain colored"></i> Java</div>
+<div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
+<div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
+</div><ul>
+<li>Delivered comprehensive instruction on the Ontario ICS3U and ICS4U curriculum, covering fundamental programming concepts and logic.</li>
+<li>Facilitated deep technical understanding by breaking down complex algorithms, memory management concepts, and data structures into digestible, practical examples.</li>
+<li>Cultivated independent problem-solving skills through guided debugging sessions and code reviews, emphasizing clean syntax and efficient software design principles.</li>
+<li>Customized lesson plans to adapt to the student’s learning pace, resulting in improved academic performance and confidence in completing major capstone projects.</li>
+</ul></div>
+                </div>
+</section>
+<hr/>
+<section class="hidden section-orange" id="projects">
+<h2>PROJECTS</h2>
+<div class="job-item clickable-card" data-hover-text="View on GitHub" data-href="https://github.com/alexgaffen/investor-practice-website">
                     <div class="job-header">
-                        <h3>Front End Developer Intern</h3>
-                        <span class="job-date">Summer 2024</span>
-                    </div>
+<h3>Mock Market</h3>
+<span class="job-date">Personal Project</span>
+</div>
                     <div class="job-sub">
-                        <h4>Bonbon Technologies, Los Angeles, California (Remote)</h4>
-                    </div>
-                    
-                    <div class="project-skills-list">
-                        <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
-                        <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
-                        <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
-                        <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
-                        <div class="skill-box frontend"><i class="fas fa-code-branch"></i> Front End Dev</div>
-                        <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
-                    </div>
-
-                    <ul>
-                        <li>Completed a work term of 4 months during the summer of 2024.</li>
-                        <li>Consistently met project deadlines utilizing the Svelte framework, Git, and GitHub to design and deploy web components that enhanced user engagement and registration for a loyalty program.</li>
-                        <li>Showcased adaptability and initiative during last minute design changes by other departments.</li>
-                        <li>Discussed business strategy and innovative AI solutions to reach a wider audience.</li>
-                    </ul>
+<h4>Full Stack Investor Practice Website</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Mock Market</div><div class="project-skills-list">
+<div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+<div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+<div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
+<div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+<div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+</div><ul>
+<li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
+<li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
+<li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
+<li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
+</ul><div class="project-demo-wrap">
+<div class="project-preview-gallery">
+<img alt="Mock Market Home Page" class="project-preview-img" src="assets/mock-market-home.png"/>
+<img alt="Mock Market Analysis View" class="project-preview-img" src="assets/mock-market-analyze.jpg"/>
+</div>
+<div class="project-demo">
+<video autoplay muted loop playsinline class="demo-video" poster="assets/mock-market-home.png">
+<source src="assets/demos/mock-market-demo.mp4" type="video/mp4">
+</video>
+</div>
+</div></div>
                 </div>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>Lifeguard & Pool Supervisor</h3>
-                        <span class="job-date">Summer 2023</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>City of Ottawa, Ottawa ON</h4>
-                    </div>
-                    
-                    <div class="project-skills-list">
-                        <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Leadership</div>
-                        <div class="skill-box communication"><i class="fas fa-comments"></i> Mentorship</div>
-                        <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
-                        <div class="skill-box management"><i class="fas fa-calendar-check"></i> Scheduling</div>
-                    </div>
-
-                    <ul>
-                        <li>Practiced strong interpersonal and leadership skills in mentoring less experienced lifeguards while having to adapt changing policy and safety standards to ensure safety for all patrons.</li>
-                        <li>Exercised patience and compassion as the mediator for conflict resolution between children.</li>
-                        <li>Adhered to safety procedures set out by City of Ottawa for working with chlorine, cleaning up dangerous objects routinely, resulting in no injuries or issues.</li>
-                        <li>Created an efficient task schedule for workers every morning to streamline opening procedures.</li>
-                    </ul>
+<div class="job-item clickable-card" data-hover-text="View on GitHub" data-href="https://github.com/alexgaffen/GhostShell">
+<div class="job-header">
+<h3>Ghost Shell</h3>
+<span class="job-date">Personal Project</span>
+</div>
+<div class="job-sub">
+<h4>Autonomous AI Honeypot Agent</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Ghost Shell</div><div class="project-skills-list">
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+<div class="skill-box go"><i class="devicon-go-original-wordmark colored"></i> Go</div>
+<div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+<div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Linux</div>
+<div class="skill-box ssh"><i class="fas fa-terminal"></i> SSH</div>
+</div><ul>
+<li>Developing an autonomous AI agent in Python that prototypes intelligent automation by planning and executing commands via an LLM-driven reasoning loop.</li>
+<li>Built a custom Go-based terminal emulator and virtual honey-filesystem to provide a high-fidelity, sandboxed environment for capturing and analyzing malicious activity.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>Computer Science High School Tutor</h3>
-                        <span class="job-date">Fall 2022</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Hamilton, ON (Remote)</h4>
-                    </div>
-                    
-                    <div class="project-skills-list">
-                        <div class="skill-box communication"><i class="fas fa-chalkboard-teacher"></i> Teaching</div>
-                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                        <div class="skill-box java"><i class="devicon-java-plain colored"></i> Java</div>
-                        <div class="skill-box algorithms"><i class="fas fa-sitemap"></i> Algorithms</div>
-                        <div class="skill-box bug"><i class="fas fa-bug"></i> Debugging</div>
-                    </div>
-
-                    <ul>
-                        <li>Delivered comprehensive instruction on the Ontario ICS3U and ICS4U curriculum, covering fundamental programming concepts and logic.</li>
-                        <li>Facilitated deep technical understanding by breaking down complex algorithms, memory management concepts, and data structures into digestible, practical examples.</li>
-                        <li>Cultivated independent problem-solving skills through guided debugging sessions and code reviews, emphasizing clean syntax and efficient software design principles.</li>
-                        <li>Customized lesson plans to adapt to the student’s learning pace, resulting in improved academic performance and confidence in completing major capstone projects.</li>
-                    </ul>
+<div class="job-item">
+<div class="job-header">
+<h3>Networked Battle Game</h3>
+<span class="job-date">Final Project (A+)</span>
+</div>
+<div class="job-sub">
+<h4>Course: Computer Networks and Security</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Networked Battle Game</div><div class="project-skills-list">
+<div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C</div>
+<div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+<div class="skill-box server"><i class="fas fa-server"></i> Client-Server Architecture</div>
+</div><ul>
+<li>Developed a client-server game in C as the final project for Computer Networks and Security course.</li>
+<li>Implemented socket programming and network protocols to manage real-time data exchange and communication between multiple clients.</li>
+</ul></div>
                 </div>
-            </section>
-
-            <hr>
-
-            <section id="projects" class="hidden section-orange">
-                <h2>PROJECTS</h2>
-
-                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/investor-practice-website" data-hover-text="View on GitHub">
-                    <div class="project-card-layout">
-                        <div class="project-card-text">
-                            <div class="job-header">
-                                <h3>Mock Market</h3>
-                                <span class="job-date">Personal Project</span>
-                            </div>
-                            <div class="job-sub">
-                                <h4>Full Stack Investor Practice Website</h4>
-                            </div>
-                            
-                            <div class="project-skills-list">
-                                <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
-                                <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
-                                <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C++</div>
-                                <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
-                                <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
-                            </div>
-
-                            <ul>
-                                <li>Designed a full-stack microservices application simulating stock market trading with a React frontend and Node.js backend.</li>
-                                <li>Implemented secure Google Authentication and real-time stock data retrieval using the Finnhub API.</li>
-                                <li>Developed a C++ service for algorithmic analysis to provide trading signals, integrated via Docker containers.</li>
-                                <li>Utilized Firebase for robust user authentication and portfolio data storage, allowing users to track virtual investment performance.</li>
-                            </ul>
-                        </div>
-                        <div class="project-preview-gallery">
-                            <img src="assets/mock-market-home.png" alt="Mock Market Home Page" class="project-preview-img">
-                            <img src="assets/mock-market-analyze.jpg" alt="Mock Market Analysis View" class="project-preview-img">
-                        </div>
-                    </div>
+<div class="job-item clickable-card" data-hover-text="View on GitHub" data-href="https://github.com/singk17/MathVisualizer">
+<div class="job-header">
+<h3>Matrix Visualizer Web App</h3>
+<span class="job-date">Grade Received: A-</span>
+</div>
+<div class="job-sub">
+<h4>Team Collaboration (6 members)</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Matrix Visualizer Web App</div><div class="project-skills-list">
+<div class="skill-box elm"><i class="devicon-elm-plain colored"></i> Elm</div>
+<div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UX/UI Design Principles</div>
+</div><ul>
+<li>Collaborated in a team of 6 to design and code graphing software using Elm language.</li>
+<li>Followed UX and UI design principles for ease of use and aesthetic purposes.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item clickable-card" data-href="https://github.com/alexgaffen/GhostShell" data-hover-text="View on GitHub">
-                    <div class="job-header">
-                        <h3>Ghost Shell</h3>
-                        <span class="job-date">Personal Project</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Autonomous AI Honeypot Agent</h4>
-                    </div>
-
-                    <div class="project-skills-list">
-                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                        <div class="skill-box go"><i class="devicon-go-original-wordmark colored"></i> Go</div>
-                        <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
-                        <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Linux</div>
-                        <div class="skill-box ssh"><i class="fas fa-terminal"></i> SSH</div>
-                    </div>
-
-                    <ul>
-                        <li>Developing an autonomous AI agent in Python that prototypes intelligent automation by planning and executing commands via an LLM-driven reasoning loop.</li>
-                        <li>Built a custom Go-based terminal emulator and virtual honey-filesystem to provide a high-fidelity, sandboxed environment for capturing and analyzing malicious activity.</li>
-                    </ul>
+</section>
+<hr/>
+<section class="hidden section-gold" id="competitions-awards">
+<h2>AWARDS</h2>
+<div class="job-item">
+<div class="job-header">
+<h3>McMaster University Award of Excellence</h3>
+<span class="job-date">2023</span>
+</div>
+<div class="job-sub">
+<h4>McMaster University — Entrance Scholarship ($3,000)</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">McMaster University Award of Excellence</div><ul>
+<li>Awarded for outstanding academic achievement upon admission.</li>
+</ul></div>
                 </div>
-                
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>Networked Battle Game</h3>
-                        <span class="job-date">Final Project (A+)</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Course: Computer Networks and Security</h4>
-                    </div>
-                    
-                    <div class="project-skills-list">
-                        <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C</div>
-                        <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
-                        <div class="skill-box server"><i class="fas fa-server"></i> Client-Server Architecture</div>
-                    </div>
-
-                    <ul>
-                        <li>Developed a client-server game in C as the final project for Computer Networks and Security course.</li>
-                        <li>Implemented socket programming and network protocols to manage real-time data exchange and communication between multiple clients.</li>
-                    </ul>
+<div class="job-item">
+<div class="job-header">
+<h3>Euclid Mathematics Contest</h3>
+<span class="job-date">2022</span>
+</div>
+<div class="job-sub">
+<h4>University of Waterloo — 1st Place in School</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Euclid Mathematics Contest</div><ul>
+<li>Achieved the highest score among all participants at my high school in this nationally recognized contest.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item clickable-card" data-href="https://github.com/singk17/MathVisualizer" data-hover-text="View on GitHub">
-                    <div class="job-header">
-                        <h3>Matrix Visualizer Web App</h3>
-                        <span class="job-date">Grade Received: A-</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Team Collaboration (6 members)</h4>
-                    </div>
-
-                    <div class="project-skills-list">
-                        <div class="skill-box elm"><i class="devicon-elm-plain colored"></i> Elm</div>
-                        <div class="skill-box uxui"><i class="fas fa-drafting-compass"></i> UX/UI Design Principles</div>
-                    </div>
-
-                    <ul>
-                        <li>Collaborated in a team of 6 to design and code graphing software using Elm language.</li>
-                        <li>Followed UX and UI design principles for ease of use and aesthetic purposes.</li>
-                    </ul>
+<div class="job-item">
+<div class="job-header">
+<h3>Canadian Senior Mathematics Contest</h3>
+<span class="job-date">2021</span>
+</div>
+<div class="job-sub">
+<h4>University of Waterloo — 1st Place in School</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Canadian Senior Mathematics Contest</div><ul>
+<li>Earned the top score at my high school in the CSMC, a national-level competition for senior students.</li>
+</ul></div>
                 </div>
-            </section>
-
-            <hr>
-
-            <section id="competitions-awards" class="hidden section-gold">
-                <h2>AWARDS</h2>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>McMaster University Award of Excellence</h3>
-                        <span class="job-date">2023</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>McMaster University — Entrance Scholarship ($3,000)</h4>
-                    </div>
-                    <ul>
-                        <li>Awarded for outstanding academic achievement upon admission.</li>
-                    </ul>
-                </div>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>Euclid Mathematics Contest</h3>
-                        <span class="job-date">2022</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>University of Waterloo — 1st Place in School</h4>
-                    </div>
-                    <ul>
-                        <li>Achieved the highest score among all participants at my high school in this nationally recognized contest.</li>
-                    </ul>
-                </div>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>Canadian Senior Mathematics Contest</h3>
-                        <span class="job-date">2021</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>University of Waterloo — 1st Place in School</h4>
-                    </div>
-                    <ul>
-                        <li>Earned the top score at my high school in the CSMC, a national-level competition for senior students.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <hr>
-            
-            <section id="skills" class="hidden">
-                <h2>SKILLS</h2>
-                
-                <div class="skills-grid">
-                    
-                    <div class="skill-category">
-                        <h3>PROGRAMMING LANGUAGES & TOOLS</h3>
-                        <div class="skill-items">
-                            <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                            <div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
-                            <div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
-                            <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
-                            <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
-                            <div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
-                            <div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
-                            <div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
-                            <div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
-                            <div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
-                            <div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
-                            <div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
-                            <div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
-                            <div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>CYBERSECURITY & NETWORKING</h3>
-                        <div class="skill-items">
-                            <div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
-                            <div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
-                            <div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
-                            <div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
-                            <div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
-                            <div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
-                        </div>
-                    </div>
-
-                    <div class="skill-category">
-                        <h3>INTERPERSONAL & LEADERSHIP</h3>
-                        <div class="skill-items">
-                            <div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
-                            <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
-                            <div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
-                            <div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <hr>
-            
-            <section id="certifications" class="hidden section-purple">
-                <h2>CERTIFICATIONS</h2>
-                <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
+</section>
+<hr/>
+<section class="hidden" id="skills">
+<h2>SKILLS</h2>
+<div style="display:flex;justify-content:center;margin-bottom:2.5rem;">
+    <canvas id="radarChart" width="420" height="420" style="max-width:100%;"></canvas>
+</div>
+<div class="skills-grid">
+<div class="skill-category">
+<h3>PROGRAMMING LANGUAGES &amp; TOOLS</h3>
+<div class="skill-items">
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+<div class="skill-box cplusplus"><i class="devicon-cplusplus-plain colored"></i> C/C++</div>
+<div class="skill-box bash"><i class="devicon-bash-plain colored"></i> Bash</div>
+<div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
+<div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
+<div class="skill-box frontend javascript"><i class="devicon-javascript-plain colored"></i> JavaScript</div>
+<div class="skill-box react"><i class="devicon-react-original colored"></i> React</div>
+<div class="skill-box node"><i class="devicon-nodejs-plain colored"></i> Node.js</div>
+<div class="skill-box svelte"><i class="devicon-svelte-plain colored"></i> Svelte</div>
+<div class="skill-box linux"><i class="devicon-linux-plain colored"></i> Unix / Linux</div>
+<div class="skill-box git"><i class="devicon-git-plain colored"></i> Git / GitHub</div>
+<div class="skill-box docker"><i class="devicon-docker-plain colored"></i> Docker</div>
+<div class="skill-box vscode"><i class="devicon-vscode-plain colored"></i> VS Code</div>
+<div class="skill-box firebase"><i class="devicon-firebase-plain colored"></i> Firebase</div>
+</div>
+</div>
+<div class="skill-category">
+<h3>CYBERSECURITY &amp; NETWORKING</h3>
+<div class="skill-items">
+<div class="skill-box security"><i class="fas fa-lock"></i> Firewalls / VPNs</div>
+<div class="skill-box networking"><i class="fas fa-network-wired"></i> Network Protocols</div>
+<div class="skill-box plug"><i class="fas fa-plug"></i> Socket Programming</div>
+<div class="skill-box security"><i class="fas fa-shield-alt"></i> Network Security</div>
+<div class="skill-box cisco"><i class="fas fa-desktop"></i> Cisco Equipment</div>
+<div class="skill-box osi"><i class="fas fa-layer-group"></i> OSI Model</div>
+</div>
+</div>
+<div class="skill-category">
+<h3>INTERPERSONAL &amp; LEADERSHIP</h3>
+<div class="skill-items">
+<div class="skill-box communication"><i class="fas fa-comments"></i> Communication</div>
+<div class="skill-box leadership"><i class="fas fa-users-cog"></i> Team Leadership</div>
+<div class="skill-box problem-solving"><i class="fas fa-lightbulb"></i> Problem-Solving</div>
+<div class="skill-box mediation"><i class="fas fa-balance-scale"></i> Conflict Mediation</div>
+</div>
+</div>
+</div>
+</section>
+<hr/>
+<section class="hidden section-purple" id="certifications">
+<h2>CERTIFICATIONS</h2>
+<p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.05rem;">
                     Currently pursuing the following certifications to deepen my expertise in AI/ML.
                 </p>
-
-                <div class="job-item clickable-card" data-href="https://www.coursera.org/specializations/deep-learning" data-hover-text="View on Coursera">
-                    <div class="job-header">
-                        <h3>Deep Learning Specialization</h3>
-                        <span class="job-date">Dec 2025 – Present</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>DeepLearning.AI (Coursera) — 5-Course Specialization by Andrew Ng</h4>
-                    </div>
-                    <div class="project-skills-list">
-                        <div class="skill-box"><i class="devicon-tensorflow-original colored"></i> TensorFlow</div>
-                        <div class="skill-box"><i class="devicon-keras-plain colored"></i> Keras</div>
-                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                    </div>
-                    <ul>
-                        <li>Neural Networks & Deep Learning — foundations of deep learning and neural network architectures.</li>
-                        <li>Improving Deep Neural Networks — hyperparameter tuning, regularization, and optimization (Adam, RMSprop, batch norm).</li>
-                        <li>Structuring Machine Learning Projects — ML strategy, error analysis, and transfer learning best practices.</li>
-                        <li>Convolutional Neural Networks (CNNs) — image recognition, object detection (YOLO), and neural style transfer.</li>
-                        <li>Sequence Models (RNNs/LSTMs) — NLP, attention mechanisms, and transformer architectures.</li>
-                    </ul>
+<div class="job-item clickable-card" data-hover-text="View on Coursera" data-href="https://www.coursera.org/specializations/deep-learning">
+<div class="job-header">
+<h3>Deep Learning Specialization</h3>
+<span class="job-date">Dec 2025 – Present</span>
+</div>
+<div class="job-sub">
+<h4>DeepLearning.AI (Coursera) — 5-Course Specialization by Andrew Ng</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Deep Learning Specialization</div><div class="project-skills-list">
+<div class="skill-box"><i class="devicon-tensorflow-original colored"></i> TensorFlow</div>
+<div class="skill-box"><i class="devicon-keras-plain colored"></i> Keras</div>
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+</div><ul>
+<li>Neural Networks &amp; Deep Learning — foundations of deep learning and neural network architectures.</li>
+<li>Improving Deep Neural Networks — hyperparameter tuning, regularization, and optimization (Adam, RMSprop, batch norm).</li>
+<li>Structuring Machine Learning Projects — ML strategy, error analysis, and transfer learning best practices.</li>
+<li>Convolutional Neural Networks (CNNs) — image recognition, object detection (YOLO), and neural style transfer.</li>
+<li>Sequence Models (RNNs/LSTMs) — NLP, attention mechanisms, and transformer architectures.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item clickable-card" data-href="https://www.coursera.org/professional-certificates/pytorch-for-deep-learning" data-hover-text="View on Coursera">
-                    <div class="job-header">
-                        <h3>PyTorch for Deep Learning</h3>
-                        <span class="job-date">Dec 2025 – Present</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>DeepLearning.AI (Coursera)</h4>
-                    </div>
-                    <div class="project-skills-list">
-                        <div class="skill-box"><i class="devicon-pytorch-original colored"></i> PyTorch</div>
-                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                    </div>
-                    <ul>
-                        <li>Building and training neural networks using PyTorch's dynamic computational graphs.</li>
-                        <li>Implementing CNNs, RNNs, and custom model architectures with torch.nn modules.</li>
-                        <li>GPU-accelerated training, model evaluation, and deployment workflows.</li>
-                    </ul>
+<div class="job-item clickable-card" data-hover-text="View on Coursera" data-href="https://www.coursera.org/professional-certificates/pytorch-for-deep-learning">
+<div class="job-header">
+<h3>PyTorch for Deep Learning</h3>
+<span class="job-date">Dec 2025 – Present</span>
+</div>
+<div class="job-sub">
+<h4>DeepLearning.AI (Coursera)</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">PyTorch for Deep Learning</div><div class="project-skills-list">
+<div class="skill-box"><i class="devicon-pytorch-original colored"></i> PyTorch</div>
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+</div><ul>
+<li>Building and training neural networks using PyTorch's dynamic computational graphs.</li>
+<li>Implementing CNNs, RNNs, and custom model architectures with torch.nn modules.</li>
+<li>GPU-accelerated training, model evaluation, and deployment workflows.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item clickable-card" data-href="https://www.udemy.com/course/machinelearning/" data-hover-text="View on Udemy">
-                    <div class="job-header">
-                        <h3>Machine Learning A-Z: AI, Python & R</h3>
-                        <span class="job-date">Dec 2024 – Present</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4>Udemy — Kirill Eremenko & Hadelin de Ponteves</h4>
-                    </div>
-                    <div class="project-skills-list">
-                        <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
-                        <div class="skill-box"><i class="devicon-r-plain colored"></i> R</div>
-                        <div class="skill-box"><i class="fas fa-chart-line"></i> Scikit-learn</div>
-                    </div>
-                    <ul>
-                        <li>Regression, classification, clustering, and association rule learning with real-world datasets.</li>
-                        <li>Dimensionality reduction (PCA, LDA), model selection, and boosting (XGBoost).</li>
-                        <li>Natural Language Processing and reinforcement learning fundamentals.</li>
-                    </ul>
+<div class="job-item clickable-card" data-hover-text="View on Udemy" data-href="https://www.udemy.com/course/machinelearning/">
+<div class="job-header">
+<h3>Machine Learning A-Z: AI, Python &amp; R</h3>
+<span class="job-date">Dec 2024 – Present</span>
+</div>
+<div class="job-sub">
+<h4>Udemy — Kirill Eremenko &amp; Hadelin de Ponteves</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">Machine Learning A-Z: AI, Python &amp; R</div><div class="project-skills-list">
+<div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
+<div class="skill-box"><i class="devicon-r-plain colored"></i> R</div>
+<div class="skill-box"><i class="fas fa-chart-line"></i> Scikit-learn</div>
+</div><ul>
+<li>Regression, classification, clustering, and association rule learning with real-world datasets.</li>
+<li>Dimensionality reduction (PCA, LDA), model selection, and boosting (XGBoost).</li>
+<li>Natural Language Processing and reinforcement learning fundamentals.</li>
+</ul></div>
                 </div>
-            </section>
-
-            <hr>
-            
-            <section id="hobbies-interests" class="hidden section-coral">
-                <h2>INTERESTS</h2>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>McMaster Symphony Orchestra</h3>
-                        <span class="job-date">2022 – Present</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4><i class="fas fa-music" style="margin-right: 0.4rem;"></i>Violinist</h4>
-                    </div>
-                    <ul>
-                        <li>Perform as a violinist with the McMaster Symphony Orchestra, rehearsing and performing orchestral repertoire throughout the academic year.</li>
-                    </ul>
+</section>
+<hr/>
+<section class="hidden section-coral" id="hobbies-interests">
+<h2>INTERESTS</h2>
+<div class="job-item">
+<div class="job-header">
+<h3>McMaster Symphony Orchestra</h3>
+<span class="job-date">2022 – Present</span>
+</div>
+<div class="job-sub">
+<h4><i class="fas fa-music" style="margin-right: 0.4rem;"></i>Violinist</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">McMaster Symphony Orchestra</div><ul>
+<li>Perform as a violinist with the McMaster Symphony Orchestra, rehearsing and performing orchestral repertoire throughout the academic year.</li>
+</ul></div>
                 </div>
-
-                <div class="job-item">
-                    <div class="job-header">
-                        <h3>McMaster Intramural Team Sports</h3>
-                        <span class="job-date">2023 – Present</span>
-                    </div>
-                    <div class="job-sub">
-                        <h4><i class="fas fa-futbol" style="margin-right: 0.4rem;"></i>Soccer, Pickleball, Football</h4>
-                    </div>
-                    <ul>
-                        <li>Compete in intramural leagues across multiple sports, fostering teamwork and sportsmanship in a competitive environment.</li>
-                    </ul>
+<div class="job-item">
+<div class="job-header">
+<h3>McMaster Intramural Team Sports</h3>
+<span class="job-date">2023 – Present</span>
+</div>
+<div class="job-sub">
+<h4><i class="fas fa-futbol" style="margin-right: 0.4rem;"></i>Soccer, Pickleball, Football</h4>
+</div>
+                    <div class="tl-card"><div class="tl-card-title">McMaster Intramural Team Sports</div><ul>
+<li>Compete in intramural leagues across multiple sports, fostering teamwork and sportsmanship in a competitive environment.</li>
+</ul></div>
                 </div>
-            </section>
-
-            <hr>
-
-            <section id="contact" class="hidden">
-                <h2>GET IN TOUCH</h2>
-                <div class="contact-section">
-                    <form class="contact-form" action="https://formspree.io/f/mqeyyljp" method="POST">
-                        <input type="hidden" name="_subject" value="New message from alexgaffen.com">
-                        <input type="text" name="_gotcha" style="display:none">
-                        <div class="contact-form-row">
-                            <div class="form-group">
-                                <label for="contact-name">Name</label>
-                                <input type="text" id="contact-name" name="name" required placeholder="Your name">
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-email">Email</label>
-                                <input type="email" id="contact-email" name="email" required placeholder="your@email.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="contact-message">Message</label>
-                            <textarea id="contact-message" name="message" required placeholder="Your message..." rows="5"></textarea>
-                        </div>
-                        <button type="submit" class="contact-submit"><i class="fas fa-paper-plane"></i> Send Message</button>
-                    </form>
-                </div>
-            </section>
-
-            <footer class="site-footer">
-                <p>&copy; 2026 Alex Gaffen. All rights reserved.</p>
-            </footer>
-
-        </main>
-    </div>
-    
-    <div class="scroll-progress" id="scrollProgress"></div>
-    <div id="cardHoverHint" class="card-hover-hint" aria-hidden="true"></div>
-
-    <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop" title="Back to top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-
-    <!-- Mobile Top Bar (shows on scroll-up past sidebar) -->
-    <div class="mobile-top-bar" id="mobileTopBar">
-        <a href="#" class="mobile-top-brand" id="mobileTopBrand">alexgaffen.com</a>
-        <button class="mobile-top-hamburger" id="mobileTopHamburger" title="Open navigation" aria-label="Open navigation">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-
-    <!-- Mobile Nav Menu Button (legacy, hidden — replaced by mobile top bar) -->
-    <button class="mobile-nav-toggle" id="mobileNavToggle" title="Open navigation" aria-label="Open navigation" style="display:none!important">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Mobile Nav Panel -->
-    <div class="mobile-nav-panel" id="mobileNavPanel">
-        <button class="mobile-nav-close" id="mobileNavClose" title="Close navigation" aria-label="Close navigation">
-            <i class="fas fa-times"></i>
-        </button>
-        <ul class="mobile-nav-links">
-            <li><a href="#about">ABOUT</a></li>
-            <li><a href="#education" class="active">EDUCATION</a></li>
-            <li><a href="#workexperience">EXPERIENCE</a></li>
-            <li><a href="#projects">PROJECTS</a></li>
-            <li><a href="#competitions-awards">AWARDS</a></li>
-            <li><a href="#skills">SKILLS</a></li>
-            <li><a href="#certifications">CERTIFICATIONS</a></li>
-            <li><a href="#hobbies-interests">HOBBIES & INTERESTS</a></li>
-        </ul>
-    </div>
-    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
-    
-    <script>
+</section>
+<hr/>
+<section class="hidden" id="contact">
+<h2>GET IN TOUCH</h2>
+<div class="contact-section">
+<form action="https://formspree.io/f/mqeyyljp" class="contact-form" method="POST">
+<input name="_subject" type="hidden" value="New message from alexgaffen.com"/>
+<input name="_gotcha" style="display:none" type="text"/>
+<div class="contact-form-row">
+<div class="form-group">
+<label for="contact-name">Name</label>
+<input id="contact-name" name="name" placeholder="Your name" required="" type="text"/>
+</div>
+<div class="form-group">
+<label for="contact-email">Email</label>
+<input id="contact-email" name="email" placeholder="your@email.com" required="" type="email"/>
+</div>
+</div>
+<div class="form-group">
+<label for="contact-message">Message</label>
+<textarea id="contact-message" name="message" placeholder="Your message..." required="" rows="5"></textarea>
+</div>
+<button class="contact-submit" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+</form>
+</div>
+</section>
+<footer class="site-footer">
+<p>© 2026 Alex Gaffen. All rights reserved.</p>
+</footer>
+</main>
+</div>
+<div class="scroll-progress" id="scrollProgress"></div>
+<div aria-hidden="true" class="card-hover-hint" id="cardHoverHint"></div>
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" title="Back to top">
+<i class="fas fa-arrow-up"></i>
+</button>
+<!-- Mobile Top Bar (shows on scroll-up past sidebar) -->
+<div class="mobile-top-bar" id="mobileTopBar">
+<a class="mobile-top-brand" href="#" id="mobileTopBrand">alexgaffen.com</a>
+<button aria-label="Open navigation" class="mobile-top-hamburger" id="mobileTopHamburger" title="Open navigation">
+<i class="fas fa-bars"></i>
+</button>
+</div>
+<!-- Mobile Nav Menu Button (legacy, hidden — replaced by mobile top bar) -->
+<button aria-label="Open navigation" class="mobile-nav-toggle" id="mobileNavToggle" style="display:none!important" title="Open navigation">
+<i class="fas fa-bars"></i>
+</button>
+<!-- Mobile Nav Panel -->
+<div class="mobile-nav-panel" id="mobileNavPanel">
+<button aria-label="Close navigation" class="mobile-nav-close" id="mobileNavClose" title="Close navigation">
+<i class="fas fa-times"></i>
+</button>
+<ul class="mobile-nav-links">
+<li><a class="active" href="#education">EDUCATION</a></li>
+<li><a href="#workexperience">EXPERIENCE</a></li>
+<li><a href="#projects">PROJECTS</a></li>
+<li><a href="#competitions-awards">AWARDS</a></li>
+<li><a href="#skills">SKILLS</a></li>
+<li><a href="#certifications">CERTIFICATIONS</a></li>
+<li><a href="#hobbies-interests">HOBBIES &amp; INTERESTS</a></li>
+</ul>
+</div>
+<div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+<script>
         // Always start at the top on page load/refresh
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
@@ -776,6 +696,9 @@
             if (e.key === 'ArrowUp' && window.innerWidth > 900) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            if (e.key === 'Escape') {
+                window.location.href = 'index.html';
             }
         });
 
@@ -1589,10 +1512,8 @@
             hackerElements.forEach(el => hackerObserver.observe(el));
         })();
     </script>
-
-
-    <!-- CRT TRANSITION SCRIPT -->
-    <script>
+<!-- CRT TRANSITION SCRIPT -->
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             // Check if we came from another page on our site
             const isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
@@ -1625,7 +1546,75 @@
             });
         });
     </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// Animated Radar Chart for Skills
+(function() {
+    var canvas = document.getElementById('radarChart');
+    if (!canvas) return;
+    var drawn = false;
 
-    <script src="global_fx.js"></script>
+    var observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !drawn) {
+            drawn = true;
+            drawRadar();
+            observer.disconnect();
+        }
+    }, { threshold: 0.3 });
+    observer.observe(canvas);
+
+    function drawRadar() {
+        var ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Web Dev', 'Systems / C++', 'Python / AI', 'Cybersecurity', 'Networking', 'Leadership'],
+                datasets: [{
+                    label: 'Proficiency',
+                    data: [92, 78, 88, 75, 80, 85],
+                    backgroundColor: 'rgba(34, 211, 238, 0.15)',
+                    borderColor: '#22d3ee',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#22d3ee',
+                    pointBorderColor: '#fff',
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: false,
+                animation: {
+                    duration: 1800,
+                    easing: 'easeOutQuart'
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            display: false,
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.08)'
+                        },
+                        angleLines: {
+                            color: 'rgba(255,255,255,0.08)'
+                        },
+                        pointLabels: {
+                            color: '#c9d1d9',
+                            font: { size: 12, family: "'DM Sans', sans-serif" }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+})();
+</script>
+<script src="global_fx.js"></script>
 </body>
 </html>

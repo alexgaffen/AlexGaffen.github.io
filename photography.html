@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen - Photography</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --bg-color: #0d0d0d;
@@ -12,12 +13,10 @@
             --link-color: #f0f0f0;
             --link-hover: #a855f7;
             --border-color: #333;
-            --nav-bg: rgba(252, 239, 212, 0.9);
         }
-
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 20px;
             line-height: 1.6;
@@ -25,180 +24,215 @@
             color: var(--text-color);
             font-size: 14px;
         }
-
         header {
             margin-bottom: 2em;
             padding-bottom: 1em;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: flex; flex-direction: column; gap: 15px;
         }
-
         .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         h1 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5em;
-            
-            margin: 0;
-            letter-spacing: -0.5px; font-weight: 800;
+            font-family: 'Inter', sans-serif; font-size: 1.5em;
+            margin: 0; letter-spacing: -0.5px; font-weight: 800;
         }
-
         a {
-            color: var(--link-color);
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7em;
-            
+            color: var(--link-color); text-decoration: none;
+            font-family: 'Inter', sans-serif; font-size: 0.7em;
             transition: all 0.2s ease;
         }
-        
         a.back-btn {
             border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
-            padding: 8px 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 8px 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-
-        a:hover:not(.photo-card) {
-            color: var(--link-hover);
-        }
-        
+        a:hover:not(.photo-card) { color: var(--link-hover); }
         a.back-btn:hover {
-            box-shadow: 0 6px 15px rgba(168, 85, 247, 0.4); border-color: rgba(168, 85, 247, 0.7);
+            box-shadow: 0 6px 15px rgba(168, 85, 247, 0.4);
             border-color: var(--link-hover);
         }
 
-        /* Filter Navigation */
         .filter-nav {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
+            display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;
         }
-        
         .filter-btn {
-            color: var(--text-color);
-            background: transparent;
-            border: 1px solid var(--text-color);
-            padding: 6px 12px;
-            font-family: 'Space Mono', monospace;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-radius: 4px;
-            font-size: 0.9em;
+            color: var(--text-color); background: transparent;
+            border: 1px solid var(--text-color); padding: 6px 12px;
+            font-family: 'Space Mono', monospace; cursor: pointer;
+            transition: all 0.2s; border-radius: 4px; font-size: 0.9em;
         }
-
         .filter-btn.active, .filter-btn:hover {
-            background: var(--text-color);
-            color: var(--bg-color);
+            background: var(--text-color); color: var(--bg-color);
         }
 
-        .content-area {
-            animation: fadeIn 0.8s ease-out;
-        }
-
+        .content-area { animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modern Photo Grid */
+        /* Masonry grid using CSS columns */
         .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 2em;
+            column-count: 3; column-gap: 20px; margin-top: 2em;
         }
+        @media (max-width: 800px) { .photo-grid { column-count: 2; } }
+        @media (max-width: 500px) { .photo-grid { column-count: 1; } }
 
         .photo-card {
-            border: none;
-            background: transparent;
-            padding: 0;
-            transition: transform 0.3s ease, filter 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            display: block;
+            break-inside: avoid; margin-bottom: 20px; border: none;
+            background: transparent; padding: 0;
+            position: relative; overflow: hidden; border-radius: 8px;
+            display: block; cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
         }
-
-        .photo-card:hover {
-            transform: translateY(-5px);
-        }
-
+        .photo-card.tag-hidden { display: none; }
+        .photo-card:hover { transform: translateY(-5px); }
         .photo-image {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            display: block;
-            border-radius: 8px;
+            width: 100%; display: block; border-radius: 8px;
             transition: transform 0.5s ease;
         }
-
-        .photo-card:hover .photo-image {
-            transform: scale(1.03);
-        }
-
+        .photo-card:hover .photo-image { transform: scale(1.03); }
         .photo-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: absolute; bottom: 0; left: 0; right: 0;
             padding: 30px 15px 15px;
             background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            color: #fff;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+            color: #fff; opacity: 0; transition: opacity 0.3s ease;
+            border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
             pointer-events: none;
         }
-
-        .photo-card:hover .photo-info {
-            opacity: 1;
-        }
-
+        .photo-card:hover .photo-info { opacity: 1; }
         .photo-title {
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            font-size: 1.1em;
-            margin-bottom: 2px;
-            text-transform: none;
-            letter-spacing: 0;
-            color: #fff;
+            font-family: 'Space Mono', monospace; font-weight: 700;
+            font-size: 1.1em; margin-bottom: 2px; color: #fff;
         }
-
         .photo-meta {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8em;
-            opacity: 0.9;
-            text-transform: none;
-            color: #ddd;
+            font-family: 'Space Mono', monospace; font-size: 0.8em;
+            opacity: 0.9; color: #ddd;
         }
-        
         .placeholder-image {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%; aspect-ratio: 4/3; background: #1a1a1a;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; text-align: center; font-style: italic;
+            color: #666; padding: 20px; box-sizing: border-box;
+        }
+        .hidden { display: none !important; }
+
+        /* Map section */
+        .map-section {
+            margin: 3em 0; padding: 2em 0; border-top: 1px solid var(--border-color);
+        }
+        .map-section h2 {
+            font-family: 'Inter', sans-serif; font-size: 1.2em;
+            margin-bottom: 1em; font-weight: 800;
+        }
+        #photoMap {
+            width: 100%; height: 400px; border-radius: 8px; z-index: 1;
+            border: 1px solid var(--border-color);
+        }
+        /* Dark map tiles */
+        .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2); }
+        .leaflet-control-attribution { display: none; }
+
+        /* Per-image location button */
+        .photo-loc-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            margin-top: 6px; padding: 3px 8px;
+            background: rgba(168, 85, 247, 0.25); border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #ddd; border-radius: 4px; cursor: pointer;
+            font-family: 'Space Mono', monospace; font-size: 0.7em;
+            transition: all 0.2s; pointer-events: auto;
+        }
+        .photo-loc-btn:hover {
+            background: rgba(168, 85, 247, 0.45); color: #fff;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Inline map panel — fixed right side on wide screens, below on small */
+        .inline-map-panel {
             border-radius: 8px;
-            text-align: center;
-            font-style: italic;
-            color: #666;
-            padding: 20px;
-            box-sizing: border-box;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            overflow: hidden; animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: var(--bg-color);
         }
-
-        .hidden {
-            display: none !important;
+        @media (min-width: 1000px) {
+            .inline-map-panel {
+                position: fixed;
+                top: 80px;
+                right: 24px;
+                width: 380px;
+                z-index: 100;
+                margin: 0;
+            }
+            .inline-map-panel #inlineMap { height: 320px; }
         }
+        @media (max-width: 999px) {
+            .inline-map-panel {
+                margin: 10px 0 20px;
+            }
+            .inline-map-panel #inlineMap { height: 250px; }
+        }
+        .inline-map-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 14px; background: rgba(20, 20, 20, 0.95);
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            font-family: 'Space Mono', monospace; font-size: 0.85em; color: #a855f7;
+        }
+        .inline-map-close {
+            background: none; border: none; color: #888; cursor: pointer;
+            font-size: 1.4em; transition: color 0.2s; padding: 0 4px;
+        }
+        .inline-map-close:hover { color: #fff; }
 
+        /* EXIF in modal */
+        .exif-row {
+            display: flex; justify-content: center; gap: 20px;
+            margin-top: 8px; flex-wrap: wrap;
+        }
+        .exif-item {
+            font-family: 'Space Mono', monospace; font-size: 0.7em;
+            color: #888; display: flex; align-items: center; gap: 4px;
+        }
+        .exif-icon { opacity: 0.6; }
+
+        /* Lightbox Modal */
+        .modal {
+            display: none; position: fixed; z-index: 999;
+            padding-top: 50px; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(5px);
+        }
+        .modal-nav {
+            cursor: pointer; position: absolute; top: 50%;
+            width: auto; padding: 16px; margin-top: -50px;
+            color: white; font-weight: bold; font-size: 40px;
+            transition: 0.6s ease; border-radius: 0 3px 3px 0;
+            user-select: none; background-color: rgba(0,0,0,0.3);
+            border: none; z-index: 1001;
+        }
+        .modal-nav:hover { background-color: rgba(0,0,0,0.8); }
+        .modal-nav.prev { left: 0; }
+        .modal-nav.next { right: 0; }
+        .modal-content {
+            margin: auto; display: block; max-width: 90%;
+            max-height: 70vh; border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn {
+            from { transform:scale(0.95); opacity:0; filter: blur(10px); }
+            to { transform:scale(1); opacity:1; filter: blur(0); }
+        }
+        #modal-caption {
+            margin: auto; display: block; width: 80%; max-width: 700px;
+            text-align: center; color: #ccc; padding: 12px 0;
+            font-family: 'Space Mono', monospace;
+        }
+        .modal-close {
+            position: absolute; top: 20px; right: 35px;
+            color: #f1f1f1; font-size: 40px; font-weight: bold;
+            transition: 0.3s; cursor: pointer; z-index: 1000;
+        }
+        .modal-close:hover { color: #bbb; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -209,194 +243,91 @@
             <a href="index.html" class="back-btn">&lt; BACK</a>
         </div>
         <div class="filter-nav">
-            <button class="filter-btn active" onclick="filterPhotos('all')">All</button>
-            <button class="filter-btn" onclick="filterPhotos('sf')">San Francisco</button>
-            <button class="filter-btn" onclick="filterPhotos('banff')">Banff (Upcoming Trip)</button>
+            <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
+            <button class="filter-btn" onclick="filterPhotos('sf', this)">San Francisco</button>
+            <button class="filter-btn" onclick="filterPhotos('banff', this)">Banff (Upcoming Trip)</button>
         </div>
     </header>
 
     <div class="content-area">
-        <p style="margin-top: 0; margin-bottom: 2em; opacity: 0.9; font-size: 1.05em; max-width: 800px; color: var(--text-color);">
+        <p style="margin-top:0;margin-bottom:2em;opacity:0.9;font-size:1.05em;max-width:800px;">
             A collection of pictures I've taken on various trips. I currently shoot on my phone, but I plan to upgrade to a dedicated camera very soon!
         </p>
 
-        <div class="photo-grid" id="gallery">
-            <!-- San Francisco Set -->
-            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/ggbridge.jpg', 'Golden Gate Bridge', 'San Francisco · Shot on S10')" style="cursor: pointer;">
-                <img src="photography/s10/ggbridge.jpg" alt="Golden Gate Bridge" class="photo-image">
-                <div class="photo-info">
-                    <div class="photo-title">Golden Gate Bridge</div>
-                    <div class="photo-meta">San Francisco · Shot on S10</div>
+        <div id="gridView">
+            <div class="photo-grid" id="gallery">
+                <div class="photo-card" data-loc="sf" data-lat="37.8199" data-lng="-122.4783" data-exif="f/2.4 | 1/1000s | ISO 50 | 4.3mm" onclick="openModal('photography/s10/ggbridge.jpg', 'Golden Gate Bridge', 'San Francisco &middot; Shot on S10', this)">
+                    <img src="photography/s10/ggbridge.jpg" alt="Golden Gate Bridge" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Golden Gate Bridge</div>
+                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/alcatraz.jpg', 'Alcatraz', 'San Francisco · Shot on S10')" style="cursor: pointer;">
-                <img src="photography/s10/alcatraz.jpg" alt="Alcatraz" class="photo-image">
-                <div class="photo-info">
-                    <div class="photo-title">Alcatraz</div>
-                    <div class="photo-meta">San Francisco · Shot on S10</div>
+                <div class="photo-card" data-loc="sf" data-lat="37.8267" data-lng="-122.4233" data-exif="f/2.4 | 1/800s | ISO 64 | 4.3mm" onclick="openModal('photography/s10/alcatraz.jpg', 'Alcatraz', 'San Francisco &middot; Shot on S10', this)">
+                    <img src="photography/s10/alcatraz.jpg" alt="Alcatraz" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Alcatraz</div>
+                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="sf" data-lat="37.7949" data-lng="-122.3994" data-exif="f/1.5 | 1/500s | ISO 100 | 4.3mm" onclick="openModal('photography/s10/oaklandfromSF.jpg', 'Secondary View - Oakland', 'San Francisco &middot; Shot on S10', this)">
+                    <img src="photography/s10/oaklandfromSF.jpg" alt="Oakland from SF" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Secondary View - Oakland</div>
+                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="sf" data-lat="37.7672" data-lng="-122.4685" data-exif="f/1.5 | 1/250s | ISO 100 | 4.3mm" onclick="openModal('photography/s10/SFgardens.jpg', 'Botanical Scenery', 'San Francisco &middot; Shot on S10', this)">
+                    <img src="photography/s10/SFgardens.jpg" alt="SF Gardens" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Botanical Scenery</div>
+                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="sf" data-lat="37.7749" data-lng="-122.4194" data-exif="f/2.4 | 1/640s | ISO 50 | 4.3mm" onclick="openModal('photography/s10/SFslopes.jpg', 'City Slopes', 'San Francisco &middot; Shot on S10', this)">
+                    <img src="photography/s10/SFslopes.jpg" alt="SF Slopes" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">City Slopes</div>
+                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.4254" data-lng="-116.1773">
+                    <div class="placeholder-image">Lake Louise</div>
+                    <div class="photo-info">
+                        <div class="photo-title">Lake Louise</div>
+                        <div class="photo-meta">Banff National Park</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.3217" data-lng="-116.1860">
+                    <div class="placeholder-image">Moraine Lake</div>
+                    <div class="photo-info">
+                        <div class="photo-title">Moraine Lake</div>
+                        <div class="photo-meta">Banff National Park</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708">
+                    <div class="placeholder-image">Scenic Peaks</div>
+                    <div class="photo-info">
+                        <div class="photo-title">Mountain Ranges</div>
+                        <div class="photo-meta">Banff National Park</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/oaklandfromSF.jpg', 'Secondary View - Oakland', 'San Francisco · Shot on S10')" style="cursor: pointer;">
-                <img src="photography/s10/oaklandfromSF.jpg" alt="Oakland from SF" class="photo-image">
-                <div class="photo-info">
-                    <div class="photo-title">Secondary View - Oakland</div>
-                    <div class="photo-meta">San Francisco · Shot on S10</div>
+            <!-- Inline Map Panel (per-image) -->
+            <div id="inlineMapPanel" class="inline-map-panel" style="display:none;">
+                <div class="inline-map-header">
+                    <span id="inlineMapTitle">Location</span>
+                    <button onclick="closeInlineMap()" class="inline-map-close">&times;</button>
                 </div>
+                <div id="inlineMap" style="width:100%;border-radius:0 0 8px 8px;"></div>
             </div>
 
-            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/SFgardens.jpg', 'Botanical Scenery', 'San Francisco · Shot on S10')" style="cursor: pointer;">
-                <img src="photography/s10/SFgardens.jpg" alt="SF Gardens" class="photo-image">
-                <div class="photo-info">
-                    <div class="photo-title">Botanical Scenery</div>
-                    <div class="photo-meta">San Francisco · Shot on S10</div>
-                </div>
-            </div>
-
-            <div class="photo-card" data-loc="sf" onclick="openModal('photography/s10/SFslopes.jpg', 'City Slopes', 'San Francisco · Shot on S10')" style="cursor: pointer;">
-                <img src="photography/s10/SFslopes.jpg" alt="SF Slopes" class="photo-image">
-                <div class="photo-info">
-                    <div class="photo-title">City Slopes</div>
-                    <div class="photo-meta">San Francisco · Shot on S10</div>
-                </div>
-            </div>
-
-            <!-- Banff Placeholders -->
-            <div class="photo-card" data-loc="banff">
-                <div class="placeholder-image">
-                    Lake Louise
-                </div>
-                <div class="photo-info">
-                    <div class="photo-title">Lake Louise</div>
-                    <div class="photo-meta">Banff National Park</div>
-                </div>
-            </div>
-
-            <div class="photo-card" data-loc="banff">
-                <div class="placeholder-image">
-                    Moraine Lake
-                </div>
-                <div class="photo-info">
-                    <div class="photo-title">Moraine Lake</div>
-                    <div class="photo-meta">Banff National Park</div>
-                </div>
-            </div>
-            
-            <div class="photo-card" data-loc="banff">
-                <div class="placeholder-image">
-                    Scenic Peaks
-                </div>
-                <div class="photo-info">
-                    <div class="photo-title">Mountain Ranges</div>
-                    <div class="photo-meta">Banff National Park</div>
-                </div>
-            </div>
 
         </div>
+
     </div>
 
-    <script>
-        function filterPhotos(loc) {
-            const cards = document.querySelectorAll('.photo-card');
-            const btns = document.querySelectorAll('.filter-btn');
-            
-            btns.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            cards.forEach(card => {
-                if (loc === 'all' || card.dataset.loc === loc) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-        }
-    
-        
-        let currentPhotos = [];
-        let currentIndex = 0;
-
-        function openModal(imgSrc, title, meta) {
-            const modal = document.getElementById('photo-modal');
-            const modalImg = document.getElementById('modal-img');
-            const captionText = document.getElementById('modal-caption');
-            
-            // Gather all visible photos to allow navigation
-            currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.hidden)'));
-            
-            // Find current index
-            currentIndex = currentPhotos.findIndex(card => {
-                // simple hack: find card that has this image
-                return card.getAttribute('onclick').includes(imgSrc);
-            });
-            if (currentIndex === -1) currentIndex = 0; // fallback
-
-            modal.style.display = "block";
-            modalImg.src = imgSrc;
-            
-            // Restart animation by cloning
-            const newImg = modalImg.cloneNode(true);
-            modalImg.parentNode.replaceChild(newImg, modalImg);
-            
-            document.getElementById('modal-caption').innerHTML = "<strong>" + title + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + meta + "</span>";
-            
-            // disable body scroll
-            document.body.style.overflow = "hidden";
-        }
-        
-        function changePhoto(n) {
-            if (currentPhotos.length === 0) return;
-            currentIndex += n;
-            if (currentIndex >= currentPhotos.length) currentIndex = 0;
-            if (currentIndex < 0) currentIndex = currentPhotos.length - 1;
-            
-            const card = currentPhotos[currentIndex];
-            const onclickText = card.getAttribute('onclick');
-            
-            // parse the arguments from onclick="openModal('src', 'title', 'meta')"
-            const matches = onclickText.match(/openModal\('([^']*)',\s*'([^']*)',\s*'([^']*)'\)/);
-            if (matches && matches.length >= 4) {
-                const modalImg = document.getElementById('modal-img');
-                modalImg.src = matches[1];
-                
-                // clone to trigger animation again
-                const newImg = modalImg.cloneNode(true);
-                modalImg.parentNode.replaceChild(newImg, modalImg);
-
-                document.getElementById('modal-caption').innerHTML = "<strong>" + matches[2] + "</strong><br><span style='opacity:0.7; font-size: 0.9em;'>" + matches[3] + "</span>";
-            }
-        }
-        
-        function closeModal() {
-            document.getElementById('photo-modal').style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-        
-        // Close on clicking outside the image
-        window.onclick = function(event) {
-            const modal = document.getElementById('photo-modal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-        
-        // Keydown events for arrows and escape
-        document.addEventListener('keydown', function(event){
-            const modal = document.getElementById('photo-modal');
-            if (modal.style.display === "block") {
-                if(event.key === "Escape"){
-                    closeModal();
-                } else if (event.key === "ArrowRight") {
-                    changePhoto(1);
-                } else if (event.key === "ArrowLeft") {
-                    changePhoto(-1);
-                }
-            }
-        });
-</script>
-
-    
     <!-- Lightbox Modal -->
     <div id="photo-modal" class="modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -406,124 +337,200 @@
         <div id="modal-caption"></div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Parallax on scroll
+        var cards = document.querySelectorAll('.photo-card');
+        function parallaxScroll() {
+            var scrollY = window.pageYOffset;
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var rect = card.getBoundingClientRect();
+                var offset = (rect.top - window.innerHeight / 2) * 0.04;
+                card.style.transform = 'translateY(' + offset + 'px)';
+            }
+            requestAnimationFrame(parallaxScroll);
+        }
+        requestAnimationFrame(parallaxScroll);
 
-    <style>
-        /* Lightbox Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-nav {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 16px;
-            margin-top: -50px;
-            color: white;
-            font-weight: bold;
-            font-size: 40px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-            background-color: rgba(0,0,0,0.3);
-            border: none;
-            z-index: 1001;
-            text-decoration: none;
-        }
-        .modal-nav:hover {
-            background-color: rgba(0,0,0,0.8);
-        }
-        .modal-nav.prev {
-            left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-        .modal-nav.next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
+        // Filter
+        function filterPhotos(loc, btn) {
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            if (btn) btn.classList.add('active');
+            document.querySelectorAll('.photo-card').forEach(function(card) {
+                if (loc === 'all' || card.dataset.loc === loc) {
+                    card.classList.remove('tag-hidden');
+                } else {
+                    card.classList.add('tag-hidden');
+                }
+            });
         }
 
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 80vh;
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            animation: zoomIn 0.3s ease;
-        }
-        @keyframes zoomIn {
-            from {transform:scale(0.95); opacity:0; filter: blur(10px);}
-            to {transform:scale(1); opacity:1; filter: blur(0);}
-        }
-        #modal-caption {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-            text-align: center;
-            color: #ccc;
-            padding: 15px 0;
-            font-family: 'Space Mono', monospace;
-            height: 150px;
-        }
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        .modal-close:hover,
-        .modal-close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
+        // Per-image location buttons
+        var inlineMap = null;
+        var activeMapCard = null;
 
+        // Add location buttons to cards with lat/lng
+        document.querySelectorAll('.photo-card[data-lat]').forEach(function(card) {
+            var info = card.querySelector('.photo-info');
+            if (!info) return;
+            var btn = document.createElement('button');
+            btn.className = 'photo-loc-btn';
+            btn.innerHTML = '\uD83D\uDCCD See on map';
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                showInlineMap(card);
+            });
+            info.appendChild(btn);
+        });
+
+        function showInlineMap(card) {
+            var lat = parseFloat(card.dataset.lat);
+            var lng = parseFloat(card.dataset.lng);
+            var titleEl = card.querySelector('.photo-title');
+            var name = titleEl ? titleEl.textContent : 'Location';
+            var panel = document.getElementById('inlineMapPanel');
+
+            // If clicking the same card, toggle off
+            if (activeMapCard === card && panel.style.display !== 'none') {
+                closeInlineMap();
+                return;
+            }
+
+            panel.style.display = 'block';
+            document.getElementById('inlineMapTitle').textContent = '\uD83D\uDCCD ' + name;
+            activeMapCard = card;
+
+            if (inlineMap) {
+                inlineMap.remove();
+                inlineMap = null;
+            }
+
+            inlineMap = L.map('inlineMap').setView([lat, lng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18
+            }).addTo(inlineMap);
+            L.marker([lat, lng]).addTo(inlineMap).bindPopup('<strong>' + name + '</strong>').openPopup();
+
+            // Scroll panel into view
+            setTimeout(function() {
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                inlineMap.invalidateSize();
+            }, 100);
+        }
+
+        function closeInlineMap() {
+            var panel = document.getElementById('inlineMapPanel');
+            panel.style.display = 'none';
+            if (inlineMap) {
+                inlineMap.remove();
+                inlineMap = null;
+            }
+            activeMapCard = null;
+        }
+
+        // ESC key closes map panel
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeInlineMap();
+        });
+
+        // Modal with EXIF
+        var currentPhotos = [];
+        var currentIndex = 0;
+
+        function openModal(imgSrc, title, meta, cardEl) {
+            var modal = document.getElementById('photo-modal');
+            var modalImg = document.getElementById('modal-img');
+            currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.tag-hidden)[onclick]'));
+            var exif = cardEl ? (cardEl.dataset.exif || '') : '';
+            currentIndex = currentPhotos.indexOf(cardEl);
+            if (currentIndex === -1) currentIndex = 0;
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+            var newImg = modalImg.cloneNode(true);
+            modalImg.parentNode.replaceChild(newImg, modalImg);
+            var exifHtml = '';
+            if (exif) {
+                var parts = exif.split(' | ');
+                var icons = ['\u2300', '\u23f1', 'ISO', '\u2316'];
+                exifHtml = '<div class="exif-row">';
+                for (var i = 0; i < parts.length; i++) {
+                    exifHtml += '<span class="exif-item"><span class="exif-icon">' + (icons[i] || '') + '</span> ' + parts[i] + '</span>';
+                }
+                exifHtml += '</div>';
+            }
+            document.getElementById('modal-caption').innerHTML = '<strong>' + title + '</strong><br><span style="opacity:0.7;font-size:0.9em;">' + meta + '</span>' + exifHtml;
+            document.body.style.overflow = "hidden";
+        }
+
+        function changePhoto(n) {
+            if (currentPhotos.length === 0) return;
+            currentIndex += n;
+            if (currentIndex >= currentPhotos.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = currentPhotos.length - 1;
+            var card = currentPhotos[currentIndex];
+            var onclickText = card.getAttribute('onclick');
+            var matches = onclickText.match(/openModal\('([^']*)',\s*'([^']*)',\s*'([^']*)'/);
+            if (matches && matches.length >= 4) {
+                var modalImg = document.getElementById('modal-img');
+                modalImg.src = matches[1];
+                var newImg = modalImg.cloneNode(true);
+                modalImg.parentNode.replaceChild(newImg, modalImg);
+                var exif = card.dataset.exif || '';
+                var exifHtml = '';
+                if (exif) {
+                    var parts = exif.split(' | ');
+                    var icons = ['\u2300', '\u23f1', 'ISO', '\u2316'];
+                    exifHtml = '<div class="exif-row">';
+                    for (var i = 0; i < parts.length; i++) {
+                        exifHtml += '<span class="exif-item"><span class="exif-icon">' + (icons[i] || '') + '</span> ' + parts[i] + '</span>';
+                    }
+                    exifHtml += '</div>';
+                }
+                document.getElementById('modal-caption').innerHTML = '<strong>' + matches[2] + '</strong><br><span style="opacity:0.7;font-size:0.9em;">' + matches[3] + '</span>' + exifHtml;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('photo-modal').style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('photo-modal')) closeModal();
+        });
+        document.addEventListener('keydown', function(event) {
+            var modal = document.getElementById('photo-modal');
+            if (modal.style.display === "block") {
+                if (event.key === "Escape") closeModal();
+                else if (event.key === "ArrowRight") changePhoto(1);
+                else if (event.key === "ArrowLeft") changePhoto(-1);
+            }
+        });
+
+
+    </script>
 
     <!-- CRT TRANSITION SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if we came from another page on our site
-            const isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
+        document.addEventListener('DOMContentLoaded', function() {
+            var isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
             if (isLocalReferrer) {
                 document.body.classList.add('crt-temp-on');
-                setTimeout(() => { document.body.classList.remove('crt-temp-on'); }, 500);
+                setTimeout(function() { document.body.classList.remove('crt-temp-on'); }, 500);
             }
-            
-            document.querySelectorAll('a').forEach(el => {
-                // Ignore if it has an existing click handler doing this via inline or index.js
-                // Actually for other pages we need this. For index.html, it already does it, but we can override it if we are careful, or just let other pages have it.
+            document.querySelectorAll('a').forEach(function(el) {
                 if (!el.getAttribute('data-crt-bound')) {
                     el.setAttribute('data-crt-bound', 'true');
-                    el.addEventListener('click', (e) => {
-                        if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#') || !el.href) {
-                            return; // let default happen
-                        }
-                        // Check if it's the same origin
+                    el.addEventListener('click', function(e) {
+                        if (el.hasAttribute('target') || el.href.indexOf('mailto:') !== -1 || el.href.indexOf('#') !== -1 || !el.href) return;
                         try {
-                            const url = new URL(el.href);
-                            if (url.origin === window.location.origin || el.href.startsWith('/') || el.href.startsWith('.')) {
+                            var url = new URL(el.href);
+                            if (url.origin === window.location.origin) {
                                 e.preventDefault();
                                 document.body.classList.remove('crt-temp-on');
                                 document.body.classList.add('crt-temp-off');
-                                setTimeout(() => { window.location.href = el.href; }, 450);
+                                setTimeout(function() { window.location.href = el.href; }, 450);
                             }
                         } catch(err) {}
                     });
@@ -531,8 +538,6 @@
             });
         });
     </script>
-
     <script src="global_fx.js"></script>
 </body>
 </html>
-

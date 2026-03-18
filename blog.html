@@ -12,6 +12,39 @@
             --link-color: #0f0f0f;
             --link-hover: #d62020;
             --border-color: #d1cdc2;
+            --tag-bg: rgba(0,0,0,0.08);
+            --tag-active: #0f0f0f;
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+        }
+
+        /* CRT dark mode */
+        html.dark-mode {
+            --bg-color: #0a0a0a;
+            --text-color: #00ff41;
+            --link-color: #00ff41;
+            --link-hover: #ff3333;
+            --border-color: #1a3a1a;
+            --tag-bg: rgba(0,255,65,0.1);
+            --tag-active: #00ff41;
+            --code-bg: #0d1117;
+            --code-text: #00ff41;
+        }
+        html.dark-mode body {
+            text-shadow: 0 0 8px rgba(0,255,65,0.3);
+        }
+        html.dark-mode .post-item::before {
+            background: var(--bg-color);
+        }
+        html.dark-mode .post-item {
+            border-left-color: #1a3a1a;
+        }
+        html.dark-mode code {
+            text-shadow: 0 0 6px rgba(0,255,65,0.4);
+        }
+        html.dark-mode .theme-toggle {
+            border-color: #1a3a1a;
+            color: #00ff41;
         }
 
         body {
@@ -23,6 +56,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 14px;
+            transition: background-color 0.4s, color 0.4s;
         }
 
         header {
@@ -32,6 +66,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-color);
         }
 
         h1 {
@@ -40,6 +78,12 @@
             text-transform: uppercase;
             margin: 0;
             letter-spacing: -1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         a {
@@ -56,14 +100,58 @@
             padding: 8px 12px;
             box-shadow: 2px 2px 0px var(--text-color);
         }
-
-        a:hover {
-            color: var(--link-hover);
-        }
-        
+        a:hover { color: var(--link-hover); }
         a.back-btn:hover {
             box-shadow: 4px 4px 0px var(--link-hover);
             border-color: var(--link-hover);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--text-color);
+            padding: 6px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6em;
+            color: var(--text-color);
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--text-color);
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            box-shadow: 4px 4px 0px var(--link-hover);
+            border-color: var(--link-hover);
+            color: var(--link-hover);
+        }
+
+        /* Tag filter bar */
+        .tag-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 2em;
+            padding-bottom: 1em;
+            border-bottom: 1px dashed var(--border-color);
+            position: sticky;
+            top: 58px;
+            z-index: 99;
+            background: var(--bg-color);
+            padding-top: 0.5em;
+        }
+        .tag-btn {
+            background: var(--tag-bg);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5em;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .tag-btn.active, .tag-btn:hover {
+            background: var(--tag-active);
+            color: var(--bg-color);
         }
 
         .content-area {
@@ -75,7 +163,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        
         .post-list {
             list-style: none;
             padding: 0;
@@ -85,6 +172,17 @@
             padding-left: 20px;
             margin-bottom: 2.5em;
             position: relative;
+            transition: opacity 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+        .post-item:hover {
+            transform: translateX(6px);
+        }
+        .post-item:hover::before {
+            color: var(--link-hover);
+        }
+        .post-item.tag-hidden {
+            display: none;
         }
         .post-item::before {
             content: '>';
@@ -96,6 +194,7 @@
             font-size: 10px;
             background: var(--bg-color);
             padding: 2px 0;
+            transition: background 0.4s;
         }
         .post-date {
             font-family: 'Press Start 2P', monospace;
@@ -104,6 +203,31 @@
             opacity: 0.6;
             margin-bottom: 8px;
             display: block;
+        }
+        .post-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .read-time {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5em;
+            opacity: 0.5;
+            white-space: nowrap;
+        }
+        .post-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .post-tag {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.45em;
+            background: var(--tag-bg);
+            padding: 3px 7px;
+            border-radius: 2px;
+            opacity: 0.7;
         }
         .post-title {
             font-size: 1.4em;
@@ -120,34 +244,187 @@
             margin: 0;
             opacity: 0.85;
         }
+        /* Typing cursor */
+        .post-excerpt .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1em;
+            background: var(--text-color);
+            margin-left: 2px;
+            animation: blink 0.7s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
 
+        /* Code block styling */
+        .code-block {
+            position: relative;
+            background: var(--code-bg);
+            border-radius: 6px;
+            margin: 12px 0;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .code-block-lang {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.45em;
+            color: #888;
+            text-transform: uppercase;
+        }
+        .code-copy-btn {
+            background: none;
+            border: 1px solid #555;
+            color: #888;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.4em;
+            padding: 3px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .code-copy-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+        .code-copy-btn.copied {
+            color: #00ff41;
+            border-color: #00ff41;
+        }
+        .code-block pre {
+            margin: 0;
+            padding: 14px;
+            overflow-x: auto;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            color: var(--code-text);
+        }
+        .code-block .scanline {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: rgba(0,255,65,0.15);
+            animation: scanMove 3s linear 1 forwards;
+            pointer-events: none;
+        }
+        @keyframes scanMove {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        .code-block .kw { color: #cba6f7; }
+        .code-block .fn { color: #89b4fa; }
+        .code-block .str { color: #a6e3a1; }
+        .code-block .cm { color: #6c7086; font-style: italic; }
+        .code-block .num { color: #fab387; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Blog</h1>
-        <a href="index.html" class="back-btn">&lt; BACK</a>
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">CRT</button>
+            <a href="index.html" class="back-btn">&lt; BACK</a>
+        </div>
     </header>
 
     <div class="content-area">
         <p>Thoughts on tech, AI, cybersecurity, and navigating life as a developer.</p>
         
+        <div class="tag-filter">
+            <button class="tag-btn active" data-tag="all">All</button>
+            <button class="tag-btn" data-tag="ai">AI</button>
+            <button class="tag-btn" data-tag="systems">Systems</button>
+            <button class="tag-btn" data-tag="security">Security</button>
+            <button class="tag-btn" data-tag="web">Web Dev</button>
+        </div>
+
         <ul class="post-list">
-            <li class="post-item">
-                <span class="post-date">OCT 24, 2024</span>
-                <h2 class="post-title"><a href="#">Breaking down my recent AI project</a></h2>
-                <p class="post-excerpt">A deep dive into the architecture and challenges of building large-scale data pipelines for local ML inference. Here's what I learned...</p>
+            <li class="post-item" data-tags="ai,web">
+                <div class="post-meta-row">
+                    <span class="post-date">OCT 24, 2024</span>
+                    <span class="read-time">~5 min read</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag">AI</span>
+                    <span class="post-tag">Web Dev</span>
+                </div>
+                <h2 class="post-title"><a href="#" onclick="return false;">Breaking down my recent AI project</a></h2>
+                <p class="post-excerpt" data-text="A deep dive into the architecture and challenges of building large-scale data pipelines for local ML inference. Here's what I learned..."></p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">python</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                    </div>
+                    <pre><span class="kw">import</span> torch
+<span class="kw">from</span> transformers <span class="kw">import</span> AutoModelForCausalLM
+
+<span class="cm"># Load quantized model for local inference</span>
+model = AutoModelForCausalLM.<span class="fn">from_pretrained</span>(
+    <span class="str">"meta-llama/Llama-2-7b"</span>,
+    device_map=<span class="str">"auto"</span>,
+    load_in_4bit=<span class="num">True</span>
+)</pre>
+                    <div class="scanline"></div>
+                </div>
             </li>
-            <li class="post-item">
-                <span class="post-date">SEP 12, 2024</span>
-                <h2 class="post-title"><a href="#">Why C/C++ is still relevant in the age of Rust</a></h2>
-                <p class="post-excerpt">Exploring the gritty details of memory management and when it makes sense to stick to the classics for system-level robust tooling...</p>
+            <li class="post-item" data-tags="systems">
+                <div class="post-meta-row">
+                    <span class="post-date">SEP 12, 2024</span>
+                    <span class="read-time">~7 min read</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag">Systems</span>
+                </div>
+                <h2 class="post-title"><a href="#" onclick="return false;">Why C/C++ is still relevant in the age of Rust</a></h2>
+                <p class="post-excerpt" data-text="Exploring the gritty details of memory management and when it makes sense to stick to the classics for system-level robust tooling..."></p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">c</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                    </div>
+                    <pre><span class="cm">// Custom memory pool allocator</span>
+<span class="kw">void</span>* <span class="fn">pool_alloc</span>(<span class="kw">MemPool</span>* pool, <span class="kw">size_t</span> size) {
+    <span class="kw">if</span> (pool->offset + size > pool->capacity)
+        <span class="kw">return</span> <span class="num">NULL</span>;
+    <span class="kw">void</span>* ptr = pool->base + pool->offset;
+    pool->offset += <span class="fn">ALIGN</span>(size, <span class="num">16</span>);
+    <span class="kw">return</span> ptr;
+}</pre>
+                    <div class="scanline"></div>
+                </div>
             </li>
-            <li class="post-item">
-                <span class="post-date">AUG 05, 2024</span>
-                <h2 class="post-title"><a href="#">My homelab setup and network security</a></h2>
-                <p class="post-excerpt">How I isolated my services, set up a custom firewall structure, and learned penetration testing basics in the process.</p>
+            <li class="post-item" data-tags="security">
+                <div class="post-meta-row">
+                    <span class="post-date">AUG 05, 2024</span>
+                    <span class="read-time">~4 min read</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag">Security</span>
+                </div>
+                <h2 class="post-title"><a href="#" onclick="return false;">My homelab setup and network security</a></h2>
+                <p class="post-excerpt" data-text="How I isolated my services, set up a custom firewall structure, and learned penetration testing basics in the process."></p>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <span class="code-block-lang">bash</span>
+                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                    </div>
+                    <pre><span class="cm"># Isolate VLAN traffic with iptables</span>
+iptables -A FORWARD -i vlan10 -o vlan20 \
+    -m state --state NEW -j <span class="str">DROP</span>
+iptables -A FORWARD -i vlan20 -o vlan10 \
+    -m state --state ESTABLISHED,RELATED -j <span class="str">ACCEPT</span></pre>
+                    <div class="scanline"></div>
+                </div>
             </li>
         </ul>
     </div>
@@ -155,31 +432,109 @@
 
     <!-- CRT TRANSITION SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if we came from another page on our site
-            const isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
+        // Tag filtering
+        document.querySelectorAll('.tag-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tag-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var tag = btn.getAttribute('data-tag');
+                document.querySelectorAll('.post-item').forEach(function(item) {
+                    if (tag === 'all' || item.getAttribute('data-tags').indexOf(tag) !== -1) {
+                        item.classList.remove('tag-hidden');
+                    } else {
+                        item.classList.add('tag-hidden');
+                    }
+                });
+            });
+        });
+
+        // Typing effect on scroll
+        var typedItems = [];
+        var typeObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && typedItems.indexOf(entry.target) === -1) {
+                    typedItems.push(entry.target);
+                    typeExcerpt(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.post-excerpt').forEach(function(el) {
+            typeObserver.observe(el);
+        });
+
+        function typeExcerpt(el) {
+            var text = el.getAttribute('data-text');
+            if (!text) return;
+            el.textContent = '';
+            var cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            el.appendChild(cursor);
+            var i = 0;
+            var speed = 18; // ms per character
+            function tick() {
+                if (i < text.length) {
+                    el.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+                    i++;
+                    setTimeout(tick, speed);
+                } else {
+                    // Remove cursor after typing is done
+                    setTimeout(function() { cursor.style.display = 'none'; }, 1500);
+                }
+            }
+            tick();
+        }
+
+        // Copy code button
+        function copyCode(btn) {
+            var pre = btn.closest('.code-block').querySelector('pre');
+            var text = pre.textContent || pre.innerText;
+            navigator.clipboard.writeText(text).then(function() {
+                btn.textContent = 'COPIED!';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = 'COPY';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Dark mode toggle
+        var toggle = document.getElementById('themeToggle');
+        // Check saved preference
+        if (localStorage.getItem('blog-dark') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+            toggle.textContent = 'LIGHT';
+        }
+        toggle.addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark-mode');
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            toggle.textContent = isDark ? 'LIGHT' : 'CRT';
+            localStorage.setItem('blog-dark', isDark);
+        });
+
+        // CRT transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            var isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
             if (isLocalReferrer) {
                 document.body.classList.add('crt-temp-on');
-                setTimeout(() => { document.body.classList.remove('crt-temp-on'); }, 500);
+                setTimeout(function() { document.body.classList.remove('crt-temp-on'); }, 500);
             }
             
-            document.querySelectorAll('a').forEach(el => {
-                // Ignore if it has an existing click handler doing this via inline or index.js
-                // Actually for other pages we need this. For index.html, it already does it, but we can override it if we are careful, or just let other pages have it.
+            document.querySelectorAll('a').forEach(function(el) {
                 if (!el.getAttribute('data-crt-bound')) {
                     el.setAttribute('data-crt-bound', 'true');
-                    el.addEventListener('click', (e) => {
-                        if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#') || !el.href) {
-                            return; // let default happen
+                    el.addEventListener('click', function(e) {
+                        if(el.hasAttribute('target') || el.href.indexOf('mailto:') !== -1 || el.href.indexOf('#') !== -1 || !el.href) {
+                            return;
                         }
-                        // Check if it's the same origin
                         try {
-                            const url = new URL(el.href);
-                            if (url.origin === window.location.origin || el.href.startsWith('/') || el.href.startsWith('.')) {
+                            var url = new URL(el.href);
+                            if (url.origin === window.location.origin || el.href.indexOf('/') === 0 || el.href.indexOf('.') === 0) {
                                 e.preventDefault();
                                 document.body.classList.remove('crt-temp-on');
                                 document.body.classList.add('crt-temp-off');
-                                setTimeout(() => { window.location.href = el.href; }, 450);
+                                setTimeout(function() { window.location.href = el.href; }, 450);
                             }
                         } catch(err) {}
                     });
