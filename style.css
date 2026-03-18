@@ -2850,3 +2850,24 @@ html.theme-transitioning *::after {
 [data-theme="aurora"] .about-theme-fx {
     display: block;
 }
+
+
+@keyframes crtTurnOff {
+    0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+    40% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
+    70% { transform: scale(0, 0.005); opacity: 0.5; filter: brightness(5); background: white; }
+    100% { transform: scale(0, 0); opacity: 0; filter: brightness(0); background: white; }
+}
+@keyframes crtTurnOn {
+    0% { transform: scale(0, 0); opacity: 0; filter: brightness(0); background: white; }
+    30% { transform: scale(0, 0.005); opacity: 0.5; filter: brightness(5); background: white; }
+    60% { transform: scale(1, 0.005); opacity: 1; filter: brightness(2); }
+    100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+}
+body.crt-temp-off {
+    animation: crtTurnOff 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
+    pointer-events: none;
+}
+body.crt-temp-on {
+    animation: crtTurnOn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
+}
