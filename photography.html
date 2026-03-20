@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
+            --bg-color: #fcefd4;
+            --text-color: #0f0f0f;
+            --link-color: #0f0f0f;
+            --link-hover: #d62020;
+            --border-color: #d1cdc2;
+        }
+        html.dark-mode {
             --bg-color: #0d0d0d;
             --text-color: #f0f0f0;
             --link-color: #f0f0f0;
@@ -17,7 +24,7 @@
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
             max-width: 1100px;
-            margin: 40px auto;
+            margin: 80px auto 40px auto;
             padding: 0 20px;
             line-height: 1.6;
             background-color: var(--bg-color);
@@ -65,7 +72,8 @@
             background: var(--text-color); color: var(--bg-color);
         }
 
-        .content-area { animation: fadeIn 0.8s ease-out; }
+        .content-area { opacity: 1; }
+        .content-area.first-visit { animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -234,13 +242,29 @@
         }
         .modal-close:hover { color: #bbb; cursor: pointer; }
     </style>
+    <link href="site-tabs.css" rel="stylesheet">
+    <script src="site-tabs.js"></script>
 </head>
-<body>
+<body class="has-site-tabs photo-page">
+<nav class="site-tabs" aria-label="Primary">
+    <div class="site-tabs-group">
+        <a href="index.html" class="site-tab ">🏠 HOME</a>
+        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="photography.html" class="site-tab is-active">📷 PHOTOS</a>
+        <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        <a href="game.html" class="site-tab ">🎮 GAME</a>
+    </div>
+    <div class="site-tabs-controls">
+        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
+        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+    </div>
+</nav>
+
 
     <header>
         <div class="header-top">
             <h1>Photography</h1>
-            <a href="index.html" class="back-btn">&lt; BACK</a>
+            
         </div>
         <div class="filter-nav">
             <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
@@ -510,33 +534,14 @@
 
 
     </script>
-
-    <!-- CRT TRANSITION SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
-            if (isLocalReferrer) {
-                document.body.classList.add('crt-temp-on');
-                setTimeout(function() { document.body.classList.remove('crt-temp-on'); }, 500);
+        (function() {
+            var key = 'visited-photography';
+            if (!localStorage.getItem(key)) {
+                document.querySelector('.content-area').classList.add('first-visit');
+                localStorage.setItem(key, '1');
             }
-            document.querySelectorAll('a').forEach(function(el) {
-                if (!el.getAttribute('data-crt-bound')) {
-                    el.setAttribute('data-crt-bound', 'true');
-                    el.addEventListener('click', function(e) {
-                        if (el.hasAttribute('target') || el.href.indexOf('mailto:') !== -1 || el.href.indexOf('#') !== -1 || !el.href) return;
-                        try {
-                            var url = new URL(el.href);
-                            if (url.origin === window.location.origin) {
-                                e.preventDefault();
-                                document.body.classList.remove('crt-temp-on');
-                                document.body.classList.add('crt-temp-off');
-                                setTimeout(function() { window.location.href = el.href; }, 450);
-                            }
-                        } catch(err) {}
-                    });
-                }
-            });
-        });
+        })();
     </script>
     <script src="global_fx.js"></script>
 </body>
