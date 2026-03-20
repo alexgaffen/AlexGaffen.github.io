@@ -206,8 +206,24 @@
 
         /* Outline decoding effect class removed */
 </style>
+    <link href="site-tabs.css" rel="stylesheet">
+    <script src="site-tabs.js"></script>
 </head>
-<body>
+<body class="has-site-tabs index-page">
+<nav class="site-tabs" aria-label="Primary">
+    <div class="site-tabs-group">
+        <a href="index.html" class="site-tab is-active">🏠 HOME</a>
+        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        <a href="game.html" class="site-tab ">🎮 GAME</a>
+    </div>
+    <div class="site-tabs-controls">
+        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
+        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+    </div>
+</nav>
+
 
     <!-- Supply Drop Animation -->
 
@@ -233,59 +249,14 @@
                    </div>
               </div>
           </div>
-            <div class="control-btns">
-    <button class="control-btn" id="audio-btn" title="Toggle Lo-Fi Audio">🔇 MUTE</button>
-    <button class="control-btn" id="theme-btn" title="Toggle Hacker Mode">🌙 THEME</button>
-</div>
+            
 
 
         <div class="sidebar">
             <ul class="nav-links" style="display: flex; flex-direction: column; gap: 1.2em; margin-top: 0; padding-top: 0;">
-                <li><a href="resume.html">> 📄 WEB CV</a></li>
-                <li><a href="photography.html">> 📷 PHOTOGRAPHY</a></li>
-                <li><a href="blog.html">> ✏️ BLOG</a></li>
-                <li class="separator"></li>
                 <li><a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">> 👾 GITHUB</a></li>
                 <li><a href="https://www.linkedin.com/in/alexgaffen/" target="_blank" rel="noopener noreferrer">> 💼 LINKEDIN</a></li>
-                <li class="separator"></li>
-                  <li>
-                    <style>
-                      @keyframes fancyShake {
-                          0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
-                          25% { transform: translateY(-2px) rotate(-5deg); filter: drop-shadow(0 0 8px rgba(255,105,180,0.8)); }
-                          50% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
-                          75% { transform: translateY(2px) rotate(5deg); filter: drop-shadow(0 0 8px rgba(0,255,255,0.8)); }
-                      }
-                      .fancy-game-link {
-                          display: inline-flex;
-                          align-items: center;
-                          gap: 8px;
-                          color: #c0c0c0; /* silver */
-                          text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                          text-decoration: none !important;
-                          animation: lightLinkShake 3s infinite ease-in-out;
-                      }
-                      
-                      @keyframes lightLinkShake {
-                          0% { transform: rotate(0deg) scale(1); opacity: 0.6; text-shadow: 0 0 2px silver; }
-                          25% { transform: rotate(-1deg) scale(1.02); opacity: 0.9; text-shadow: 0 0 6px silver, 0 0 10px white; }
-                          50% { transform: rotate(0deg) scale(1); opacity: 0.6; text-shadow: 0 0 2px silver; }
-                          75% { transform: rotate(1deg) scale(1.02); opacity: 0.9; text-shadow: 0 0 6px silver, 0 0 10px white; }
-                          100% { transform: rotate(0deg) scale(1); opacity: 0.6; text-shadow: 0 0 2px silver; }
-                      }
-                      .egg-icon {
-                          font-size: 1.5em;
-                          display: inline-block;
-                          animation: fancyShake 1.5s infinite ease-in-out;
-                          background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-                          -webkit-background-clip: text;
-                          color: transparent;
-                          /* fallback if gradient text fails on emoji */
-                          text-shadow: 0px 0px 5px rgba(255,255,255,0.5);
-                      }
-                    </style>
-                    <a href="game.html" class="fancy-game-link">> <span class="egg-icon">🥚</span> GAME</a>
-                  </li>
+                  <li><a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer">> 💀 TRYHACKME</a></li>
             </ul>
 
             
@@ -446,22 +417,10 @@
         });
     }
 
-    // 4. CRT PAGE TRANSITION & HOVER AUDIO
+    // 4. HOVER & CLICK AUDIO
     document.querySelectorAll('a, button').forEach(el => {
         el.addEventListener('mouseenter', () => playSound('hover'));
-        if(el.tagName.toLowerCase() === 'a') {
-            el.addEventListener('click', (e) => {
-                if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#')) {
-                    playSound('click');
-                    return;
-                }
-                e.preventDefault();
-                playSound('click');
-                document.body.classList.remove('crt-temp-on');
-                document.body.classList.add('crt-temp-off');
-                setTimeout(() => { window.location.href = el.href; }, 450);
-            });
-        }
+        el.addEventListener('click', () => playSound('click'));
     });
 
     // 5. HIDDEN TERMINAL
@@ -530,18 +489,6 @@
         terminal.addEventListener('click', () => termInput.focus());
     }
 </script>
-
-    
-    <!-- CRT TRANSITION SCRIPT -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const isLocalReferrer = document.referrer.indexOf(window.location.host) !== -1;
-            if (isLocalReferrer) {
-                document.body.classList.add('crt-temp-on');
-                setTimeout(() => { document.body.classList.remove('crt-temp-on'); }, 500);
-            }
-        });
-    </script>
 
 
     <script src="global_fx.js"></script>

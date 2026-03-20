@@ -18,8 +18,24 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;display=swap" rel="stylesheet"/>
+    <link href="site-tabs.css" rel="stylesheet">
+    <script src="site-tabs.js"></script>
 </head>
-<body>
+<body class="has-site-tabs resume-page">
+<nav class="site-tabs" aria-label="Primary">
+    <div class="site-tabs-group">
+        <a href="index.html" class="site-tab ">🏠 HOME</a>
+        <a href="resume.html" class="site-tab is-active">📄 WEB CV</a>
+        <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        <a href="game.html" class="site-tab ">🎮 GAME</a>
+    </div>
+    <div class="site-tabs-controls">
+        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
+        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+    </div>
+</nav>
+
 <div aria-hidden="true" class="about-theme-fx">
 <canvas id="themeFxCanvas"></canvas>
 </div>
@@ -43,9 +59,6 @@
 <img alt="TryHackMe" class="thm-icon-topbar" src="https://assets.tryhackme.com/img/favicon.png"/><span>TryHackMe</span>
 </a>
 </div>
-<a class="top-bar-esc" href="index.html" title="Back to Home">
-<span class="esc-label">ESC</span><i class="fas fa-xmark"></i>
-</a>
 </div>
 <div class="container">
 <nav class="sidebar">
@@ -523,17 +536,15 @@
 <button class="back-to-top" id="backToTop" title="Back to top">
 <i class="fas fa-arrow-up"></i>
 </button>
-<!-- Mobile Top Bar (shows on scroll-up past sidebar) -->
-<div class="mobile-top-bar" id="mobileTopBar">
-<a class="mobile-top-brand" href="#" id="mobileTopBrand">alexgaffen.com</a>
-<button aria-label="Open navigation" class="mobile-top-hamburger" id="mobileTopHamburger" title="Open navigation">
+<!-- Mobile Bottom Buttons (appear after scrolling past sidebar, mobile only) -->
+<div class="mobile-bottom-btns" id="mobileBottomBtns">
+<button class="mobile-bottom-btn" id="mobileBottomUp" title="Back to top" aria-label="Back to top">
+<i class="fas fa-arrow-up"></i>
+</button>
+<button class="mobile-bottom-btn" id="mobileBottomNav" title="Section navigation" aria-label="Section navigation">
 <i class="fas fa-bars"></i>
 </button>
 </div>
-<!-- Mobile Nav Menu Button (legacy, hidden — replaced by mobile top bar) -->
-<button aria-label="Open navigation" class="mobile-nav-toggle" id="mobileNavToggle" style="display:none!important" title="Open navigation">
-<i class="fas fa-bars"></i>
-</button>
 <!-- Mobile Nav Panel -->
 <div class="mobile-nav-panel" id="mobileNavPanel">
 <button aria-label="Close navigation" class="mobile-nav-close" id="mobileNavClose" title="Close navigation">
@@ -769,14 +780,12 @@
         // Scroll progress bar & back-to-top button (desktop only)
         const scrollProgress = document.getElementById('scrollProgress');
         const backToTop = document.getElementById('backToTop');
-        const mobileTopBar = document.getElementById('mobileTopBar');
-        const mobileTopBrand = document.getElementById('mobileTopBrand');
-        const mobileTopHamburger = document.getElementById('mobileTopHamburger');
+        const mobileBottomBtns = document.getElementById('mobileBottomBtns');
+        const mobileBottomUp = document.getElementById('mobileBottomUp');
+        const mobileBottomNav = document.getElementById('mobileBottomNav');
         let lastScrollY = window.scrollY;
-        let mobileBarVisible = false;
 
         // Mobile nav menu toggle
-        const mobileNavToggle = document.getElementById('mobileNavToggle');
         const mobileNavPanel = document.getElementById('mobileNavPanel');
         const mobileNavClose = document.getElementById('mobileNavClose');
         const mobileNavOverlay = document.getElementById('mobileNavOverlay');
@@ -788,7 +797,6 @@
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
 
-            const delta = scrollTop - lastScrollY;
             lastScrollY = scrollTop;
 
             // Desktop: show/hide back-to-top arrow
@@ -800,17 +808,14 @@
                 }
             }
 
-            // Mobile: show/hide top bar when scrolling up past sidebar
+            // Mobile: show/hide bottom buttons after scrolling past sidebar
             if (window.innerWidth <= 900) {
                 const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
-                if (scrollTop <= sidebarBottom) {
-                    mobileBarVisible = false;
-                } else if (delta < -3) {
-                    mobileBarVisible = true;
-                } else if (delta > 5) {
-                    mobileBarVisible = false;
+                if (scrollTop > sidebarBottom) {
+                    mobileBottomBtns.classList.add('visible');
+                } else {
+                    mobileBottomBtns.classList.remove('visible');
                 }
-                mobileTopBar.classList.toggle('visible', mobileBarVisible);
             }
         });
 
@@ -818,12 +823,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Mobile top bar — brand scrolls to top, hamburger opens nav
-        mobileTopBrand.addEventListener('click', (e) => {
-            e.preventDefault();
+        // Mobile bottom buttons
+        mobileBottomUp.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        mobileTopHamburger.addEventListener('click', openMobileNav);
+        mobileBottomNav.addEventListener('click', openMobileNav);
 
         function openMobileNav() {
             mobileNavPanel.classList.add('open');
@@ -836,7 +840,6 @@
             document.body.style.overflow = '';
         }
 
-        mobileNavToggle.addEventListener('click', openMobileNav);
         mobileNavClose.addEventListener('click', closeMobileNav);
         mobileNavOverlay.addEventListener('click', closeMobileNav);
 
@@ -1509,40 +1512,6 @@
             
             hackerElements.forEach(el => hackerObserver.observe(el));
         })();
-    </script>
-<!-- CRT TRANSITION SCRIPT -->
-<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if we came from another page on our site
-            const isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
-            if (isLocalReferrer) {
-                document.body.classList.add('crt-temp-on');
-                setTimeout(() => { document.body.classList.remove('crt-temp-on'); }, 500);
-            }
-            
-            document.querySelectorAll('a').forEach(el => {
-                // Ignore if it has an existing click handler doing this via inline or index.js
-                // Actually for other pages we need this. For index.html, it already does it, but we can override it if we are careful, or just let other pages have it.
-                if (!el.getAttribute('data-crt-bound')) {
-                    el.setAttribute('data-crt-bound', 'true');
-                    el.addEventListener('click', (e) => {
-                        if(el.hasAttribute('target') || el.href.includes('mailto:') || el.href.includes('#') || !el.href) {
-                            return; // let default happen
-                        }
-                        // Check if it's the same origin
-                        try {
-                            const url = new URL(el.href);
-                            if (url.origin === window.location.origin || el.href.startsWith('/') || el.href.startsWith('.')) {
-                                e.preventDefault();
-                                document.body.classList.remove('crt-temp-on');
-                                document.body.classList.add('crt-temp-off');
-                                setTimeout(() => { window.location.href = el.href; }, 450);
-                            }
-                        } catch(err) {}
-                    });
-                }
-            });
-        });
     </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>

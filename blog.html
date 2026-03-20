@@ -42,10 +42,7 @@
         html.dark-mode code {
             text-shadow: 0 0 6px rgba(0,255,65,0.4);
         }
-        html.dark-mode .theme-toggle {
-            border-color: #1a3a1a;
-            color: #00ff41;
-        }
+
 
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
@@ -106,23 +103,7 @@
             border-color: var(--link-hover);
         }
 
-        /* Theme toggle */
-        .theme-toggle {
-            background: none;
-            border: 2px solid var(--text-color);
-            padding: 6px 10px;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.6em;
-            color: var(--text-color);
-            cursor: pointer;
-            box-shadow: 2px 2px 0px var(--text-color);
-            transition: all 0.2s;
-        }
-        .theme-toggle:hover {
-            box-shadow: 4px 4px 0px var(--link-hover);
-            border-color: var(--link-hover);
-            color: var(--link-hover);
-        }
+
 
         /* Tag filter bar */
         .tag-filter {
@@ -155,6 +136,9 @@
         }
 
         .content-area {
+            opacity: 1;
+        }
+        .content-area.first-visit {
             animation: fadeIn 0.8s ease-out;
         }
 
@@ -326,15 +310,28 @@
         .code-block .cm { color: #6c7086; font-style: italic; }
         .code-block .num { color: #fab387; }
     </style>
+    <link href="site-tabs.css" rel="stylesheet">
+    <script src="site-tabs.js"></script>
 </head>
-<body>
+<body class="has-site-tabs blog-page">
+<nav class="site-tabs" aria-label="Primary">
+    <div class="site-tabs-group">
+        <a href="index.html" class="site-tab ">🏠 HOME</a>
+        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <a href="blog.html" class="site-tab is-active">✏️ BLOG</a>
+        <a href="game.html" class="site-tab ">🎮 GAME</a>
+    </div>
+    <div class="site-tabs-controls">
+        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
+        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+    </div>
+</nav>
+
 
     <header>
         <h1>Blog</h1>
-        <div class="header-actions">
-            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">CRT</button>
-            <a href="index.html" class="back-btn">&lt; BACK</a>
-        </div>
+
     </header>
 
     <div class="content-area">
@@ -430,7 +427,6 @@ iptables -A FORWARD -i vlan20 -o vlan10 \
     </div>
 
 
-    <!-- CRT TRANSITION SCRIPT -->
     <script>
         // Tag filtering
         document.querySelectorAll('.tag-btn').forEach(function(btn) {
@@ -498,51 +494,17 @@ iptables -A FORWARD -i vlan20 -o vlan10 \
                 }, 2000);
             });
         }
-
-        // Dark mode toggle
-        var toggle = document.getElementById('themeToggle');
-        // Check saved preference
-        if (localStorage.getItem('blog-dark') === 'true') {
-            document.documentElement.classList.add('dark-mode');
-            toggle.textContent = 'LIGHT';
-        }
-        toggle.addEventListener('click', function() {
-            document.documentElement.classList.toggle('dark-mode');
-            var isDark = document.documentElement.classList.contains('dark-mode');
-            toggle.textContent = isDark ? 'LIGHT' : 'CRT';
-            localStorage.setItem('blog-dark', isDark);
-        });
-
-        // CRT transitions
-        document.addEventListener('DOMContentLoaded', function() {
-            var isLocalReferrer = document.referrer.indexOf(window.location.origin) !== -1 || document.referrer.indexOf(window.location.host) !== -1;
-            if (isLocalReferrer) {
-                document.body.classList.add('crt-temp-on');
-                setTimeout(function() { document.body.classList.remove('crt-temp-on'); }, 500);
-            }
-            
-            document.querySelectorAll('a').forEach(function(el) {
-                if (!el.getAttribute('data-crt-bound')) {
-                    el.setAttribute('data-crt-bound', 'true');
-                    el.addEventListener('click', function(e) {
-                        if(el.hasAttribute('target') || el.href.indexOf('mailto:') !== -1 || el.href.indexOf('#') !== -1 || !el.href) {
-                            return;
-                        }
-                        try {
-                            var url = new URL(el.href);
-                            if (url.origin === window.location.origin || el.href.indexOf('/') === 0 || el.href.indexOf('.') === 0) {
-                                e.preventDefault();
-                                document.body.classList.remove('crt-temp-on');
-                                document.body.classList.add('crt-temp-off');
-                                setTimeout(function() { window.location.href = el.href; }, 450);
-                            }
-                        } catch(err) {}
-                    });
-                }
-            });
-        });
     </script>
 
+    <script>
+        (function() {
+            var key = 'visited-blog';
+            if (!localStorage.getItem(key)) {
+                document.querySelector('.content-area').classList.add('first-visit');
+                localStorage.setItem(key, '1');
+            }
+        })();
+    </script>
     <script src="global_fx.js"></script>
 </body>
 </html>

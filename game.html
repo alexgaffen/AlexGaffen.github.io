@@ -57,9 +57,25 @@
         }
         .restart-btn:active { box-shadow: 0 0 0 var(--text-color); transform: translate(2px, 2px); }
     </style>
+    <link href="site-tabs.css" rel="stylesheet">
+    <script src="site-tabs.js"></script>
 </head>
-<body>
-    <a href="index.html" class="back-btn">&lt; BACK</a>
+<body class="has-site-tabs game-page">
+<nav class="site-tabs" aria-label="Primary">
+    <div class="site-tabs-group">
+        <a href="index.html" class="site-tab ">🏠 HOME</a>
+        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        <a href="game.html" class="site-tab is-active">🎮 GAME</a>
+    </div>
+    <div class="site-tabs-controls">
+        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
+        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+    </div>
+</nav>
+
+    
     <div id="ui-layer">SCORE: <span id="scoreEl">0</span></div>
     <div id="instructions">TAP, CLICK, OR SPACE TO BOOST</div>
     
