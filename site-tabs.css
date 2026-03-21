@@ -150,16 +150,16 @@ html.dark-mode .site-tab::before {
 }
 
 body.index-page {
-    --site-world-a: rgba(50, 190, 255, 0.32);
-    --site-world-b: rgba(255, 120, 60, 0.26);
-    --site-world-c: rgba(255, 230, 80, 0.22);
+    --site-world-a: rgba(50, 190, 255, 0.22);
+    --site-world-b: rgba(255, 120, 60, 0.20);
+    --site-world-c: rgba(255, 230, 80, 0.20);
     padding-top: 76px !important;
 }
 
 body.blog-page {
-    --site-world-a: rgba(40, 240, 150, 0.28);
-    --site-world-b: rgba(60, 130, 255, 0.26);
-    --site-world-c: rgba(255, 70, 70, 0.22);
+    --site-world-a: rgba(40, 240, 150, 0.12);
+    --site-world-b: rgba(60, 130, 255, 0.12);
+    --site-world-c: rgba(255, 70, 70, 0.12);
     padding-top: 74px !important;
 }
 
@@ -174,17 +174,17 @@ body.blog-page .tag-filter {
 }
 
 body.photo-page {
-    --site-world-a: rgba(80, 210, 255, 0.28);
-    --site-world-b: rgba(255, 155, 70, 0.24);
-    --site-world-c: rgba(255, 90, 140, 0.22);
+    --site-world-a: rgba(80, 210, 255, 0.18);
+    --site-world-b: rgba(255, 155, 70, 0.18);
+    --site-world-c: rgba(255, 90, 140, 0.18);
     padding-top: 74px !important;
 }
 
 
 
 body.game-page {
-    --site-world-a: rgba(255, 210, 105, 0.25);
-    --site-world-b: rgba(255, 120, 120, 0.2);
+    --site-world-a: rgba(255, 210, 105, 0.20);
+    --site-world-b: rgba(255, 120, 120, 0.20);
     --site-world-c: rgba(255, 255, 255, 0.12);
     padding-top: 72px !important;
 }
@@ -204,9 +204,9 @@ body.resume-page {
     --site-tab-active-bg: #fcefd4;
     --site-tab-active-fg: #10235e;
     --site-tab-active-border: rgba(16, 35, 94, 0.9);
-    --site-world-a: rgba(70, 240, 210, 0.24);
-    --site-world-b: rgba(110, 80, 255, 0.22);
-    --site-world-c: rgba(255, 200, 60, 0.18);
+    --site-world-a: rgba(70, 240, 210, 0.18);
+    --site-world-b: rgba(110, 80, 255, 0.16);
+    --site-world-c: rgba(255, 200, 60, 0.14);
 }
 
 body.resume-page .content {
