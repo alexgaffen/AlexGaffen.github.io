@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Alex Gaffen | Portfolio</title>
+<title>Alex Gaffen</title>
 <!-- Google Analytics -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -28,7 +28,6 @@
         <a href="resume.html" class="site-tab is-active">📄 WEB CV</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
-        <a href="game.html" class="site-tab ">🎮 GAME</a>
     </div>
     <div class="site-tabs-controls">
         <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
@@ -649,6 +648,29 @@
                 });
             }
         });
+
+        const trajectoryNodes = document.querySelectorAll('.trajectory-node');
+        const trajectoryTitle = document.getElementById('trajectoryTitle');
+        const trajectoryText = document.getElementById('trajectoryText');
+
+        function setTrajectoryNode(node) {
+            if (!node || !trajectoryTitle || !trajectoryText) return;
+            trajectoryNodes.forEach((item) => item.classList.remove('is-active'));
+            node.classList.add('is-active');
+            trajectoryTitle.textContent = node.dataset.title || '';
+            trajectoryText.textContent = node.dataset.text || '';
+        }
+
+        trajectoryNodes.forEach((node) => {
+            node.addEventListener('click', () => setTrajectoryNode(node));
+            if (supportsHover) {
+                node.addEventListener('mouseenter', () => setTrajectoryNode(node));
+            }
+        });
+
+        if (trajectoryNodes.length) {
+            setTrajectoryNode(document.querySelector('.trajectory-node.is-active') || trajectoryNodes[0]);
+        }
 
         // Star theme toggle
         const htmlEl = document.documentElement;

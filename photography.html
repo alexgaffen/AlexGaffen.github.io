@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Gaffen - Photography</title>
+    <title>Alex Gaffen</title>
+    <link href="assets/favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -166,7 +167,7 @@
         @media (min-width: 1000px) {
             .inline-map-panel {
                 position: fixed;
-                top: 80px;
+                top: 108px;
                 right: 24px;
                 width: 380px;
                 z-index: 100;
@@ -206,12 +207,12 @@
         /* Lightbox Modal */
         .modal {
             display: none; position: fixed; z-index: 999;
-            padding-top: 50px; left: 0; top: 0;
-            width: 100%; height: 100%; overflow: auto;
+            padding-top: 24px; left: 0; top: 55px;
+            width: 100%; height: calc(100% - 55px); overflow: auto;
             background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(5px);
         }
         .modal-nav {
-            cursor: pointer; position: absolute; top: 50%;
+            cursor: pointer; position: absolute; top: calc(50% + 28px);
             width: auto; padding: 16px; margin-top: -50px;
             color: white; font-weight: bold; font-size: 40px;
             transition: 0.6s ease; border-radius: 0 3px 3px 0;
@@ -231,16 +232,94 @@
             to { transform:scale(1); opacity:1; filter: blur(0); }
         }
         #modal-caption {
-            margin: auto; display: block; width: 80%; max-width: 700px;
-            text-align: center; color: #ccc; padding: 12px 0;
+            margin: auto; display: block; width: 80%; max-width: 760px;
+            text-align: left; color: #ccc; padding: 14px 0 18px;
             font-family: 'Space Mono', monospace;
         }
+        .modal-telemetry {
+            display: grid;
+            gap: 14px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+            box-shadow: 0 18px 48px rgba(0,0,0,0.24);
+        }
+        .modal-telemetry-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: start;
+        }
+        .modal-sequence {
+            font-size: 0.68em;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            opacity: 0.62;
+        }
+        .modal-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 3px;
+        }
+        .modal-meta-line {
+            font-size: 0.92em;
+            opacity: 0.78;
+            margin-top: 4px;
+        }
+        .modal-signal-badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #d8b4fe;
+            background: rgba(168, 85, 247, 0.08);
+            font-size: 0.72em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .modal-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .modal-stat {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+        }
+        .modal-stat-label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.62em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.58;
+        }
+        .modal-stat-value {
+            display: block;
+            font-size: 0.86em;
+            color: #fff;
+        }
         .modal-close {
-            position: absolute; top: 20px; right: 35px;
+            position: absolute; top: 12px; right: 35px;
             color: #f1f1f1; font-size: 40px; font-weight: bold;
             transition: 0.3s; cursor: pointer; z-index: 1000;
         }
         .modal-close:hover { color: #bbb; cursor: pointer; }
+        @media (max-width: 700px) {
+            #modal-caption {
+                width: 92%;
+            }
+            .modal-telemetry-top {
+                flex-direction: column;
+            }
+            .modal-stat-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
     </style>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
@@ -252,7 +331,6 @@
         <a href="resume.html" class="site-tab ">📄 WEB CV</a>
         <a href="photography.html" class="site-tab is-active">📷 PHOTOS</a>
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
-        <a href="game.html" class="site-tab ">🎮 GAME</a>
     </div>
     <div class="site-tabs-controls">
         <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
@@ -363,19 +441,40 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Parallax on scroll
+        // Parallax on scroll — scroll-driven only to avoid continuous jank
         var cards = document.querySelectorAll('.photo-card');
-        function parallaxScroll() {
-            var scrollY = window.pageYOffset;
+        var canUseParallax = window.innerWidth > 900 && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        var parallaxTicking = false;
+
+        function applyParallax() {
+            parallaxTicking = false;
+
             for (var i = 0; i < cards.length; i++) {
                 var card = cards[i];
+
+                if (!canUseParallax || card.classList.contains('tag-hidden')) {
+                    card.style.transform = '';
+                    continue;
+                }
+
                 var rect = card.getBoundingClientRect();
                 var offset = (rect.top - window.innerHeight / 2) * 0.04;
-                card.style.transform = 'translateY(' + offset + 'px)';
+                card.style.transform = 'translateY(' + offset.toFixed(2) + 'px)';
             }
-            requestAnimationFrame(parallaxScroll);
         }
-        requestAnimationFrame(parallaxScroll);
+
+        function queueParallax() {
+            if (parallaxTicking) return;
+            parallaxTicking = true;
+            requestAnimationFrame(applyParallax);
+        }
+
+        window.addEventListener('scroll', queueParallax, { passive: true });
+        window.addEventListener('resize', function() {
+            canUseParallax = window.innerWidth > 900 && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+            queueParallax();
+        });
+        applyParallax();
 
         // Filter
         function filterPhotos(loc, btn) {
@@ -387,6 +486,12 @@
                 } else {
                     card.classList.add('tag-hidden');
                 }
+            });
+
+            queueParallax();
+
+            requestAnimationFrame(function() {
+                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
             });
         }
 
@@ -440,6 +545,7 @@
             setTimeout(function() {
                 panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 inlineMap.invalidateSize();
+                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
             }, 100);
         }
 
@@ -451,6 +557,8 @@
                 inlineMap = null;
             }
             activeMapCard = null;
+
+            if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
         }
 
         // ESC key closes map panel
@@ -462,29 +570,52 @@
         var currentPhotos = [];
         var currentIndex = 0;
 
+        function renderModalTelemetry(card, title, meta) {
+            var exif = card ? (card.dataset.exif || '') : '';
+            var lat = card && card.dataset.lat ? parseFloat(card.dataset.lat) : null;
+            var lng = card && card.dataset.lng ? parseFloat(card.dataset.lng) : null;
+            var frameCode = 'FRAME ' + String(currentIndex + 1).padStart(2, '0') + ' / ' + String(currentPhotos.length || 1).padStart(2, '0');
+            var coords = lat !== null && lng !== null ? lat.toFixed(4) + ', ' + lng.toFixed(4) : 'Telemetry pending';
+            var exifParts = exif ? exif.split(' | ') : [];
+            var stats = [
+                { label: 'Capture', value: exifParts[0] || 'Phone lens' },
+                { label: 'Exposure', value: exifParts[1] || 'Auto' },
+                { label: 'ISO', value: exifParts[2] || 'Adaptive' },
+                { label: 'Coordinates', value: coords }
+            ];
+
+            document.getElementById('modal-caption').innerHTML =
+                '<div class="modal-telemetry">' +
+                    '<div class="modal-telemetry-top">' +
+                        '<div>' +
+                            '<div class="modal-sequence">' + frameCode + '</div>' +
+                            '<div class="modal-title">' + title + '</div>' +
+                            '<div class="modal-meta-line">' + meta + '</div>' +
+                        '</div>' +
+                        '<div class="modal-signal-badge">Field Archive</div>' +
+                    '</div>' +
+                    '<div class="modal-stat-grid">' +
+                        stats.map(function(stat) {
+                            return '<div class="modal-stat"><span class="modal-stat-label">' + stat.label + '</span><span class="modal-stat-value">' + stat.value + '</span></div>';
+                        }).join('') +
+                    '</div>' +
+                '</div>';
+        }
+
         function openModal(imgSrc, title, meta, cardEl) {
             var modal = document.getElementById('photo-modal');
             var modalImg = document.getElementById('modal-img');
             currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.tag-hidden)[onclick]'));
-            var exif = cardEl ? (cardEl.dataset.exif || '') : '';
             currentIndex = currentPhotos.indexOf(cardEl);
             if (currentIndex === -1) currentIndex = 0;
             modal.style.display = "block";
             modalImg.src = imgSrc;
             var newImg = modalImg.cloneNode(true);
             modalImg.parentNode.replaceChild(newImg, modalImg);
-            var exifHtml = '';
-            if (exif) {
-                var parts = exif.split(' | ');
-                var icons = ['\u2300', '\u23f1', 'ISO', '\u2316'];
-                exifHtml = '<div class="exif-row">';
-                for (var i = 0; i < parts.length; i++) {
-                    exifHtml += '<span class="exif-item"><span class="exif-icon">' + (icons[i] || '') + '</span> ' + parts[i] + '</span>';
-                }
-                exifHtml += '</div>';
-            }
-            document.getElementById('modal-caption').innerHTML = '<strong>' + title + '</strong><br><span style="opacity:0.7;font-size:0.9em;">' + meta + '</span>' + exifHtml;
+            renderModalTelemetry(cardEl, title, meta);
             document.body.style.overflow = "hidden";
+
+            if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
         }
 
         function changePhoto(n) {
@@ -500,24 +631,17 @@
                 modalImg.src = matches[1];
                 var newImg = modalImg.cloneNode(true);
                 modalImg.parentNode.replaceChild(newImg, modalImg);
-                var exif = card.dataset.exif || '';
-                var exifHtml = '';
-                if (exif) {
-                    var parts = exif.split(' | ');
-                    var icons = ['\u2300', '\u23f1', 'ISO', '\u2316'];
-                    exifHtml = '<div class="exif-row">';
-                    for (var i = 0; i < parts.length; i++) {
-                        exifHtml += '<span class="exif-item"><span class="exif-icon">' + (icons[i] || '') + '</span> ' + parts[i] + '</span>';
-                    }
-                    exifHtml += '</div>';
-                }
-                document.getElementById('modal-caption').innerHTML = '<strong>' + matches[2] + '</strong><br><span style="opacity:0.7;font-size:0.9em;">' + matches[3] + '</span>' + exifHtml;
+                renderModalTelemetry(card, matches[2], matches[3]);
             }
         }
 
         function closeModal() {
             document.getElementById('photo-modal').style.display = "none";
             document.body.style.overflow = "auto";
+
+            requestAnimationFrame(function() {
+                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
+            });
         }
 
         window.addEventListener('click', function(event) {

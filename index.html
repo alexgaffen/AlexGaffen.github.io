@@ -17,6 +17,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen</title>
+    <link href="assets/favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -71,8 +72,6 @@
             100% { opacity: 1; transform: translateX(0); }
         }
         
-        .connect-btn { }
-
         .nav-links li {
             opacity: 0;
             animation: slideInRight 0.6s both cubic-bezier(0.25, 1, 0.5, 1);
@@ -216,7 +215,6 @@
         <a href="resume.html" class="site-tab ">📄 WEB CV</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
-        <a href="game.html" class="site-tab ">🎮 GAME</a>
     </div>
     <div class="site-tabs-controls">
         <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
@@ -233,10 +231,9 @@
                 <div class="box-inner-content">
                     <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
                     <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
-                        Software Engineer, Developer & Researcher <br> 
-                        <span style="margin-top:0.4em; display: block;">🧬 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
+                        Software Developer & Researcher <br> 
+                        <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
                     </span>
-                    
                     <p class="bio-intro">
                         Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
                     </p>
@@ -249,18 +246,12 @@
                    </div>
               </div>
           </div>
-            
-
-
         <div class="sidebar">
             <ul class="nav-links" style="display: flex; flex-direction: column; gap: 1.2em; margin-top: 0; padding-top: 0;">
                 <li><a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">> 👾 GITHUB</a></li>
                 <li><a href="https://www.linkedin.com/in/alexgaffen/" target="_blank" rel="noopener noreferrer">> 💼 LINKEDIN</a></li>
-                  <li><a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer">> 💀 TRYHACKME</a></li>
+                <li><a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer">> 💀 TRYHACKME</a></li>
             </ul>
-
-            
-
         </div>
     </div>
 
@@ -270,78 +261,12 @@
 
     
 <style>
-    /* 10X COOLER INJECTIONS */
-    body.hacker-mode {
-        --bg-color: #0a0a0a !important;
-        --text-color: #33ff33 !important;
-        --link-color: #33ff33 !important;
-        --link-hover: #ffffff !important;
-        --border-color: #1a4a1a !important;
-    }
     body.hacker-mode .glistening-box {
         background: #000 padding-box, linear-gradient(135deg, #00ff00, #003300, #00ff00) border-box !important;
         box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
         border: 4px solid transparent !important;
     }
-    
-    .scanlines {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-        background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0; z-index: 998; transition: opacity 0.3s;
-    }
-    body.hacker-mode .scanlines { opacity: 1; }
-    
-    @keyframes glitch-skew {
-        0% { transform: skew(0deg); }
-        20% { transform: skew(-10deg); text-shadow: -2px 0 red, 2px 0 #00ffff; }
-        40% { transform: skew(10deg); text-shadow: 2px 0 red, -2px 0 #00ffff; }
-        60% { transform: skew(0deg); text-shadow: none; }
-        80% { transform: skew(5deg); text-shadow: -1px 0 #00ff00, 1px 0 red; }
-        100% { transform: skew(0deg); }
-    }
-    .nav-links a:hover, .connect-btn:hover {
-        animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite !important;
-    }
-    
-    .control-btns {
-        position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 999;
-    }
-    .control-btn {
-        background: rgba(0,0,0,0.02); border: 2px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
-        color: var(--text-color); font-family: 'Press Start 2P', monospace; font-size: 0.8rem;
-        padding: 8px 12px; cursor: pointer; transition: all 0.2s;
-    }
-    .control-btn:active { box-shadow: 0 0 0 var(--text-color); transform: translate(2px, 2px); }
-
-    
-    
-    #terminal-overlay {
-        display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.95); z-index: 1000; color: #0f0; font-family: 'Space Mono', monospace;
-        padding: 40px; box-sizing: border-box; flex-direction: column; font-size: 1.2rem;
-    }
-    #term-output { flex: 1; overflow-y: auto; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; text-shadow: 0 0 5px #0f0; }
-    #term-input-line { display: flex; align-items: center; }
-    #term-prompt { margin-right: 15px; text-shadow: 0 0 5px #0f0; }
-    #term-input { background: transparent; border: none; color: #0f0; font-family: 'Space Mono', monospace; flex: 1; outline: none; font-size: 1.2rem; text-shadow: 0 0 5px #0f0; }
-    
-    @media (max-width: 800px) {
-        .control-btns { position: static; justify-content: center; margin-top: -10px; margin-bottom: 20px; }
-        .control-btn { font-size: 0.7rem; padding: 10px 15px; }
-    }
 </style>
-
-<!-- 10X COOLER ELEMENTS -->
-<div class="scanlines"></div>
-
-
-<div id="terminal-overlay">
-    <div id="term-output">Initializing secure connection...\n[OK] Welcome to Alex Gaffen's Hidden Terminal.\nType 'help' for a list of commands.</div>
-    <div id="term-input-line">
-        <span id="term-prompt">alex@sys:~$</span>
-        <input type="text" id="term-input" autocomplete="off" spellcheck="false" autofocus>
-    </div>
-</div>
 
 <script>
     // 1. TILT EFFECT
@@ -361,9 +286,13 @@
     }
 
     // 2. AUDIO SYNTH
-    let audioEnabled = false; // Sounds on by default
+    if (localStorage.getItem('site-audio') === null) {
+        localStorage.setItem('site-audio', 'false');
+    }
+
     let audioCtx = null;
     function playSound(type) {
+        const audioEnabled = localStorage.getItem('site-audio') === 'true';
         if (!audioEnabled) return;
         try {
             if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -392,102 +321,21 @@
 
     const audioBtn = document.getElementById('audio-btn');
     if (audioBtn) {
+        let audioEnabled = localStorage.getItem('site-audio') === 'true';
         audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
         audioBtn.addEventListener('click', () => {
             audioEnabled = !audioEnabled;
+            localStorage.setItem('site-audio', String(audioEnabled));
             if(audioEnabled) playSound('click');
             audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
         });
     }
 
-    // 3. THEME TOGGLE
-    let hackerMode = false;
-    const themeBtn = document.getElementById('theme-btn');
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            playSound('click');
-            hackerMode = !hackerMode;
-            if(hackerMode) {
-                document.body.classList.add('hacker-mode');
-                themeBtn.innerText = '☀️ NORMAL';
-            } else {
-                document.body.classList.remove('hacker-mode');
-                themeBtn.innerText = '🌙 HACKER';
-            }
-        });
-    }
-
-    // 4. HOVER & CLICK AUDIO
+    // 3. HOVER & CLICK AUDIO
     document.querySelectorAll('a, button').forEach(el => {
         el.addEventListener('mouseenter', () => playSound('hover'));
         el.addEventListener('click', () => playSound('click'));
     });
-
-    // 5. HIDDEN TERMINAL
-    const terminal = document.getElementById('terminal-overlay');
-    const termInput = document.getElementById('term-input');
-    const termOutput = document.getElementById('term-output');
-    let keyBuffer = '';
-    
-    window.addEventListener('keydown', (e) => {
-        if(terminal && terminal.style.display === 'flex') {
-            if(e.key === 'Escape') {
-                terminal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                termInput.value = '';
-            }
-            return;
-        }
-        
-        if (e.key && e.key.length === 1) {
-            keyBuffer += e.key.toLowerCase();
-            if(keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
-            
-            if(keyBuffer.includes('hack') || keyBuffer.includes('sudo')) {
-                keyBuffer = '';
-                playSound('click');
-                if (terminal) {
-                    terminal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                    setTimeout(() => termInput.focus(), 100);
-                }
-            }
-        }
-    });
-
-    if (termInput) {
-        termInput.addEventListener('keydown', (e) => {
-            if(e.key === 'Enter') {
-                const val = termInput.value.trim();
-                if(!val) return;
-                
-                termOutput.innerHTML += "\n<span style='color:#fff'>> " + val + "</span>\n";
-                let response = '';
-                const lowered = val.toLowerCase();
-                
-                if (lowered === 'help') {
-                    response = 'Commands:\n  whoami      Display user information\n  skills      Show technology stack\n  clear       Clear terminal output\n  close       Exit the terminal system\n  launch_game Deploy Easter Egg payload';
-                } else if (lowered === 'whoami') {
-                    response = 'Alex Gaffen.\n4th-year CS student at McMaster.\nFocus: Bioinformatics / Cyber / AI Engineer.';
-                } else if (lowered === 'skills') {
-                    response = 'Languages: C/C++, Python, JS, HTML/CSS\nEnvs: Linux, Bash\nInterests: Security, Robotics, AI';
-                } else if (lowered === 'clear') {
-                    termOutput.innerHTML = ''; response = '';
-                } else if (lowered === 'exit' || lowered === 'close') {
-                    terminal.style.display = 'none'; document.body.style.overflow = 'auto'; response='';
-                } else if (lowered === 'launch_game') {
-                    response = 'Launching...'; setTimeout(() => window.location.href='game.html', 500);
-                } else {
-                    response = "Command not found: " + val + ". Type 'help' for syntax.";
-                }
-                
-                if (response) termOutput.innerHTML += response;
-                termInput.value = '';
-                termOutput.scrollTop = termOutput.scrollHeight;
-            }
-        });
-        terminal.addEventListener('click', () => termInput.focus());
-    }
 </script>
 
 

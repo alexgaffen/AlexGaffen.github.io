@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Gaffen - Blog</title>
+    <title>Alex Gaffen</title>
+    <link href="assets/favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -46,9 +47,9 @@
 
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: none;
+            margin: 0;
+            padding: 0;
             line-height: 1.6;
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -56,8 +57,10 @@
             transition: background-color 0.4s, color 0.4s;
         }
 
+        /* Page header — scoped to non-blog pages via layout context */
         header {
-            margin-bottom: 2em;
+            margin: 0 auto 2em;
+            max-width: min(1340px, calc(100% - clamp(24px, 6vw, 64px)));
             padding-bottom: 1em;
             border-bottom: 2px dashed var(--border-color);
             display: flex;
@@ -65,8 +68,14 @@
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 200;
             background: var(--bg-color);
+        }
+
+        /* The blog page uses header.archive-header — reset the generic header styles */
+        header.archive-header {
+            all: revert;
+            box-sizing: border-box;
         }
 
         h1 {
@@ -105,20 +114,7 @@
 
 
 
-        /* Tag filter bar */
-        .tag-filter {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 2em;
-            padding-bottom: 1em;
-            border-bottom: 1px dashed var(--border-color);
-            position: sticky;
-            top: 58px;
-            z-index: 99;
-            background: var(--bg-color);
-            padding-top: 0.5em;
-        }
+        /* Tag filter button */
         .tag-btn {
             background: var(--tag-bg);
             border: 1px solid var(--border-color);
@@ -129,6 +125,7 @@
             cursor: pointer;
             transition: all 0.2s;
             text-transform: uppercase;
+            border-radius: 999px;
         }
         .tag-btn.active, .tag-btn:hover {
             background: var(--tag-active);
@@ -147,39 +144,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .post-list {
-            list-style: none;
-            padding: 0;
-        }
-        .post-item {
-            border-left: 2px solid var(--text-color);
-            padding-left: 20px;
-            margin-bottom: 2.5em;
-            position: relative;
-            transition: opacity 0.3s, transform 0.3s;
-            cursor: pointer;
-        }
-        .post-item:hover {
-            transform: translateX(6px);
-        }
-        .post-item:hover::before {
-            color: var(--link-hover);
-        }
-        .post-item.tag-hidden {
-            display: none;
-        }
-        .post-item::before {
-            content: '>';
-            position: absolute;
-            left: -6px;
-            top: 0;
-            color: var(--text-color);
-            font-family: 'Press Start 2P', monospace;
-            font-size: 10px;
-            background: var(--bg-color);
-            padding: 2px 0;
-            transition: background 0.4s;
-        }
         .post-date {
             font-family: 'Press Start 2P', monospace;
             font-size: 0.6em;
@@ -187,12 +151,6 @@
             opacity: 0.6;
             margin-bottom: 8px;
             display: block;
-        }
-        .post-meta-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
         }
         .read-time {
             font-family: 'Press Start 2P', monospace;
@@ -210,23 +168,8 @@
             font-size: 0.45em;
             background: var(--tag-bg);
             padding: 3px 7px;
-            border-radius: 2px;
+            border-radius: 999px;
             opacity: 0.7;
-        }
-        .post-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin: 0 0 10px 0;
-        }
-        .post-title a {
-            font-family: 'Space Mono', monospace;
-            font-size: 1em;
-            text-transform: none;
-            letter-spacing: normal;
-        }
-        .post-excerpt {
-            margin: 0;
-            opacity: 0.85;
         }
         /* Typing cursor */
         .post-excerpt .cursor {
@@ -246,10 +189,9 @@
         .code-block {
             position: relative;
             background: var(--code-bg);
-            border-radius: 6px;
+            border-radius: 14px;
             margin: 12px 0;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         .code-block-header {
             display: flex;
@@ -257,7 +199,7 @@
             align-items: center;
             padding: 6px 12px;
             background: rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .code-block-lang {
             font-family: 'Press Start 2P', monospace;
@@ -291,24 +233,840 @@
             font-size: 0.85em;
             line-height: 1.5;
             color: var(--code-text);
-        }
-        .code-block .scanline {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: rgba(0,255,65,0.15);
-            animation: scanMove 3s linear 1 forwards;
-            pointer-events: none;
-        }
-        @keyframes scanMove {
-            0% { top: 0; }
-            100% { top: 100%; }
+            white-space: pre;
         }
         .code-block .kw { color: #cba6f7; }
         .code-block .fn { color: #89b4fa; }
         .code-block .str { color: #a6e3a1; }
         .code-block .cm { color: #6c7086; font-style: italic; }
         .code-block .num { color: #fab387; }
+
+        /* ─── Blog page base ─── */
+        body.blog-page {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Content children constrained centrally */
+        body.blog-page > .archive-header,
+        body.blog-page > .content-area {
+            width: min(1340px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: clamp(12px, 3vw, 32px);
+            padding-right: clamp(12px, 3vw, 32px);
+            box-sizing: border-box;
+        }
+
+        body.blog-page > .content-area {
+            padding-bottom: 80px;
+        }
+
+        /* ─── Archive header card ─── */
+        .archive-header {
+            margin: clamp(6px, 1.2vw, 18px) 0 clamp(16px, 2vw, 28px);
+            padding: clamp(18px, 2.4vw, 32px) clamp(18px, 3vw, 36px);
+            border: 1px solid var(--border-color);
+            border-radius: clamp(16px, 2vw, 28px);
+            display: grid;
+            gap: 1rem;
+            position: sticky;
+            top: clamp(6px, 1vw, 14px);
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(252, 239, 212, 0.97), rgba(252, 239, 212, 0.91));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 12px 40px rgba(15, 15, 15, 0.1);
+            box-sizing: border-box;
+        }
+
+        html.dark-mode .archive-header {
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.97), rgba(10, 10, 10, 0.91));
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .archive-header-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .archive-kicker {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.38em, 0.8vw, 0.58em);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            opacity: 0.72;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .archive-title-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .archive-title-row h1 {
+            margin: 0;
+            font-size: clamp(0.85em, 2.5vw, 1.5em);
+        }
+
+        .archive-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.36em, 0.7vw, 0.48em);
+            text-transform: uppercase;
+            background: rgba(255,255,255,0.34);
+            white-space: nowrap;
+        }
+
+        .archive-status-pill::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #00d26a;
+            box-shadow: 0 0 10px rgba(0, 210, 106, 0.55);
+        }
+
+        html.dark-mode .archive-status-pill {
+            background: rgba(0,255,65,0.08);
+        }
+
+        .archive-summary {
+            margin: 0;
+            font-size: clamp(0.82rem, 1.8vw, 1.03rem);
+            opacity: 0.86;
+            line-height: 1.65;
+        }
+
+        /* ─── Archive metrics row ─── */
+        .archive-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: clamp(8px, 1.2vw, 14px);
+        }
+
+        .archive-metric {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: clamp(12px, 1.4vw, 18px);
+            background: linear-gradient(145deg, rgba(255,255,255,0.5), rgba(255,255,255,0.18));
+        }
+
+        .archive-metric::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
+            transform: translateX(-100%);
+            animation: metricSweep 5.5s linear infinite;
+        }
+
+        html.dark-mode .archive-metric {
+            background: linear-gradient(145deg, rgba(0,255,65,0.06), rgba(0,0,0,0.14));
+        }
+
+        .archive-metric-label {
+            display: block;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.36em, 0.7vw, 0.48em);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.64;
+            margin-bottom: 10px;
+        }
+
+        .archive-metric-value {
+            display: block;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.7em, 1.4vw, 1.1em);
+            line-height: 1.4;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .archive-metric-note {
+            font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+        /* ─── Main 2-col grid ─── */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.72fr) minmax(0, 0.88fr);
+            gap: clamp(16px, 2.4vw, 28px);
+            align-items: start;
+        }
+
+        .archive-main {
+            min-width: 0;
+        }
+
+        /* ─── Sticky tag filter inside archive-main ─── */
+        .tag-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 10px 0 10px;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            background: var(--bg-color);
+        }
+
+        /* ─── Sidebar ─── */
+        .archive-sidebar {
+            position: sticky;
+            top: clamp(6px, 1vw, 14px);
+            display: grid;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .archive-panel {
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: clamp(14px, 1.8vw, 20px);
+            background: linear-gradient(155deg, rgba(255,255,255,0.46), rgba(255,255,255,0.14));
+            box-shadow: 0 14px 36px rgba(15, 15, 15, 0.07);
+        }
+
+        html.dark-mode .archive-panel {
+            background: linear-gradient(155deg, rgba(0,255,65,0.05), rgba(0,0,0,0.18));
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+        }
+
+        .archive-panel-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.42em, 0.9vw, 0.56em);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin: 0 0 12px;
+        }
+
+        .archive-panel p,
+        .archive-panel li {
+            opacity: 0.82;
+        }
+
+        .archive-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .archive-panel li {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            flex-wrap: wrap;
+            font-size: clamp(0.74rem, 1.5vw, 0.88rem);
+        }
+
+        .archive-panel li:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        /* ─── Feed meta bar ─── */
+        .archive-feed-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 0 0 0.9rem;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.18);
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.38em, 0.75vw, 0.5em);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        html.dark-mode .archive-feed-meta {
+            background: rgba(0,255,65,0.05);
+        }
+
+        .archive-feed-status {
+            opacity: 0.7;
+        }
+
+        /* ─── Post list ─── */
+        .post-list {
+            display: grid;
+            gap: clamp(12px, 1.8vw, 20px);
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .post-item {
+            border-left: none;
+            padding: clamp(16px, 2vw, 22px);
+            margin-bottom: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: linear-gradient(150deg, rgba(255,255,255,0.48), rgba(255,255,255,0.14));
+            box-shadow: 0 14px 36px rgba(15, 15, 15, 0.06);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        html.dark-mode .post-item {
+            background: linear-gradient(150deg, rgba(0,255,65,0.05), rgba(0,0,0,0.16));
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-item::before {
+            content: attr(data-log);
+            position: absolute;
+            right: clamp(12px, 1.8vw, 18px);
+            top: clamp(12px, 1.8vw, 18px);
+            left: auto;
+            font-size: clamp(0.38em, 0.75vw, 0.5em);
+            letter-spacing: 0.12em;
+            padding: 5px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: rgba(252, 239, 212, 0.94);
+            font-family: 'Press Start 2P', monospace;
+            text-transform: uppercase;
+        }
+
+        html.dark-mode .post-item::before {
+            background: rgba(10, 10, 10, 0.92);
+        }
+
+        .post-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 48px rgba(15, 15, 15, 0.12);
+        }
+
+        html.dark-mode .post-item:hover {
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+        }
+
+        .post-item:hover::before {
+            color: var(--text-color);
+        }
+
+        .post-item.tag-hidden {
+            display: none;
+        }
+
+        .post-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+            padding-right: clamp(64px, 10vw, 90px);
+        }
+
+        .post-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.36em, 0.7vw, 0.45em);
+            text-transform: uppercase;
+            opacity: 0.75;
+        }
+
+        .post-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.75;
+        }
+
+        .post-title {
+            margin: 6px 0 10px;
+            max-width: 100%;
+            padding-right: 0;
+        }
+
+        .post-title a {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(0.92em, 2vw, 1em);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .post-excerpt {
+            margin: 0 0 12px;
+            opacity: 0.82;
+            max-width: 64ch;
+            line-height: 1.65;
+            font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+        }
+
+        /* ─── Sidebar chips / route map ─── */
+        .archive-query-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .archive-query-chip {
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.38em, 0.8vw, 0.46em);
+            text-transform: uppercase;
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+        }
+
+        .archive-query-chip:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .archive-route-map {
+            display: grid;
+            gap: 10px;
+        }
+
+        .archive-route {
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .archive-route-label {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.4em, 0.8vw, 0.52em);
+            opacity: 0.65;
+        }
+
+        .archive-route-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .archive-route-bar span {
+            position: absolute;
+            inset: 0 auto 0 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #29d37c, #5f9cff);
+        }
+
+        /* ─── Article reader modal ─── */
+        .article-reader[hidden] {
+            display: none;
+        }
+
+        .article-reader {
+            position: fixed;
+            inset: 0;
+            z-index: 2600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(56px, 8vw, 78px) clamp(10px, 2.5vw, 24px) clamp(12px, 2vw, 24px);
+            background: rgba(5, 8, 18, 0.76);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            overscroll-behavior: contain;
+            box-sizing: border-box;
+        }
+
+        html.article-reader-open,
+        body.article-reader-open {
+            overflow: hidden !important;
+        }
+
+        .article-panel {
+            width: min(980px, 100%);
+            max-height: 90vh;
+            overflow: hidden;
+            border-radius: clamp(14px, 2.5vw, 26px);
+            border: 1px solid var(--border-color);
+            background: rgba(252, 239, 212, 0.99);
+            box-shadow: 0 28px 100px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        html.dark-mode .article-panel {
+            background: rgba(11, 11, 11, 0.99);
+        }
+
+        .article-panel,
+        .article-panel * {
+            text-shadow: none !important;
+        }
+
+        /* hidden topline stripe (keep element, just not shown) */
+        .article-topline {
+            display: none;
+        }
+
+        /* ─── Article head ─── */
+        .article-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: flex-start;
+            padding: clamp(18px, 2.5vw, 26px) clamp(18px, 2.8vw, 28px) clamp(10px, 1.2vw, 14px);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .article-kicker {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.38em, 0.75vw, 0.48em);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            opacity: 0.62;
+        }
+
+        .article-head h2 {
+            margin: 0;
+            font-size: clamp(1rem, 2.4vw, 1.25rem);
+            line-height: 1.4;
+            border: none;
+            padding: 0;
+            text-shadow: none;
+        }
+
+        .article-head h2::after {
+            display: none;
+        }
+
+        .article-meta-line {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.36em, 0.7vw, 0.44em);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.68;
+        }
+
+        .article-close {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── Article glance (summary + signal) ─── */
+        .article-glance {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: clamp(10px, 1.4vw, 16px);
+            padding: clamp(12px, 1.5vw, 16px) clamp(18px, 2.8vw, 28px);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .article-summary-block,
+        .article-signal-block {
+            border-radius: 14px;
+            padding: clamp(12px, 1.4vw, 16px);
+            background: rgba(255,255,255,0.3);
+        }
+
+        html.dark-mode .article-summary-block,
+        html.dark-mode .article-signal-block {
+            background: rgba(0,255,65,0.05);
+        }
+
+        .article-summary-block p,
+        .article-signal-block p {
+            margin: 0;
+            font-size: clamp(0.8rem, 1.6vw, 0.92rem);
+            opacity: 0.84;
+            line-height: 1.6;
+        }
+
+        /* ─── Scrollable article body ─── */
+        .article-section-scroll {
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.8vw, 28px) clamp(24px, 3vw, 36px);
+            overscroll-behavior: contain;
+            flex: 1 1 auto;
+        }
+
+        .article-body {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(16px, 2.2vw, 24px);
+        }
+
+        .article-section {
+            padding: 0;
+        }
+
+        .article-section-kicker {
+            display: block;
+            margin-bottom: 6px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.36em, 0.7vw, 0.44em);
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.56;
+        }
+
+        .article-section h3 {
+            margin: 0 0 10px;
+            font-size: clamp(0.96rem, 2vw, 1.08rem);
+            line-height: 1.45;
+        }
+
+        .article-section p {
+            margin: 0 0 10px;
+            font-size: clamp(0.82rem, 1.7vw, 0.96rem);
+            line-height: 1.7;
+            opacity: 0.88;
+            text-shadow: none;
+        }
+
+        .article-quote {
+            margin: 0;
+            padding: clamp(14px, 1.8vw, 18px) clamp(16px, 2vw, 20px);
+            background: rgba(95,156,255,0.1);
+            border-radius: 14px;
+            font-size: clamp(0.88rem, 1.8vw, 0.98rem);
+            line-height: 1.65;
+            font-style: italic;
+        }
+
+        .article-body .code-block {
+            margin: 0;
+            border-radius: 14px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .article-body .code-block-header {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .article-body .code-block pre {
+            padding: 12px 16px 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            text-shadow: none;
+            font-size: clamp(0.74rem, 1.5vw, 0.85rem);
+            line-height: 1.55;
+        }
+
+        /* ─── Stats grid ─── */
+        .article-signal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .article-signal-stat {
+            padding: 9px 11px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.14);
+        }
+
+        .article-signal-stat span {
+            display: block;
+        }
+
+        .article-signal-stat-label {
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.34em, 0.65vw, 0.42em);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.56;
+            margin-bottom: 5px;
+        }
+
+        .article-signal-stat-value {
+            font-size: clamp(0.78rem, 1.5vw, 0.86rem);
+            line-height: 1.4;
+        }
+
+        /* ─── Animations ─── */
+        @keyframes metricSweep {
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(120%); }
+        }
+
+        /* ─── 1100px: collapse to single col, sidebar moves below ─── */
+        @media (max-width: 1100px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .archive-sidebar {
+                position: static;
+            }
+
+            .archive-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* ─── 640px: mobile layout ─── */
+        @media (max-width: 640px) {
+            body.blog-page {
+                font-size: 13px;
+            }
+
+            .archive-header {
+                margin: 4px 0 14px;
+                top: 4px;
+            }
+
+            .archive-header-top {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .archive-title-row {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .archive-metrics {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .archive-metric {
+                padding: 12px;
+            }
+
+            .archive-feed-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .blog-grid {
+                gap: 12px;
+            }
+
+            .post-item {
+                padding: 14px 14px 14px;
+            }
+
+            .post-item::before {
+                position: static;
+                display: inline-flex;
+                margin-bottom: 10px;
+                right: auto;
+                top: auto;
+            }
+
+            .post-meta-row {
+                padding-right: 0;
+                gap: 8px;
+            }
+
+            .post-title {
+                margin: 4px 0 8px;
+            }
+
+            /* article reader on mobile */
+            .article-reader {
+                padding: 54px 8px 10px;
+                align-items: flex-end;
+            }
+
+            .article-panel {
+                max-height: calc(100svh - 60px);
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                width: 100%;
+            }
+
+            .article-head {
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+
+            .article-glance {
+                grid-template-columns: 1fr;
+            }
+
+            .article-signal-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ─── Very small phones ─── */
+        @media (max-width: 400px) {
+            .archive-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .article-signal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tag-filter {
+                gap: 6px;
+            }
+        }
     </style>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
@@ -320,7 +1078,6 @@
         <a href="resume.html" class="site-tab ">📄 WEB CV</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
         <a href="blog.html" class="site-tab is-active">✏️ BLOG</a>
-        <a href="game.html" class="site-tab ">🎮 GAME</a>
     </div>
     <div class="site-tabs-controls">
         <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
@@ -329,38 +1086,74 @@
 </nav>
 
 
-    <header>
-        <h1>Blog</h1>
-
+    <header class="archive-header">
+        <div class="archive-header-top">
+            <div>
+                <span class="archive-kicker">Developer Notes</span>
+                <div class="archive-title-row">
+                    <h1>Blog Archive</h1>
+                    <span class="archive-status-pill">Current Writing</span>
+                </div>
+            </div>
+        </div>
+        <p class="archive-summary">Notes on AI systems, security, software engineering, and the projects shaping how I build. The archive is filterable, readable, and meant to stay clean rather than theatrical.</p>
+        <div class="archive-metrics">
+            <article class="archive-metric">
+                <span class="archive-metric-label">Total Logs</span>
+                <span class="archive-metric-value" id="archiveTotalCount">03</span>
+                <span class="archive-metric-note">Active documents in the current archive.</span>
+            </article>
+            <article class="archive-metric">
+                <span class="archive-metric-label">Tracks</span>
+                <span class="archive-metric-value">AI / Systems / Security</span>
+                <span class="archive-metric-note">Primary lanes under active observation.</span>
+            </article>
+            <article class="archive-metric">
+                <span class="archive-metric-label">Focus Vector</span>
+                <span class="archive-metric-value">Applied ML Infrastructure</span>
+                <span class="archive-metric-note">Recent emphasis across current work.</span>
+            </article>
+            <article class="archive-metric">
+                <span class="archive-metric-label">Interface</span>
+                <span class="archive-metric-value">Typed + Filterable</span>
+                <span class="archive-metric-note">Query by tag and scan implementation fragments.</span>
+            </article>
+        </div>
     </header>
 
     <div class="content-area">
-        <p>Thoughts on tech, AI, cybersecurity, and navigating life as a developer.</p>
-        
-        <div class="tag-filter">
-            <button class="tag-btn active" data-tag="all">All</button>
-            <button class="tag-btn" data-tag="ai">AI</button>
-            <button class="tag-btn" data-tag="systems">Systems</button>
-            <button class="tag-btn" data-tag="security">Security</button>
-            <button class="tag-btn" data-tag="web">Web Dev</button>
-        </div>
+        <div class="blog-grid">
+            <div class="archive-main">
+                <div class="tag-filter">
+                    <button class="tag-btn active" data-tag="all">All</button>
+                    <button class="tag-btn" data-tag="ai">AI</button>
+                    <button class="tag-btn" data-tag="systems">Systems</button>
+                    <button class="tag-btn" data-tag="security">Security</button>
+                    <button class="tag-btn" data-tag="web">Web Dev</button>
+                </div>
 
-        <ul class="post-list">
-            <li class="post-item" data-tags="ai,web">
+                <div class="archive-feed-meta">
+                    <span>Visible Logs: <span id="visiblePostCount">03</span></span>
+                    <span class="archive-feed-status" id="archiveFeedStatus">Filter: All sectors visible</span>
+                </div>
+
+                <ul class="post-list">
+            <li class="post-item" data-article="ai-pipeline" data-log="LOG-01" data-tags="ai,web">
                 <div class="post-meta-row">
                     <span class="post-date">OCT 24, 2024</span>
                     <span class="read-time">~5 min read</span>
+                    <span class="post-status">Active Study</span>
                 </div>
                 <div class="post-tags">
                     <span class="post-tag">AI</span>
                     <span class="post-tag">Web Dev</span>
                 </div>
-                <h2 class="post-title"><a href="#" onclick="return false;">Breaking down my recent AI project</a></h2>
+                <h2 class="post-title"><a href="#" onclick="openArticleById('ai-pipeline'); return false;">Breaking down my recent AI project</a></h2>
                 <p class="post-excerpt" data-text="A deep dive into the architecture and challenges of building large-scale data pipelines for local ML inference. Here's what I learned..."></p>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-lang">python</span>
-                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                        <button class="code-copy-btn" onclick="copyCode(event, this)">COPY</button>
                     </div>
                     <pre><span class="kw">import</span> torch
 <span class="kw">from</span> transformers <span class="kw">import</span> AutoModelForCausalLM
@@ -371,23 +1164,23 @@ model = AutoModelForCausalLM.<span class="fn">from_pretrained</span>(
     device_map=<span class="str">"auto"</span>,
     load_in_4bit=<span class="num">True</span>
 )</pre>
-                    <div class="scanline"></div>
                 </div>
             </li>
-            <li class="post-item" data-tags="systems">
+            <li class="post-item" data-article="cpp-relevance" data-log="LOG-02" data-tags="systems">
                 <div class="post-meta-row">
                     <span class="post-date">SEP 12, 2024</span>
                     <span class="read-time">~7 min read</span>
+                    <span class="post-status">Systems Trace</span>
                 </div>
                 <div class="post-tags">
                     <span class="post-tag">Systems</span>
                 </div>
-                <h2 class="post-title"><a href="#" onclick="return false;">Why C/C++ is still relevant in the age of Rust</a></h2>
+                <h2 class="post-title"><a href="#" onclick="openArticleById('cpp-relevance'); return false;">Why C/C++ is still relevant in the age of Rust</a></h2>
                 <p class="post-excerpt" data-text="Exploring the gritty details of memory management and when it makes sense to stick to the classics for system-level robust tooling..."></p>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-lang">c</span>
-                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                        <button class="code-copy-btn" onclick="copyCode(event, this)">COPY</button>
                     </div>
                     <pre><span class="cm">// Custom memory pool allocator</span>
 <span class="kw">void</span>* <span class="fn">pool_alloc</span>(<span class="kw">MemPool</span>* pool, <span class="kw">size_t</span> size) {
@@ -397,51 +1190,351 @@ model = AutoModelForCausalLM.<span class="fn">from_pretrained</span>(
     pool->offset += <span class="fn">ALIGN</span>(size, <span class="num">16</span>);
     <span class="kw">return</span> ptr;
 }</pre>
-                    <div class="scanline"></div>
                 </div>
             </li>
-            <li class="post-item" data-tags="security">
+            <li class="post-item" data-article="homelab-security" data-log="LOG-03" data-tags="security">
                 <div class="post-meta-row">
                     <span class="post-date">AUG 05, 2024</span>
                     <span class="read-time">~4 min read</span>
+                    <span class="post-status">Network Report</span>
                 </div>
                 <div class="post-tags">
                     <span class="post-tag">Security</span>
                 </div>
-                <h2 class="post-title"><a href="#" onclick="return false;">My homelab setup and network security</a></h2>
+                <h2 class="post-title"><a href="#" onclick="openArticleById('homelab-security'); return false;">My homelab setup and network security</a></h2>
                 <p class="post-excerpt" data-text="How I isolated my services, set up a custom firewall structure, and learned penetration testing basics in the process."></p>
                 <div class="code-block">
                     <div class="code-block-header">
                         <span class="code-block-lang">bash</span>
-                        <button class="code-copy-btn" onclick="copyCode(this)">COPY</button>
+                        <button class="code-copy-btn" onclick="copyCode(event, this)">COPY</button>
                     </div>
                     <pre><span class="cm"># Isolate VLAN traffic with iptables</span>
 iptables -A FORWARD -i vlan10 -o vlan20 \
     -m state --state NEW -j <span class="str">DROP</span>
 iptables -A FORWARD -i vlan20 -o vlan10 \
     -m state --state ESTABLISHED,RELATED -j <span class="str">ACCEPT</span></pre>
-                    <div class="scanline"></div>
                 </div>
             </li>
-        </ul>
+                </ul>
+            </div>
+
+            <aside class="archive-sidebar">
+                <section class="archive-panel">
+                    <h2 class="archive-panel-title">Quick Filters</h2>
+                    <p>Fast ways to scan the archive without opening the full command palette.</p>
+                    <div class="archive-query-list">
+                        <button class="archive-query-chip" type="button" data-tag-shortcut="ai">AI Experiments</button>
+                        <button class="archive-query-chip" type="button" data-tag-shortcut="systems">Systems Notes</button>
+                        <button class="archive-query-chip" type="button" data-tag-shortcut="security">Security Logs</button>
+                        <button class="archive-query-chip" type="button" data-tag-shortcut="web">Frontend Builds</button>
+                    </div>
+                </section>
+
+                <section class="archive-panel">
+                    <h2 class="archive-panel-title">Research Map</h2>
+                    <div class="archive-route-map">
+                        <div class="archive-route">
+                            <span class="archive-route-label">AI</span>
+                            <div class="archive-route-bar"><span style="width: 78%"></span></div>
+                        </div>
+                        <div class="archive-route">
+                            <span class="archive-route-label">Systems</span>
+                            <div class="archive-route-bar"><span style="width: 66%"></span></div>
+                        </div>
+                        <div class="archive-route">
+                            <span class="archive-route-label">Security</span>
+                            <div class="archive-route-bar"><span style="width: 58%"></span></div>
+                        </div>
+                        <div class="archive-route">
+                            <span class="archive-route-label">Web</span>
+                            <div class="archive-route-bar"><span style="width: 61%"></span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="archive-panel">
+                    <h2 class="archive-panel-title">Archive Profile</h2>
+                    <ul>
+                        <li><span>Signal Style</span><span>Technical + reflective</span></li>
+                        <li><span>Cadence</span><span>Project-driven entries</span></li>
+                        <li><span>Mode</span><span>Notes + code fragments</span></li>
+                        <li><span>Operator</span><span>Alex Gaffen</span></li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <div class="article-reader" id="articleReader" hidden>
+        <div class="article-panel" role="dialog" aria-modal="true" aria-label="Research log reader">
+            <div class="article-topline" id="articleTopline"></div>
+            <div class="article-head">
+                <div>
+                    <span class="article-kicker" id="articleKicker">Article</span>
+                    <h2 id="articleTitle">Article Reader</h2>
+                    <div class="article-meta-line" id="articleMeta"></div>
+                </div>
+                <button class="article-close" id="articleClose" type="button" aria-label="Close article">×</button>
+            </div>
+            <div class="article-glance">
+                <div class="article-summary-block">
+                    <p id="articleSummary">Recovered article summary.</p>
+                </div>
+                <div class="article-signal-block">
+                    <p id="articleSignal">Signal block.</p>
+                    <div class="article-signal-grid" id="articleStats"></div>
+                </div>
+            </div>
+            <div class="article-section-scroll" id="articleScroll">
+                <article class="article-body" id="articleBody"></article>
+            </div>
+        </div>
     </div>
 
 
     <script>
         // Tag filtering
+        var articleLibrary = {
+            'ai-pipeline': {
+                kicker: 'AI Infrastructure',
+                title: 'Breaking down my recent AI project',
+                meta: ['Oct 24, 2024', '~5 min read', 'AI / Web'],
+                summary: 'The hardest part of the project was not model loading itself. It was building the system around the model so local inference stayed dependable, inspectable, and easy to iterate on.',
+                signal: 'Main lesson: treat the pipeline, not the model, as the product surface.',
+                stats: [
+                    { label: 'Inference Mode', value: 'Quantized local' },
+                    { label: 'Primary Risk', value: 'Latency spikes' },
+                    { label: 'Key Fix', value: 'Tighter pipeline contracts' },
+                    { label: 'Stack', value: 'Python + HF + UI' }
+                ],
+                sections: [
+                    {
+                        kicker: 'Section 01',
+                        title: 'The real bottleneck was orchestration',
+                        paragraphs: [
+                            'The system felt slow long before the model itself became the problem. Requests were wandering through data preparation, device selection, serialization, and UI handoff layers that had all been built at different speeds and with different assumptions.',
+                            'Once I stopped treating those pieces as support code and started treating them as first-class architecture, the project became much easier to reason about. The pipeline needed explicit contracts, predictable handoff points, and fewer magical branches.'
+                        ]
+                    },
+                    {
+                        kicker: 'Section 02',
+                        title: 'Observability made iteration faster',
+                        paragraphs: [
+                            'A lightweight telemetry layer was more useful than another round of prompt tweaking. I wanted to know when the model was loading, when it was waiting on disk, when response assembly was happening, and what kind of requests actually produced rough outputs.',
+                            'That visibility turned subjective performance complaints into a concrete debugging surface. Instead of guessing where quality or speed broke down, I could inspect the path and tighten one stage at a time.'
+                        ]
+                    }
+                ],
+                quote: 'If the model is powerful but the pipeline is blurry, the user still experiences a blurry product.',
+                code: {
+                    lang: 'python',
+                    content: 'pipeline = InferencePipeline(model=model, preprocessor=prep, tracer=telemetry)\nresult = pipeline.run(payload)\nif result.latency_ms > 700:\n    telemetry.flag("latency-spike", result.trace_id)'
+                }
+            },
+            'cpp-relevance': {
+                kicker: 'Systems Notes',
+                title: 'Why C/C++ is still relevant in the age of Rust',
+                meta: ['Sep 12, 2024', '~7 min read', 'Systems'],
+                summary: 'Rust improves many sharp edges, but C and C++ still show up anywhere teams need direct control over memory layout, embedded constraints, legacy interop, or performance-critical tooling that already exists in deep ecosystems.',
+                signal: 'Main lesson: relevance comes from constraints, not trends.',
+                stats: [
+                    { label: 'Primary Constraint', value: 'Memory control' },
+                    { label: 'Where It Wins', value: 'Legacy + infra' },
+                    { label: 'Counterweight', value: 'Safety costs' },
+                    { label: 'Takeaway', value: 'Use the right pressure-tested tool' }
+                ],
+                sections: [
+                    {
+                        kicker: 'Section 01',
+                        title: 'Interfacing with reality is messy',
+                        paragraphs: [
+                            'A lot of systems programming is not greenfield language theory. It is existing protocols, long-lived libraries, hardware expectations, and weird operational budgets. In those environments, C and C++ remain deeply practical because they are already the language of the boundary.',
+                            'Even when Rust is the better long-term direction, the path there often travels through code that is already deployed, audited, or heavily integrated. That means understanding C and C++ still pays off.'
+                        ]
+                    },
+                    {
+                        kicker: 'Section 02',
+                        title: 'Skill in these languages sharpens systems thinking',
+                        paragraphs: [
+                            'Working in lower-level environments trains different instincts. You start thinking in data movement, alignment, ownership pressure, cache behavior, and failure surfaces that can be hidden in higher-level code until they become expensive.',
+                            'That mental model stays useful even when you move back up the stack. It changes how you design APIs, how you profile software, and how you interpret performance regressions.'
+                        ]
+                    }
+                ],
+                quote: 'Languages rise and fall in hype cycles. Constraints do not.',
+                code: {
+                    lang: 'c',
+                    content: 'void *pool_alloc(MemPool *pool, size_t size) {\n    if (pool->offset + size > pool->capacity) return NULL;\n    void *ptr = pool->base + pool->offset;\n    pool->offset += ALIGN(size, 16);\n    return ptr;\n}'
+                }
+            },
+            'homelab-security': {
+                kicker: 'Security Report',
+                title: 'My homelab setup and network security',
+                meta: ['Aug 05, 2024', '~4 min read', 'Security'],
+                summary: 'The most useful part of the homelab was not the hardware. It was using a small environment to learn how segmentation, default-deny thinking, and layered monitoring change the way a network behaves under pressure.',
+                signal: 'Main lesson: security gets clearer when you can observe and break your own environment safely.',
+                stats: [
+                    { label: 'Core Pattern', value: 'Segmentation' },
+                    { label: 'Policy Style', value: 'Default deny' },
+                    { label: 'Learning Loop', value: 'Build, test, refine' },
+                    { label: 'Outcome', value: 'Better intuition for blast radius' }
+                ],
+                sections: [
+                    {
+                        kicker: 'Section 01',
+                        title: 'Isolation changed the way I designed services',
+                        paragraphs: [
+                            'Once services stopped living on the same flat network, every new deployment forced a clearer decision: what actually needs to talk to what, over which port, and under what assumptions. That discipline improved both reliability and security.'
+                        ]
+                    },
+                    {
+                        kicker: 'Section 02',
+                        title: 'Hands-on testing made the concepts stick',
+                        paragraphs: [
+                            'Reading about firewall rules is useful, but watching a bad rule leak traffic or kill a service teaches much faster. The homelab became a place where I could safely learn how segmentation interacts with convenience, debugging, and operational tradeoffs.'
+                        ]
+                    }
+                ],
+                quote: 'A secure network is rarely one giant lock. It is usually a map of smaller, deliberate trust boundaries.',
+                code: {
+                    lang: 'bash',
+                    content: 'iptables -A FORWARD -i vlan10 -o vlan20 -m state --state NEW -j DROP\niptables -A FORWARD -i vlan20 -o vlan10 -m state --state ESTABLISHED,RELATED -j ACCEPT\niptables -A INPUT -p tcp --dport 22 -s 10.0.10.0/24 -j ACCEPT'
+                }
+            }
+        };
+        var articleReader = document.getElementById('articleReader');
+        var articleScroll = document.getElementById('articleScroll');
+        var articleTopline = document.getElementById('articleTopline');
+
+        function renderArticle(article) {
+            var sectionsHtml = article.sections.map(function(section) {
+                return '<section class="article-section">' +
+                    '<span class="article-section-kicker">' + section.kicker + '</span>' +
+                    '<h3>' + section.title + '</h3>' +
+                    section.paragraphs.map(function(paragraph) {
+                        return '<p>' + paragraph + '</p>';
+                    }).join('') +
+                '</section>';
+            }).join('');
+
+            var codeHtml = article.code
+                ? '<div class="code-block"><div class="code-block-header"><span class="code-block-lang">' + article.code.lang + '</span><button class="code-copy-btn" onclick="copyCode(event, this)">COPY</button></div><pre>' + article.code.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre></div>'
+                : '';
+
+            return sectionsHtml +
+                '<blockquote class="article-quote">' + article.quote + '</blockquote>' +
+                codeHtml;
+        }
+
+        function updateArticleProgress() {
+            if (!articleScroll || !articleTopline) return;
+            var total = articleScroll.scrollHeight - articleScroll.clientHeight;
+            var percent = total > 0 ? (articleScroll.scrollTop / total) * 100 : 0;
+            articleTopline.style.width = percent + '%';
+        }
+
+        function openArticleById(id) {
+            var article = articleLibrary[id];
+            if (!article || !articleReader) return;
+
+            document.getElementById('articleKicker').textContent = article.kicker;
+            document.getElementById('articleTitle').textContent = article.title;
+            document.getElementById('articleMeta').innerHTML = article.meta.map(function(item) {
+                return '<span>' + item + '</span>';
+            }).join('');
+            document.getElementById('articleSummary').textContent = article.summary;
+            document.getElementById('articleSignal').textContent = article.signal;
+            document.getElementById('articleStats').innerHTML = article.stats.map(function(stat) {
+                return '<div class="article-signal-stat"><span class="article-signal-stat-label">' + stat.label + '</span><span class="article-signal-stat-value">' + stat.value + '</span></div>';
+            }).join('');
+            document.getElementById('articleBody').innerHTML = renderArticle(article);
+            articleReader.hidden = false;
+            document.documentElement.classList.add('article-reader-open');
+            document.body.classList.add('article-reader-open');
+            articleScroll.scrollTop = 0;
+            updateArticleProgress();
+        }
+
+        function closeArticleReader() {
+            if (!articleReader) return;
+            articleReader.hidden = true;
+            document.documentElement.classList.remove('article-reader-open');
+            document.body.classList.remove('article-reader-open');
+        }
+
+        var allPosts = Array.prototype.slice.call(document.querySelectorAll('.post-item'));
+        var visibleCountEl = document.getElementById('visiblePostCount');
+        var totalCountEl = document.getElementById('archiveTotalCount');
+        var feedStatusEl = document.getElementById('archiveFeedStatus');
+        var currentFilter = 'all';
+
+        function setActiveFilter(tag) {
+            document.querySelectorAll('.tag-btn').forEach(function(button) {
+                button.classList.toggle('active', button.getAttribute('data-tag') === tag);
+            });
+            currentFilter = tag;
+        }
+
+        function applyTagFilter(tag) {
+            setActiveFilter(tag);
+            document.querySelectorAll('.post-item').forEach(function(item) {
+                if (tag === 'all' || item.getAttribute('data-tags').indexOf(tag) !== -1) {
+                    item.classList.remove('tag-hidden');
+                } else {
+                    item.classList.add('tag-hidden');
+                }
+            });
+            updateArchiveFeed(tag);
+        }
+
+        function updateArchiveFeed(tag) {
+            var visibleCount = allPosts.filter(function(item) {
+                return !item.classList.contains('tag-hidden');
+            }).length;
+
+            if (visibleCountEl) visibleCountEl.textContent = String(visibleCount).padStart(2, '0');
+            if (totalCountEl) totalCountEl.textContent = String(allPosts.length).padStart(2, '0');
+            if (feedStatusEl) {
+                feedStatusEl.textContent = tag === 'all'
+                    ? 'Showing all posts'
+                    : 'Showing ' + tag.toUpperCase() + ' posts';
+            }
+        }
+
         document.querySelectorAll('.tag-btn').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.tag-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
                 var tag = btn.getAttribute('data-tag');
-                document.querySelectorAll('.post-item').forEach(function(item) {
-                    if (tag === 'all' || item.getAttribute('data-tags').indexOf(tag) !== -1) {
-                        item.classList.remove('tag-hidden');
-                    } else {
-                        item.classList.add('tag-hidden');
-                    }
-                });
+                if (tag !== 'all' && currentFilter === tag) {
+                    applyTagFilter('all');
+                    return;
+                }
+                applyTagFilter(tag);
             });
+        });
+
+        document.querySelectorAll('[data-tag-shortcut]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var tag = btn.getAttribute('data-tag-shortcut');
+                applyTagFilter(tag);
+            });
+        });
+
+        document.querySelectorAll('.post-item[data-article]').forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                if (event.target.closest('.code-copy-btn')) return;
+                openArticleById(item.getAttribute('data-article'));
+            });
+        });
+
+        document.getElementById('articleClose').addEventListener('click', closeArticleReader);
+        articleReader.addEventListener('click', function(event) {
+            if (event.target === articleReader) closeArticleReader();
+        });
+        articleScroll.addEventListener('scroll', updateArticleProgress, { passive: true });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && articleReader && !articleReader.hidden) {
+                closeArticleReader();
+            }
         });
 
         // Typing effect on scroll
@@ -482,7 +1575,8 @@ iptables -A FORWARD -i vlan20 -o vlan10 \
         }
 
         // Copy code button
-        function copyCode(btn) {
+        function copyCode(event, btn) {
+            if (event) event.stopPropagation();
             var pre = btn.closest('.code-block').querySelector('pre');
             var text = pre.textContent || pre.innerText;
             navigator.clipboard.writeText(text).then(function() {
@@ -494,6 +1588,8 @@ iptables -A FORWARD -i vlan20 -o vlan10 \
                 }, 2000);
             });
         }
+
+        applyTagFilter('all');
     </script>
 
     <script>

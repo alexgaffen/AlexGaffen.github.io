@@ -14,8 +14,12 @@ console.log(`%c
 
 
 
+const isSiteAudioEnabled = () => localStorage.getItem("site-audio") === "true";
+
+
 // CRT TV Hum Audio
 const playTvStatic = () => {
+    if (!isSiteAudioEnabled()) return;
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -49,12 +53,12 @@ const playTvStatic = () => {
 // Listen for link clicks to trigger static
 document.addEventListener("click", (e) => {
     const link = e.target.closest("a");
-    if (link && !link.hasAttribute('target') && !link.href.includes('mailto:') && !link.href.includes('#')) {
+    if (link && isSiteAudioEnabled() && !link.hasAttribute('target') && !link.href.includes('mailto:') && !link.href.includes('#')) {
         playTvStatic();
     }
 });
 // Play static on initial load transition
-if (document.referrer.indexOf(window.location.host) !== -1) {
+if (isSiteAudioEnabled() && document.referrer.indexOf(window.location.host) !== -1) {
     playTvStatic();
 }
 
