@@ -391,6 +391,8 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
 function updateSiteScrollProgress() {
+    if (document.body.classList.contains('resume-page')) return;
+
     let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     let scrolled = height > 0 ? (winScroll / height) * 100 : 0;
@@ -404,8 +406,9 @@ window.updateSiteScrollProgress = updateSiteScrollProgress;
 window.addEventListener('scroll', updateSiteScrollProgress);
 window.addEventListener('resize', updateSiteScrollProgress);
 
-// Create full-width progress bar on all pages
 document.addEventListener('DOMContentLoaded', () => {
+    if (document.body.classList.contains('resume-page')) return;
+
     if (!document.getElementById('site-full-progress')) {
         let bar = document.createElement('div');
         bar.id = 'site-full-progress';

@@ -82,27 +82,6 @@ html.dark-mode body.has-site-tabs {
     box-sizing: content-box;
 }
 
-/* Per-tab progress bar accent */
-.site-tab::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #d62020;
-    border-radius: 6px 6px 0 0;
-    z-index: 1;
-}
-html.dark-mode .site-tab::before {
-    background: #00ff00;
-}
-.site-tab.is-active::before {
-    width: var(--tab-scroll-progress, 0%);
-    height: 3px;
-    transition: width 0.1s;
-}
-
 @keyframes site-tab-text-glitch {
     0%, 100% { text-shadow: none; }
     20% { text-shadow: -2px 0 red, 2px 0 #00ffff; }
@@ -210,7 +189,7 @@ body.resume-page {
 }
 
 body.resume-page .content {
-    padding-top: 96px;
+    padding-top: 112px;
 }
 
 [data-theme="light"] body.resume-page {
@@ -227,7 +206,7 @@ body.resume-page .content {
     }
 
     body.resume-page .content {
-        padding-top: 60px !important;
+        padding-top: 72px !important;
     }
 
     body.resume-page .sidebar {
@@ -310,8 +289,7 @@ body.hacker-mode.game-page canvas {
 ::-webkit-scrollbar { display: none; }
 html, body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden; }
 
-/* Full-width scroll progress bar (all pages) */
-#site-full-progress {
+body:not(.resume-page) #site-full-progress {
     position: fixed;
     top: 0;
     left: 0;
@@ -323,7 +301,8 @@ html, body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden
     pointer-events: none;
     box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
 }
-html.dark-mode #site-full-progress {
+
+html.dark-mode body:not(.resume-page) #site-full-progress {
     background: linear-gradient(90deg, #22d3ee, #a78bfa, #14b8a6);
     box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
 }
