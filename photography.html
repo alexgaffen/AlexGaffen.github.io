@@ -37,6 +37,8 @@
             padding-bottom: 1em;
             border-bottom: 1px solid var(--border-color);
             display: flex; flex-direction: column; gap: 15px;
+            position: relative;
+            z-index: 1;
         }
         .header-top {
             display: flex; justify-content: space-between; align-items: center;
@@ -73,7 +75,7 @@
             background: var(--text-color); color: var(--bg-color);
         }
 
-        .content-area { opacity: 1; }
+        .content-area { opacity: 1; position: relative; z-index: 1; }
         .content-area.first-visit { animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -90,33 +92,23 @@
         .photo-card {
             break-inside: avoid; margin-bottom: 20px; border: none;
             background: transparent; padding: 0;
-            position: relative; overflow: hidden; border-radius: 8px;
             display: block; cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s;
         }
         .photo-card.tag-hidden { display: none; }
-        .photo-card:hover { transform: translateY(-5px); }
         .photo-image {
             width: 100%; display: block; border-radius: 8px;
-            transition: transform 0.5s ease;
         }
-        .photo-card:hover .photo-image { transform: scale(1.03); }
         .photo-info {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 30px 15px 15px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            color: #fff; opacity: 0; transition: opacity 0.3s ease;
-            border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
-            pointer-events: none;
+            padding: 10px 5px;
+            color: var(--text-color);
         }
-        .photo-card:hover .photo-info { opacity: 1; }
         .photo-title {
             font-family: 'Space Mono', monospace; font-weight: 700;
-            font-size: 1.1em; margin-bottom: 2px; color: #fff;
+            font-size: 1.1em; margin-bottom: 2px;
         }
         .photo-meta {
             font-family: 'Space Mono', monospace; font-size: 0.8em;
-            opacity: 0.9; color: #ddd;
+            opacity: 0.9;
         }
         .placeholder-image {
             width: 100%; aspect-ratio: 4/3; background: #1a1a1a;
@@ -142,18 +134,26 @@
         .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2); }
         .leaflet-control-attribution { display: none; }
 
+        /* Remove background animations entirely */
+        #site-world-canvas, .site-world-canvas, body::after, body.has-site-tabs::after {
+            display: none !important;
+            opacity: 0 !important;
+        }
+
         /* Per-image location button */
         .photo-loc-btn {
             display: inline-flex; align-items: center; gap: 4px;
-            margin-top: 6px; padding: 3px 8px;
-            background: rgba(168, 85, 247, 0.25); border: 1px solid rgba(168, 85, 247, 0.4);
-            color: #ddd; border-radius: 4px; cursor: pointer;
-            font-family: 'Space Mono', monospace; font-size: 0.7em;
+            margin-top: 8px; padding: 5px 10px;
+            background: #a855f7; border: 1px solid #a855f7;
+            color: #fff; border-radius: 4px; cursor: pointer;
+            font-family: 'Space Mono', monospace; font-size: 0.75em;
+            font-weight: bold;
             transition: all 0.2s; pointer-events: auto;
+            box-shadow: 0 2px 4px rgba(168, 85, 247, 0.4);
         }
         .photo-loc-btn:hover {
-            background: rgba(168, 85, 247, 0.45); color: #fff;
-            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+            background: #9333ea;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
         }
 
         /* Inline map panel — fixed right side on wide screens, below on small */
@@ -204,38 +204,168 @@
         }
         .exif-icon { opacity: 0.6; }
 
-        /* Lightbox Modal */
         .modal {
-            display: none; position: fixed; z-index: 999;
-            padding-top: 24px; left: 0; top: 55px;
-            width: 100%; height: calc(100% - 55px); overflow: auto;
+            display: none; position: fixed; z-index: 9999;
+            left: 0; top: 0; padding: 0; margin: 0;
+            width: 100vw; height: 100vh; overflow: hidden;
             background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+            box-sizing: border-box;
         }
         .modal-nav {
-            cursor: pointer; position: absolute; top: calc(50% + 28px);
-            width: auto; padding: 16px; margin-top: -50px;
+            cursor: pointer; position: absolute; top: 50%;
+            width: auto; padding: 16px; transform: translateY(-50%);
             color: white; font-weight: bold; font-size: 40px;
-            transition: 0.6s ease; border-radius: 0 3px 3px 0;
+            transition: 0.6s ease; border-radius: 3px;
             user-select: none; background-color: rgba(0,0,0,0.3);
             border: none; z-index: 1001;
+            opacity: 1;
         }
         .modal-nav:hover { background-color: rgba(0,0,0,0.8); }
-        .modal-nav.prev { left: 0; }
-        .modal-nav.next { right: 0; }
+        .modal-nav.prev { left: 0; border-radius: 0 3px 3px 0; }
+        .modal-nav.next { right: 0; border-radius: 3px 0 0 3px; }
+        
+        .modal-split-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+            align-items: center;
+            width: 90vw;
+            height: 90vh;
+            max-width: 1800px;
+            box-sizing: border-box;
+            background: transparent;
+            margin: auto;
+            gap: 40px;
+        }
+        .modal-image-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+        }
         .modal-content {
-            margin: auto; display: block; max-width: 90%;
-            max-height: 70vh; border-radius: 4px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease;
+            display: block; 
+            max-width: 100%; 
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            min-width: 0; min-height: 0;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+            animation: zoomIn 0.3s ease;
+            cursor: zoom-in;
         }
         @keyframes zoomIn {
             from { transform:scale(0.95); opacity:0; filter: blur(10px); }
             to { transform:scale(1); opacity:1; filter: blur(0); }
         }
-        #modal-caption {
-            margin: auto; display: block; width: 80%; max-width: 760px;
-            text-align: left; color: #ccc; padding: 14px 0 18px;
-            font-family: 'Space Mono', monospace;
+        
+        .modal-sidebar {
+            width: min(360px, 30vw);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
+        #modal-caption {
+            display: block;
+            width: auto;
+            text-align: left; color: #ccc; padding: 0;
+            font-family: 'Space Mono', monospace;
+            animation: zoomIn 0.3s ease;
+        }
+        
+        /* Fullscreen styles for real Fullscreen API */
+        .modal:fullscreen {
+            padding-top: 0 !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: #000 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        .modal:-webkit-full-screen {
+            padding-top: 0 !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: #000 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .modal.is-fullscreen .modal-split-layout,
+        .modal:fullscreen .modal-split-layout,
+        .modal:-webkit-full-screen .modal-split-layout {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            gap: 0;
+            padding: 0;
+        }
+        .modal.is-fullscreen .modal-sidebar,
+        .modal:fullscreen .modal-sidebar,
+        .modal:-webkit-full-screen .modal-sidebar {
+            display: none !important;
+        }
+        .modal.is-fullscreen .modal-image-container,
+        .modal:fullscreen .modal-image-container,
+        .modal:-webkit-full-screen .modal-image-container {
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: auto;
+        }
+        .modal.is-fullscreen .modal-content,
+        .modal:fullscreen .modal-content,
+        .modal:-webkit-full-screen .modal-content {
+            border-radius: 0;
+            box-shadow: none;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            cursor: zoom-out;
+        }
+        .modal.is-fullscreen .modal-close,
+        .modal:fullscreen .modal-close,
+        .modal:-webkit-full-screen .modal-close {
+            display: block !important;
+        }
+        .modal.is-fullscreen .modal-fullscreen-btn,
+        .modal:fullscreen .modal-fullscreen-btn,
+        .modal:-webkit-full-screen .modal-fullscreen-btn {
+            background: rgba(0,0,0,0.8);
+        }
+        .modal-fullscreen-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 1010;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        .modal-fullscreen-btn:hover { background: rgba(0,0,0,0.9); border-color: rgba(255,255,255,0.4); }
+        .modal-fullscreen-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .modal-telemetry {
             display: grid;
             gap: 14px;
@@ -307,11 +437,61 @@
             position: absolute; top: 12px; right: 35px;
             color: #f1f1f1; font-size: 40px; font-weight: bold;
             transition: 0.3s; cursor: pointer; z-index: 1000;
+            opacity: 1;
         }
         .modal-close:hover { color: #bbb; cursor: pointer; }
-        @media (max-width: 700px) {
+
+        .modal.is-fullscreen .modal-nav,
+        .modal.is-fullscreen .modal-fullscreen-btn,
+        .modal.is-fullscreen .modal-close,
+        .modal:fullscreen .modal-nav,
+        .modal:fullscreen .modal-fullscreen-btn,
+        .modal:fullscreen .modal-close,
+        .modal:-webkit-full-screen .modal-nav,
+        .modal:-webkit-full-screen .modal-fullscreen-btn,
+        .modal:-webkit-full-screen .modal-close {
+            opacity: 0.38;
+            transition: opacity 0.35s ease, background-color 0.35s ease, color 0.35s ease;
+        }
+
+        .modal.controls-hidden.is-fullscreen .modal-nav,
+        .modal.controls-hidden.is-fullscreen .modal-fullscreen-btn,
+        .modal.controls-hidden.is-fullscreen .modal-close,
+        .modal.controls-hidden:fullscreen .modal-nav,
+        .modal.controls-hidden:fullscreen .modal-fullscreen-btn,
+        .modal.controls-hidden:fullscreen .modal-close,
+        .modal.controls-hidden:-webkit-full-screen .modal-nav,
+        .modal.controls-hidden:-webkit-full-screen .modal-fullscreen-btn,
+        .modal.controls-hidden:-webkit-full-screen .modal-close {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal.is-fullscreen .modal-nav:hover,
+        .modal.is-fullscreen .modal-fullscreen-btn:hover,
+        .modal.is-fullscreen .modal-close:hover,
+        .modal:fullscreen .modal-nav:hover,
+        .modal:fullscreen .modal-fullscreen-btn:hover,
+        .modal:fullscreen .modal-close:hover,
+        .modal:-webkit-full-screen .modal-nav:hover,
+        .modal:-webkit-full-screen .modal-fullscreen-btn:hover,
+        .modal:-webkit-full-screen .modal-close:hover {
+            opacity: 0.88;
+        }
+
+        @media (max-width: 850px) {
+            .modal-split-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: minmax(0, 1fr) auto;
+                height: 90vh;
+                gap: 15px;
+                padding: 10px 0;
+            }
+            .modal-image-container { height: 50vh; width: 100%; min-height: 0; }
+            .modal-content { max-height: 100%; max-width: 100%; }
+            .modal-sidebar { width: 100%; flex-shrink: 0; }
             #modal-caption {
-                width: 92%;
+                width: 100%;
             }
             .modal-telemetry-top {
                 flex-direction: column;
@@ -319,6 +499,7 @@
             .modal-stat-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
+            .modal.is-fullscreen .modal-content { max-height: 100vh; max-width: 100vw; }
         }
     </style>
     <link href="site-tabs.css" rel="stylesheet">
@@ -347,7 +528,7 @@
         <div class="filter-nav">
             <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
             <button class="filter-btn" onclick="filterPhotos('sf', this)">San Francisco</button>
-            <button class="filter-btn" onclick="filterPhotos('banff', this)">Banff (Upcoming Trip)</button>
+            <button class="filter-btn" onclick="filterPhotos('banff', this)">Banff</button>
         </div>
     </header>
 
@@ -393,25 +574,60 @@
                         <div class="photo-meta">San Francisco &middot; Shot on S10</div>
                     </div>
                 </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.4254" data-lng="-116.1773">
-                    <div class="placeholder-image">Lake Louise</div>
+                <div class="photo-card" data-loc="banff" data-lat="51.4254" data-lng="-116.1773" onclick="openModal('photography/s10/lakelouisenordicstop.jpg', 'Lake Louise Nordic Stop', 'Banff &middot; Shot on S10', this)">
+                    <img src="photography/s10/lakelouisenordicstop.jpg" alt="Lake Louise Nordic Stop" class="photo-image" loading="lazy">
                     <div class="photo-info">
-                        <div class="photo-title">Lake Louise</div>
-                        <div class="photo-meta">Banff National Park</div>
+                        <div class="photo-title">Lake Louise Nordic Stop</div>
+                        <div class="photo-meta">Banff &middot; Shot on S10</div>
                     </div>
                 </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.3217" data-lng="-116.1860">
-                    <div class="placeholder-image">Moraine Lake</div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708" onclick="openModal('photography/DSLR/3sisterstrailtrain.JPG', 'Three Sisters Trail Train', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/3sisterstrailtrain.JPG" alt="Three Sisters Trail Train" class="photo-image" loading="lazy">
                     <div class="photo-info">
-                        <div class="photo-title">Moraine Lake</div>
-                        <div class="photo-meta">Banff National Park</div>
+                        <div class="photo-title">Three Sisters Trail Train</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
                     </div>
                 </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708">
-                    <div class="placeholder-image">Scenic Peaks</div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/banffgondolaeast.JPG', 'Banff Gondola East', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/banffgondolaeast.JPG" alt="Banff Gondola East" class="photo-image" loading="lazy">
                     <div class="photo-info">
-                        <div class="photo-title">Mountain Ranges</div>
-                        <div class="photo-meta">Banff National Park</div>
+                        <div class="photo-title">Banff Gondola East</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/banffgondolasunisset.JPG', 'Banff Gondola Sunset', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/banffgondolasunisset.JPG" alt="Banff Gondola Sunset" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Banff Gondola Sunset</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1636" data-lng="-115.5623" onclick="openModal('photography/DSLR/fairmontbanff.JPG', 'Fairmont Banff Springs', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/fairmontbanff.JPG" alt="Fairmont Banff Springs" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Fairmont Banff Springs</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708" onclick="openModal('photography/DSLR/goldenhourmountain.JPG', 'Golden Hour Mountain', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/goldenhourmountain.JPG" alt="Golden Hour Mountain" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Golden Hour Mountain</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.4130" data-lng="-116.2289" onclick="openModal('photography/DSLR/leftmntnlakelouise.JPG', 'Left Mountain Lake Louise', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/leftmntnlakelouise.JPG" alt="Left Mountain Lake Louise" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">Left Mountain Lake Louise</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
+                    </div>
+                </div>
+                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/ongondola.jpg', 'On Gondola View', 'Banff &middot; Shot on DSLR', this)">
+                    <img src="photography/DSLR/ongondola.jpg" alt="On Gondola View" class="photo-image" loading="lazy">
+                    <div class="photo-info">
+                        <div class="photo-title">On Gondola View</div>
+                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
                     </div>
                 </div>
             </div>
@@ -434,48 +650,21 @@
     <div id="photo-modal" class="modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <button class="modal-nav prev" onclick="changePhoto(-1)">&#10094;</button>
-        <img class="modal-content" id="modal-img">
         <button class="modal-nav next" onclick="changePhoto(1)">&#10095;</button>
-        <div id="modal-caption"></div>
+        
+        <div class="modal-split-layout">
+            <div class="modal-image-container">
+                <button class="modal-fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen">
+                    <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                </button>
+                <img class="modal-content" id="modal-img" onclick="toggleFullscreen()">
+            </div>
+            <div class="modal-sidebar" id="modal-caption"></div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Parallax on scroll — scroll-driven only to avoid continuous jank
-        var cards = document.querySelectorAll('.photo-card');
-        var canUseParallax = window.innerWidth > 900 && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-        var parallaxTicking = false;
-
-        function applyParallax() {
-            parallaxTicking = false;
-
-            for (var i = 0; i < cards.length; i++) {
-                var card = cards[i];
-
-                if (!canUseParallax || card.classList.contains('tag-hidden')) {
-                    card.style.transform = '';
-                    continue;
-                }
-
-                var rect = card.getBoundingClientRect();
-                var offset = (rect.top - window.innerHeight / 2) * 0.04;
-                card.style.transform = 'translateY(' + offset.toFixed(2) + 'px)';
-            }
-        }
-
-        function queueParallax() {
-            if (parallaxTicking) return;
-            parallaxTicking = true;
-            requestAnimationFrame(applyParallax);
-        }
-
-        window.addEventListener('scroll', queueParallax, { passive: true });
-        window.addEventListener('resize', function() {
-            canUseParallax = window.innerWidth > 900 && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-            queueParallax();
-        });
-        applyParallax();
-
         // Filter
         function filterPhotos(loc, btn) {
             document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -487,8 +676,6 @@
                     card.classList.add('tag-hidden');
                 }
             });
-
-            queueParallax();
 
             requestAnimationFrame(function() {
                 if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
@@ -569,6 +756,32 @@
         // Modal with EXIF
         var currentPhotos = [];
         var currentIndex = 0;
+        var fullscreenIdleTimer = null;
+
+        function isModalFullscreen() {
+            var modal = document.getElementById('photo-modal');
+            return !!(document.fullscreenElement || document.webkitFullscreenElement || modal.classList.contains('is-fullscreen'));
+        }
+
+        function showFullscreenControls() {
+            var modal = document.getElementById('photo-modal');
+            modal.classList.remove('controls-hidden');
+            if (!isModalFullscreen()) return;
+            if (fullscreenIdleTimer) window.clearTimeout(fullscreenIdleTimer);
+            fullscreenIdleTimer = window.setTimeout(function() {
+                if (isModalFullscreen()) {
+                    modal.classList.add('controls-hidden');
+                }
+            }, 1800);
+        }
+
+        function stopFullscreenControlsTimer() {
+            if (fullscreenIdleTimer) {
+                window.clearTimeout(fullscreenIdleTimer);
+                fullscreenIdleTimer = null;
+            }
+            document.getElementById('photo-modal').classList.remove('controls-hidden');
+        }
 
         function renderModalTelemetry(card, title, meta) {
             var exif = card ? (card.dataset.exif || '') : '';
@@ -602,17 +815,30 @@
                 '</div>';
         }
 
+        function getPhotoDetails(card) {
+            var imageEl = card.querySelector('.photo-image');
+            var titleEl = card.querySelector('.photo-title');
+            var metaEl = card.querySelector('.photo-meta');
+
+            return {
+                src: imageEl ? imageEl.getAttribute('src') : '',
+                title: titleEl ? titleEl.textContent : 'Untitled',
+                meta: metaEl ? metaEl.innerHTML : ''
+            };
+        }
+
         function openModal(imgSrc, title, meta, cardEl) {
             var modal = document.getElementById('photo-modal');
             var modalImg = document.getElementById('modal-img');
+            var photo = getPhotoDetails(cardEl);
             currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.tag-hidden)[onclick]'));
             currentIndex = currentPhotos.indexOf(cardEl);
             if (currentIndex === -1) currentIndex = 0;
-            modal.style.display = "block";
-            modalImg.src = imgSrc;
-            var newImg = modalImg.cloneNode(true);
-            modalImg.parentNode.replaceChild(newImg, modalImg);
-            renderModalTelemetry(cardEl, title, meta);
+            modal.style.display = "flex";
+            modal.classList.remove('controls-hidden');
+            modalImg.src = photo.src || imgSrc;
+            modalImg.alt = photo.title || title;
+            renderModalTelemetry(cardEl, photo.title || title, photo.meta || meta);
             document.body.style.overflow = "hidden";
 
             if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
@@ -624,33 +850,119 @@
             if (currentIndex >= currentPhotos.length) currentIndex = 0;
             if (currentIndex < 0) currentIndex = currentPhotos.length - 1;
             var card = currentPhotos[currentIndex];
-            var onclickText = card.getAttribute('onclick');
-            var matches = onclickText.match(/openModal\('([^']*)',\s*'([^']*)',\s*'([^']*)'/);
-            if (matches && matches.length >= 4) {
-                var modalImg = document.getElementById('modal-img');
-                modalImg.src = matches[1];
-                var newImg = modalImg.cloneNode(true);
-                modalImg.parentNode.replaceChild(newImg, modalImg);
-                renderModalTelemetry(card, matches[2], matches[3]);
-            }
+            var photo = getPhotoDetails(card);
+            var modalImg = document.getElementById('modal-img');
+            modalImg.src = photo.src;
+            modalImg.alt = photo.title;
+            renderModalTelemetry(card, photo.title, photo.meta);
         }
 
         function closeModal() {
-            document.getElementById('photo-modal').style.display = "none";
+            var modal = document.getElementById('photo-modal');
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
+            modal.classList.remove('is-fullscreen');
+            modal.classList.remove('controls-hidden');
+            modal.style.display = "none";
             document.body.style.overflow = "auto";
+            stopFullscreenControlsTimer();
 
             requestAnimationFrame(function() {
                 if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
             });
         }
 
+        function toggleFullscreen() {
+            var modal = document.getElementById('photo-modal');
+            var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
+            
+            if (!isNativeFS) {
+                if (modal.requestFullscreen) {
+                    modal.requestFullscreen();
+                } else if (modal.webkitRequestFullscreen) {
+                    modal.webkitRequestFullscreen();
+                } else {
+                    // Fallback to CSS fullscreen
+                    modal.classList.add('is-fullscreen');
+                }
+                showFullscreenControls();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else {
+                    modal.classList.remove('is-fullscreen');
+                }
+                stopFullscreenControlsTimer();
+            }
+            
+            requestAnimationFrame(function() {
+                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
+            });
+        }
+        
+        document.addEventListener('fullscreenchange', function() {
+            var modal = document.getElementById('photo-modal');
+            if (!document.fullscreenElement) {
+                modal.classList.remove('is-fullscreen');
+                stopFullscreenControlsTimer();
+            } else {
+                modal.classList.add('is-fullscreen');
+                showFullscreenControls();
+            }
+        });
+        document.addEventListener('webkitfullscreenchange', function() {
+            var modal = document.getElementById('photo-modal');
+            if (!document.webkitFullscreenElement) {
+                modal.classList.remove('is-fullscreen');
+                stopFullscreenControlsTimer();
+            } else {
+                modal.classList.add('is-fullscreen');
+                showFullscreenControls();
+            }
+        });
+
+        document.getElementById('photo-modal').addEventListener('mousemove', function() {
+            if (isModalFullscreen()) showFullscreenControls();
+        });
+
+        document.getElementById('photo-modal').addEventListener('click', function(e) {
+            if (isModalFullscreen() && e.target !== document.getElementById('photo-modal')) {
+                showFullscreenControls();
+            }
+        });
+
         window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('photo-modal')) closeModal();
+            if (event.target === document.getElementById('photo-modal') || event.target.closest('.modal-split-layout') && event.target.classList.contains('modal-split-layout')) {
+                var modal = document.getElementById('photo-modal');
+                var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
+                if (isNativeFS || modal.classList.contains('is-fullscreen')) {
+                    toggleFullscreen();
+                } else {
+                    closeModal();
+                }
+            }
         });
         document.addEventListener('keydown', function(event) {
             var modal = document.getElementById('photo-modal');
-            if (modal.style.display === "block") {
-                if (event.key === "Escape") closeModal();
+            if (modal.style.display === "flex") {
+                if (event.key === "Escape") {
+                    var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
+                    if (isNativeFS || modal.classList.contains('is-fullscreen')) {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else {
+                            modal.classList.remove('is-fullscreen');
+                        }
+                    } else {
+                        closeModal();
+                    }
+                }
                 else if (event.key === "ArrowRight") changePhoto(1);
                 else if (event.key === "ArrowLeft") changePhoto(-1);
             }
