@@ -11,7 +11,6 @@
     <style>
         html.no-intro .glistening-box { animation: glisten 6s ease-in-out infinite !important; transform: none !important; opacity: 1 !important; margin-bottom: 1.5em !important; }
         html.no-intro .nav-links li { animation: none !important; opacity: 1 !important; transform: none !important; }
-        html.no-intro #connect-wrapper { animation: none !important; opacity: 1 !important; transform: none !important; }
     </style>
 
     <meta charset="UTF-8">
@@ -55,6 +54,31 @@
             align-items: center;
             width: 100%;
             gap: 50px;
+        }
+
+        .headshot-box {
+            float: left;
+            margin-right: 1.5em;
+            margin-bottom: 0.5em;
+            width: clamp(140px, 18vw, 240px);
+            aspect-ratio: 3 / 4;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            border: 4px solid transparent;
+            background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
+                        linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box;
+            background-size: auto, 300% 300%;
+            animation: glisten 6s ease-in-out infinite;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 0 20px rgba(138, 43, 226, 0.2);
+        }
+
+        .headshot-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 10px;
         }
 
         @keyframes fadeInContent {
@@ -176,6 +200,18 @@
             .supply-drop {
                 font-size: 2.5rem;
             }
+            .headshot-box {
+                width: 180px;
+                height: auto;
+                float: none;
+                margin: 0 auto 1.5em auto;
+            }
+            .bio-intro, .bio-personal {
+                text-align: left;
+            }
+            .main-content {
+                text-align: center;
+            }
         }
 
         /* GLISTENING BOX STYLES */
@@ -229,20 +265,25 @@
         <div class="main-content">
             <div class="glistening-box">
                 <div class="box-inner-content">
-                    <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
-                    <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
-                        Software Developer & Researcher <br> 
-                        <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
-                    </span>
+                    <div class="headshot-box">
+                        <img src="assets/frontheadshot.jpg" alt="Alex Gaffen">
+                    </div>
+                    <div>
+                        <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-top:-0.15em; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
+                        <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
+                            Software Developer & Researcher <br> 
+                            <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
+                        </span>
+                    </div>
                     <p class="bio-intro">
                         Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
                     </p>
 
                     <p class="bio-personal">
                         I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
-                        </p>
-
-                        <div id="connect-wrapper" style="animation: slideInLeft 0.8s both cubic-bezier(0.25, 1, 0.5, 1); animation-delay: 2.4s; display: inline-block;"><a href="mailto:alexgaffen@gmail.com" class="connect-btn" style="opacity: 1; font-size: 0.85em; margin-bottom: 0em; margin-top: 0.5em; color: var(--link-color); box-shadow: 2px 2px 0px var(--text-color); border: 2px solid var(--text-color); padding: 8px 12px; display: inline-block; transition: all 0.2s; font-family: 'Press Start 2P', monospace; text-transform: uppercase;">> Let's connect!</a></div>
+                        <a href="mailto:alexgaffen@gmail.com" style="margin-left: 0.5em; color: #a855f7; font-weight: bold; text-decoration: underline; font-family: 'Space Mono', monospace; font-size: 1em; text-transform: none;">Let's connect!</a>
+                    </p>
+                    <div style="clear: both;"></div>
                    </div>
               </div>
           </div>
