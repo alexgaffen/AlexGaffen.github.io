@@ -57,6 +57,15 @@
             transition: background-color 0.4s, color 0.4s;
         }
 
+        /* Disable shared shell glisten/world overlay effects on blog */
+        #site-world-canvas,
+        .site-world-canvas,
+        body::after,
+        body.has-site-tabs::after {
+            display: none !important;
+            opacity: 0 !important;
+        }
+
         /* Page header — scoped to non-blog pages via layout context */
         header {
             margin: 0 auto 2em;
@@ -171,20 +180,6 @@
             border-radius: 999px;
             opacity: 0.7;
         }
-        /* Typing cursor */
-        .post-excerpt .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 1em;
-            background: var(--text-color);
-            margin-left: 2px;
-            animation: blink 0.7s step-end infinite;
-            vertical-align: text-bottom;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-
         /* Code block styling */
         .code-block {
             position: relative;
@@ -375,7 +370,7 @@
             inset: 0;
             background: linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
             transform: translateX(-100%);
-            animation: metricSweep 5.5s linear infinite;
+            animation: none;
         }
 
         html.dark-mode .archive-metric {
@@ -719,6 +714,7 @@
 
         .article-panel {
             width: min(980px, 100%);
+            height: min(90vh, 90svh);
             max-height: 90vh;
             overflow: hidden;
             border-radius: clamp(14px, 2.5vw, 26px);
@@ -843,6 +839,7 @@
             padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.8vw, 28px) clamp(24px, 3vw, 36px);
             overscroll-behavior: contain;
             flex: 1 1 auto;
+            min-height: 0;
         }
 
         .article-body {
@@ -944,12 +941,6 @@
             line-height: 1.4;
         }
 
-        /* ─── Animations ─── */
-        @keyframes metricSweep {
-            0% { transform: translateX(-120%); }
-            100% { transform: translateX(120%); }
-        }
-
         /* ─── 1100px: collapse to single col, sidebar moves below ─── */
         @media (max-width: 1100px) {
             .blog-grid {
@@ -1033,6 +1024,7 @@
             }
 
             .article-panel {
+                height: calc(100svh - 60px);
                 max-height: calc(100svh - 60px);
                 border-bottom-left-radius: 0;
                 border-bottom-right-radius: 0;
@@ -1042,14 +1034,20 @@
             .article-head {
                 flex-wrap: nowrap;
                 gap: 10px;
+                padding: 16px 16px 10px;
             }
 
             .article-glance {
                 grid-template-columns: 1fr;
+                padding: 10px 16px 12px;
             }
 
             .article-signal-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+
+            .article-section-scroll {
+                padding: 14px 16px 24px;
             }
         }
 
@@ -1537,42 +1535,10 @@ iptables -A FORWARD -i vlan20 -o vlan10 \
             }
         });
 
-        // Typing effect on scroll
-        var typedItems = [];
-        var typeObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting && typedItems.indexOf(entry.target) === -1) {
-                    typedItems.push(entry.target);
-                    typeExcerpt(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-
         document.querySelectorAll('.post-excerpt').forEach(function(el) {
-            typeObserver.observe(el);
-        });
-
-        function typeExcerpt(el) {
             var text = el.getAttribute('data-text');
-            if (!text) return;
-            el.textContent = '';
-            var cursor = document.createElement('span');
-            cursor.className = 'cursor';
-            el.appendChild(cursor);
-            var i = 0;
-            var speed = 18; // ms per character
-            function tick() {
-                if (i < text.length) {
-                    el.insertBefore(document.createTextNode(text.charAt(i)), cursor);
-                    i++;
-                    setTimeout(tick, speed);
-                } else {
-                    // Remove cursor after typing is done
-                    setTimeout(function() { cursor.style.display = 'none'; }, 1500);
-                }
-            }
-            tick();
-        }
+            if (text) el.textContent = text;
+        });
 
         // Copy code button
         function copyCode(event, btn) {

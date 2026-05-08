@@ -128,6 +128,22 @@ html.dark-mode body.has-site-tabs {
     transform: scale(1.2);
 }
 
+@media (max-width: 760px) {
+    .site-tab {
+        transition: none;
+    }
+
+    .site-tab:not(.is-active):hover {
+        color: var(--site-tab-fg);
+        text-decoration: none;
+        animation: none;
+    }
+
+    .site-tabs-btn:hover {
+        transform: none;
+    }
+}
+
 body.index-page {
     --site-world-a: rgba(50, 190, 255, 0.22);
     --site-world-b: rgba(255, 120, 60, 0.20);
