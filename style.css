@@ -688,16 +688,14 @@ h1.name {
 /* ############################################################# */
 
 .job-item {
-    margin-bottom: 3rem; 
-    padding: 1.5rem 1.5rem 1.5rem 20px;
+    margin-bottom: 2rem;
+    padding: 1.5rem 1.75rem;
     border: 1px solid var(--glass-border);
-    border-left: 3px solid var(--green-color); 
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.5));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    border-left: 3px solid var(--green-color);
+    background: linear-gradient(180deg, #11192c 0%, #0b1220 100%);
     border-radius: 0 14px 14px 0;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-    box-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.03);
     position: relative;
     overflow: hidden;
 }
@@ -714,8 +712,8 @@ h1.name {
 }
 
 .job-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--glass-border), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .clickable-card {
@@ -1425,15 +1423,13 @@ h1.name {
 /* --- NEW BIO STYLES --- */
 
 .bio-container {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.93));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: linear-gradient(180deg, #11192c 0%, #0b1220 100%);
     border: 1px solid var(--glass-border);
     border-left: 4px solid var(--green-color);
     padding: 1.8rem 2rem;
     border-radius: 0 14px 14px 0;
     margin-bottom: 0;
-    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
     position: relative;
     overflow: hidden;
 }
@@ -1739,10 +1735,8 @@ h1.name {
 }
 
 [data-theme="light"] .job-item {
-    background: linear-gradient(135deg, rgba(240, 233, 220, 0.95), rgba(235, 225, 210, 0.9));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 4px 24px -8px rgba(60, 40, 10, 0.08), 0 0 0 1px rgba(140, 120, 90, 0.15), inset 0 1px 0 rgba(255, 250, 240, 0.6);
+    background: linear-gradient(180deg, #f4ecdc 0%, #ede2cc 100%);
+    box-shadow: 0 4px 18px -10px rgba(60, 40, 10, 0.18), 0 0 0 1px rgba(140, 120, 90, 0.18), inset 0 1px 0 rgba(255, 250, 240, 0.6);
 }
 
 [data-theme="light"] .job-item h3 {
@@ -2577,11 +2571,9 @@ html.theme-transitioning *::after {
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.2rem;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.5));
+    background: linear-gradient(180deg, #11192c 0%, #0b1220 100%);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
