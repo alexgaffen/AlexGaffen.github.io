@@ -370,9 +370,6 @@
 <hr/>
 <section class="hidden" id="skills">
 <h2>SKILLS</h2>
-<div style="display:flex;justify-content:center;margin-bottom:2.5rem;">
-    <canvas id="radarChart" width="420" height="420" style="max-width:100%;"></canvas>
-</div>
 <div class="skills-grid">
 <div class="skill-category">
 <h3>PROGRAMMING LANGUAGES &amp; TOOLS</h3>
@@ -1538,75 +1535,6 @@
             hackerElements.forEach(el => hackerObserver.observe(el));
         })();
     </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script>
-// Animated Radar Chart for Skills
-(function() {
-    var canvas = document.getElementById('radarChart');
-    if (!canvas) return;
-    var drawn = false;
-
-    var observer = new IntersectionObserver(function(entries) {
-        if (entries[0].isIntersecting && !drawn) {
-            drawn = true;
-            drawRadar();
-            observer.disconnect();
-        }
-    }, { threshold: 0.3 });
-    observer.observe(canvas);
-
-    function drawRadar() {
-        var ctx = canvas.getContext('2d');
-        new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: ['Web Dev', 'Systems / C++', 'Python / AI', 'Cybersecurity', 'Networking', 'Leadership'],
-                datasets: [{
-                    label: 'Proficiency',
-                    data: [92, 78, 88, 75, 80, 85],
-                    backgroundColor: 'rgba(34, 211, 238, 0.15)',
-                    borderColor: '#22d3ee',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#22d3ee',
-                    pointBorderColor: '#fff',
-                    pointRadius: 5,
-                    pointHoverRadius: 8
-                }]
-            },
-            options: {
-                responsive: false,
-                animation: {
-                    duration: 1800,
-                    easing: 'easeOutQuart'
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            display: false,
-                            stepSize: 20
-                        },
-                        grid: {
-                            color: 'rgba(255,255,255,0.08)'
-                        },
-                        angleLines: {
-                            color: 'rgba(255,255,255,0.08)'
-                        },
-                        pointLabels: {
-                            color: '#c9d1d9',
-                            font: { size: 12, family: "'DM Sans', sans-serif" }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    }
-})();
-</script>
 <script src="global_fx.js"></script>
 </body>
 </html>
