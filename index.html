@@ -240,6 +240,235 @@
         }
 
         /* Outline decoding effect class removed */
+
+        /* ============================================================
+           HIGHLIGHT MARQUEE BAR — bottom-fixed advertisement-style strip
+           ============================================================ */
+        body {
+            padding-bottom: 130px; /* room for the marquee */
+        }
+
+        .highlight-marquee {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1200;
+            padding: 4px 0 6px;
+            background:
+                linear-gradient(90deg,
+                    rgba(15, 15, 15, 0.97) 0%,
+                    rgba(20, 12, 40, 0.97) 25%,
+                    rgba(8, 20, 45, 0.97) 50%,
+                    rgba(20, 12, 40, 0.97) 75%,
+                    rgba(15, 15, 15, 0.97) 100%);
+            border-top: 1px solid rgba(168, 85, 247, 0.5);
+            box-shadow:
+                0 -8px 32px rgba(168, 85, 247, 0.25),
+                0 -2px 12px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Animated gradient sheen sliding across the bar */
+        .highlight-marquee::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg,
+                transparent 0%,
+                transparent 35%,
+                rgba(168, 85, 247, 0.18) 45%,
+                rgba(59, 130, 246, 0.18) 55%,
+                transparent 65%,
+                transparent 100%);
+            background-size: 250% 100%;
+            animation: marqueeSheen 6s linear infinite;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        /* Thin neon top accent line */
+        .highlight-marquee::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent,
+                #a855f7,
+                #22d3ee,
+                #3b82f6,
+                #a855f7,
+                transparent);
+            background-size: 200% 100%;
+            animation: marqueeLine 4s linear infinite;
+            opacity: 0.85;
+            filter: blur(0.5px);
+        }
+
+        @keyframes marqueeSheen {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        @keyframes marqueeLine {
+            0%   { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .marquee-label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.45em 1.1em 0.45em 1em;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #fcefd4;
+            background: linear-gradient(90deg, rgba(168,85,247,0.95), rgba(59,130,246,0.85) 60%, rgba(59,130,246,0));
+            border-right: 1px solid rgba(168, 85, 247, 0.55);
+            text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+            white-space: nowrap;
+        }
+        .marquee-label .pulse-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #22d3ee;
+            box-shadow: 0 0 8px #22d3ee, 0 0 16px #22d3ee;
+            animation: pulseDot 1.4s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+        }
+
+        .marquee-viewport {
+            position: relative;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg,
+                transparent 0,
+                #000 80px,
+                #000 calc(100% - 80px),
+                transparent 100%);
+            -webkit-mask-image: linear-gradient(90deg,
+                transparent 0,
+                #000 80px,
+                #000 calc(100% - 80px),
+                transparent 100%);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            gap: 0;
+            animation: marqueeScroll 45s linear infinite;
+            will-change: transform;
+        }
+
+        .highlight-marquee:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeScroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+            padding: 0.55em 1.1em;
+            margin: 0 0.4em;
+            font-family: 'Space Mono', 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: #fcefd4;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            white-space: nowrap;
+            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .marquee-item .m-icon {
+            font-size: 1.15em;
+            line-height: 1;
+            filter: drop-shadow(0 0 6px currentColor);
+        }
+
+        .marquee-item .m-title {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .marquee-item .m-sub {
+            opacity: 0.75;
+            font-size: 0.85em;
+        }
+        .marquee-item .m-tag {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            padding: 0.25em 0.5em;
+            border-radius: 4px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Category accents */
+        .marquee-item.m-edu   { color: #ffd66b; }
+        .marquee-item.m-edu   .m-tag { background: rgba(234, 179, 8, 0.18); color: #ffd66b; border: 1px solid rgba(234, 179, 8, 0.5); }
+        .marquee-item.m-work  { color: #22d3ee; }
+        .marquee-item.m-work  .m-tag { background: rgba(34, 211, 238, 0.15); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.5); }
+        .marquee-item.m-bio   { color: #fb7185; }
+        .marquee-item.m-bio   .m-tag { background: rgba(251, 113, 133, 0.15); color: #fb7185; border: 1px solid rgba(251, 113, 133, 0.5); }
+        .marquee-item.m-proj  { color: #a855f7; }
+        .marquee-item.m-proj  .m-tag { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.55); }
+
+        .marquee-item:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 22px currentColor;
+            border-color: currentColor;
+        }
+        .marquee-item a {
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            text-transform: none;
+            line-height: inherit;
+            text-decoration: none;
+        }
+
+        .marquee-sep {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            color: rgba(168, 85, 247, 0.7);
+            font-size: 0.8rem;
+            user-select: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track { animation: none; }
+            .highlight-marquee::before,
+            .highlight-marquee::after { animation: none; }
+        }
+
+        @media (max-width: 800px) {
+            body { padding-bottom: 110px; }
+            .marquee-label { display: none; }
+            .marquee-viewport { mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%); }
+            .marquee-item { font-size: 0.8rem; padding: 0.45em 0.85em; }
+            .marquee-track { animation-duration: 35s; }
+        }
 </style>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
@@ -250,7 +479,9 @@
         <a href="index.html" class="site-tab is-active">🏠 HOME</a>
         <a href="resume.html" class="site-tab ">📄 WEB CV</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <!-- Blog tab temporarily hidden:
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        -->
     </div>
     <div class="site-tabs-controls">
         <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
@@ -379,6 +610,132 @@
     });
 </script>
 
+
+    <!-- ====================================================
+         HIGHLIGHT MARQUEE — scrolling highlights bar
+         ==================================================== -->
+    <aside class="highlight-marquee" aria-label="Career highlights">
+        <div class="marquee-label" aria-hidden="true">
+            <span class="pulse-dot"></span>HIGHLIGHTS
+        </div>
+        <div class="marquee-viewport">
+            <div class="marquee-track" id="marqueeTrack">
+                <!-- Group A -->
+                <div class="marquee-item m-edu">
+                    <span class="m-tag">EDU</span>
+                    <span class="m-icon">🎓</span>
+                    <span class="m-title">Honours Computer Science</span>
+                    <span class="m-sub">— McMaster University</span>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-work">
+                    <span class="m-tag">CO-OP</span>
+                    <span class="m-icon">🤖</span>
+                    <span class="m-title">AI &amp; Robotics Research Engineer</span>
+                    <span class="m-sub">— Adaptron Inc · 8 months</span>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-bio">
+                    <span class="m-tag">RESEARCH</span>
+                    <span class="m-icon">🧬</span>
+                    <span class="m-title">Biomedical ML Research Engineer</span>
+                    <span class="m-sub">— McMaster Dept. of Medicine · 4 months</span>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-proj">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">📈</span>
+                    <a href="resume.html#projects"><span class="m-title">Mock Market</span>
+                        <span class="m-sub">— Full-Stack Trading Sim</span></a>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-proj">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">👻</span>
+                    <a href="resume.html#projects"><span class="m-title">Ghost Shell</span>
+                        <span class="m-sub">— Stealth Reverse Shell</span></a>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-proj">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">🎮</span>
+                    <a href="resume.html#projects"><span class="m-title">Networked Battle Game</span>
+                        <span class="m-sub">— C++ Multiplayer Engine</span></a>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <div class="marquee-item m-proj">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">🧮</span>
+                    <a href="resume.html#projects"><span class="m-title">Matrix Visualizer</span>
+                        <span class="m-sub">— Linear Algebra Web App</span></a>
+                </div>
+                <span class="marquee-sep">◆</span>
+
+                <!-- Group B (duplicate for seamless loop) -->
+                <div class="marquee-item m-edu" aria-hidden="true">
+                    <span class="m-tag">EDU</span>
+                    <span class="m-icon">🎓</span>
+                    <span class="m-title">Honours Computer Science</span>
+                    <span class="m-sub">— McMaster University</span>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-work" aria-hidden="true">
+                    <span class="m-tag">CO-OP</span>
+                    <span class="m-icon">🤖</span>
+                    <span class="m-title">AI &amp; Robotics Research Engineer</span>
+                    <span class="m-sub">— Adaptron Inc · 8 months</span>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-bio" aria-hidden="true">
+                    <span class="m-tag">RESEARCH</span>
+                    <span class="m-icon">🧬</span>
+                    <span class="m-title">Biomedical ML Research Engineer</span>
+                    <span class="m-sub">— McMaster Dept. of Medicine · 4 months</span>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-proj" aria-hidden="true">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">📈</span>
+                    <a href="resume.html#projects"><span class="m-title">Mock Market</span>
+                        <span class="m-sub">— Full-Stack Trading Sim</span></a>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-proj" aria-hidden="true">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">👻</span>
+                    <a href="resume.html#projects"><span class="m-title">Ghost Shell</span>
+                        <span class="m-sub">— Stealth Reverse Shell</span></a>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-proj" aria-hidden="true">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">🎮</span>
+                    <a href="resume.html#projects"><span class="m-title">Networked Battle Game</span>
+                        <span class="m-sub">— C++ Multiplayer Engine</span></a>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+
+                <div class="marquee-item m-proj" aria-hidden="true">
+                    <span class="m-tag">PROJECT</span>
+                    <span class="m-icon">🧮</span>
+                    <a href="resume.html#projects"><span class="m-title">Matrix Visualizer</span>
+                        <span class="m-sub">— Linear Algebra Web App</span></a>
+                </div>
+                <span class="marquee-sep" aria-hidden="true">◆</span>
+            </div>
+        </div>
+    </aside>
 
     <script src="global_fx.js"></script>
 </body>
