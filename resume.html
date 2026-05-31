@@ -109,6 +109,66 @@
 </div>
 </nav>
 <main class="content">
+<header class="resume-hero">
+    <div class="hero-bg" aria-hidden="true">
+        <span class="hero-orb hero-orb-a"></span>
+        <span class="hero-orb hero-orb-b"></span>
+        <span class="hero-orb hero-orb-c"></span>
+    </div>
+    <div class="hero-grid">
+        <div class="hero-left">
+            <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · v2026.05</span>
+            <h1 class="hero-name">Alex <span class="accent">Gaffen</span></h1>
+            <div class="hero-typer">
+                <span class="prompt">$</span><span class="typed" id="heroTyper"></span>
+            </div>
+            <div class="hero-status">
+                <span class="chip"><i class="fas fa-location-dot"></i> Hamilton, ON</span>
+                <span class="chip"><i class="fas fa-graduation-cap"></i> 4th-year Honours CS @ McMaster</span>
+                <span class="chip live">Open to AI &amp; Cybersecurity roles</span>
+            </div>
+            <div class="hero-actions">
+                <a class="primary" href="mailto:alexgaffen@gmail.com"><i class="fas fa-paper-plane"></i> Hire / Collaborate</a>
+                <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                <a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fas fa-shield-halved"></i> TryHackMe</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <i class="fas fa-code stat-icon"></i>
+                <div class="stat-label">Coding Since</div>
+                <div class="stat-value">2018</div>
+                <div class="stat-sub">~7 years building software</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-briefcase stat-icon"></i>
+                <div class="stat-label">Industry · Research</div>
+                <div class="stat-value">12mo<span class="stat-plus">+</span></div>
+                <div class="stat-sub">Co-op &amp; RA experience</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-rocket stat-icon"></i>
+                <div class="stat-label">Shipped Projects</div>
+                <div class="stat-value">10<span class="stat-plus">+</span></div>
+                <div class="stat-sub">Full-stack · AI · Systems</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-microchip stat-icon"></i>
+                <div class="stat-label">Stack Highlights</div>
+                <div class="stat-value">C++ · Py · React</div>
+                <div class="stat-sub">+ Docker, PyTorch, Flask</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-quicknav" aria-label="Section quick nav">
+        <a href="#workexperience"><i class="fas fa-briefcase"></i> Experience</a>
+        <a href="#projects"><i class="fas fa-rocket"></i> Projects</a>
+        <a href="#skills"><i class="fas fa-microchip"></i> Skills</a>
+        <a href="#certifications"><i class="fas fa-certificate"></i> Certs</a>
+        <a href="#competitions-awards"><i class="fas fa-trophy"></i> Awards</a>
+    </div>
+</header>
 <section class="hidden section-burgundy" id="education">
 <h2>EDUCATION</h2>
 <div class="job-item">
@@ -1535,6 +1595,59 @@
             hackerElements.forEach(el => hackerObserver.observe(el));
         })();
     </script>
+<script>
+// ===== Resume hero: rotating typewriter tagline + auto section count badges =====
+(function() {
+    var phrases = [
+        "whoami → Software Developer · AI & Cybersecurity Researcher",
+        "ls ~/passions → C/C++, Python, Linux, neural nets, exploits",
+        "cat status.txt → seeking AI Research & Cybersecurity roles",
+        "echo \"Let's build something that actually matters.\""
+    ];
+    var el = document.getElementById('heroTyper');
+    if (el) {
+        var p = 0, c = 0, deleting = false;
+        function tick() {
+            var full = phrases[p];
+            if (!deleting) {
+                c++;
+                el.textContent = full.slice(0, c);
+                if (c >= full.length) { deleting = true; setTimeout(tick, 2200); return; }
+            } else {
+                c--;
+                el.textContent = full.slice(0, c);
+                if (c <= 0) { deleting = false; p = (p + 1) % phrases.length; }
+            }
+            setTimeout(tick, deleting ? 22 : 42);
+        }
+        tick();
+    }
+
+    // Auto count badge for each resume section
+    var nounMap = {
+        education: 'PROGRAM',
+        workexperience: 'ROLES',
+        projects: 'PROJECTS',
+        'competitions-awards': 'AWARDS',
+        skills: 'TRACKS',
+        certifications: 'CERTS',
+        'hobbies-interests': 'PURSUITS'
+    };
+    document.querySelectorAll('main.content > section').forEach(function(sec) {
+        var h2 = sec.querySelector('h2');
+        if (!h2) return;
+        var count = sec.querySelectorAll('.job-item').length;
+        if (!count) count = sec.querySelectorAll('.skill-category').length;
+        if (!count) return;
+        var badge = document.createElement('span');
+        badge.className = 'section-count';
+        var noun = nounMap[sec.id] || 'ITEMS';
+        if (count === 1 && noun.endsWith('S')) noun = noun.slice(0, -1);
+        badge.textContent = count + ' ' + noun;
+        h2.appendChild(badge);
+    });
+})();
+</script>
 <script src="global_fx.js"></script>
 </body>
 </html>
