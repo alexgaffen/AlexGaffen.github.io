@@ -3199,6 +3199,32 @@ body.crt-temp-on {
 /* RESUME REDESIGN - DUAL COLUMN TIMELINE WITH LIGHT SWEEP   */
 /* ========================================================= */
 
+/* Numbered section headers */
+.content { counter-reset: resume-section; }
+body.resume-page main.content section > h2::before {
+    counter-increment: resume-section;
+    content: counter(resume-section, decimal-leading-zero);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 0.75em;
+    color: var(--green-color);
+    background: rgba(34, 211, 238, 0.08);
+    border: 1px solid rgba(34, 211, 238, 0.35);
+    border-radius: 6px;
+    padding: 0.25em 0.55em;
+    margin-right: 0.7em;
+    letter-spacing: 0.1em;
+    text-shadow: none;
+    line-height: 1;
+    box-shadow: 0 0 16px -4px rgba(34, 211, 238, 0.4);
+}
+.section-burgundy h2::before { color: var(--burgundy) !important; background: rgba(182, 106, 121, 0.08) !important; border-color: rgba(182, 106, 121, 0.4) !important; box-shadow: 0 0 16px -4px rgba(182, 106, 121, 0.4) !important; }
+.section-teal     h2::before { color: var(--teal) !important;     background: rgba(20, 184, 166, 0.08) !important; border-color: rgba(20, 184, 166, 0.4) !important; box-shadow: 0 0 16px -4px rgba(20, 184, 166, 0.4) !important; }
+.section-orange   h2::before { color: var(--orange) !important;   background: rgba(249, 115, 22, 0.08) !important; border-color: rgba(249, 115, 22, 0.4) !important; box-shadow: 0 0 16px -4px rgba(249, 115, 22, 0.4) !important; }
+.section-gold     h2::before { color: var(--gold) !important;     background: rgba(234, 179, 8, 0.08) !important;  border-color: rgba(234, 179, 8, 0.4) !important;  box-shadow: 0 0 16px -4px rgba(234, 179, 8, 0.4) !important; }
+.section-purple   h2::before { color: var(--purple) !important;   background: rgba(168, 85, 247, 0.08) !important; border-color: rgba(168, 85, 247, 0.4) !important; box-shadow: 0 0 16px -4px rgba(168, 85, 247, 0.4) !important; }
+.section-coral    h2::before { color: var(--coral) !important;    background: rgba(251, 113, 133, 0.08) !important; border-color: rgba(251, 113, 133, 0.4) !important; box-shadow: 0 0 16px -4px rgba(251, 113, 133, 0.4) !important; }
+
 /* Each section becomes a timeline container */
 section {
     display: flex !important;
@@ -3329,19 +3355,20 @@ section::before {
 .tl-card {
     grid-column: 3;
     grid-row: 1 / 5;
-    background: var(--bg-card);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(180deg, #131c33 0%, #0b1220 100%);
+    border: 1px solid rgba(148, 163, 184, 0.12);
     border-left: 3px solid var(--green-color);
-    border-radius: 12px;
-    padding: 22px 25px;
-    margin-bottom: 35px;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 24px -14px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
     /* Slide-in from right */
     opacity: 0;
     transform: translateX(60px);
-    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s, border-color 0.3s;
 }
 
 .job-item.in-view .tl-card {
@@ -3350,17 +3377,33 @@ section::before {
 }
 
 .tl-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--glass-border);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px -16px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Subtle corner accent on each card */
+.tl-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 90px; height: 90px;
+    background: radial-gradient(circle at top right, rgba(34, 211, 238, 0.10), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* Card title (duplicated from h3) */
 .tl-card-title {
     font-family: var(--font-head);
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
     color: var(--text-dark);
+    letter-spacing: 0.01em;
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.14);
+    position: relative;
+    z-index: 1;
 }
 
 /* Light sweep on the card */
@@ -3503,13 +3546,7 @@ section::before {
     50% { opacity: 0.6; }
 }
 
-/* Radar chart container */
-#radarChart {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    padding: 20px;
-}
+/* Radar chart removed */
 
 /* Mobile responsive */
 @media (max-width: 900px) {
