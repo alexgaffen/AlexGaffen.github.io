@@ -33,15 +33,21 @@
             width: 90%;
             min-height: 100vh;
             margin: 0 auto;
-            padding: 40px 20px;
-            line-height: 1.6;
+            padding: 70px 20px 90px;
+            line-height: 1.55;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             align-items: center;
             overflow-x: hidden;
-            font-size: clamp(14px, 1.2vw, 24px);
+            font-size: clamp(13px, 1.05vw, 20px);
             box-sizing: border-box;
+        }
+
+        /* Desktop: keep the landing card + marquee fully visible without scrolling */
+        @media (min-width: 801px) and (min-height: 620px) {
+            html, body { height: 100vh; }
+            body { overflow: hidden; }
         }
 
         /* 
@@ -58,9 +64,9 @@
 
         .headshot-box {
             float: left;
-            margin-right: 1.5em;
-            margin-bottom: 0.5em;
-            width: clamp(140px, 18vw, 240px);
+            margin-right: 1.25em;
+            margin-bottom: 0.4em;
+            width: clamp(120px, 14vw, 200px);
             aspect-ratio: 3 / 4;
             border-radius: 14px;
             overflow: hidden;
@@ -120,12 +126,12 @@
 
 
         p {
-            font-size: 1.05em;
-            margin-bottom: 2em;
+            font-size: 1em;
+            margin-bottom: 0.9em;
         }
 
         p.bio-intro, p.bio-personal {
-            margin-bottom: 1.2em;
+            margin-bottom: 0.7em;
         }
 
         a {
@@ -223,8 +229,8 @@
                         linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box;
             background-size: auto, 300% 300%;
             animation: dropAboutBox 2.2s forwards cubic-bezier(0.25, 1, 0.5, 1), glisten 6s ease-in-out infinite;
-            padding: 2.5em;
-            margin-bottom: 1.5em; /* Reduced so Let's Connect isn't too far */
+            padding: 1.5em 1.75em;
+            margin-bottom: 0.6em;
             box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
             z-index: 1;
         }
@@ -245,7 +251,7 @@
            HIGHLIGHT MARQUEE BAR — bottom-fixed advertisement-style strip
            ============================================================ */
         body {
-            padding-bottom: 130px; /* room for the marquee */
+            padding-bottom: 78px; /* room for the marquee */
         }
 
         .highlight-marquee {
@@ -272,24 +278,6 @@
             -webkit-backdrop-filter: blur(8px);
         }
 
-        /* Animated gradient sheen sliding across the bar */
-        .highlight-marquee::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(110deg,
-                transparent 0%,
-                transparent 35%,
-                rgba(168, 85, 247, 0.18) 45%,
-                rgba(59, 130, 246, 0.18) 55%,
-                transparent 65%,
-                transparent 100%);
-            background-size: 250% 100%;
-            animation: marqueeSheen 6s linear infinite;
-            pointer-events: none;
-            mix-blend-mode: screen;
-        }
-
         /* Thin neon top accent line */
         .highlight-marquee::after {
             content: "";
@@ -309,45 +297,9 @@
             filter: blur(0.5px);
         }
 
-        @keyframes marqueeSheen {
-            0%   { background-position: 200% 0; }
-            100% { background-position: -100% 0; }
-        }
-
         @keyframes marqueeLine {
             0%   { background-position: 0% 0; }
             100% { background-position: 200% 0; }
-        }
-
-        .marquee-label {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            z-index: 3;
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-            padding: 0.45em 1.1em 0.45em 1em;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.55rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: #fcefd4;
-            background: linear-gradient(90deg, rgba(168,85,247,0.95), rgba(59,130,246,0.85) 60%, rgba(59,130,246,0));
-            border-right: 1px solid rgba(168, 85, 247, 0.55);
-            text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
-            white-space: nowrap;
-        }
-        .marquee-label .pulse-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: #22d3ee;
-            box-shadow: 0 0 8px #22d3ee, 0 0 16px #22d3ee;
-            animation: pulseDot 1.4s ease-in-out infinite;
-        }
-        @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.7); }
         }
 
         .marquee-viewport {
@@ -371,10 +323,6 @@
             gap: 0;
             animation: marqueeScroll 45s linear infinite;
             will-change: transform;
-        }
-
-        .highlight-marquee:hover .marquee-track {
-            animation-play-state: paused;
         }
 
         @keyframes marqueeScroll {
@@ -458,13 +406,11 @@
 
         @media (prefers-reduced-motion: reduce) {
             .marquee-track { animation: none; }
-            .highlight-marquee::before,
             .highlight-marquee::after { animation: none; }
         }
 
         @media (max-width: 800px) {
-            body { padding-bottom: 110px; }
-            .marquee-label { display: none; }
+            body { padding-bottom: 74px; }
             .marquee-viewport { mask-image: linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%); }
             .marquee-item { font-size: 0.8rem; padding: 0.45em 0.85em; }
             .marquee-track { animation-duration: 35s; }
@@ -500,10 +446,10 @@
                         <img src="assets/frontheadshot.jpg" alt="Alex Gaffen">
                     </div>
                     <div>
-                        <span style="font-size: 2.2rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-top:-0.15em; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
-                        <span style="display: block; font-size: 0.95em; margin-bottom: 1.5em; opacity: 0.8; font-style: italic;">
+                        <span style="font-size: 1.85rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-top:-0.15em; margin-bottom: 0.2em; line-height: 1.15;">Alex Gaffen</span>
+                        <span style="display: block; font-size: 0.9em; margin-bottom: 0.9em; opacity: 0.8; font-style: italic;">
                             Software Developer & Researcher <br> 
-                            <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
+                            <span style="margin-top:0.3em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
                         </span>
                     </div>
                     <p class="bio-intro">
@@ -615,9 +561,6 @@
          HIGHLIGHT MARQUEE — scrolling highlights bar
          ==================================================== -->
     <aside class="highlight-marquee" aria-label="Career highlights">
-        <div class="marquee-label" aria-hidden="true">
-            <span class="pulse-dot"></span>HIGHLIGHTS
-        </div>
         <div class="marquee-viewport">
             <div class="marquee-track" id="marqueeTrack">
                 <!-- Group A -->
@@ -669,14 +612,6 @@
                 </div>
                 <span class="marquee-sep">◆</span>
 
-                <div class="marquee-item m-proj">
-                    <span class="m-tag">PROJECT</span>
-                    <span class="m-icon">🧮</span>
-                    <a href="resume.html#projects"><span class="m-title">Matrix Visualizer</span>
-                        <span class="m-sub">— Linear Algebra Web App</span></a>
-                </div>
-                <span class="marquee-sep">◆</span>
-
                 <!-- Group B (duplicate for seamless loop) -->
                 <div class="marquee-item m-edu" aria-hidden="true">
                     <span class="m-tag">EDU</span>
@@ -723,14 +658,6 @@
                     <span class="m-icon">🎮</span>
                     <a href="resume.html#projects"><span class="m-title">Networked Battle Game</span>
                         <span class="m-sub">— C++ Multiplayer Engine</span></a>
-                </div>
-                <span class="marquee-sep" aria-hidden="true">◆</span>
-
-                <div class="marquee-item m-proj" aria-hidden="true">
-                    <span class="m-tag">PROJECT</span>
-                    <span class="m-icon">🧮</span>
-                    <a href="resume.html#projects"><span class="m-title">Matrix Visualizer</span>
-                        <span class="m-sub">— Linear Algebra Web App</span></a>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
             </div>

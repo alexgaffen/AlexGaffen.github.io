@@ -63,16 +63,19 @@
         }
 
         .filter-nav {
-            display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;
+            display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
         }
         .filter-btn {
-            color: var(--text-color); background: transparent;
-            border: 1px solid var(--text-color); padding: 6px 12px;
+            color: var(--text-color); background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.18); padding: 6px 14px;
             font-family: 'Space Mono', monospace; cursor: pointer;
-            transition: all 0.2s; border-radius: 4px; font-size: 0.9em;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+            border-radius: 999px; font-size: 0.85em; letter-spacing: 0.02em;
         }
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--text-color); color: var(--bg-color);
+        .filter-btn:hover { transform: translateY(-1px); border-color: #a855f7; color: #fff; }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #a855f7, #3b82f6); color: #fff;
+            border-color: transparent; box-shadow: 0 4px 14px rgba(168,85,247,0.35);
         }
 
         .content-area { opacity: 1; position: relative; z-index: 1; }
@@ -90,25 +93,32 @@
         @media (max-width: 500px) { .photo-grid { column-count: 1; } }
 
         .photo-card {
-            break-inside: avoid; margin-bottom: 20px; border: none;
+            break-inside: avoid; margin-bottom: 22px; border: none;
             background: transparent; padding: 0;
             display: block; cursor: pointer;
+            transition: transform 0.25s ease;
+        }
+        .photo-card:hover { transform: translateY(-3px); }
+        .photo-card:hover .photo-image {
+            box-shadow: 0 12px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(168,85,247,0.35);
         }
         .photo-card.tag-hidden { display: none; }
         .photo-image {
-            width: 100%; display: block; border-radius: 8px;
+            width: 100%; display: block; border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            transition: box-shadow 0.25s ease;
         }
         .photo-info {
-            padding: 10px 5px;
+            padding: 10px 4px 4px;
             color: var(--text-color);
         }
         .photo-title {
             font-family: 'Space Mono', monospace; font-weight: 700;
-            font-size: 1.1em; margin-bottom: 2px;
+            font-size: 1em; margin-bottom: 2px; letter-spacing: 0.01em;
         }
         .photo-meta {
-            font-family: 'Space Mono', monospace; font-size: 0.8em;
-            opacity: 0.9;
+            font-family: 'Space Mono', monospace; font-size: 0.78em;
+            opacity: 0.7;
         }
         .placeholder-image {
             width: 100%; aspect-ratio: 4/3; background: #1a1a1a;
