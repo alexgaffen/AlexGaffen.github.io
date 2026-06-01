@@ -3777,13 +3777,16 @@ body.resume-page::before {
     font-family: 'Space Mono', monospace;
     font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
     color: #94a3b8; margin-bottom: 6px;
+    padding-right: 40px;
 }
 .stat-card .stat-value {
     font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 1.8rem; color: #f1f5f9; line-height: 1;
+    font-size: 1.7rem; color: #f1f5f9; line-height: 1.05;
+    padding-right: 40px;
+    overflow-wrap: anywhere;
 }
 .stat-card .stat-value .stat-plus { color: #22d3ee; margin-left: 1px; }
-.stat-card .stat-sub { font-size: 0.78rem; color: #94a3b8; margin-top: 6px; }
+.stat-card .stat-sub { font-size: 0.78rem; color: #94a3b8; margin-top: 6px; padding-right: 40px; }
 .stat-card .stat-icon {
     position: absolute; top: 16px; right: 16px;
     color: rgba(34, 211, 238, 0.4);
@@ -3928,61 +3931,96 @@ body.resume-page::before {
     display: flex !important; flex-wrap: wrap !important; gap: 8px !important;
 }
 
-/* ============== WEB CV: full-width (sidebar removed) + floating theme dock ============== */
+/* ============== WEB CV: full-width (sidebar removed) ============== */
 .resume-page .content {
-    margin-left: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     width: 100% !important;
     max-width: 1180px;
-    margin-right: auto;
-    margin-left: auto !important;
-    padding: 2.5rem 3rem 4rem;
-}
-@media (min-width: 901px) {
-    .resume-page .content { margin-left: auto !important; }
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 4rem;
 }
 @media (max-width: 700px) {
-    .resume-page .content { padding: 1.5rem 1.1rem 3rem; }
+    .resume-page .content {
+        padding-left: 1.1rem;
+        padding-right: 1.1rem;
+        padding-bottom: 3rem;
+    }
 }
 
-/* Floating 6-theme star switcher, top-right */
-.cv-theme-dock {
-    position: fixed;
-    top: 60px;
-    right: 18px;
-    z-index: 950;
-    width: 104px;
-    height: 104px;
-    display: flex;
+/* Restored top social bar — full width under the site shell */
+.resume-page .top-social-bar {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+}
+
+/* ============== Modern dark/light theme switch (top-right) ============== */
+.theme-switch {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0 2px;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    line-height: 0;
+}
+.theme-switch .theme-switch-track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 58px;
+    height: 28px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1e1b4b, #2e1065);
+    border: 1px solid rgba(192, 132, 252, 0.5);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45), 0 0 14px -4px rgba(168, 85, 247, 0.6);
+    transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.theme-switch .ts-icon {
+    font-size: 0.74rem;
+    z-index: 1;
+    transition: color 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+}
+.theme-switch .ts-moon { color: #c4b5fd; }
+.theme-switch .ts-sun { color: #fbbf24; opacity: 0.45; }
+.theme-switch .theme-switch-thumb {
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: radial-gradient(circle at 50% 40%, rgba(15, 23, 42, 0.92), rgba(7, 11, 22, 0.82));
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    box-shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-50%);
+    background: radial-gradient(circle at 35% 30%, #f5f3ff, #c084fc);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 10px -1px rgba(192, 132, 252, 0.9);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease;
 }
-.cv-theme-dock:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 48px -16px rgba(34, 211, 238, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+.theme-switch:hover .theme-switch-track {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45), 0 0 18px -3px rgba(168, 85, 247, 0.85);
 }
-.cv-theme-dock .star-toggle {
-    width: 96px;
-    height: 96px;
+.theme-switch:focus-visible { outline: none; }
+.theme-switch:focus-visible .theme-switch-track {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.35);
 }
-@media (min-width: 901px) {
-    /* Keep hero content clear of the floating theme dock */
-    .resume-page .resume-hero { padding-top: 60px; }
-    .resume-page .resume-hero .hero-grid { padding-right: 96px; }
+/* Light mode appearance */
+.theme-switch[data-mode="light"] .theme-switch-track {
+    background: linear-gradient(135deg, #e0f2fe, #fef9c3);
+    border-color: rgba(251, 191, 36, 0.7);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 14px -4px rgba(251, 191, 36, 0.7);
 }
-@media (max-width: 900px) {
-    .cv-theme-dock {
-        top: auto;
-        bottom: 18px;
-        right: 14px;
-        width: 100px;
-        height: 100px;
-    }
-    .cv-theme-dock .star-toggle { width: 82px; height: 82px; }
+.theme-switch[data-mode="light"] .theme-switch-thumb {
+    transform: translateY(-50%) translateX(30px);
+    background: radial-gradient(circle at 35% 30%, #fffbeb, #fbbf24);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 10px -1px rgba(251, 191, 36, 0.9);
 }
+.theme-switch[data-mode="light"] .ts-moon { color: #94a3b8; opacity: 0.45; }
+.theme-switch[data-mode="light"] .ts-sun { color: #f59e0b; opacity: 1; }
+

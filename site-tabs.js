@@ -1,33 +1,9 @@
 // site-tabs.js
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
-    const audioBtn = document.getElementById("site-audio-btn");
     const themeBtn = document.getElementById("site-theme-btn");
-    const storedAudioPreference = localStorage.getItem("site-audio");
 
-    if (storedAudioPreference === null) {
-        localStorage.setItem("site-audio", "false");
-    }
-
-    let siteAudioEnabled = storedAudioPreference === "true";
     let isDarkMode = localStorage.getItem("site-dark-mode") === "true";
-    let globalAudioCtx = null;
-    let ambientLayer = null;
-    const ambientProfiles = {
-        home: { frequencies: [196, 293.66, 440], types: ["sine", "triangle", "sine"], gain: 0.016, lfoRate: 0.08, lfoDepth: 0.003, filter: 920 },
-        resume: { frequencies: [220, 329.63, 493.88], types: ["triangle", "sine", "sine"], gain: 0.014, lfoRate: 0.06, lfoDepth: 0.0025, filter: 860 },
-        photos: { frequencies: [174.61, 261.63, 392], types: ["sine", "sine", "triangle"], gain: 0.015, lfoRate: 0.05, lfoDepth: 0.0022, filter: 720 },
-        blog: { frequencies: [155.56, 233.08, 349.23], types: ["triangle", "triangle", "sine"], gain: 0.013, lfoRate: 0.09, lfoDepth: 0.0028, filter: 780 },
-        default: { frequencies: [196, 261.63, 392], types: ["sine", "triangle", "sine"], gain: 0.014, lfoRate: 0.07, lfoDepth: 0.0025, filter: 800 }
-    };
-
-    function getPageKey() {
-        if (body.classList.contains("index-page")) return "home";
-        if (body.classList.contains("resume-page")) return "resume";
-        if (body.classList.contains("photo-page")) return "photos";
-        if (body.classList.contains("blog-page")) return "blog";
-        return "default";
-    }
 
     function applyTheme() {
         if (isDarkMode) {
@@ -39,141 +15,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function setAudioState(nextState, playClickSound) {
-        siteAudioEnabled = nextState;
-        localStorage.setItem("site-audio", String(siteAudioEnabled));
-        window.siteAudioEnabled = siteAudioEnabled;
-        if (audioBtn) audioBtn.innerText = siteAudioEnabled ? "🔊" : "🔇";
-        if (playClickSound && siteAudioEnabled) playGlobalSound("click");
-        if (siteAudioEnabled) startAmbientLayer();
-        else stopAmbientLayer();
-    }
-
     function setThemeState(nextState) {
         isDarkMode = nextState;
         localStorage.setItem("site-dark-mode", String(isDarkMode));
         applyTheme();
-        if (siteAudioEnabled) playGlobalSound("click");
-    }
-
-    function toggleAudio() {
-        setAudioState(!siteAudioEnabled, true);
     }
 
     function toggleTheme() {
         setThemeState(!isDarkMode);
     }
 
-    function playGlobalSound(type) {
-        if (!window.siteAudioEnabled) return;
-
-        try {
-            if (!globalAudioCtx) globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (globalAudioCtx.state === "suspended") globalAudioCtx.resume();
-
-            const osc = globalAudioCtx.createOscillator();
-            const gain = globalAudioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(globalAudioCtx.destination);
-
-            if (type === "hover") {
-                osc.type = "square";
-                osc.frequency.setValueAtTime(300, globalAudioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, globalAudioCtx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.015, globalAudioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, globalAudioCtx.currentTime + 0.05);
-                osc.start();
-                osc.stop(globalAudioCtx.currentTime + 0.05);
-            } else if (type === "click") {
-                osc.type = "sawtooth";
-                osc.frequency.setValueAtTime(150, globalAudioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(80, globalAudioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.03, globalAudioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, globalAudioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(globalAudioCtx.currentTime + 0.1);
-            }
-        } catch (e) {}
-    }
-
-    function stopAmbientLayer() {
-        if (!ambientLayer || !globalAudioCtx) return;
-
-        try {
-            const now = globalAudioCtx.currentTime;
-            ambientLayer.master.gain.cancelScheduledValues(now);
-            ambientLayer.master.gain.setValueAtTime(ambientLayer.master.gain.value, now);
-            ambientLayer.master.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-
-            ambientLayer.oscillators.forEach((oscillator) => oscillator.stop(now + 0.24));
-            ambientLayer.lfo.stop(now + 0.24);
-
-            window.setTimeout(() => {
-                try {
-                    ambientLayer.oscillators.forEach((oscillator) => oscillator.disconnect());
-                    ambientLayer.oscillatorGains.forEach((gainNode) => gainNode.disconnect());
-                    ambientLayer.lfo.disconnect();
-                    ambientLayer.lfoGain.disconnect();
-                    ambientLayer.filter.disconnect();
-                    ambientLayer.master.disconnect();
-                } catch (e) {}
-            }, 320);
-        } catch (e) {}
-
-        ambientLayer = null;
-    }
-
-    function startAmbientLayer() {
-        if (!siteAudioEnabled || document.hidden) return;
-
-        try {
-            if (!globalAudioCtx) globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (globalAudioCtx.state === "suspended") globalAudioCtx.resume();
-            if (ambientLayer) stopAmbientLayer();
-
-            const profile = ambientProfiles[getPageKey()] || ambientProfiles.default;
-            const now = globalAudioCtx.currentTime;
-            const master = globalAudioCtx.createGain();
-            master.gain.setValueAtTime(0.0001, now);
-            master.gain.exponentialRampToValueAtTime(profile.gain, now + 0.6);
-
-            const filter = globalAudioCtx.createBiquadFilter();
-            filter.type = "lowpass";
-            filter.frequency.setValueAtTime(profile.filter, now);
-            filter.Q.setValueAtTime(0.8, now);
-
-            filter.connect(master);
-            master.connect(globalAudioCtx.destination);
-
-            const oscillatorGains = [];
-            const oscillators = profile.frequencies.map((frequency, index) => {
-                const oscillator = globalAudioCtx.createOscillator();
-                const gainNode = globalAudioCtx.createGain();
-                oscillator.type = profile.types[index] || "sine";
-                oscillator.frequency.setValueAtTime(frequency, now);
-                oscillator.detune.setValueAtTime(index * 4, now);
-                gainNode.gain.setValueAtTime(0.002 + index * 0.0013, now);
-                oscillator.connect(gainNode);
-                gainNode.connect(filter);
-                oscillator.start(now);
-                oscillatorGains.push(gainNode);
-                return oscillator;
-            });
-
-            const lfo = globalAudioCtx.createOscillator();
-            const lfoGain = globalAudioCtx.createGain();
-            lfo.type = "sine";
-            lfo.frequency.setValueAtTime(profile.lfoRate, now);
-            lfoGain.gain.setValueAtTime(profile.lfoDepth, now);
-            lfo.connect(lfoGain);
-            lfoGain.connect(master.gain);
-            lfo.start(now);
-
-            ambientLayer = { master, filter, oscillators, oscillatorGains, lfo, lfoGain };
-        } catch (e) {}
-    }
-
     function initWorldCanvas() {
+        if (body.classList.contains("resume-page")) return;
         if (document.getElementById("site-world-canvas")) return;
 
         const canvas = document.createElement("canvas");
@@ -343,30 +196,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     applyTheme();
-    window.siteAudioEnabled = siteAudioEnabled;
-    window.toggleSiteAudio = toggleAudio;
     window.toggleSiteTheme = toggleTheme;
-
-    if (audioBtn) {
-        audioBtn.innerText = siteAudioEnabled ? "🔊" : "🔇";
-        audioBtn.addEventListener("click", toggleAudio);
-    }
 
     if (themeBtn) {
         themeBtn.addEventListener("click", toggleTheme);
     }
 
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) stopAmbientLayer();
-        else if (siteAudioEnabled) startAmbientLayer();
-    });
-
-    document.querySelectorAll(".site-tab, .site-tabs-btn").forEach((el) => {
-        el.addEventListener("mouseenter", () => playGlobalSound("hover"));
-    });
-
     initWorldCanvas();
-    if (siteAudioEnabled) startAmbientLayer();
 });
 
 // Immediately apply theme before DOMContentLoaded to prevent FOUC

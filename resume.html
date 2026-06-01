@@ -32,8 +32,13 @@
         -->
     </div>
     <div class="site-tabs-controls">
-        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
-        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+        <button id="cv-theme-toggle" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
+            <span class="theme-switch-track">
+                <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
+                <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
+                <span class="theme-switch-thumb"></span>
+            </span>
+        </button>
     </div>
 </nav>
 
@@ -41,30 +46,21 @@
 <canvas id="themeFxCanvas"></canvas>
 </div>
 <div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
-<!-- Floating 6-theme switcher (top-right) -->
+
+<div class="top-social-bar">
+    <div class="top-bar-identity">
+        <span class="top-bar-name">Alex Gaffen</span>
+        <span class="top-bar-title">Software Developer</span>
+    </div>
+    <div class="top-bar-links">
+        <a class="top-social-link social-linkedin" href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
+        <a class="top-social-link social-github" href="https://github.com/alexgaffen" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i><span>GitHub</span></a>
+        <a class="top-social-link social-email" href="mailto:alexgaffen@gmail.com" title="Email"><i class="fas fa-envelope"></i><span>Email</span></a>
+        <a class="top-social-link social-thm" href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener" title="TryHackMe"><i class="fas fa-shield-halved"></i><span>TryHackMe</span></a>
+    </div>
+</div>
+
 <div class="container">
-<div class="cv-theme-dock" aria-label="Theme switcher">
-<div class="star-toggle" id="starToggle">
-<svg class="star-lines" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-<!-- Spokes from center to each point -->
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="50" y2="12"></line>
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="83" y1="50" y2="31"></line>
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="83" y1="50" y2="69"></line>
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="50" y1="50" y2="88"></line>
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="17" y1="50" y2="69"></line>
-<line opacity="0.25" stroke="currentColor" stroke-width="1.5" x1="50" x2="17" y1="50" y2="31"></line>
-<!-- Outline connecting adjacent points (hexagon perimeter) -->
-<polygon fill="none" opacity="0.15" points="50,12 83,31 83,69 50,88 17,69 17,31" stroke="currentColor" stroke-width="1"></polygon>
-</svg>
-<div class="star-indicator"></div>
-<button class="star-slot" data-slot="0" data-theme="light" title="Light Mode (1)"><i class="fas fa-sun"></i></button>
-<button class="star-slot" data-slot="1" data-theme="ocean" title="Ocean (2)"><i class="fas fa-water"></i></button>
-<button class="star-slot" data-slot="2" data-theme="ember" title="Ember (3)"><i class="fas fa-fire"></i></button>
-<button class="star-slot" data-slot="3" data-theme="dark" title="Dark Mode (4)"><i class="fas fa-moon"></i></button>
-<button class="star-slot" data-slot="4" data-theme="forest" title="Forest (5)"><i class="fas fa-leaf"></i></button>
-<button class="star-slot" data-slot="5" data-theme="aurora" title="Aurora (6)"><i class="fas fa-star"></i></button>
-</div>
-</div>
 <main class="content">
 <header class="resume-hero">
     <div class="hero-bg" aria-hidden="true">
@@ -686,58 +682,41 @@
             setTrajectoryNode(document.querySelector('.trajectory-node.is-active') || trajectoryNodes[0]);
         }
 
-        // Star theme toggle
+        // Modern dark/light theme toggle (dark = aurora, light = light)
         const htmlEl = document.documentElement;
-        const starSlots = document.querySelectorAll('.star-slot');
-        const starIndicator = document.querySelector('.star-indicator');
+        const cvThemeToggle = document.getElementById('cv-theme-toggle');
 
-        function moveIndicator(slot) {
-            const slotIndex = parseInt(slot.dataset.slot);
-            const angle = slotIndex * 60 - 90; // start from top, 60° apart
-            const rad = angle * Math.PI / 180;
-            const radius = 38;
-            const cx = 50 + radius * Math.cos(rad);
-            const cy = 50 + radius * Math.sin(rad);
-            starIndicator.style.left = cx + '%';
-            starIndicator.style.top = cy + '%';
+        function applyCvTheme(mode) {
+            if (mode === 'light') {
+                htmlEl.setAttribute('data-theme', 'light');
+            } else {
+                mode = 'dark';
+                htmlEl.setAttribute('data-theme', 'aurora');
+            }
+            if (cvThemeToggle) {
+                cvThemeToggle.setAttribute('aria-checked', mode === 'dark' ? 'true' : 'false');
+                cvThemeToggle.dataset.mode = mode;
+            }
+            localStorage.setItem('cv-theme', mode);
         }
 
-        // Default to dark mode
-        htmlEl.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'dark');
-        const defaultSlot = document.querySelector('.star-slot[data-theme="dark"]');
-        defaultSlot.classList.add('active');
-        moveIndicator(defaultSlot);
+        const storedCvTheme = localStorage.getItem('cv-theme') === 'light' ? 'light' : 'dark';
+        applyCvTheme(storedCvTheme);
 
-        starSlots.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const theme = btn.dataset.theme;
+        if (cvThemeToggle) {
+            cvThemeToggle.addEventListener('click', () => {
                 htmlEl.classList.add('theme-transitioning');
-                starSlots.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                moveIndicator(btn);
-                if (theme === 'dark') {
-                    htmlEl.removeAttribute('data-theme');
-                } else {
-                    htmlEl.setAttribute('data-theme', theme);
-                }
-                localStorage.setItem('theme', theme);
+                const next = cvThemeToggle.dataset.mode === 'dark' ? 'light' : 'dark';
+                applyCvTheme(next);
                 setTimeout(() => htmlEl.classList.remove('theme-transitioning'), 700);
             });
-        });
+        }
 
-        // Keyboard shortcuts: 1-6 switch themes, ArrowUp scrolls to top (desktop)
-        const themeKeys = ['light', 'ocean', 'ember', 'dark', 'forest', 'aurora'];
+        // Keyboard shortcuts: ArrowUp scrolls to top (desktop), Escape returns home
         document.addEventListener('keydown', (e) => {
             // Ignore when typing in an input/textarea
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-            const keyNum = parseInt(e.key);
-            if (keyNum >= 1 && keyNum <= 6) {
-                const themeName = themeKeys[keyNum - 1];
-                const slot = document.querySelector('.star-slot[data-theme="' + themeName + '"]');
-                if (slot) slot.click();
-            }
             if (e.key === 'ArrowUp' && window.innerWidth > 900) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
