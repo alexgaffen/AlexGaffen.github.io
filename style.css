@@ -3927,3 +3927,62 @@ body.resume-page::before {
 #skills .skill-items {
     display: flex !important; flex-wrap: wrap !important; gap: 8px !important;
 }
+
+/* ============== WEB CV: full-width (sidebar removed) + floating theme dock ============== */
+.resume-page .content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 1180px;
+    margin-right: auto;
+    margin-left: auto !important;
+    padding: 2.5rem 3rem 4rem;
+}
+@media (min-width: 901px) {
+    .resume-page .content { margin-left: auto !important; }
+}
+@media (max-width: 700px) {
+    .resume-page .content { padding: 1.5rem 1.1rem 3rem; }
+}
+
+/* Floating 6-theme star switcher, top-right */
+.cv-theme-dock {
+    position: fixed;
+    top: 60px;
+    right: 18px;
+    z-index: 950;
+    width: 104px;
+    height: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, rgba(15, 23, 42, 0.92), rgba(7, 11, 22, 0.82));
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    box-shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.cv-theme-dock:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 48px -16px rgba(34, 211, 238, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.cv-theme-dock .star-toggle {
+    width: 96px;
+    height: 96px;
+}
+@media (min-width: 901px) {
+    /* Keep hero content clear of the floating theme dock */
+    .resume-page .resume-hero { padding-top: 60px; }
+    .resume-page .resume-hero .hero-grid { padding-right: 96px; }
+}
+@media (max-width: 900px) {
+    .cv-theme-dock {
+        top: auto;
+        bottom: 18px;
+        right: 14px;
+        width: 100px;
+        height: 100px;
+    }
+    .cv-theme-dock .star-toggle { width: 82px; height: 82px; }
+}
