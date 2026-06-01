@@ -15,6 +15,18 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Alex Gaffen - Honours Computer Science student at McMaster University. Building highly optimized systems, artificial intelligence, and interactive web experiences.">
+    <meta name="keywords" content="Alex Gaffen, Gaffen, McMaster, Computer Science, Software Engineer, Resume, Projects, Developer Portfolio, AI, Systems, Hamilton">
+    <meta name="author" content="Alex Gaffen">
+    <meta property="og:title" content="Alex Gaffen — Software Engineer">
+    <meta property="og:description" content="Computer Science student at McMaster. Focusing on AI, low-level systems, and security exploits. Discover portfolio shipments, resume highlights, and active project builds.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alexgaffen.github.io/">
+    <meta property="og:image" content="https://alexgaffen.github.io/assets/frontheadshot.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alex Gaffen — Software Engineer">
+    <meta name="twitter:description" content="Honours Computer Science student at McMaster University. Active systems developer, machine learning researcher, and tech shipments director.">
+    <meta name="twitter:image" content="https://alexgaffen.github.io/assets/frontheadshot.jpg">
     <title>Alex Gaffen</title>
     <link href="assets/favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
@@ -516,6 +528,7 @@
             .marquee-track { animation-duration: 35s; }
         }
 </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
@@ -523,14 +536,20 @@
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
         <a href="index.html" class="site-tab is-active">🏠 HOME</a>
-        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="resume.html" class="site-tab ">📄 RESUME</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
         <!-- Blog tab temporarily hidden:
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
         -->
     </div>
     <div class="site-tabs-controls">
-        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+        <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
+            <span class="theme-switch-track">
+                <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
+                <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
+                <span class="theme-switch-thumb"></span>
+            </span>
+        </button>
     </div>
 </nav>
 
