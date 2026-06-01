@@ -1,17 +1,56 @@
 // site-tabs.js
+
+// Apply the saved (or default) theme synchronously before first paint to avoid
+// a light-mode flash. Defaults to dark mode when nothing is stored.
+(function applyInitialTheme() {
+    try {
+        if (localStorage.getItem("site-dark-mode") === null) {
+            localStorage.setItem("site-dark-mode", "true");
+        }
+        var dark = localStorage.getItem("site-dark-mode") !== "false";
+        var html = document.documentElement;
+        if (dark) {
+            html.classList.add("dark-mode");
+            html.removeAttribute("data-theme");
+        } else {
+            html.classList.remove("dark-mode");
+            html.setAttribute("data-theme", "light");
+        }
+    } catch (e) { /* ignore */ }
+})();
+
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     const themeBtn = document.getElementById("site-theme-btn");
 
-    let isDarkMode = localStorage.getItem("site-dark-mode") === "true";
+    let isDarkMode = localStorage.getItem("site-dark-mode") !== "false";
 
     function applyTheme() {
+        const html = document.documentElement;
         if (isDarkMode) {
-            document.documentElement.classList.add("dark-mode");
+            html.classList.add("dark-mode");
             body.classList.add("hacker-mode");
+            if (body.classList.contains("resume-page")) {
+                html.setAttribute("data-theme", "aurora");
+            } else {
+                html.removeAttribute("data-theme");
+            }
+            if (themeBtn) {
+                themeBtn.setAttribute("aria-checked", "true");
+                themeBtn.dataset.mode = "dark";
+            }
         } else {
-            document.documentElement.classList.remove("dark-mode");
+            html.classList.remove("dark-mode");
             body.classList.remove("hacker-mode");
+            if (body.classList.contains("resume-page")) {
+                html.setAttribute("data-theme", "light");
+            } else {
+                html.setAttribute("data-theme", "light");
+            }
+            if (themeBtn) {
+                themeBtn.setAttribute("aria-checked", "false");
+                themeBtn.dataset.mode = "light";
+            }
         }
     }
 
@@ -22,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function toggleTheme() {
+        const html = document.documentElement;
+        html.classList.add("theme-transitioning");
         setThemeState(!isDarkMode);
+        setTimeout(() => html.classList.remove("theme-transitioning"), 700);
     }
 
     function initWorldCanvas() {
@@ -207,22 +249,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Immediately apply theme before DOMContentLoaded to prevent FOUC
 (function() {
-    var isDark = localStorage.getItem("site-dark-mode") === "true";
+    var isDark = localStorage.getItem("site-dark-mode") !== "false";
     if (isDark) {
         document.documentElement.classList.add("dark-mode");
+        if (document.documentElement.classList.contains("resume-page") || window.location.pathname.indexOf("resume") !== -1) {
+            document.documentElement.setAttribute("data-theme", "aurora");
+        }
         // Apply hacker-mode to body as soon as it exists
         if (document.body) {
             document.body.classList.add("hacker-mode");
+            if (document.body.classList.contains("resume-page")) {
+                document.documentElement.setAttribute("data-theme", "aurora");
+            }
         } else {
             // Use MutationObserver to catch body creation
             var observer = new MutationObserver(function() {
                 if (document.body) {
                     document.body.classList.add("hacker-mode");
+                    if (document.body.classList.contains("resume-page")) {
+                        document.documentElement.setAttribute("data-theme", "aurora");
+                    }
                     observer.disconnect();
                 }
             });
             observer.observe(document.documentElement, { childList: true });
         }
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
     }
 })();
 

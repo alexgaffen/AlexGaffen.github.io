@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alex Gaffen</title>
+    <meta name="description" content="Alex Gaffen - Amateur DSLR and Mobile Photography. Explore high-quality street, landscape, and macro shots geolocated on an interactive map.">
+    <meta name="keywords" content="Alex Gaffen Photography, McMaster DSLR, Street Photography, Geolocated Map Photos, Travel DSLR, Hamilton Photography">
+    <meta property="og:title" content="Alex Gaffen — Photography">
+    <meta property="og:description" content="A visual diary of amateur landscape, structural, and macro photography captured via DSLR and Samsung geolocated on an interactive map.">
+    <meta property="og:image" content="https://alexgaffen.github.io/assets/frontheadshot.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alex Gaffen — Photography">
+    <meta name="twitter:description" content="Geolocated visual media, travel galleries, and street exploration images shot by Alex Gaffen.">
+    <title>Alex Gaffen — Photography</title>
     <link href="assets/favicon.png" rel="icon" type="image/png"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -76,6 +84,14 @@
         .filter-btn.active {
             background: linear-gradient(135deg, #a855f7, #3b82f6); color: #fff;
             border-color: transparent; box-shadow: 0 4px 14px rgba(168,85,247,0.35);
+        }
+        [data-theme="light"] .filter-btn {
+            color: #1e293b; background: rgba(0,0,0,0.03);
+            border-color: rgba(30,41,59,0.5);
+        }
+        [data-theme="light"] .filter-btn:hover { border-color: #7c3aed; color: #111; }
+        [data-theme="light"] .filter-btn.active {
+            color: #000000 !important; border-color: transparent;
         }
 
         .content-area { opacity: 1; position: relative; z-index: 1; }
@@ -611,6 +627,7 @@
             .modal.is-fullscreen .modal-split-layout { min-height: 100vh; height: 100vh; }
         }
     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
@@ -618,12 +635,18 @@
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
         <a href="index.html" class="site-tab ">🏠 HOME</a>
-        <a href="resume.html" class="site-tab ">📄 WEB CV</a>
+        <a href="resume.html" class="site-tab ">📄 RESUME</a>
         <a href="photography.html" class="site-tab is-active">📷 PHOTOS</a>
         <!-- Blog tab temporarily hidden: <a href="blog.html" class="site-tab ">✏️ BLOG</a> -->
     </div>
     <div class="site-tabs-controls">
-        <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
+        <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
+            <span class="theme-switch-track">
+                <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
+                <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
+                <span class="theme-switch-thumb"></span>
+            </span>
+        </button>
     </div>
 </nav>
 

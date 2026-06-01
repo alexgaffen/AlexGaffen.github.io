@@ -4,7 +4,15 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Alex Gaffen</title>
+<meta name="description" content="Alex Gaffen - Web CV & Resume. Honours Computer Science student at McMaster University. Highlighting technical expertise, work history in research & industry co-ops, and shipped engineering works.">
+<meta name="keywords" content="Alex Gaffen Resume, Alex Gaffen McMaster, CS Co-op, AI Developer, Exploit Researcher, Systems Engineering Resume">
+<meta property="og:title" content="Alex Gaffen — Technical Resume">
+<meta property="og:description" content="Explore Alex Gaffen's computer science resume, featuring 14+ months of industry co-op and research experience, technical stack highlights, and advanced academic shipments.">
+<meta property="og:image" content="https://alexgaffen.github.io/assets/frontheadshot.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Alex Gaffen — Technical Resume">
+<meta name="twitter:description" content="Explore highlights, publications, stack profiles, and active engineering co-ops of Alex Gaffen from McMaster University.">
+<title>Alex Gaffen — Resume</title>
 <!-- Google Analytics -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -25,14 +33,14 @@
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
         <a href="index.html" class="site-tab ">🏠 HOME</a>
-        <a href="resume.html" class="site-tab is-active">📄 WEB CV</a>
+        <a href="resume.html" class="site-tab is-active">📄 RESUME</a>
         <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
         <!-- Blog tab temporarily hidden:
         <a href="blog.html" class="site-tab ">✏️ BLOG</a>
         -->
     </div>
     <div class="site-tabs-controls">
-        <button id="cv-theme-toggle" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
+        <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
             <span class="theme-switch-track">
                 <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
                 <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
@@ -50,7 +58,6 @@
 <div class="top-social-bar">
     <div class="top-bar-identity">
         <span class="top-bar-name">Alex Gaffen</span>
-        <span class="top-bar-title">Software Developer</span>
     </div>
     <div class="top-bar-links">
         <a class="top-social-link social-linkedin" href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
@@ -127,7 +134,7 @@
 <span class="job-date">2022-Present</span>
 </div>
 <div class="job-sub">
-<img alt="McMaster University" class="edu-logo" src="assets/mcmaster.png"/>
+<img alt="McMaster University" class="edu-logo" loading="lazy" src="assets/mcmaster.png"/>
 <h4>McMaster University, Hamilton ON</h4>
 </div>
                     <div class="tl-card"><div class="tl-card-title">Honours Computer Science Co-op (B.A.Sc.)</div><div class="edu-stats">
@@ -806,11 +813,34 @@
         const mobileNavOverlay = document.getElementById('mobileNavOverlay');
         const sidebar = document.querySelector('.sidebar');
 
+        // Dynamically compute when to show the name in the top bar
+        const resumeHero = document.querySelector('.resume-hero');
+        const topBarIdentity = document.querySelector('.top-bar-identity');
+        let heroScrollThreshold = 300;
+
+        function updateHeroThreshold() {
+            if (resumeHero) {
+                const rect = resumeHero.getBoundingClientRect();
+                heroScrollThreshold = rect.bottom + window.scrollY - 60;
+            }
+        }
+        updateHeroThreshold();
+        window.addEventListener('resize', updateHeroThreshold);
+
         window.addEventListener('scroll', () => {
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
+
+            // Show name smoothly only when scrolled past the hero/highlight box
+            if (topBarIdentity) {
+                if (scrollTop > heroScrollThreshold) {
+                    topBarIdentity.classList.add('show-name');
+                } else {
+                    topBarIdentity.classList.remove('show-name');
+                }
+            }
 
             lastScrollY = scrollTop;
 
