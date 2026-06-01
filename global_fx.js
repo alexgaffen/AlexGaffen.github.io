@@ -13,55 +13,6 @@ console.log(`%c
 `, "color: #0f0; font-family: monospace; font-size: 14px; text-shadow: 0 0 5px #0f0;");
 
 
-
-const isSiteAudioEnabled = () => localStorage.getItem("site-audio") === "true";
-
-
-// CRT TV Hum Audio
-const playTvStatic = () => {
-    if (!isSiteAudioEnabled()) return;
-    try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if(audioCtx.state === 'suspended') audioCtx.resume();
-        const bufferSize = audioCtx.sampleRate * 0.5; // 0.5 seconds
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const output = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            output[i] = Math.random() * 2 - 1; // White noise
-        }
-        const whiteNoise = audioCtx.createBufferSource();
-        whiteNoise.buffer = buffer;
-        
-        // Lowpass filter for TV hum/thump
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 1000;
-        
-        // Volume envelope
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        
-        whiteNoise.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        
-        whiteNoise.start();
-    } catch(e) {}
-};
-
-// Listen for link clicks to trigger static
-document.addEventListener("click", (e) => {
-    const link = e.target.closest("a");
-    if (link && isSiteAudioEnabled() && !link.hasAttribute('target') && !link.href.includes('mailto:') && !link.href.includes('#')) {
-        playTvStatic();
-    }
-});
-// Play static on initial load transition
-if (isSiteAudioEnabled() && document.referrer.indexOf(window.location.host) !== -1) {
-    playTvStatic();
-}
-
 // Resume Scroll Observer + Progress Line
 document.addEventListener("DOMContentLoaded", function() {
     var observer = new IntersectionObserver(function(entries) {

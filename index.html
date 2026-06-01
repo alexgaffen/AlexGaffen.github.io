@@ -530,7 +530,6 @@
         -->
     </div>
     <div class="site-tabs-controls">
-        <button id="site-audio-btn" class="site-tabs-btn" title="Toggle Audio" aria-label="Toggle Audio">🔊</button>
         <button id="site-theme-btn" class="site-tabs-btn" title="Toggle Theme" aria-label="Toggle Theme">🌗</button>
     </div>
 </nav>
@@ -608,58 +607,6 @@
             glistenBox.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`; 
         });
     }
-
-    // 2. AUDIO SYNTH
-    if (localStorage.getItem('site-audio') === null) {
-        localStorage.setItem('site-audio', 'false');
-    }
-
-    let audioCtx = null;
-    function playSound(type) {
-        const audioEnabled = localStorage.getItem('site-audio') === 'true';
-        if (!audioEnabled) return;
-        try {
-            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            if (type === 'hover') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-            } else if (type === 'click') {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-            }
-        } catch(e) {}
-    }
-
-    const audioBtn = document.getElementById('audio-btn');
-    if (audioBtn) {
-        let audioEnabled = localStorage.getItem('site-audio') === 'true';
-        audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
-        audioBtn.addEventListener('click', () => {
-            audioEnabled = !audioEnabled;
-            localStorage.setItem('site-audio', String(audioEnabled));
-            if(audioEnabled) playSound('click');
-            audioBtn.innerText = audioEnabled ? '🔊 ON' : '🔇 MUTE';
-        });
-    }
-
-    // 3. HOVER & CLICK AUDIO
-    document.querySelectorAll('a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => playSound('hover'));
-        el.addEventListener('click', () => playSound('click'));
-    });
 </script>
 
 
