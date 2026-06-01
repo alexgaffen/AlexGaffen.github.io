@@ -4065,6 +4065,7 @@ body.resume-page::before {
     border-radius: 0;
     border-left: none;
     border-right: none;
+    padding-top: 20px;
     padding-left: clamp(1.4rem, 6vw, 7rem);
     padding-right: clamp(1.4rem, 6vw, 7rem);
 }
