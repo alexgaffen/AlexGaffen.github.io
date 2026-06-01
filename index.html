@@ -134,6 +134,100 @@
             margin-bottom: 1em;
         }
 
+        /* ===== Let's Connect CTA button ===== */
+        .bio-cta-wrap {
+            margin: 1.2em 0 0.2em;
+            text-align: left;
+        }
+        .connect-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7em;
+            padding: 0.85em 1.6em 0.85em 1.4em;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: none;
+            text-decoration: none;
+            color: #0a0a14;
+            background: linear-gradient(135deg, #22d3ee 0%, #a855f7 60%, #ec4899 100%);
+            background-size: 200% 100%;
+            background-position: 0% 0%;
+            border-radius: 999px;
+            border: none;
+            line-height: 1;
+            box-shadow:
+                0 8px 24px -8px rgba(168, 85, 247, 0.65),
+                0 4px 12px -4px rgba(34, 211, 238, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-position 0.6s ease;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .connect-btn::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(135deg, #22d3ee, #a855f7, #ec4899, #22d3ee);
+            background-size: 300% 100%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            animation: connectBorderShift 4s linear infinite;
+        }
+        .connect-btn::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -120%;
+            width: 60%; height: 100%;
+            background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.7s ease;
+            z-index: 1;
+        }
+        .connect-btn:hover {
+            color: #050810;
+            transform: translateY(-2px);
+            background-position: 100% 0%;
+            box-shadow:
+                0 14px 32px -10px rgba(168, 85, 247, 0.8),
+                0 8px 20px -6px rgba(34, 211, 238, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+        }
+        .connect-btn:hover::after { left: 140%; }
+        .connect-btn:hover::before { opacity: 1; }
+        .connect-btn:hover .connect-arrow { transform: translateX(4px); }
+        .connect-btn .connect-icon,
+        .connect-btn .connect-text,
+        .connect-btn .connect-arrow { position: relative; z-index: 2; }
+        .connect-btn .connect-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.7em; height: 1.7em;
+            border-radius: 50%;
+            background: rgba(10, 10, 20, 0.18);
+            font-size: 0.85em;
+        }
+        .connect-btn .connect-arrow {
+            font-family: inherit;
+            font-size: 1.1em;
+            transition: transform 0.25s ease;
+        }
+        @keyframes connectBorderShift {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 300% 0%; }
+        }
+
         a {
             color: var(--link-color);
             text-decoration: none;
@@ -260,7 +354,7 @@
             right: 0;
             bottom: 0;
             z-index: 1200;
-            padding: 4px 0 6px;
+            padding: 12px 0 6px;
             background:
                 linear-gradient(90deg,
                     rgba(15, 15, 15, 0.97) 0%,
@@ -461,8 +555,14 @@
                     </p>
 
                     <p class="bio-personal">
-                        I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>. 
-                        <a href="mailto:alexgaffen@gmail.com" style="margin-left: 0.5em; color: #a855f7; font-weight: bold; text-decoration: underline; font-family: 'Space Mono', monospace; font-size: 1em; text-transform: none;">Let's connect!</a>
+                        I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>.
+                    </p>
+                    <p class="bio-cta-wrap">
+                        <a class="connect-btn" href="mailto:alexgaffen@gmail.com">
+                            <span class="connect-icon"><i class="fas fa-paper-plane"></i></span>
+                            <span class="connect-text">Let's connect</span>
+                            <span class="connect-arrow">&rarr;</span>
+                        </a>
                     </p>
                     <div style="clear: both;"></div>
                    </div>
