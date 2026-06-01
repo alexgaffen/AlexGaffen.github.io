@@ -41,43 +41,9 @@
 <canvas id="themeFxCanvas"></canvas>
 </div>
 <div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
-<!-- Sticky top bar (desktop only) -->
-<div class="top-social-bar" id="topSocialBar">
-<div class="top-bar-identity">
-<span class="top-bar-name">Alex Gaffen</span>
-</div>
-<div class="top-bar-links">
-<a class="top-social-link social-linkedin" href="https://www.linkedin.com/in/alexgaffen" target="_blank">
-<i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
-</a>
-<a class="top-social-link social-github" href="https://github.com/alexgaffen" target="_blank">
-<i class="fab fa-github"></i><span>GitHub</span>
-</a>
-<a class="top-social-link social-email" href="mailto:alexgaffen@gmail.com">
-<i class="fas fa-envelope"></i><span>Email</span>
-</a>
-<a class="top-social-link social-thm" href="https://tryhackme.com/p/alexgaffen" target="_blank">
-<img alt="TryHackMe" class="thm-icon-topbar" src="https://assets.tryhackme.com/img/favicon.png"/><span>TryHackMe</span>
-</a>
-</div>
-</div>
+<!-- Floating 6-theme switcher (top-right) -->
 <div class="container">
-<nav class="sidebar">
-<!-- Profile photo temporarily removed:
-<div class="profile-container">
-<img alt="Alex Gaffen" class="profile-img" src="assets/Headshot.jpg"/>
-</div>
--->
-<ul class="nav-links">
-<li><a class="active" href="#education">EDUCATION</a></li>
-<li><a href="#workexperience">EXPERIENCE</a></li>
-<li><a href="#projects">PROJECTS</a></li>
-<li><a href="#competitions-awards">AWARDS</a></li>
-<li><a href="#skills">SKILLS</a></li>
-<li><a href="#certifications">CERTIFICATIONS</a></li>
-<li><a href="#hobbies-interests">INTERESTS</a></li>
-</ul>
-<div class="sidebar-theme-toggle">
+<div class="cv-theme-dock" aria-label="Theme switcher">
 <div class="star-toggle" id="starToggle">
 <svg class="star-lines" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 <!-- Spokes from center to each point -->
@@ -99,15 +65,6 @@
 <button class="star-slot" data-slot="5" data-theme="aurora" title="Aurora (6)"><i class="fas fa-star"></i></button>
 </div>
 </div>
-<div class="sidebar-action">
-<div class="sidebar-socials">
-<a class="social-linkedin" href="https://www.linkedin.com/in/alexgaffen" rel="noopener noreferrer" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-<a class="social-github" href="https://github.com/alexgaffen" rel="noopener noreferrer" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-<a class="social-email" href="mailto:alexgaffen@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-<a class="social-thm" href="https://tryhackme.com/p/alexgaffen" rel="noopener noreferrer" target="_blank" title="TryHackMe"><img alt="TryHackMe" class="thm-icon" src="https://assets.tryhackme.com/img/favicon.png"/></a>
-</div>
-</div>
-</nav>
 <main class="content">
 <header class="resume-hero">
     <div class="hero-bg" aria-hidden="true">
@@ -129,23 +86,20 @@
             </div>
             <div class="hero-actions">
                 <a class="primary" href="mailto:alexgaffen@gmail.com"><i class="fas fa-paper-plane"></i> Hire / Collaborate</a>
-                <a href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-                <a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
-                <a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer"><i class="fas fa-shield-halved"></i> TryHackMe</a>
             </div>
         </div>
         <div class="hero-stats">
             <div class="stat-card">
                 <i class="fas fa-code stat-icon"></i>
                 <div class="stat-label">Coding Since</div>
-                <div class="stat-value">2018</div>
-                <div class="stat-sub">~7 years building software</div>
+                <div class="stat-value">2021</div>
+                <div class="stat-sub">~5 years building software</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-briefcase stat-icon"></i>
                 <div class="stat-label">Industry · Research</div>
-                <div class="stat-value">12mo<span class="stat-plus">+</span></div>
-                <div class="stat-sub">Co-op &amp; RA experience</div>
+                <div class="stat-value">14<span class="stat-plus">+</span> mo</div>
+                <div class="stat-sub">Co-op, RA &amp; freelance</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-rocket stat-icon"></i>
@@ -892,7 +846,7 @@
 
             // Mobile: show/hide bottom buttons after scrolling past sidebar
             if (window.innerWidth <= 900) {
-                const sidebarBottom = sidebar.offsetTop + sidebar.offsetHeight;
+                const sidebarBottom = sidebar ? sidebar.offsetTop + sidebar.offsetHeight : 320;
                 if (scrollTop > sidebarBottom) {
                     mobileBottomBtns.classList.add('visible');
                 } else {
