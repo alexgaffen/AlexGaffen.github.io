@@ -79,9 +79,6 @@
         <div class="hero-left">
             <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · v2026.05</span>
             <h1 class="hero-name">Alex <span class="accent">Gaffen</span></h1>
-            <div class="hero-typer">
-                <span class="prompt">$</span><span class="typed" id="heroTyper"></span>
-            </div>
             <div class="hero-status">
                 <span class="chip"><i class="fas fa-location-dot"></i> Hamilton, ON</span>
                 <span class="chip"><i class="fas fa-graduation-cap"></i> 4th-year Honours CS @ McMaster</span>
@@ -91,31 +88,40 @@
                 <a class="primary" href="mailto:alexgaffen@gmail.com"><i class="fas fa-paper-plane"></i> Hire / Collaborate</a>
             </div>
         </div>
-        <div class="hero-stats">
-            <div class="stat-card">
-                <i class="fas fa-code stat-icon"></i>
-                <div class="stat-label">Coding Since</div>
-                <div class="stat-value">2021</div>
-                <div class="stat-sub">~5 years building software</div>
+        <div class="hero-terminal" aria-hidden="true">
+            <div class="term-bar">
+                <span class="term-dot red"></span>
+                <span class="term-dot amber"></span>
+                <span class="term-dot green"></span>
+                <span class="term-title">alex@portfolio: ~</span>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-briefcase stat-icon"></i>
-                <div class="stat-label">Industry · Research</div>
-                <div class="stat-value">14<span class="stat-plus">+</span> mo</div>
-                <div class="stat-sub">Co-op, RA &amp; freelance</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-rocket stat-icon"></i>
-                <div class="stat-label">Shipped Projects</div>
-                <div class="stat-value">10<span class="stat-plus">+</span></div>
-                <div class="stat-sub">Full-stack · AI · Systems</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-microchip stat-icon"></i>
-                <div class="stat-label">Stack Highlights</div>
-                <div class="stat-value">C++ · Py · React</div>
-                <div class="stat-sub">+ Docker, PyTorch, Flask</div>
-            </div>
+            <div class="term-body" id="heroTerminal"></div>
+        </div>
+    </div>
+    <div class="hero-stats">
+        <div class="stat-card">
+            <i class="fas fa-code stat-icon"></i>
+            <div class="stat-label">Coding Since</div>
+            <div class="stat-value">2021</div>
+            <div class="stat-sub">~5 years building software</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-briefcase stat-icon"></i>
+            <div class="stat-label">Industry · Research</div>
+            <div class="stat-value">14<span class="stat-plus">+</span> mo</div>
+            <div class="stat-sub">Co-op, RA &amp; freelance</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-rocket stat-icon"></i>
+            <div class="stat-label">Shipped Projects</div>
+            <div class="stat-value">10<span class="stat-plus">+</span></div>
+            <div class="stat-sub">Full-stack · AI · Systems</div>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-microchip stat-icon"></i>
+            <div class="stat-label">Stack Highlights</div>
+            <div class="stat-value">C++ · Py · React</div>
+            <div class="stat-sub">+ Docker, PyTorch, Flask</div>
         </div>
     </div>
     <div class="hero-quicknav" aria-label="Section quick nav">
@@ -1559,31 +1565,72 @@
         })();
     </script>
 <script>
-// ===== Resume hero: rotating typewriter tagline + auto section count badges =====
+// ===== Resume hero: animated (non-interactive) terminal + auto section count badges =====
 (function() {
-    var phrases = [
-        "whoami → Software Developer · AI & Cybersecurity Researcher",
-        "ls ~/passions → C/C++, Python, Linux, neural nets, exploits",
-        "cat status.txt → seeking AI Research & Cybersecurity roles",
-        "echo \"Let's build something that actually matters.\""
-    ];
-    var el = document.getElementById('heroTyper');
-    if (el) {
-        var p = 0, c = 0, deleting = false;
-        function tick() {
-            var full = phrases[p];
-            if (!deleting) {
-                c++;
-                el.textContent = full.slice(0, c);
-                if (c >= full.length) { deleting = true; setTimeout(tick, 2200); return; }
-            } else {
-                c--;
-                el.textContent = full.slice(0, c);
-                if (c <= 0) { deleting = false; p = (p + 1) % phrases.length; }
-            }
-            setTimeout(tick, deleting ? 22 : 42);
+    var term = document.getElementById('heroTerminal');
+    if (term) {
+        var promptHTML = '<span class="term-prompt-user">visitor@alex</span>' +
+                         '<span class="term-prompt-sign">:</span>' +
+                         '<span class="term-prompt-path">~</span>' +
+                         '<span class="term-prompt-sign">$</span> ';
+        var lines = [
+            { cmd: 'whoami',          out: 'Alex Gaffen — Software Developer · AI & Cybersecurity Researcher' },
+            { cmd: 'ls ~/passions',   out: 'C/C++   Python   Linux   neural-nets   exploits' },
+            { cmd: 'cat status.txt',  out: 'Seeking AI Research & Cybersecurity roles · open to relocation' },
+            { cmd: 'echo $MISSION',   out: "Let's build something that actually matters." }
+        ];
+
+        var TYPE_SPEED = 55;     // ms per character
+        var ENTER_PAUSE = 420;   // pause after typing before "enter"
+        var HOLD = 3000;         // each finished message holds 3s
+        var MAX_HISTORY = 3;     // visible command blocks before the screen clears
+
+        var history = [];        // completed blocks (HTML strings)
+        var idx = 0;
+
+        function render(typed, showCursor) {
+            var html = history.join('');
+            html += '<div class="term-line">' + promptHTML +
+                    '<span class="term-cmd">' + escapeHtml(typed) + '</span>' +
+                    (showCursor ? '<span class="term-cursor"></span>' : '') + '</div>';
+            term.innerHTML = html;
         }
-        tick();
+
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function typeCmd(cmd, done) {
+            var i = 0;
+            (function step() {
+                render(cmd.slice(0, i), true);
+                if (i < cmd.length) {
+                    i++;
+                    setTimeout(step, TYPE_SPEED + Math.random() * 35);
+                } else {
+                    setTimeout(done, ENTER_PAUSE);
+                }
+            })();
+        }
+
+        function runNext() {
+            var line = lines[idx];
+            typeCmd(line.cmd, function() {
+                // "Enter" pressed: commit the command + its output to history
+                var block = '<div class="term-line">' + promptHTML +
+                            '<span class="term-cmd">' + escapeHtml(line.cmd) + '</span></div>' +
+                            '<div class="term-out">' + escapeHtml(line.out) + '</div>';
+                history.push(block);
+                if (history.length > MAX_HISTORY) history.shift();
+                term.innerHTML = history.join('');
+                setTimeout(function() {
+                    idx = (idx + 1) % lines.length;
+                    if (idx === 0) history = []; // fresh screen each full cycle
+                    runNext();
+                }, HOLD);
+            });
+        }
+        runNext();
     }
 
     // Auto count badge for each resume section

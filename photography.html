@@ -254,7 +254,7 @@
         
         .modal-split-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) min(360px, 28vw);
+            grid-template-columns: 1fr;
             align-items: stretch;
             width: 92vw;
             height: 92vh;
@@ -262,7 +262,7 @@
             box-sizing: border-box;
             background: transparent;
             margin: auto;
-            gap: 24px;
+            gap: 0;
         }
         .modal-image-container {
             position: relative;
@@ -292,6 +292,52 @@
             from { transform:scale(0.95); opacity:0; filter: blur(10px); }
             to { transform:scale(1); opacity:1; filter: blur(0); }
         }
+
+        /* Info overlay shown on the image while hovering / moving the mouse */
+        .image-overlay {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 22px;
+            background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.38) 55%, transparent 100%);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .modal-image-container.show-overlay .image-overlay { opacity: 1; transform: translateY(0); }
+        .image-overlay-title {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1rem, 2.4vw, 1.25rem); font-weight: 700; color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.65);
+            line-height: 1.2;
+        }
+        .image-overlay-city {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.82rem; color: #d8b4fe; margin-top: 5px;
+            display: flex; align-items: center; gap: 7px;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+        }
+        .image-overlay-city i { color: #a855f7; }
+        .image-overlay-fs {
+            pointer-events: auto;
+            display: inline-flex; align-items: center; gap: 9px;
+            padding: 10px 16px; border-radius: 11px;
+            background: rgba(168, 85, 247, 0.22);
+            border: 1px solid rgba(216, 180, 254, 0.5);
+            color: #fff; cursor: pointer;
+            font-family: 'Space Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            backdrop-filter: blur(4px);
+            transition: background 0.25s, border-color 0.25s, transform 0.2s;
+            flex: 0 0 auto; white-space: nowrap;
+        }
+        .image-overlay-fs:hover { background: rgba(168, 85, 247, 0.4); border-color: #d8b4fe; transform: translateY(-1px); }
+        .image-overlay-fs svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         
         .modal-sidebar {
             display: flex;
@@ -505,9 +551,9 @@
             text-align: right;
         }
         .modal-close {
-            position: absolute;
+            position: fixed;
             top: 18px;
-            right: 18px;
+            right: 22px;
             width: 44px;
             height: 44px;
             display: flex;
@@ -518,12 +564,13 @@
             font-weight: bold;
             line-height: 1;
             border-radius: 999px;
-            background: rgba(0,0,0,0.42);
-            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.18);
             transition: 0.3s;
             cursor: pointer;
-            z-index: 1012;
+            z-index: 2200;
             opacity: 1;
+            backdrop-filter: blur(4px);
         }
         .modal-close:hover { color: #fff; background: rgba(0,0,0,0.72); border-color: rgba(255,255,255,0.28); }
 
@@ -665,7 +712,7 @@
 
     <div class="content-area">
         <p style="margin-top:0;margin-bottom:2em;opacity:0.9;font-size:1.05em;max-width:800px;">
-            A collection of pictures I've taken on various trips. I currently shoot on my phone, but I plan to upgrade to a dedicated camera very soon!
+            A collection of pictures I've taken on various trips.
         </p>
 
         <div id="gridView">
@@ -779,15 +826,24 @@
 
     <!-- Lightbox Modal -->
     <div id="photo-modal" class="modal">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <button class="modal-nav prev" onclick="changePhoto(-1)">&#10094;</button>
-        <button class="modal-nav next" onclick="changePhoto(1)">&#10095;</button>
-        
+        <span class="modal-close" onclick="closeModal()" aria-label="Close">&times;</span>
+        <button class="modal-nav prev" onclick="changePhoto(-1)" aria-label="Previous photo">&#10094;</button>
+        <button class="modal-nav next" onclick="changePhoto(1)" aria-label="Next photo">&#10095;</button>
+
         <div class="modal-split-layout">
             <div class="modal-image-container">
                 <img class="modal-content" id="modal-img">
+                <div class="image-overlay">
+                    <div class="image-overlay-info">
+                        <div class="image-overlay-title" id="overlay-title"></div>
+                        <div class="image-overlay-city" id="overlay-city"></div>
+                    </div>
+                    <button class="image-overlay-fs" onclick="toggleFullscreen()" aria-label="Toggle fullscreen">
+                        <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                        <span>Fullscreen</span>
+                    </button>
+                </div>
             </div>
-            <div class="modal-sidebar" id="modal-caption"></div>
         </div>
     </div>
 
@@ -911,50 +967,45 @@
             document.getElementById('photo-modal').classList.remove('controls-hidden');
         }
 
-        function renderModalTelemetry(card, title, meta) {
-            var exif = card ? (card.dataset.exif || '') : '';
-            var lat = card && card.dataset.lat ? parseFloat(card.dataset.lat) : null;
-            var lng = card && card.dataset.lng ? parseFloat(card.dataset.lng) : null;
-            var frameCode = 'FRAME ' + String(currentIndex + 1).padStart(2, '0') + ' / ' + String(currentPhotos.length || 1).padStart(2, '0');
-            var coords = lat !== null && lng !== null ? lat.toFixed(4) + ', ' + lng.toFixed(4) : 'Telemetry pending';
-            var exifParts = exif ? exif.split(' | ') : [];
-            var metaParts = meta ? meta.split(/\s*[·•]\s*/).filter(function(part) { return part; }) : [];
-            var metaRows = [
-                { label: 'Location', value: metaParts[0] || 'Unknown location' },
-                { label: 'Capture', value: metaParts[1] || 'Archive source pending' }
-            ];
-            var stats = [
-                { label: 'Capture', value: exifParts[0] || 'Phone lens' },
-                { label: 'Exposure', value: exifParts[1] || 'Auto' },
-                { label: 'ISO', value: exifParts[2] || 'Adaptive' },
-                { label: 'Coordinates', value: coords }
-            ];
-
-            document.getElementById('modal-caption').innerHTML =
-                '<div class="modal-telemetry">' +
-                    '<div class="modal-telemetry-top">' +
-                        '<div>' +
-                            '<div class="modal-sequence">' + frameCode + '</div>' +
-                            '<div class="modal-title">' + title + '</div>' +
-                            '<div class="modal-meta-list">' +
-                                metaRows.map(function(row) {
-                                    return '<div class="modal-meta-line"><span class="modal-meta-label">' + row.label + '</span><span class="modal-meta-value">' + row.value + '</span></div>';
-                                }).join('') +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-signal-badge">Field Archive</div>' +
-                    '</div>' +
-                    '<div class="modal-stat-grid">' +
-                        stats.map(function(stat) {
-                            return '<div class="modal-stat"><span class="modal-stat-label">' + stat.label + '</span><span class="modal-stat-value">' + stat.value + '</span></div>';
-                        }).join('') +
-                    '</div>' +
-                    '<button class="modal-fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen">' +
-                        '<svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>' +
-                        '<span>Enter Fullscreen</span>' +
-                    '</button>' +
-                '</div>';
+        function setOverlayInfo(card, title, meta) {
+            var metaParts = meta ? meta.split(/\s*[·•]\s*/).filter(function(part) { return part.trim(); }) : [];
+            var city = metaParts[0] ? metaParts[0].trim() : '';
+            var titleEl = document.getElementById('overlay-title');
+            var cityEl = document.getElementById('overlay-city');
+            if (titleEl) titleEl.textContent = title || 'Untitled';
+            if (cityEl) {
+                if (city) {
+                    cityEl.innerHTML = '<i class="fas fa-location-dot" aria-hidden="true"></i><span></span>';
+                    cityEl.querySelector('span').textContent = city;
+                    cityEl.style.display = 'flex';
+                } else {
+                    cityEl.textContent = '';
+                    cityEl.style.display = 'none';
+                }
+            }
         }
+
+        // Show the image overlay while the mouse is moving over the photo, hide it after a short idle
+        var overlayIdleTimer = null;
+        function pokeImageOverlay() {
+            var container = document.querySelector('.modal-image-container');
+            if (!container) return;
+            container.classList.add('show-overlay');
+            if (overlayIdleTimer) window.clearTimeout(overlayIdleTimer);
+            overlayIdleTimer = window.setTimeout(function() {
+                container.classList.remove('show-overlay');
+            }, 2600);
+        }
+        (function() {
+            var container = document.querySelector('.modal-image-container');
+            if (!container) return;
+            container.addEventListener('mousemove', pokeImageOverlay);
+            container.addEventListener('mouseenter', pokeImageOverlay);
+            container.addEventListener('mouseleave', function() {
+                if (overlayIdleTimer) window.clearTimeout(overlayIdleTimer);
+                container.classList.remove('show-overlay');
+            });
+        })();
 
         function getPhotoDetails(card) {
             var imageEl = card.querySelector('.photo-image');
@@ -979,8 +1030,9 @@
             modal.classList.remove('controls-hidden');
             modalImg.src = photo.src || imgSrc;
             modalImg.alt = photo.title || title;
-            renderModalTelemetry(cardEl, photo.title || title, photo.meta || meta);
+            setOverlayInfo(cardEl, photo.title || title, photo.meta || meta);
             document.body.style.overflow = "hidden";
+            pokeImageOverlay();
 
             if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
         }
@@ -995,7 +1047,8 @@
             var modalImg = document.getElementById('modal-img');
             modalImg.src = photo.src;
             modalImg.alt = photo.title;
-            renderModalTelemetry(card, photo.title, photo.meta);
+            setOverlayInfo(card, photo.title, photo.meta);
+            pokeImageOverlay();
         }
 
         function closeModal() {
