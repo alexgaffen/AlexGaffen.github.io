@@ -1,1 +1,7 @@
 ﻿*.py
+
+# Temp verification screenshots
+_*.png
+
+# Editor
+.vscode/
