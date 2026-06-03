@@ -1,8 +1,0 @@
-{
-    "chat.tools.terminal.autoApprove": {
-        "/^git add site-tabs\\.css style\\.css index\\.html ; git commit -m \"fix: toggle thumb covers sun in light mode, glistening-box max-width, resume hero gap\" ; git push$/": {
-            "approve": true,
-            "matchCommandLine": true
-        }
-    }
-}
