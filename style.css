@@ -2850,6 +2850,22 @@ html.theme-transitioning *::after {
     margin-right: 0.5rem;
 }
 
+.contact-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+    transform: none;
+}
+
+.contact-status {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    transition: color 0.2s ease;
+}
+.contact-status.is-success { color: var(--green-color); font-weight: 600; }
+.contact-status.is-error { color: #f87171; font-weight: 600; }
+
 /* ############################################################# */
 /* ADDITIONAL COLOR THEMES (Ocean, Ember, Forest, Aurora) */
 /* ############################################################# */
