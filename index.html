@@ -45,21 +45,25 @@
             width: 90%;
             min-height: 100vh;
             margin: 0 auto;
-            padding: 60px 20px 90px;
+            padding: 84px 20px 56px;
             line-height: 1.6;
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            align-items: center;
+            flex-direction: column;
             overflow-x: hidden;
             font-size: clamp(14px, 1.2vw, 24px);
             box-sizing: border-box;
         }
 
-        /* Desktop: keep the landing card + marquee fully visible without scrolling */
+        /* Vertically center the landing content, but never clip it: auto margins
+           collapse to 0 when content is taller than the viewport, keeping the
+           top reachable and scrollable on short monitors. */
+        #main-wrapper { margin-block: auto; }
+
+        /* Desktop: keep the landing card fully visible; scroll only if it can't fit */
         @media (min-width: 801px) and (min-height: 620px) {
-            html, body { height: 100vh; }
-            body { overflow: hidden; }
+            body { height: 100vh; overflow-y: auto; overflow-x: hidden; }
         }
 
         /* 
@@ -568,16 +572,15 @@
                         <span style="font-size: 2.1rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-top:-0.15em; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
                         <span style="display: block; font-size: 0.95em; margin-bottom: 1.2em; opacity: 0.8; font-style: italic;">
                             Software Developer & Researcher <br> 
-                            <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Bioinformatics</span>
+                            <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Medtech</span>
                         </span>
                     </div>
                     <p class="bio-intro">
-                        Hey there! I'm a <strong>4th-year Computer Science</strong> student at <strong>McMaster University</strong>. I build things with <strong>C/C++, Python</strong>, and <strong>Linux environments</strong>, and I'm especially interested in <strong>AI and cybersecurity</strong>, understanding how systems break and how to make them stronger.
+Hey! I'm a CS student at McMaster obsessed with the kind of engineering problems that don't have clean answers — <strong>medical AI, robotics, systems security</strong>. I like understanding how things work at a deep level, and then figuring out how they break.
+
+Right now I'm doing research in <strong>biomedical ML and robotics</strong>. I'm always looking to connect with people working on challenging problems in these fields. Outside that, I'm often at the gym, on a run, or picking up something new just to see if I can.
                     </p>
 
-                    <p class="bio-personal">
-                        I play the violin in the <strong>McMaster Symphony Orchestra</strong> and compete in <strong>intramural soccer and pickleball</strong>. I'm currently seeking opportunities in <strong>AI Research & Engineering</strong> and <strong>Cybersecurity</strong>.
-                    </p>
                     <p class="bio-cta-wrap">
                         <a class="connect-btn" href="mailto:alexgaffen@gmail.com">
                             <span class="connect-icon"><i class="fas fa-paper-plane"></i></span>

@@ -380,67 +380,54 @@ html.theme-transitioning *::after {
     font-size: 16px;
     line-height: 0;
 }
+/* Simple, robust circular theme button: one icon crossfades between
+   moon (dark) and sun (light). No sliding thumb -> no positioning bugs. */
 .theme-switch .theme-switch-track {
     position: relative;
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    width: 60px;
-    height: 30px;
-    padding: 0 8px;
-    border-radius: 999px;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    box-sizing: border-box;
+    border-radius: 50%;
     overflow: hidden;
-    background: linear-gradient(90deg, #18163f 0%, #26215c 48%, #3e1f73 52%, #4c1d95 100%);
-    border: 1.5px solid rgba(192, 132, 252, 0.82);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.14), 0 8px 20px -14px rgba(76, 29, 149, 0.95);
-    transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    background: radial-gradient(circle at 50% 38%, #2b2566 0%, #1b1840 100%);
+    border: 1.5px solid rgba(192, 132, 252, 0.7);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(76, 29, 149, 0.9);
+    transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
 }
 .theme-switch .ts-icon {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 13px;
-    font-size: 0.74rem;
-    z-index: 1;
+    font-size: 0.95rem;
     text-shadow: 0 0 8px currentColor;
-    transition: color 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+    transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.theme-switch .ts-moon { color: #c4b5fd; }
-.theme-switch .ts-sun { color: #fbbf24; opacity: 0.45; }
-.theme-switch .theme-switch-thumb {
-    position: absolute;
-    top: 50%;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    background: radial-gradient(circle at 35% 30%, #f5f3ff, #c084fc 65%, #8b5cf6 100%);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.34), 0 0 12px -1px rgba(192, 132, 252, 0.9);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease;
-}
-.theme-switch:hover .theme-switch-track {
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.18), 0 12px 24px -14px rgba(168, 85, 247, 0.95);
-}
+/* Default = dark mode: moon shown, sun tucked away */
+.theme-switch .ts-moon { color: #c4b5fd; opacity: 1; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+.theme-switch .ts-sun  { color: #fbbf24; opacity: 0; transform: translate(-50%, -50%) rotate(90deg) scale(0.4); }
+/* Hide the old sliding thumb entirely */
+.theme-switch .theme-switch-thumb { display: none; }
+
+.theme-switch:hover .theme-switch-track { transform: translateY(-1px); border-color: rgba(216, 180, 254, 0.95); }
 .theme-switch:focus-visible { outline: none; }
 .theme-switch:focus-visible .theme-switch-track {
     border-color: #a78bfa;
     box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.35);
 }
-/* Light mode appearance */
+/* Light mode appearance: sun shown, moon tucked away */
 .theme-switch[data-mode="light"] .theme-switch-track {
-    background: linear-gradient(90deg, #dbeafe 0%, #eff6ff 48%, #fef3c7 52%, #fde68a 100%);
-    border: 1.5px solid rgba(180, 120, 10, 0.88);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.18), 0 8px 20px -14px rgba(217, 119, 6, 0.85);
+    background: radial-gradient(circle at 50% 38%, #fff5d6 0%, #fde0a3 100%);
+    border: 1.5px solid rgba(217, 119, 6, 0.85);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 4px 14px -8px rgba(217, 119, 6, 0.8);
 }
-.theme-switch[data-mode="light"] .theme-switch-thumb {
-    transform: translateY(-50%) translateX(42px);
-    background: radial-gradient(circle at 35% 30%, #fffdf2, #fbbf24 68%, #f59e0b 100%);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.4), 0 0 12px -1px rgba(251, 191, 36, 0.9);
-}
-.theme-switch[data-mode="light"] .ts-moon { color: #64748b; opacity: 0.55; }
-.theme-switch[data-mode="light"] .ts-sun { color: #d97706; opacity: 1; }
+.theme-switch[data-mode="light"] .ts-moon { opacity: 0; transform: translate(-50%, -50%) rotate(-90deg) scale(0.4); }
+.theme-switch[data-mode="light"] .ts-sun  { opacity: 1; color: #d97706; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
 
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
