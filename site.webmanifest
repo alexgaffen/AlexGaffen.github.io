@@ -1,0 +1,24 @@
+{
+  "name": "Alex Gaffen — Portfolio",
+  "short_name": "Alex Gaffen",
+  "description": "Portfolio of Alex Gaffen — Honours Computer Science student at McMaster University working on AI, low-level systems, and security.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/favicon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

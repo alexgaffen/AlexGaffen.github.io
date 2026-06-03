@@ -13,15 +13,31 @@
 <meta name="twitter:title" content="Alex Gaffen — Technical Resume">
 <meta name="twitter:description" content="Explore highlights, publications, stack profiles, and active engineering co-ops of Alex Gaffen from McMaster University.">
 <title>Alex Gaffen — Resume</title>
-<!-- Google Analytics -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX'); // TODO: Replace G-XXXXXXXXXX with your GA4 Measurement ID
-    </script>
+<link rel="canonical" href="https://alexgaffen.com/resume.html">
+<meta name="theme-color" content="#0d0d0d">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://alexgaffen.com/resume.html">
+<meta property="og:site_name" content="Alex Gaffen">
+<meta name="twitter:image" content="https://alexgaffen.com/assets/frontheadshot.jpg">
+<!-- Privacy-friendly analytics (sign up at plausible.io and the domain matches your site) -->
+<script defer data-domain="alexgaffen.com" src="https://plausible.io/js/script.js"></script>
 <link href="assets/favicon.png" rel="icon" type="image/png"/>
+<link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="assets/favicon.png" rel="apple-touch-icon"/>
+<link href="site.webmanifest" rel="manifest"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Alex Gaffen",
+  "url": "https://alexgaffen.com/resume.html",
+  "image": "https://alexgaffen.com/assets/frontheadshot.jpg",
+  "jobTitle": "Software Developer · AI & Cybersecurity Researcher",
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "McMaster University" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Hamilton", "addressRegion": "ON", "addressCountry": "CA" },
+  "sameAs": [ "https://github.com/alexgaffen", "https://www.linkedin.com/in/alexgaffen" ]
+}
+</script>
 <link href="style.css" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet"/>
@@ -30,6 +46,7 @@
     <script src="site-tabs.js"></script>
 </head>
 <body class="has-site-tabs resume-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
         <a href="index.html" class="site-tab ">🏠 HOME</a>
@@ -68,7 +85,7 @@
 </div>
 
 <div class="container">
-<main class="content">
+<main class="content" id="main-content" tabindex="-1">
 <header class="resume-hero">
     <div class="hero-bg" aria-hidden="true">
         <span class="hero-orb hero-orb-a"></span>
@@ -544,6 +561,7 @@
 <textarea id="contact-message" name="message" placeholder="Your message..." required="" rows="5"></textarea>
 </div>
 <button class="contact-submit" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+<p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
 </form>
 </div>
 </section>
@@ -1655,6 +1673,39 @@
         if (count === 1 && noun.endsWith('S')) noun = noun.slice(0, -1);
         badge.textContent = count + ' ' + noun;
         h2.appendChild(badge);
+    });
+})();
+</script>
+<script>
+// Submit the contact form via fetch so visitors stay on the page
+(function() {
+    var form = document.querySelector('.contact-form');
+    if (!form) return;
+    var status = document.getElementById('contact-status');
+    var btn = form.querySelector('.contact-submit');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (status) { status.className = 'contact-status'; status.textContent = 'Sending…'; }
+        if (btn) btn.disabled = true;
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+            if (res.ok) {
+                form.reset();
+                if (status) { status.className = 'contact-status is-success'; status.textContent = 'Thanks! Your message has been sent.'; }
+            } else {
+                return res.json().then(function(data) {
+                    var msg = (data && data.errors) ? data.errors.map(function(x){return x.message;}).join(', ') : 'Something went wrong. Please email alexgaffen@gmail.com.';
+                    if (status) { status.className = 'contact-status is-error'; status.textContent = msg; }
+                });
+            }
+        }).catch(function() {
+            if (status) { status.className = 'contact-status is-error'; status.textContent = 'Network error. Please email alexgaffen@gmail.com.'; }
+        }).finally(function() {
+            if (btn) btn.disabled = false;
+        });
     });
 })();
 </script>
