@@ -477,4 +477,238 @@ html.theme-transitioning *::after {
     border: 0;
 }
 
+/* ============================================================
+   AG-OS CONSOLE — drop-down interactive terminal (site-console.js)
+   ============================================================ */
+#ag-console {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 9000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+#ag-console .ag-console-inner {
+    width: min(860px, 100vw - 24px);
+    height: min(62vh, 560px);
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    background: rgba(9, 9, 16, 0.96);
+    border: 1px solid rgba(168, 85, 247, 0.55);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    box-shadow:
+        0 24px 64px -12px rgba(0, 0, 0, 0.75),
+        0 0 42px rgba(168, 85, 247, 0.28);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform: translateY(-105%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: auto;
+    overflow: hidden;
+}
+#ag-console.open .ag-console-inner { transform: translateY(0); }
+#ag-console[aria-hidden="true"] { visibility: hidden; transition: visibility 0s 0.3s; }
+#ag-console.open { visibility: visible; transition: none; }
+
+.ag-console-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+    flex: 0 0 auto;
+}
+.ag-dot { width: 11px; height: 11px; border-radius: 50%; }
+.ag-dot-r { background: #ff5f57; }
+.ag-dot-a { background: #febc2e; }
+.ag-dot-g { background: #28c840; }
+.ag-console-title {
+    margin-left: 8px;
+    font-family: 'Space Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.78rem;
+    color: rgba(216, 216, 232, 0.75);
+    letter-spacing: 0.04em;
+    flex: 1;
+    text-align: left;
+}
+.ag-console-close {
+    background: none;
+    border: none;
+    color: rgba(216, 216, 232, 0.6);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+.ag-console-close:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+
+.ag-console-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 14px 16px 8px;
+    font-family: 'Space Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: #d4d4e4;
+    text-align: left;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 85, 247, 0.5) transparent;
+    overscroll-behavior: contain;
+}
+.ag-line { white-space: pre-wrap; word-break: break-word; animation: agLineIn 0.16s ease both; }
+@keyframes agLineIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.ag-line a { color: #67e8f9; text-decoration: underline; text-underline-offset: 2px; font-family: inherit; font-size: inherit; text-transform: none; }
+.ag-line a:hover { color: #a5f3fc; }
+.ag-echo { color: #fff; margin-top: 6px; }
+.ag-prompt-echo { color: #34d399; font-weight: 700; }
+.ag-key { color: #c084fc; font-weight: 700; }
+.ag-cmd { color: #34d399; font-weight: 700; }
+.ag-ok { color: #34d399; }
+.ag-err { color: #f87171; }
+.ag-dim { color: rgba(212, 212, 228, 0.5); }
+.ag-dir { color: #60a5fa; font-weight: 700; }
+.ag-bright { color: #fff; font-weight: 700; }
+.ag-ascii { color: #a855f7; }
+.ag-swatch {
+    display: inline-block;
+    width: 0.8em; height: 0.8em;
+    background: #a855f7;
+    border-radius: 3px;
+    vertical-align: -0.07em;
+}
+
+.ag-console-inputrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 16px 12px;
+    border-top: 1px solid rgba(168, 85, 247, 0.25);
+    flex: 0 0 auto;
+}
+.ag-prompt {
+    color: #34d399;
+    font-family: 'Space Mono', Consolas, monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.ag-console-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Space Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 16px; /* prevents iOS zoom */
+    caret-color: #a855f7;
+}
+.ag-console-input::placeholder { color: rgba(212, 212, 228, 0.35); }
+
+/* floating launcher */
+#ag-console-fab {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 8990;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1px solid rgba(168, 85, 247, 0.65);
+    background: rgba(12, 12, 20, 0.92);
+    color: #34d399;
+    font-family: 'Space Mono', Consolas, monospace;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 8px 28px -8px rgba(168, 85, 247, 0.55);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    animation: agFabPulse 3.2s ease-in-out infinite;
+}
+#ag-console-fab:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 34px -8px rgba(168, 85, 247, 0.8);
+}
+#ag-console-fab.hidden { opacity: 0; pointer-events: none; }
+@keyframes agFabPulse {
+    0%, 100% { box-shadow: 0 8px 28px -8px rgba(168, 85, 247, 0.55); }
+    50% { box-shadow: 0 8px 34px -6px rgba(34, 211, 238, 0.6); }
+}
+body.index-page #ag-console-fab { bottom: 92px; }
+@media (max-width: 800px) {
+    body.index-page #ag-console-fab { bottom: 88px; }
+    #ag-console .ag-console-inner { height: 72vh; width: 100vw; border-radius: 0 0 12px 12px; }
+}
+
+/* matrix rain overlay */
+#ag-matrix {
+    position: fixed;
+    inset: 0;
+    z-index: 8800;
+    background: rgba(0, 0, 0, 0.92);
+    cursor: pointer;
+}
+
+/* toast */
+#ag-toast {
+    position: fixed;
+    top: 64px;
+    left: 50%;
+    transform: translate(-50%, -16px);
+    z-index: 10500;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(12, 12, 20, 0.95);
+    border: 1px solid rgba(34, 211, 238, 0.7);
+    color: #67e8f9;
+    font-family: 'Space Mono', Consolas, monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    box-shadow: 0 10px 36px -8px rgba(34, 211, 238, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+#ag-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* konami spin */
+@keyframes agSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    45% { transform: rotate(360deg) scale(0.96); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+body.ag-spin { animation: agSpin 1.2s cubic-bezier(0.34, 1.3, 0.64, 1) both; }
+
+/* desktop hint chip (index sidebar) */
+.console-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    margin-top: 1.6em;
+    padding: 0.5em 0.9em;
+    border: 1px dashed rgba(168, 85, 247, 0.55);
+    border-radius: 10px;
+    font-family: 'Space Mono', Consolas, monospace;
+    font-size: 0.72rem;
+    color: inherit;
+    opacity: 0.75;
+}
+.console-hint kbd {
+    font-family: inherit;
+    background: rgba(168, 85, 247, 0.18);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 5px;
+    padding: 0.1em 0.5em;
+    font-weight: 700;
+}
+@media (max-width: 800px) { .console-hint { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    #ag-console-fab { animation: none; }
+    body.ag-spin { animation: none; }
+}
+
 
