@@ -4161,5 +4161,42 @@ body.resume-page::before {
     }
 }
 
+/* ================================================================ */
+/*  TIMELINE ART RENDERS — soft-3D illustrations in the left rail   */
+/* ================================================================ */
+.job-art {
+    grid-column: 1;
+    justify-self: end;
+    width: clamp(96px, 9.5vw, 156px);
+    height: auto;
+    margin: 18px 20px 0 0;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.35));
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.25s,
+                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.25s;
+}
+.job-item.in-view .job-art {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: jobArtFloat 7s ease-in-out 1.1s infinite;
+}
+@keyframes jobArtFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-9px) rotate(-1.5deg); }
+}
+[data-theme="light"] .job-art {
+    filter: drop-shadow(0 14px 22px rgba(30, 41, 59, 0.22));
+}
+@media (max-width: 900px) {
+    .job-art { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .job-art { animation: none !important; opacity: 1; transform: none; }
+}
+
+
 
 

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D lifeguard sun and waves illustration">
+  <defs>
+    <radialGradient id="lg-bg" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#e7f3fa"/><stop offset="100%" stop-color="#cfe6f2"/>
+    </radialGradient>
+    <radialGradient id="lg-sun" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#ffe9b0"/><stop offset="55%" stop-color="#f7c45e"/><stop offset="100%" stop-color="#dd9a33"/>
+    </radialGradient>
+    <linearGradient id="lg-wave1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9fd3e8"/><stop offset="100%" stop-color="#6db4d3"/>
+    </linearGradient>
+    <linearGradient id="lg-wave2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6db4d3"/><stop offset="100%" stop-color="#3f8db1"/>
+    </linearGradient>
+    <linearGradient id="lg-wave3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3f8db1"/><stop offset="100%" stop-color="#2a6c8d"/>
+    </linearGradient>
+    <filter id="lg-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#lg-bg)" d="M242 36c104-6 192 66 198 172 6 112-74 210-184 216C150 430 50 354 44 242 38 132 138 42 242 36Z"/>
+
+  <!-- sun -->
+  <circle cx="172" cy="160" r="58" fill="url(#lg-sun)"/>
+  <ellipse cx="152" cy="138" rx="16" ry="10" fill="#ffffff" opacity="0.5"/>
+
+  <!-- lifebuoy ring -->
+  <g transform="rotate(-12 340 170)">
+    <circle cx="340" cy="170" r="44" fill="none" stroke="#f3f0e4" stroke-width="26"/>
+    <circle cx="340" cy="170" r="44" fill="none" stroke="#e26e5a" stroke-width="26" stroke-dasharray="34 35" stroke-dashoffset="17"/>
+    <circle cx="340" cy="170" r="58" fill="none" stroke="#c8c2ac" stroke-width="3" opacity="0.6"/>
+  </g>
+
+  <!-- waves -->
+  <path fill="url(#lg-wave1)" d="M44 268c40-26 86-26 126 0s86 26 126 0 70-22 140-2v60H46l-2-58Z"/>
+  <path fill="url(#lg-wave2)" d="M46 316c44-24 90-24 130 0s88 24 128 0 64-18 130 0v44H50l-4-44Z"/>
+  <path fill="url(#lg-wave3)" d="M58 360c44-22 88-22 126 0s86 22 124 0 56-16 118 2-26 64-186 64S52 400 50 384c-1-9 3-18 8-24Z"/>
+
+  <!-- foam dots -->
+  <circle cx="120" cy="276" r="7" fill="#ffffff" opacity="0.75"/>
+  <circle cx="262" cy="284" r="5" fill="#ffffff" opacity="0.6"/>
+  <circle cx="356" cy="320" r="6" fill="#ffffff" opacity="0.65"/>
+  <circle cx="180" cy="334" r="5" fill="#ffffff" opacity="0.55"/>
+</svg>

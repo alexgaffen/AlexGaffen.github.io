@@ -11,6 +11,7 @@
     <style>
         html.no-intro .glistening-box { animation: glisten 6s ease-in-out infinite !important; transform: none !important; opacity: 1 !important; margin-bottom: 1.5em !important; }
         html.no-intro .nav-links li { animation: none !important; opacity: 1 !important; transform: none !important; }
+        html.no-intro .domain-tile { animation: none !important; opacity: 1 !important; transform: none !important; }
     </style>
 
     <meta charset="UTF-8">
@@ -317,6 +318,58 @@
             padding: 0 4px;
         }
 
+        /* ===== Domain art tiles (Wealthsimple-style renders) ===== */
+        .domain-row {
+            display: flex;
+            gap: clamp(10px, 1.4vw, 18px);
+            max-width: 780px;
+            margin-top: clamp(10px, 1.8vh, 22px);
+        }
+        .domain-tile {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.55em;
+            padding: clamp(10px, 1.6vh, 18px) 10px;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            background:
+                linear-gradient(color-mix(in srgb, var(--bg-color) 92%, #a855f7), color-mix(in srgb, var(--bg-color) 92%, #a855f7)) padding-box,
+                linear-gradient(135deg, rgba(168,85,247,0.55), rgba(59,130,246,0.55)) border-box;
+            text-decoration: none;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeInContent 0.7s both cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .domain-tile:nth-child(1) { animation-delay: 2.45s; }
+        .domain-tile:nth-child(2) { animation-delay: 2.6s; }
+        .domain-tile:nth-child(3) { animation-delay: 2.75s; }
+        .domain-tile:hover {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 18px 36px -14px rgba(168, 85, 247, 0.45);
+            text-decoration: none;
+        }
+        .domain-tile img {
+            width: clamp(64px, 10.5vh, 118px);
+            height: clamp(64px, 10.5vh, 118px);
+            filter: drop-shadow(0 10px 16px rgba(0,0,0,0.18));
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .domain-tile:hover img { transform: scale(1.08) rotate(2deg); }
+        .domain-tile span {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.52rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-color);
+            opacity: 0.85;
+        }
+        @media (max-width: 800px) {
+            .domain-row { max-width: 100%; }
+            .domain-tile img { width: 64px; height: 64px; }
+        }
+
         @media (max-width: 800px) {
             body {
                 align-items: flex-start;
@@ -616,6 +669,20 @@ Right now I'm doing research in <strong>biomedical ML and robotics</strong>. I'm
                     <div style="clear: both;"></div>
                    </div>
               </div>
+            <div class="domain-row" aria-label="Focus areas">
+                <a class="domain-tile" href="resume.html#workexperience" title="Robotics experience">
+                    <img src="assets/art/art-robotics.svg" alt="Abstract 3D robotic arm render">
+                    <span>Robotics</span>
+                </a>
+                <a class="domain-tile" href="resume.html#workexperience" title="Medical AI research">
+                    <img src="assets/art/art-medtech.svg" alt="Abstract 3D medical technology render">
+                    <span>Medtech</span>
+                </a>
+                <a class="domain-tile" href="resume.html#projects" title="Cybersecurity projects">
+                    <img src="assets/art/art-cyber.svg" alt="Abstract 3D cybersecurity shield render">
+                    <span>Security</span>
+                </a>
+            </div>
           </div>
         <div class="sidebar">
             <ul class="nav-links" style="display: flex; flex-direction: column; gap: 1.2em; margin-top: 0; padding-top: 0;">
@@ -785,5 +852,29 @@ Right now I'm doing research in <strong>biomedical ML and robotics</strong>. I'm
     <script src="neural-bg.js"></script>
     <script src="site-console.js"></script>
     <script src="global_fx.js"></script>
+    <script>
+    // Fit the landing content to the viewport on desktop so the home page
+    // never needs scrolling, regardless of monitor size.
+    (function () {
+        var wrapper = document.getElementById('main-wrapper');
+        if (!wrapper) return;
+        function fit() {
+            if (window.innerWidth < 800) { wrapper.style.zoom = ''; return; }
+            wrapper.style.zoom = '';
+            var marquee = document.querySelector('.highlight-marquee');
+            var topPad = 84;
+            var bottomPad = (marquee ? marquee.offsetHeight : 78) + 10;
+            var avail = window.innerHeight - topPad - bottomPad;
+            var h = wrapper.scrollHeight;
+            if (h > avail && avail > 200) {
+                wrapper.style.zoom = String(Math.max(0.55, avail / h));
+            }
+        }
+        window.addEventListener('resize', fit);
+        window.addEventListener('load', fit);
+        setTimeout(fit, 60);
+        setTimeout(fit, 700);
+    })();
+    </script>
 </body>
 </html>

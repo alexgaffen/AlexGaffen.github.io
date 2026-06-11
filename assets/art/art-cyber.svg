@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D cybersecurity shield illustration">
+  <defs>
+    <radialGradient id="cy-bg" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#eceafb"/><stop offset="100%" stop-color="#d8d5f2"/>
+    </radialGradient>
+    <linearGradient id="cy-shield" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#9a96ec"/><stop offset="55%" stop-color="#6f66d8"/><stop offset="100%" stop-color="#4d44ad"/>
+    </linearGradient>
+    <linearGradient id="cy-shield-side" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#453c9b"/><stop offset="100%" stop-color="#332c74"/>
+    </linearGradient>
+    <radialGradient id="cy-key" cx="38%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#fff8e8"/><stop offset="100%" stop-color="#f1dcae"/>
+    </radialGradient>
+    <radialGradient id="cy-sphere" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#f8cf90"/><stop offset="55%" stop-color="#e8a854"/><stop offset="100%" stop-color="#c47f2e"/>
+    </radialGradient>
+    <filter id="cy-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#cy-bg)" d="M242 36c104-6 192 66 198 172 6 112-74 210-184 216C150 430 50 354 44 242 38 132 136 42 242 36Z"/>
+
+  <ellipse cx="240" cy="412" rx="120" ry="16" fill="#3a3380" opacity="0.30" filter="url(#cy-blur)"/>
+
+  <!-- shield extrusion -->
+  <path fill="url(#cy-shield-side)" transform="translate(12 10)"
+        d="M240 96l108 38v92c0 74-44 130-108 158-64-28-108-84-108-158v-92l108-38Z"/>
+  <!-- shield face -->
+  <path fill="url(#cy-shield)"
+        d="M240 96l108 38v92c0 74-44 130-108 158-64-28-108-84-108-158v-92l108-38Z"/>
+  <!-- shield inner sheen -->
+  <path fill="#ffffff" opacity="0.10"
+        d="M240 116l88 31v79c0 60-35 107-88 132V116Z"/>
+
+  <!-- keyhole -->
+  <circle cx="240" cy="222" r="34" fill="url(#cy-key)"/>
+  <path fill="url(#cy-key)" d="M226 244l14 76 14-76c-4-10-24-10-28 0Z"/>
+  <circle cx="240" cy="222" r="13" fill="#5a50bd"/>
+
+  <!-- orbit ring -->
+  <ellipse cx="240" cy="250" rx="172" ry="48" fill="none" stroke="#b9b3f2" stroke-width="10" opacity="0.85"
+           transform="rotate(-14 240 250)" stroke-dasharray="250 80" stroke-linecap="round"/>
+
+  <!-- floating spheres -->
+  <circle cx="372" cy="160" r="20" fill="url(#cy-sphere)"/>
+  <ellipse cx="366" cy="153" rx="6" ry="4" fill="#ffffff" opacity="0.6"/>
+  <circle cx="104" cy="312" r="13" fill="#8fc7b4"/>
+  <ellipse cx="100" cy="308" rx="4" ry="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="118" cy="140" r="9" fill="#e28aa0"/>
+</svg>

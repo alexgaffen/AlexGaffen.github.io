@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D graduation cap illustration">
+  <defs>
+    <radialGradient id="ed-bg" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#fdf3da"/><stop offset="100%" stop-color="#f4e1b4"/>
+    </radialGradient>
+    <linearGradient id="ed-board" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stop-color="#6c6c95"/><stop offset="55%" stop-color="#4c4c73"/><stop offset="100%" stop-color="#39395a"/>
+    </linearGradient>
+    <linearGradient id="ed-cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5a5a85"/><stop offset="100%" stop-color="#414164"/>
+    </linearGradient>
+    <linearGradient id="ed-book-a" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0%" stop-color="#f6a98c"/><stop offset="100%" stop-color="#dd7a55"/>
+    </linearGradient>
+    <linearGradient id="ed-book-b" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0%" stop-color="#fff2e4"/><stop offset="100%" stop-color="#f3d9bd"/>
+    </linearGradient>
+    <radialGradient id="ed-sphere" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#aed3c4"/><stop offset="55%" stop-color="#76a890"/><stop offset="100%" stop-color="#4f8068"/>
+    </radialGradient>
+    <filter id="ed-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#ed-bg)" d="M244 36c102-6 190 66 196 172 7 112-74 210-184 216C150 430 50 354 44 242 38 132 138 42 244 36Z"/>
+
+  <ellipse cx="236" cy="404" rx="128" ry="17" fill="#8a6a2d" opacity="0.30" filter="url(#ed-blur)"/>
+
+  <!-- cap base cylinder -->
+  <path fill="url(#ed-cap)" d="M178 234h124v54a62 22 0 0 1-124 0v-54Z"/>
+  <ellipse cx="240" cy="234" rx="62" ry="22" fill="#56567f"/>
+
+  <!-- mortarboard (3D rhombus) -->
+  <path fill="url(#ed-board)" d="M240 132 412 208l-172 76L68 208l172-76Z"/>
+  <path fill="#2e2e4d" d="M68 208v18l172 76v-18L68 208Z"/>
+  <path fill="#2e2e4d" d="M412 208v18l-172 76v-18l172-76Z"/>
+  <path fill="#ffffff" opacity="0.08" d="M240 132 412 208l-86 38-172-76 86-38Z"/>
+
+  <!-- button + tassel -->
+  <circle cx="240" cy="206" r="9" fill="#f2c14e"/>
+  <path d="M240 206 C 310 210 330 250 332 300" fill="none" stroke="#f2c14e" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="332" cy="314" r="14" fill="#e8b54d"/>
+  <ellipse cx="328" cy="309" rx="4" ry="3" fill="#ffffff" opacity="0.55"/>
+
+  <!-- floating open book -->
+  <g transform="rotate(-8 130 330)">
+    <path fill="url(#ed-book-b)" d="M70 320q30-18 60-6v54q-30-12-60 6v-54Z"/>
+    <path fill="url(#ed-book-a)" d="M190 320q-30-18-60-6v54q30-12 60 6v-54Z"/>
+    <rect x="128" y="312" width="4" height="58" fill="#c98a55"/>
+  </g>
+
+  <!-- accents -->
+  <circle cx="386" cy="130" r="14" fill="url(#ed-sphere)"/>
+  <ellipse cx="382" cy="125" rx="4" ry="3" fill="#ffffff" opacity="0.6"/>
+  <path d="M104 130l7 17 17 7-17 7-7 17-7-17-17-7 17-7 7-17Z" fill="#e2a23f" opacity="0.9"/>
+</svg>

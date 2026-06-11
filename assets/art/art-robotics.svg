@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D robotic arm illustration">
+  <defs>
+    <radialGradient id="rb-bg" cx="46%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#fdf0e0"/><stop offset="100%" stop-color="#f2d9bc"/>
+    </radialGradient>
+    <linearGradient id="rb-arm1" x1="150" y1="320" x2="245" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f6bd92"/><stop offset="55%" stop-color="#e1854e"/><stop offset="100%" stop-color="#c4602f"/>
+    </linearGradient>
+    <linearGradient id="rb-arm2" x1="185" y1="190" x2="250" y2="245" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fcd2ac"/><stop offset="60%" stop-color="#ea9560"/><stop offset="100%" stop-color="#cf6c38"/>
+    </linearGradient>
+    <radialGradient id="rb-joint" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#fff6ea"/><stop offset="60%" stop-color="#f3ddc2"/><stop offset="100%" stop-color="#d9b48a"/>
+    </radialGradient>
+    <radialGradient id="rb-sphere" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#b8d8c9"/><stop offset="55%" stop-color="#7da896"/><stop offset="100%" stop-color="#54806d"/>
+    </radialGradient>
+    <linearGradient id="rb-base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e9c9a4"/><stop offset="100%" stop-color="#c79a6c"/>
+    </linearGradient>
+    <linearGradient id="rb-claw" x1="280" y1="120" x2="340" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f3b287"/><stop offset="100%" stop-color="#cd6f3d"/>
+    </linearGradient>
+    <filter id="rb-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#rb-bg)" d="M246 36c102-6 190 66 196 172 7 112-74 210-184 216C148 430 50 354 44 242 38 132 138 42 246 36Z"/>
+
+  <ellipse cx="225" cy="412" rx="128" ry="17" fill="#9c6b3f" opacity="0.32" filter="url(#rb-blur)"/>
+
+  <!-- pedestal -->
+  <rect x="150" y="368" width="150" height="38" rx="19" fill="url(#rb-base)"/>
+  <ellipse cx="225" cy="370" rx="75" ry="14" fill="#f6e3c8"/>
+
+  <!-- lower arm -->
+  <line x1="225" y1="368" x2="168" y2="252" stroke="url(#rb-arm1)" stroke-width="46" stroke-linecap="round"/>
+  <!-- elbow joint -->
+  <circle cx="168" cy="252" r="35" fill="url(#rb-joint)"/>
+  <circle cx="168" cy="252" r="13" fill="#c98a55"/>
+  <!-- upper arm -->
+  <line x1="168" y1="252" x2="272" y2="166" stroke="url(#rb-arm2)" stroke-width="38" stroke-linecap="round"/>
+  <!-- wrist -->
+  <circle cx="272" cy="166" r="26" fill="url(#rb-joint)"/>
+  <circle cx="272" cy="166" r="9" fill="#c98a55"/>
+
+  <!-- gripper claws -->
+  <path d="M290 150 Q330 118 362 132" stroke="url(#rb-claw)" stroke-width="17" stroke-linecap="round" fill="none"/>
+  <path d="M293 184 Q333 198 360 176" stroke="url(#rb-claw)" stroke-width="17" stroke-linecap="round" fill="none"/>
+
+  <!-- held sphere -->
+  <circle cx="365" cy="154" r="27" fill="url(#rb-sphere)"/>
+  <ellipse cx="356" cy="144" rx="8" ry="5" fill="#ffffff" opacity="0.55"/>
+
+  <!-- accents -->
+  <circle cx="118" cy="138" r="21" fill="none" stroke="#e6b35c" stroke-width="12"/>
+  <circle cx="382" cy="300" r="12" fill="#d98a8a"/>
+  <ellipse cx="378" cy="296" rx="4" ry="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="92" cy="318" r="8" fill="#7da896"/>
+</svg>

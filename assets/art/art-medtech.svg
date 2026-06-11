@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D medical technology illustration">
+  <defs>
+    <radialGradient id="md-bg" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#fdeaea"/><stop offset="100%" stop-color="#f6d3d6"/>
+    </radialGradient>
+    <linearGradient id="md-cross" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6a3ae"/><stop offset="60%" stop-color="#e26e84"/><stop offset="100%" stop-color="#c44e67"/>
+    </linearGradient>
+    <linearGradient id="md-cross-side" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b94560"/><stop offset="100%" stop-color="#943349"/>
+    </linearGradient>
+    <linearGradient id="md-pill-a" x1="296" y1="106" x2="342" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fff4f0"/><stop offset="100%" stop-color="#f3cdbd"/>
+    </linearGradient>
+    <linearGradient id="md-pill-b" x1="336" y1="142" x2="384" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f8c272"/><stop offset="100%" stop-color="#dd9a3e"/>
+    </linearGradient>
+    <radialGradient id="md-sphere" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#bcd4f0"/><stop offset="55%" stop-color="#7fa3cf"/><stop offset="100%" stop-color="#557aa8"/>
+    </radialGradient>
+    <filter id="md-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#md-bg)" d="M240 38c104-7 192 64 198 170 7 112-72 208-182 214C150 428 48 354 44 244 39 134 134 45 240 38Z"/>
+
+  <ellipse cx="232" cy="408" rx="125" ry="16" fill="#a04a5b" opacity="0.28" filter="url(#md-blur)"/>
+
+  <!-- cross extrusion -->
+  <path fill="url(#md-cross-side)" transform="translate(12 12)"
+        d="M196 142h72a18 18 0 0 1 18 18v44h44a18 18 0 0 1 18 18v72a18 18 0 0 1-18 18h-44v44a18 18 0 0 1-18 18h-72a18 18 0 0 1-18-18v-44h-44a18 18 0 0 1-18-18v-72a18 18 0 0 1 18-18h44v-44a18 18 0 0 1 18-18Z"/>
+  <!-- cross face -->
+  <path fill="url(#md-cross)"
+        d="M196 142h72a18 18 0 0 1 18 18v44h44a18 18 0 0 1 18 18v72a18 18 0 0 1-18 18h-44v44a18 18 0 0 1-18 18h-72a18 18 0 0 1-18-18v-44h-44a18 18 0 0 1-18-18v-72a18 18 0 0 1 18-18h44v-44a18 18 0 0 1 18-18Z"/>
+  <!-- heartbeat -->
+  <path d="M148 256h44l18-44 26 84 22-56 14 16h62" fill="none" stroke="#fff4f4" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- floating capsule pill -->
+  <g transform="rotate(43 338 146)">
+    <rect x="296" y="124" width="44" height="44" rx="22" fill="url(#md-pill-a)"/>
+    <rect x="338" y="124" width="44" height="44" rx="22" fill="url(#md-pill-b)"/>
+    <rect x="336" y="124" width="5" height="44" fill="#c98a3f" opacity="0.45"/>
+  </g>
+
+  <!-- accents -->
+  <circle cx="110" cy="150" r="17" fill="url(#md-sphere)"/>
+  <ellipse cx="105" cy="144" rx="5" ry="4" fill="#ffffff" opacity="0.6"/>
+  <circle cx="386" cy="306" r="10" fill="#f0b65e"/>
+  <circle cx="96" cy="330" r="14" fill="none" stroke="#e28aa0" stroke-width="9"/>
+</svg>
