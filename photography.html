@@ -32,7 +32,7 @@
       "author": { "@type": "Person", "name": "Alex Gaffen", "url": "https://alexgaffen.com/" }
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -41,663 +41,536 @@
             --link-color: #0f0f0f;
             --link-hover: #d62020;
             --border-color: #d1cdc2;
+            --card-radius: 16px;
+            /* default (all) theme blobs — light */
+            --blob1: #f3c8a2;
+            --blob2: #d8b6e8;
+            --blob3: #aecde0;
+            --blob-opacity: 0.55;
         }
         html.dark-mode {
-            --bg-color: #0d0d0d;
+            --bg-color: #0b0a10;
             --text-color: #f0f0f0;
             --link-color: #f0f0f0;
             --link-hover: #a855f7;
-            --border-color: #333;
+            --border-color: #2c2a36;
+            --blob1: #4c1d6e;
+            --blob2: #143a5e;
+            --blob3: #135246;
+            --blob-opacity: 0.5;
         }
+        /* San Francisco theme — fog, golden steel, sunset */
+        body.theme-sf {
+            --blob1: #f0a368;
+            --blob2: #e88aa0;
+            --blob3: #93b8d8;
+        }
+        html.dark-mode body.theme-sf {
+            --blob1: #93351a;
+            --blob2: #6e1e3c;
+            --blob3: #1d3f63;
+        }
+        /* Banff theme — alpine emerald, glacial teal */
+        body.theme-banff {
+            --blob1: #9fd3c0;
+            --blob2: #8fc3da;
+            --blob3: #d8e0a8;
+        }
+        html.dark-mode body.theme-banff {
+            --blob1: #0d4f3c;
+            --blob2: #11475e;
+            --blob3: #233f73;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            max-width: 1100px;
-            margin: 40px auto 40px auto;
-            padding: 0 20px;
+            margin: 0;
+            padding: 84px 0 80px;
             line-height: 1.6;
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 14px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.8s ease;
         }
-        header {
-            margin-bottom: 2em;
-            padding-bottom: 1em;
-            border-bottom: 1px solid var(--border-color);
-            display: flex; flex-direction: column; gap: 15px;
+
+        /* ===== Aurora background (city-themed) ===== */
+        .aurora {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .aurora .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: var(--blob-opacity);
+            transition: background-color 1.4s ease, opacity 1.4s ease;
+            will-change: transform;
+        }
+        .blob.b1 { width: 46vw; height: 46vw; top: -12vw; left: -10vw; background-color: var(--blob1); animation: blobDrift1 26s ease-in-out infinite; }
+        .blob.b2 { width: 38vw; height: 38vw; top: 24vh; right: -12vw; background-color: var(--blob2); animation: blobDrift2 32s ease-in-out infinite; }
+        .blob.b3 { width: 34vw; height: 34vw; bottom: -10vw; left: 18vw; background-color: var(--blob3); animation: blobDrift3 38s ease-in-out infinite; }
+        @keyframes blobDrift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw, 4vh) scale(1.12); } }
+        @keyframes blobDrift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-5vw, -5vh) scale(0.92); } }
+        @keyframes blobDrift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4vw, -4vh) scale(1.1); } }
+        .aurora::after {
+            /* film grain */
+            content: "";
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .aurora .blob { animation: none !important; }
+        }
+
+        /* Hide the shared 2D canvas — aurora replaces it here */
+        #site-world-canvas, .site-world-canvas { display: none !important; opacity: 0 !important; }
+
+        .page-shell {
             position: relative;
             z-index: 1;
-        }
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        h1 {
-            font-family: 'Inter', sans-serif; font-size: 1.5em;
-            margin: 0; letter-spacing: -0.5px; font-weight: 800;
-        }
-        a {
-            color: var(--link-color); text-decoration: none;
-            font-family: 'Inter', sans-serif; font-size: 0.7em;
-            transition: all 0.2s ease;
-        }
-        a.back-btn {
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;
-            padding: 8px 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        a:hover:not(.photo-card) { color: var(--link-hover); }
-        a.back-btn:hover {
-            box-shadow: 0 6px 15px rgba(168, 85, 247, 0.4);
-            border-color: var(--link-hover);
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 28px;
         }
 
-        .filter-nav {
-            display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+        /* ===== Editorial header ===== */
+        header.gallery-hero {
+            padding: 30px 0 8px;
+            margin-bottom: 10px;
         }
+        .hero-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 6px;
+        }
+        h1.gallery-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.6rem, 7vw, 5.2rem);
+            line-height: 0.98;
+            letter-spacing: -0.04em;
+            margin: 0 0 10px;
+            background: linear-gradient(110deg, var(--text-color) 55%, #a855f7 80%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gallery-tagline {
+            font-size: 0.95rem;
+            max-width: 560px;
+            opacity: 0.78;
+            margin: 0 0 22px;
+            min-height: 1.6em;
+            transition: opacity 0.4s ease;
+        }
+        .gallery-tagline.swap { opacity: 0; }
+
+        .filter-nav { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .filter-btn {
-            color: var(--text-color); background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.18); padding: 6px 14px;
-            font-family: 'Space Mono', monospace; cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-            border-radius: 999px; font-size: 0.85em; letter-spacing: 0.02em;
-        }
-        .filter-btn:hover { transform: translateY(-1px); border-color: #a855f7; color: #fff; }
-        .filter-btn.active {
-            background: linear-gradient(135deg, #a855f7, #3b82f6); color: #fff;
-            border-color: transparent; box-shadow: 0 4px 14px rgba(168,85,247,0.35);
-        }
-        [data-theme="light"] .filter-btn {
-            color: #1e293b; background: rgba(0,0,0,0.03);
-            border-color: rgba(30,41,59,0.5);
-        }
-        [data-theme="light"] .filter-btn:hover { border-color: #7c3aed; color: #111; }
-        [data-theme="light"] .filter-btn.active {
-            color: #000000 !important; border-color: transparent;
-        }
-
-        .content-area { opacity: 1; position: relative; z-index: 1; }
-        .content-area.first-visit { animation: fadeIn 0.8s ease-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Masonry grid using CSS columns */
-        .photo-grid {
-            column-count: 3; column-gap: 20px; margin-top: 2em;
-        }
-        @media (max-width: 800px) { .photo-grid { column-count: 2; } }
-        @media (max-width: 500px) { .photo-grid { column-count: 1; } }
-
-        .photo-card {
-            break-inside: avoid; margin-bottom: 22px; border: none;
-            background: transparent; padding: 0;
-            display: block; cursor: pointer;
-            transition: transform 0.25s ease;
-        }
-        .photo-card:hover { transform: translateY(-3px); }
-        .photo-card:hover .photo-image {
-            box-shadow: 0 12px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(168,85,247,0.35);
-        }
-        .photo-card.tag-hidden { display: none; }
-        .photo-image {
-            width: 100%; display: block; border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            transition: box-shadow 0.25s ease;
-        }
-        .photo-info {
-            padding: 10px 4px 4px;
             color: var(--text-color);
+            background: color-mix(in srgb, var(--bg-color) 70%, transparent);
+            border: 1px solid var(--border-color);
+            padding: 9px 18px;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            border-radius: 999px;
+            font-size: 0.85em;
+            letter-spacing: 0.02em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(6px);
+            transition: transform 0.2s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
         }
-        .photo-title {
-            font-family: 'Space Mono', monospace; font-weight: 700;
-            font-size: 1em; margin-bottom: 2px; letter-spacing: 0.01em;
-        }
-        .photo-meta {
-            font-family: 'Space Mono', monospace; font-size: 0.78em;
-            opacity: 0.7;
-        }
-        .placeholder-image {
-            width: 100%; aspect-ratio: 4/3; background: #1a1a1a;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 8px; text-align: center; font-style: italic;
-            color: #666; padding: 20px; box-sizing: border-box;
-        }
-        .hidden { display: none !important; }
-
-        /* Map section */
-        .map-section {
-            margin: 3em 0; padding: 2em 0; border-top: 1px solid var(--border-color);
-        }
-        .map-section h2 {
-            font-family: 'Inter', sans-serif; font-size: 1.2em;
-            margin-bottom: 1em; font-weight: 800;
-        }
-        #photoMap {
-            width: 100%; height: 400px; border-radius: 8px; z-index: 1;
+        .filter-btn .count {
+            font-size: 0.78em;
+            opacity: 0.55;
+            padding: 1px 7px;
+            border-radius: 999px;
             border: 1px solid var(--border-color);
         }
-        /* Dark map tiles */
-        .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2); }
-        .leaflet-control-attribution { display: none; }
-
-        /* Remove background animations entirely */
-        #site-world-canvas, .site-world-canvas, body::after, body.has-site-tabs::after {
-            display: none !important;
-            opacity: 0 !important;
+        .filter-btn:hover { transform: translateY(-2px); border-color: #a855f7; }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 8px 22px -8px rgba(168, 85, 247, 0.6);
         }
+        .filter-btn.active .count { border-color: rgba(255,255,255,0.4); opacity: 0.85; }
 
-        /* Per-image location button */
-        .photo-loc-btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            margin-top: 8px; padding: 5px 10px;
-            background: #a855f7; border: 1px solid #a855f7;
-            color: #fff; border-radius: 4px; cursor: pointer;
-            font-family: 'Space Mono', monospace; font-size: 0.75em;
-            font-weight: bold;
-            transition: all 0.2s; pointer-events: auto;
-            box-shadow: 0 2px 4px rgba(168, 85, 247, 0.4);
+        /* ===== Masonry grid ===== */
+        .photo-grid {
+            column-count: 3;
+            column-gap: 22px;
+            margin-top: 28px;
+            transition: opacity 0.22s ease, transform 0.22s ease;
         }
-        .photo-loc-btn:hover {
-            background: #9333ea;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
-        }
+        .photo-grid.switching { opacity: 0; transform: translateY(8px); }
+        @media (max-width: 980px) { .photo-grid { column-count: 2; } }
+        @media (max-width: 560px) { .photo-grid { column-count: 1; } }
 
-        /* Inline map panel — fixed right side on wide screens, below on small */
+        .photo-card {
+            position: relative;
+            break-inside: avoid;
+            margin-bottom: 22px;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            cursor: zoom-in;
+            background: #15131c;
+            box-shadow: 0 10px 30px -12px rgba(0,0,0,0.5);
+            transform: translateY(24px);
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, box-shadow 0.35s ease;
+        }
+        .photo-card.seen { transform: translateY(0); opacity: 1; }
+        .photo-card.tag-hidden { display: none; }
+        .photo-card:hover {
+            box-shadow: 0 24px 50px -16px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.4);
+        }
+        .photo-card img.photo-image {
+            width: 100%;
+            display: block;
+            transform: scale(1.001);
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+        }
+        .photo-card:hover img.photo-image { transform: scale(1.045); }
+
+        .card-veil {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 18px 18px 14px;
+            background: linear-gradient(to top, rgba(8,6,14,0.86) 0%, rgba(8,6,14,0.32) 42%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .photo-card:hover .card-veil,
+        .photo-card:focus-visible .card-veil { opacity: 1; }
+        @media (hover: none) {
+            .card-veil { opacity: 1; background: linear-gradient(to top, rgba(8,6,14,0.78) 0%, transparent 46%); }
+        }
+        .card-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 1.02rem;
+            color: #fff;
+            letter-spacing: -0.01em;
+            transform: translateY(8px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .photo-card:hover .card-title { transform: translateY(0); }
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.74rem;
+            color: #cdc4e8;
+            transform: translateY(8px);
+            transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .photo-card:hover .card-meta { transform: translateY(0); }
+        .card-loc-btn {
+            pointer-events: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(168, 85, 247, 0.28);
+            border: 1px solid rgba(216, 180, 254, 0.5);
+            color: #fff;
+            padding: 5px 11px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            backdrop-filter: blur(3px);
+            transition: background 0.25s ease, transform 0.2s ease;
+        }
+        .card-loc-btn:hover { background: rgba(168, 85, 247, 0.5); transform: translateY(-1px); }
+        .card-device {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.62rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(10, 8, 18, 0.55);
+            border: 1px solid rgba(255,255,255,0.22);
+            padding: 4px 10px;
+            border-radius: 999px;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .photo-card:hover .card-device { opacity: 1; }
+
+        /* ===== Inline map popover ===== */
         .inline-map-panel {
-            border-radius: 8px;
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            overflow: hidden; animation: fadeIn 0.3s ease-out;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: fixed;
+            bottom: 86px;
+            right: 18px;
+            width: min(380px, calc(100vw - 36px));
+            z-index: 8000;
+            border-radius: 14px;
+            border: 1px solid rgba(168, 85, 247, 0.45);
+            overflow: hidden;
+            box-shadow: 0 18px 50px rgba(0,0,0,0.55);
             background: var(--bg-color);
+            animation: mapPop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        @media (min-width: 1000px) {
-            .inline-map-panel {
-                position: fixed;
-                top: 108px;
-                right: 24px;
-                width: 380px;
-                z-index: 100;
-                margin: 0;
-            }
-            .inline-map-panel #inlineMap { height: 320px; }
-        }
-        @media (max-width: 999px) {
-            .inline-map-panel {
-                margin: 10px 0 20px;
-            }
-            .inline-map-panel #inlineMap { height: 250px; }
-        }
+        @keyframes mapPop { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
         .inline-map-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 14px; background: rgba(20, 20, 20, 0.95);
+            padding: 9px 14px;
+            background: rgba(18, 14, 26, 0.96);
             border-bottom: 1px solid rgba(168, 85, 247, 0.3);
-            font-family: 'Space Mono', monospace; font-size: 0.85em; color: #a855f7;
+            font-family: 'Space Mono', monospace; font-size: 0.82em; color: #c084fc;
         }
         .inline-map-close {
             background: none; border: none; color: #888; cursor: pointer;
             font-size: 1.4em; transition: color 0.2s; padding: 0 4px;
         }
         .inline-map-close:hover { color: #fff; }
+        #inlineMap { width: 100%; height: 280px; }
+        .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2); }
+        html:not(.dark-mode) .leaflet-tile-pane { filter: none; }
+        .leaflet-control-attribution { display: none; }
 
-        /* EXIF in modal */
-        .exif-row {
-            display: flex; justify-content: center; gap: 20px;
-            margin-top: 8px; flex-wrap: wrap;
-        }
-        .exif-item {
-            font-family: 'Space Mono', monospace; font-size: 0.7em;
-            color: #888; display: flex; align-items: center; gap: 4px;
-        }
-        .exif-icon { opacity: 0.6; }
-
+        /* ===== Lightbox ===== */
         .modal {
-            display: none; position: fixed; z-index: 9999;
-            left: 0; top: 0; padding: 0; margin: 0;
-            width: 100vw; height: 100vh; overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(5px);
-            align-items: center; justify-content: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9500;
+            background: rgba(5, 4, 10, 0.96);
+            backdrop-filter: blur(10px);
             flex-direction: column;
-            box-sizing: border-box;
-        }
-        .modal-nav {
-            cursor: pointer; position: absolute; top: 50%;
-            width: auto; padding: 16px; transform: translateY(-50%);
-            color: white; font-weight: bold; font-size: 40px;
-            transition: 0.6s ease; border-radius: 3px;
-            user-select: none; background-color: rgba(0,0,0,0.3);
-            border: none; z-index: 1001;
-            opacity: 1;
-        }
-        .modal-nav:hover { background-color: rgba(0,0,0,0.8); }
-        .modal-nav.prev { left: 0; border-radius: 0 3px 3px 0; }
-        .modal-nav.next { right: 0; border-radius: 3px 0 0 3px; }
-        
-        .modal-split-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            align-items: stretch;
-            width: 92vw;
-            height: 92vh;
-            max-width: 1800px;
-            box-sizing: border-box;
-            background: transparent;
-            margin: auto;
-            gap: 0;
-        }
-        .modal-image-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            width: 100%;
-            height: 100%;
-            min-width: 0;
-            min-height: 0;
-            overflow: hidden;
+            justify-content: center;
         }
-        .modal-content {
-            display: block; 
-            max-width: 100%; 
+        .modal.open { display: flex; }
+
+        .lb-counter {
+            position: absolute;
+            top: 20px;
+            left: 26px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.22em;
+            color: #b9aee0;
+            z-index: 20;
+            user-select: none;
+        }
+        .lb-res-badge {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #d8b4fe;
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            padding: 6px 14px;
+            border-radius: 999px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .lb-res-badge.show { opacity: 1; }
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            width: 46px; height: 46px;
+            display: flex; align-items: center; justify-content: center;
+            color: #f1f1f1;
+            font-size: 30px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.16);
+            cursor: pointer;
+            z-index: 30;
+            transition: background 0.25s, transform 0.2s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.14); transform: rotate(90deg); }
+
+        .lb-stage {
+            position: relative;
+            flex: 1 1 auto;
+            min-height: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 96px 16px;
+        }
+        .lb-img {
+            max-width: 100%;
             max-height: 100%;
-            width: auto;
-            height: auto;
-            min-width: 0; min-height: 0;
             object-fit: contain;
-            border-radius: 4px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
-            animation: zoomIn 0.3s ease;
+            border-radius: 6px;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+            animation: lbZoom 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             cursor: zoom-in;
         }
-        @keyframes zoomIn {
-            from { transform:scale(0.95); opacity:0; filter: blur(10px); }
-            to { transform:scale(1); opacity:1; filter: blur(0); }
-        }
+        .lb-img.swapping { animation: none; }
+        @keyframes lbZoom { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Info overlay shown on the image while hovering / moving the mouse */
-        .image-overlay {
+        .lb-caption {
             position: absolute;
             left: 0; right: 0; bottom: 0;
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
             gap: 16px;
-            padding: 20px 22px;
-            background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.38) 55%, transparent 100%);
+            padding: 60px 110px 22px;
+            background: linear-gradient(to top, rgba(5,4,10,0.9), transparent);
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(8px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             pointer-events: none;
-            z-index: 5;
         }
-        .modal-image-container.show-overlay .image-overlay { opacity: 1; transform: translateY(0); }
-        .image-overlay-title {
-            font-family: 'Space Mono', monospace;
-            font-size: clamp(1rem, 2.4vw, 1.25rem); font-weight: 700; color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.65);
-            line-height: 1.2;
-        }
-        .image-overlay-city {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.82rem; color: #d8b4fe; margin-top: 5px;
-            display: flex; align-items: center; gap: 7px;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-        }
-        .image-overlay-city i { color: #a855f7; }
-        .image-overlay-fs {
-            pointer-events: auto;
-            display: inline-flex; align-items: center; gap: 9px;
-            padding: 10px 16px; border-radius: 11px;
-            background: rgba(168, 85, 247, 0.22);
-            border: 1px solid rgba(216, 180, 254, 0.5);
-            color: #fff; cursor: pointer;
-            font-family: 'Space Mono', monospace; font-size: 0.72rem;
-            letter-spacing: 0.08em; text-transform: uppercase;
-            backdrop-filter: blur(4px);
-            transition: background 0.25s, border-color 0.25s, transform 0.2s;
-            flex: 0 0 auto; white-space: nowrap;
-        }
-        .image-overlay-fs:hover { background: rgba(168, 85, 247, 0.4); border-color: #d8b4fe; transform: translateY(-1px); }
-        .image-overlay-fs svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        
-        .modal-sidebar {
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        #modal-caption {
-            display: flex;
-            flex: 1 1 auto;
-            min-height: 0;
-            height: 100%;
-            text-align: left; color: #ccc; padding: 0;
-            font-family: 'Space Mono', monospace;
-            animation: zoomIn 0.3s ease;
-        }
-        
-        /* Fullscreen styles for real Fullscreen API */
-        .modal:fullscreen {
-            padding-top: 0 !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background-color: #000 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-        .modal:-webkit-full-screen {
-            padding-top: 0 !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            background-color: #000 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-
-        .modal.is-fullscreen .modal-split-layout,
-        .modal:fullscreen .modal-split-layout,
-        .modal:-webkit-full-screen .modal-split-layout {
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            gap: 0;
-            padding: 0;
-        }
-        .modal.is-fullscreen .modal-sidebar,
-        .modal:fullscreen .modal-sidebar,
-        .modal:-webkit-full-screen .modal-sidebar {
-            display: none !important;
-        }
-        .modal.is-fullscreen .modal-image-container,
-        .modal:fullscreen .modal-image-container,
-        .modal:-webkit-full-screen .modal-image-container {
-            width: 100vw !important;
-            height: 100vh !important;
-            min-height: auto;
-        }
-        .modal.is-fullscreen .modal-content,
-        .modal:fullscreen .modal-content,
-        .modal:-webkit-full-screen .modal-content {
-            border-radius: 0;
-            box-shadow: none;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            cursor: zoom-out;
-        }
-        .modal.is-fullscreen .modal-close,
-        .modal:fullscreen .modal-close,
-        .modal:-webkit-full-screen .modal-close {
-            display: block !important;
-        }
-        .modal.is-fullscreen .modal-fullscreen-btn,
-        .modal:fullscreen .modal-fullscreen-btn,
-        .modal:-webkit-full-screen .modal-fullscreen-btn {
-            background: rgba(0,0,0,0.8);
-        }
-        .modal-fullscreen-btn {
-            width: 100%;
-            margin-top: 16px;
-            padding: 12px 14px;
-            background: rgba(168, 85, 247, 0.12);
-            border: 1px solid rgba(168, 85, 247, 0.38);
+        .lb-stage.show-overlay .lb-caption { opacity: 1; transform: none; }
+        .lb-cap-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1rem, 2.4vw, 1.35rem);
             color: #fff;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
+        }
+        .lb-cap-meta {
+            font-size: 0.8rem;
+            color: #c9bdf0;
+            margin-top: 4px;
             display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .lb-cap-actions { display: flex; gap: 10px; pointer-events: auto; flex: 0 0 auto; }
+        .lb-act-btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            opacity: 1;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 11px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(216, 180, 254, 0.45);
+            color: #fff;
+            cursor: pointer;
             font-family: 'Space Mono', monospace;
-            font-size: 0.82em;
+            font-size: 0.7rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-        }
-        .modal-fullscreen-btn:hover { background: rgba(168, 85, 247, 0.22); border-color: rgba(216, 180, 254, 0.6); }
-        .modal-fullscreen-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .modal-telemetry {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex: 1 1 auto;
-            width: 100%;
-            min-height: 0;
-            overflow-y: auto;
-            gap: 14px;
-            padding: 16px 18px;
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 16px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-            box-shadow: 0 18px 48px rgba(0,0,0,0.24);
-            box-sizing: border-box;
-        }
-        .modal-telemetry-top {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 14px;
-            align-items: stretch;
-        }
-        .modal-sequence {
-            font-size: 0.68em;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            opacity: 0.62;
-        }
-        .modal-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #fff;
-            margin-top: 3px;
-            line-height: 1.35;
-        }
-        .modal-meta-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .modal-meta-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            padding: 9px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
-            font-size: 0.82em;
-            opacity: 0.9;
-            letter-spacing: 0.03em;
-        }
-        .modal-meta-label {
-            font-size: 0.68em;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            opacity: 0.56;
-        }
-        .modal-meta-value {
-            color: #fff;
-            text-align: right;
-        }
-        .modal-signal-badge {
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            color: #d8b4fe;
-            background: rgba(168, 85, 247, 0.08);
-            font-size: 0.72em;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
             white-space: nowrap;
-            align-self: flex-start;
+            backdrop-filter: blur(4px);
+            transition: background 0.25s, transform 0.2s;
+            text-decoration: none;
         }
-        .modal-stat-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        .modal-stat {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.04);
-            gap: 16px;
-        }
-        .modal-stat-label {
-            display: block;
-            margin-bottom: 0;
-            font-size: 0.62em;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            opacity: 0.58;
-        }
-        .modal-stat-value {
-            display: block;
-            font-size: 0.86em;
-            color: #fff;
-            text-align: right;
-        }
-        .modal-close {
-            position: fixed;
-            top: 18px;
-            right: 22px;
-            width: 44px;
-            height: 44px;
+        .lb-act-btn:hover { background: rgba(168, 85, 247, 0.42); transform: translateY(-1px); }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 25;
+            width: 58px;
+            height: 58px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #f1f1f1;
-            font-size: 32px;
-            font-weight: bold;
-            line-height: 1;
             border-radius: 999px;
-            background: rgba(0,0,0,0.55);
-            border: 1px solid rgba(255,255,255,0.18);
-            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 24px;
             cursor: pointer;
-            z-index: 2200;
-            opacity: 1;
-            backdrop-filter: blur(4px);
+            user-select: none;
+            transition: background 0.25s, transform 0.2s;
         }
-        .modal-close:hover { color: #fff; background: rgba(0,0,0,0.72); border-color: rgba(255,255,255,0.28); }
+        .modal-nav:hover { background: rgba(168,85,247,0.35); }
+        .modal-nav.prev { left: 22px; }
+        .modal-nav.next { right: 22px; }
+        .modal-nav.prev:hover { transform: translateY(-50%) translateX(-3px); }
+        .modal-nav.next:hover { transform: translateY(-50%) translateX(3px); }
 
-        .modal.is-fullscreen .modal-nav,
-        .modal.is-fullscreen .modal-fullscreen-btn,
-        .modal.is-fullscreen .modal-close,
-        .modal:fullscreen .modal-nav,
-        .modal:fullscreen .modal-fullscreen-btn,
-        .modal:fullscreen .modal-close,
-        .modal:-webkit-full-screen .modal-nav,
-        .modal:-webkit-full-screen .modal-fullscreen-btn,
-        .modal:-webkit-full-screen .modal-close {
-            opacity: 0.38;
-            transition: opacity 0.35s ease, background-color 0.35s ease, color 0.35s ease;
+        /* ===== Filmstrip ===== */
+        .lb-filmstrip {
+            flex: 0 0 auto;
+            display: flex;
+            gap: 8px;
+            padding: 12px 18px 18px;
+            max-width: 100vw;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(168,85,247,0.5) transparent;
+        }
+        .lb-thumb {
+            flex: 0 0 auto;
+            width: 74px;
+            height: 52px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            opacity: 0.45;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+            transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+        }
+        .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .lb-thumb:hover { opacity: 0.85; transform: translateY(-2px); }
+        .lb-thumb.active { opacity: 1; border-color: #a855f7; }
+
+        /* Fullscreen */
+        .modal.is-fullscreen .lb-filmstrip,
+        .modal:fullscreen .lb-filmstrip { display: none; }
+        .modal.is-fullscreen .lb-stage,
+        .modal:fullscreen .lb-stage { padding: 0; }
+        .modal.is-fullscreen .lb-img,
+        .modal:fullscreen .lb-img { border-radius: 0; cursor: zoom-out; max-width: 100vw; max-height: 100vh; }
+        .modal.is-fullscreen .lb-caption,
+        .modal:fullscreen .lb-caption { padding: 60px 40px 22px; }
+
+        @media (max-width: 760px) {
+            .lb-stage { padding: 58px 12px 10px; }
+            .lb-caption { padding: 50px 16px 16px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .modal-nav { width: 44px; height: 44px; font-size: 18px; }
+            .modal-nav.prev { left: 8px; }
+            .modal-nav.next { right: 8px; }
+            .lb-counter { left: 16px; }
+            .page-shell { padding: 0 16px; }
         }
 
-        .modal.controls-hidden.is-fullscreen .modal-nav,
-        .modal.controls-hidden.is-fullscreen .modal-fullscreen-btn,
-        .modal.controls-hidden.is-fullscreen .modal-close,
-        .modal.controls-hidden:fullscreen .modal-nav,
-        .modal.controls-hidden:fullscreen .modal-fullscreen-btn,
-        .modal.controls-hidden:fullscreen .modal-close,
-        .modal.controls-hidden:-webkit-full-screen .modal-nav,
-        .modal.controls-hidden:-webkit-full-screen .modal-fullscreen-btn,
-        .modal.controls-hidden:-webkit-full-screen .modal-close {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .modal.is-fullscreen .modal-nav:hover,
-        .modal.is-fullscreen .modal-fullscreen-btn:hover,
-        .modal.is-fullscreen .modal-close:hover,
-        .modal:fullscreen .modal-nav:hover,
-        .modal:fullscreen .modal-fullscreen-btn:hover,
-        .modal:fullscreen .modal-close:hover,
-        .modal:-webkit-full-screen .modal-nav:hover,
-        .modal:-webkit-full-screen .modal-fullscreen-btn:hover,
-        .modal:-webkit-full-screen .modal-close:hover {
-            opacity: 0.88;
-        }
-
-        @media (max-width: 850px) {
-            .modal {
-                align-items: flex-start;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            .modal-split-layout {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto;
-                width: 100vw;
-                height: auto;
-                min-height: 100vh;
-                gap: 0;
-                padding: 0;
-            }
-            .modal-image-container {
-                width: 100%;
-                height: auto;
-                max-height: 75vh;
-                min-height: 0;
-            }
-            .modal-content {
-                max-height: 75vh;
-                max-width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-            }
-            .modal-sidebar {
-                width: 100%;
-                height: auto;
-                overflow: visible;
-                padding: 16px;
-                box-sizing: border-box;
-            }
-            #modal-caption {
-                width: 100%;
-                height: auto;
-            }
-            .modal-telemetry {
-                overflow-y: visible;
-            }
-            .modal-telemetry-top {
-                flex-direction: column;
-            }
-            .modal-stat-grid {
-                grid-template-columns: 1fr;
-            }
-            .modal-meta-line { align-items: flex-start; flex-direction: column; gap: 4px; }
-            .modal-meta-value { text-align: left; }
-            .modal-stat { align-items: flex-start; flex-direction: column; gap: 6px; }
-            .modal-stat-value { text-align: left; }
-            .modal-close {
-                top: 10px;
-                right: 10px;
-            }
-            .modal-nav {
-                top: 30vh;
-            }
-            .modal.is-fullscreen .modal-content { max-height: 100vh; max-width: 100vw; }
-            .modal.is-fullscreen .modal-split-layout { min-height: 100vh; height: 100vh; }
+        @media (prefers-reduced-motion: reduce) {
+            .photo-card, .photo-card img.photo-image { transition: none !important; }
+            .lb-img { animation: none !important; }
         }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
-<body class="has-site-tabs photo-page">
+<body class="has-site-tabs photo-page theme-all">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
@@ -717,518 +590,362 @@
     </div>
 </nav>
 
+<div class="aurora" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+</div>
 
-    <header>
-        <div class="header-top">
-            <h1 style="font-size: 2.5em">Photography</h1>
-            
-        </div>
-        <div class="filter-nav">
-            <button class="filter-btn active" onclick="filterPhotos('all', this)">All</button>
-            <button class="filter-btn" onclick="filterPhotos('sf', this)">San Francisco</button>
-            <button class="filter-btn" onclick="filterPhotos('banff', this)">Banff</button>
-        </div>
+<div class="page-shell">
+    <header class="gallery-hero">
+        <div class="hero-eyebrow">Field Notes · Travel Frames</div>
+        <h1 class="gallery-title">Photography</h1>
+        <p class="gallery-tagline" id="galleryTagline">Frames collected on the road — fog, summits and golden hours.</p>
+        <div class="filter-nav" id="filterNav" role="group" aria-label="Filter photos by location"></div>
     </header>
 
-    <div class="content-area" id="main-content" tabindex="-1">
-        <p style="margin-top:0;margin-bottom:2em;opacity:0.9;font-size:1.05em;max-width:800px;">
-            A collection of pictures I've taken on various trips.
-        </p>
+    <main class="content-area" id="main-content" tabindex="-1">
+        <div class="photo-grid" id="gallery"></div>
+    </main>
+</div>
 
-        <div id="gridView">
-            <div class="photo-grid" id="gallery">
-                <div class="photo-card" data-loc="sf" data-lat="37.8199" data-lng="-122.4783" data-exif="f/2.4 | 1/1000s | ISO 50 | 4.3mm" onclick="openModal('photography/s10/ggbridge.webp', 'Golden Gate Bridge', 'San Francisco &middot; Shot on S10', this)">
-                    <img src="photography/s10/ggbridge.webp" alt="Golden Gate Bridge" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Golden Gate Bridge</div>
-                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="sf" data-lat="37.8267" data-lng="-122.4233" data-exif="f/2.4 | 1/800s | ISO 64 | 4.3mm" onclick="openModal('photography/s10/alcatraz.webp', 'Alcatraz', 'San Francisco &middot; Shot on S10', this)">
-                    <img src="photography/s10/alcatraz.webp" alt="Alcatraz" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Alcatraz</div>
-                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="sf" data-lat="37.7949" data-lng="-122.3994" data-exif="f/1.5 | 1/500s | ISO 100 | 4.3mm" onclick="openModal('photography/s10/oaklandfromSF.webp', 'Secondary View - Oakland', 'San Francisco &middot; Shot on S10', this)">
-                    <img src="photography/s10/oaklandfromSF.webp" alt="Oakland from SF" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Secondary View - Oakland</div>
-                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="sf" data-lat="37.7672" data-lng="-122.4685" data-exif="f/1.5 | 1/250s | ISO 100 | 4.3mm" onclick="openModal('photography/s10/SFgardens.webp', 'Botanical Scenery', 'San Francisco &middot; Shot on S10', this)">
-                    <img src="photography/s10/SFgardens.webp" alt="SF Gardens" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Botanical Scenery</div>
-                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="sf" data-lat="37.7749" data-lng="-122.4194" data-exif="f/2.4 | 1/640s | ISO 50 | 4.3mm" onclick="openModal('photography/s10/SFslopes.webp', 'City Slopes', 'San Francisco &middot; Shot on S10', this)">
-                    <img src="photography/s10/SFslopes.webp" alt="SF Slopes" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">City Slopes</div>
-                        <div class="photo-meta">San Francisco &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.4254" data-lng="-116.1773" onclick="openModal('photography/s10/lakelouisenordicstop.webp', 'Lake Louise Nordic Stop', 'Banff &middot; Shot on S10', this)">
-                    <img src="photography/s10/lakelouisenordicstop.webp" alt="Lake Louise Nordic Stop" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Lake Louise Nordic Stop</div>
-                        <div class="photo-meta">Banff &middot; Shot on S10</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708" onclick="openModal('photography/DSLR/3sisterstrailtrain.webp', 'Three Sisters Trail Train', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/3sisterstrailtrain.webp" alt="Three Sisters Trail Train" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Three Sisters Trail Train</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/banffgondolaeast.webp', 'Banff Gondola East', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/banffgondolaeast.webp" alt="Banff Gondola East" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Banff Gondola East</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/banffgondolasunisset.webp', 'Banff Gondola Sunset', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/banffgondolasunisset.webp" alt="Banff Gondola Sunset" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Banff Gondola Sunset</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1636" data-lng="-115.5623" onclick="openModal('photography/DSLR/fairmontbanff.webp', 'Fairmont Banff Springs', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/fairmontbanff.webp" alt="Fairmont Banff Springs" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Fairmont Banff Springs</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1784" data-lng="-115.5708" onclick="openModal('photography/DSLR/goldenhourmountain.webp', 'Golden Hour Mountain', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/goldenhourmountain.webp" alt="Golden Hour Mountain" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Golden Hour Mountain</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.4130" data-lng="-116.2289" onclick="openModal('photography/DSLR/leftmntnlakelouise.webp', 'Left Mountain Lake Louise', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/leftmntnlakelouise.webp" alt="Left Mountain Lake Louise" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">Left Mountain Lake Louise</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-                <div class="photo-card" data-loc="banff" data-lat="51.1444" data-lng="-115.5564" onclick="openModal('photography/DSLR/ongondola.webp', 'On Gondola View', 'Banff &middot; Shot on DSLR', this)">
-                    <img src="photography/DSLR/ongondola.webp" alt="On Gondola View" class="photo-image" loading="lazy" decoding="async">
-                    <div class="photo-info">
-                        <div class="photo-title">On Gondola View</div>
-                        <div class="photo-meta">Banff &middot; Shot on DSLR</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inline Map Panel (per-image) -->
-            <div id="inlineMapPanel" class="inline-map-panel" style="display:none;">
-                <div class="inline-map-header">
-                    <span id="inlineMapTitle">Location</span>
-                    <button onclick="closeInlineMap()" class="inline-map-close">&times;</button>
-                </div>
-                <div id="inlineMap" style="width:100%;border-radius:0 0 8px 8px;"></div>
-            </div>
-
-
-        </div>
-
+<!-- Inline map popover -->
+<div id="inlineMapPanel" class="inline-map-panel" style="display:none;">
+    <div class="inline-map-header">
+        <span id="inlineMapTitle">Location</span>
+        <button onclick="closeInlineMap()" class="inline-map-close" aria-label="Close map">&times;</button>
     </div>
+    <div id="inlineMap"></div>
+</div>
 
-    <!-- Lightbox Modal -->
-    <div id="photo-modal" class="modal">
-        <span class="modal-close" onclick="closeModal()" aria-label="Close">&times;</span>
-        <button class="modal-nav prev" onclick="changePhoto(-1)" aria-label="Previous photo">&#10094;</button>
-        <button class="modal-nav next" onclick="changePhoto(1)" aria-label="Next photo">&#10095;</button>
+<!-- Lightbox -->
+<div id="photo-modal" class="modal" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <div class="lb-counter" id="lbCounter">01 / 13</div>
+    <div class="lb-res-badge" id="lbResBadge">Loading full resolution…</div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <button class="modal-nav prev" onclick="changePhoto(-1)" aria-label="Previous photo">&#10094;</button>
+    <button class="modal-nav next" onclick="changePhoto(1)" aria-label="Next photo">&#10095;</button>
 
-        <div class="modal-split-layout">
-            <div class="modal-image-container">
-                <img class="modal-content" id="modal-img">
-                <div class="image-overlay">
-                    <div class="image-overlay-info">
-                        <div class="image-overlay-title" id="overlay-title"></div>
-                        <div class="image-overlay-city" id="overlay-city"></div>
-                    </div>
-                    <button class="image-overlay-fs" onclick="toggleFullscreen()" aria-label="Toggle fullscreen">
-                        <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-                        <span>Fullscreen</span>
-                    </button>
-                </div>
+    <div class="lb-stage" id="lbStage">
+        <img class="lb-img" id="lbImg" alt="">
+        <div class="lb-caption">
+            <div>
+                <div class="lb-cap-title" id="lbTitle"></div>
+                <div class="lb-cap-meta" id="lbMeta"></div>
+            </div>
+            <div class="lb-cap-actions">
+                <button class="lb-act-btn" id="lbMapBtn" type="button"><i class="fas fa-location-dot"></i> Map</button>
+                <button class="lb-act-btn" onclick="toggleFullscreen()" type="button"><i class="fas fa-expand"></i> Fullscreen</button>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Filter
-        function filterPhotos(loc, btn) {
-            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-            if (btn) btn.classList.add('active');
-            document.querySelectorAll('.photo-card').forEach(function(card) {
-                if (loc === 'all' || card.dataset.loc === loc) {
-                    card.classList.remove('tag-hidden');
-                } else {
-                    card.classList.add('tag-hidden');
-                }
-            });
+    <div class="lb-filmstrip" id="lbFilmstrip" aria-label="Photo thumbnails"></div>
+</div>
 
-            requestAnimationFrame(function() {
-                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-            });
-        }
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+    "use strict";
 
-        // Per-image location buttons
-        var inlineMap = null;
-        var activeMapCard = null;
+    /* ============ Data ============ */
+    var PHOTOS = [
+        { id: "ggbridge",     src: "photography/s10/ggbridge.webp",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",        loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8199, lng: -122.4783, exif: "f/2.4 · 1/1000s · ISO 50" },
+        { id: "alcatraz",     src: "photography/s10/alcatraz.webp",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                  loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8267, lng: -122.4233, exif: "f/2.4 · 1/800s · ISO 64" },
+        { id: "oakland",      src: "photography/s10/oaklandfromSF.webp",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",      loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7949, lng: -122.3994, exif: "f/1.5 · 1/500s · ISO 100" },
+        { id: "gardens",      src: "photography/s10/SFgardens.webp",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",         loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7672, lng: -122.4685, exif: "f/1.5 · 1/250s · ISO 100" },
+        { id: "slopes",       src: "photography/s10/SFslopes.webp",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",               loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7749, lng: -122.4194, exif: "f/2.4 · 1/640s · ISO 50" },
+        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.webp",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",   loc: "banff", city: "Banff",         device: "S10",  lat: 51.4254, lng: -116.1773 },
+        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.webp",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train", loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
+        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.webp",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",        loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
+        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.webp", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
+        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.webp",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",    loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1636, lng: -115.5623 },
+        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.webp",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
+        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.webp",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise",loc: "banff", city: "Banff",         device: "DSLR", lat: 51.4130, lng: -116.2289 },
+        { id: "ongondola",    src: "photography/DSLR/ongondola.webp",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",           loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 }
+    ];
 
-        // Add location buttons to cards with lat/lng
-        document.querySelectorAll('.photo-card[data-lat]').forEach(function(card) {
-            var info = card.querySelector('.photo-info');
-            if (!info) return;
-            var btn = document.createElement('button');
-            btn.className = 'photo-loc-btn';
-            btn.innerHTML = '\uD83D\uDCCD See on map';
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                showInlineMap(card);
-            });
-            info.appendChild(btn);
+    var FILTERS = [
+        { key: "all",   label: "All",           theme: "theme-all",   tagline: "Frames collected on the road — fog, summits and golden hours." },
+        { key: "sf",    label: "San Francisco", theme: "theme-sf",    tagline: "Fog rolling over golden steel — shot on foot, uphill both ways." },
+        { key: "banff", label: "Banff",         theme: "theme-banff", tagline: "Alpine light, glacial water, and one very scenic gondola." }
+    ];
+
+    var state = { filter: "all", visible: PHOTOS.slice(), index: 0 };
+
+    /* ============ Build filter pills ============ */
+    var nav = document.getElementById("filterNav");
+    FILTERS.forEach(function (f) {
+        var n = f.key === "all" ? PHOTOS.length : PHOTOS.filter(function (p) { return p.loc === f.key; }).length;
+        var b = document.createElement("button");
+        b.className = "filter-btn" + (f.key === "all" ? " active" : "");
+        b.type = "button";
+        b.innerHTML = f.label + ' <span class="count">' + n + "</span>";
+        b.addEventListener("click", function () { setFilter(f.key, b); });
+        nav.appendChild(b);
+    });
+
+    /* ============ Build gallery ============ */
+    var grid = document.getElementById("gallery");
+    PHOTOS.forEach(function (p, i) {
+        var card = document.createElement("article");
+        card.className = "photo-card";
+        card.dataset.loc = p.loc;
+        card.tabIndex = 0;
+        card.setAttribute("role", "button");
+        card.setAttribute("aria-label", "Open " + p.title);
+        card.innerHTML =
+            '<img class="photo-image" src="' + p.src + '" alt="' + p.title + '" loading="lazy" decoding="async">' +
+            '<span class="card-device">' + p.device + "</span>" +
+            '<div class="card-veil">' +
+                '<div class="card-title">' + p.title + "</div>" +
+                '<div class="card-meta"><span>' + p.city + (p.exif ? " · " + p.exif : "") + "</span>" +
+                '<button class="card-loc-btn" type="button"><i class="fas fa-location-dot"></i> Map</button></div>' +
+            "</div>";
+        card.addEventListener("click", function (e) {
+            if (e.target.closest(".card-loc-btn")) return;
+            openModal(i);
         });
+        card.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(i); }
+        });
+        card.querySelector(".card-loc-btn").addEventListener("click", function (e) {
+            e.stopPropagation();
+            showInlineMap(p);
+        });
+        grid.appendChild(card);
+    });
 
-        function showInlineMap(card) {
-            var lat = parseFloat(card.dataset.lat);
-            var lng = parseFloat(card.dataset.lng);
-            var titleEl = card.querySelector('.photo-title');
-            var name = titleEl ? titleEl.textContent : 'Location';
-            var panel = document.getElementById('inlineMapPanel');
-
-            // If clicking the same card, toggle off
-            if (activeMapCard === card && panel.style.display !== 'none') {
-                closeInlineMap();
-                return;
+    /* Reveal-on-scroll */
+    var seenObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+            if (en.isIntersecting) {
+                en.target.classList.add("seen");
+                seenObs.unobserve(en.target);
             }
+        });
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".photo-card").forEach(function (c) { seenObs.observe(c); });
 
-            panel.style.display = 'block';
-            document.getElementById('inlineMapTitle').textContent = '\uD83D\uDCCD ' + name;
-            activeMapCard = card;
+    /* ============ Filtering + city themes ============ */
+    function setFilter(key, btn) {
+        if (state.filter === key) return;
+        state.filter = key;
+        var f = FILTERS.filter(function (x) { return x.key === key; })[0];
 
-            if (inlineMap) {
-                inlineMap.remove();
-                inlineMap = null;
-            }
+        document.querySelectorAll(".filter-btn").forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
 
-            inlineMap = L.map('inlineMap').setView([lat, lng], 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18
-            }).addTo(inlineMap);
-            L.marker([lat, lng]).addTo(inlineMap).bindPopup('<strong>' + name + '</strong>').openPopup();
+        /* swap aurora theme */
+        FILTERS.forEach(function (x) { document.body.classList.remove(x.theme); });
+        document.body.classList.add(f.theme);
 
-            // Scroll panel into view
-            setTimeout(function() {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                inlineMap.invalidateSize();
-                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-            }, 100);
-        }
+        /* swap tagline */
+        var tag = document.getElementById("galleryTagline");
+        tag.classList.add("swap");
+        setTimeout(function () { tag.textContent = f.tagline; tag.classList.remove("swap"); }, 380);
 
-        function closeInlineMap() {
-            var panel = document.getElementById('inlineMapPanel');
-            panel.style.display = 'none';
-            if (inlineMap) {
-                inlineMap.remove();
-                inlineMap = null;
-            }
-            activeMapCard = null;
-
+        /* animate grid swap */
+        grid.classList.add("switching");
+        setTimeout(function () {
+            document.querySelectorAll(".photo-card").forEach(function (card) {
+                var show = key === "all" || card.dataset.loc === key;
+                card.classList.toggle("tag-hidden", !show);
+                if (show) card.classList.add("seen");
+            });
+            state.visible = PHOTOS.filter(function (p) { return key === "all" || p.loc === key; });
+            grid.classList.remove("switching");
             if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-        }
+        }, 230);
+    }
 
-        // ESC key closes map panel
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeInlineMap();
+    /* ============ Inline map ============ */
+    var inlineMap = null;
+    window.showInlineMap = function (p) {
+        var panel = document.getElementById("inlineMapPanel");
+        panel.style.display = "block";
+        document.getElementById("inlineMapTitle").textContent = "📍 " + p.title;
+        if (inlineMap) { inlineMap.remove(); inlineMap = null; }
+        inlineMap = L.map("inlineMap").setView([p.lat, p.lng], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(inlineMap);
+        L.marker([p.lat, p.lng]).addTo(inlineMap).bindPopup("<strong>" + p.title + "</strong>").openPopup();
+        setTimeout(function () { inlineMap.invalidateSize(); }, 120);
+    };
+    window.closeInlineMap = function () {
+        document.getElementById("inlineMapPanel").style.display = "none";
+        if (inlineMap) { inlineMap.remove(); inlineMap = null; }
+    };
+
+    /* ============ Lightbox ============ */
+    var modal = document.getElementById("photo-modal");
+    var lbImg = document.getElementById("lbImg");
+    var lbStage = document.getElementById("lbStage");
+    var strip = document.getElementById("lbFilmstrip");
+    var resBadge = document.getElementById("lbResBadge");
+    var fullLoader = null;
+    var fullLoaded = {};
+
+    function visibleList() { return state.visible.length ? state.visible : PHOTOS; }
+
+    function buildStrip() {
+        strip.innerHTML = "";
+        visibleList().forEach(function (p, i) {
+            var t = document.createElement("button");
+            t.className = "lb-thumb";
+            t.type = "button";
+            t.setAttribute("aria-label", p.title);
+            t.innerHTML = '<img src="' + p.src + '" alt="" loading="lazy">';
+            t.addEventListener("click", function () { showPhoto(i, true); });
+            strip.appendChild(t);
         });
+    }
 
-        // Modal with EXIF
-        var currentPhotos = [];
-        var currentIndex = 0;
-        var fullscreenIdleTimer = null;
+    function pad(n) { return n < 10 ? "0" + n : String(n); }
 
-        function isModalFullscreen() {
-            var modal = document.getElementById('photo-modal');
-            return !!(document.fullscreenElement || document.webkitFullscreenElement || modal.classList.contains('is-fullscreen'));
-        }
+    function showPhoto(i, viaStrip) {
+        var list = visibleList();
+        state.index = ((i % list.length) + list.length) % list.length;
+        var p = list[state.index];
 
-        function showFullscreenControls() {
-            var modal = document.getElementById('photo-modal');
-            modal.classList.remove('controls-hidden');
-            if (!isModalFullscreen()) return;
-            if (fullscreenIdleTimer) window.clearTimeout(fullscreenIdleTimer);
-            fullscreenIdleTimer = window.setTimeout(function() {
-                if (isModalFullscreen()) {
-                    modal.classList.add('controls-hidden');
+        /* webp instantly, then swap in the full-res original */
+        if (fullLoader) { fullLoader.onload = null; fullLoader = null; }
+        lbImg.classList.remove("swapping");
+        lbImg.src = fullLoaded[p.id] ? p.full : p.src;
+        lbImg.alt = p.title;
+
+        if (!fullLoaded[p.id]) {
+            resBadge.classList.add("show");
+            fullLoader = new Image();
+            fullLoader.onload = function () {
+                fullLoaded[p.id] = true;
+                resBadge.classList.remove("show");
+                var cur = visibleList()[state.index];
+                if (cur && cur.id === p.id) {
+                    lbImg.classList.add("swapping");
+                    lbImg.src = p.full;
                 }
-            }, 1800);
-        }
-
-        function stopFullscreenControlsTimer() {
-            if (fullscreenIdleTimer) {
-                window.clearTimeout(fullscreenIdleTimer);
-                fullscreenIdleTimer = null;
-            }
-            document.getElementById('photo-modal').classList.remove('controls-hidden');
-        }
-
-        function setOverlayInfo(card, title, meta) {
-            var metaParts = meta ? meta.split(/\s*[·•]\s*/).filter(function(part) { return part.trim(); }) : [];
-            var city = metaParts[0] ? metaParts[0].trim() : '';
-            var titleEl = document.getElementById('overlay-title');
-            var cityEl = document.getElementById('overlay-city');
-            if (titleEl) titleEl.textContent = title || 'Untitled';
-            if (cityEl) {
-                if (city) {
-                    cityEl.innerHTML = '<i class="fas fa-location-dot" aria-hidden="true"></i><span></span>';
-                    cityEl.querySelector('span').textContent = city;
-                    cityEl.style.display = 'flex';
-                } else {
-                    cityEl.textContent = '';
-                    cityEl.style.display = 'none';
-                }
-            }
-        }
-
-        // Show the image overlay while the mouse is moving over the photo, hide it after a short idle
-        var overlayIdleTimer = null;
-        function pokeImageOverlay() {
-            var container = document.querySelector('.modal-image-container');
-            if (!container) return;
-            container.classList.add('show-overlay');
-            if (overlayIdleTimer) window.clearTimeout(overlayIdleTimer);
-            overlayIdleTimer = window.setTimeout(function() {
-                container.classList.remove('show-overlay');
-            }, 2600);
-        }
-        (function() {
-            var container = document.querySelector('.modal-image-container');
-            if (!container) return;
-            container.addEventListener('mousemove', pokeImageOverlay);
-            container.addEventListener('mouseenter', pokeImageOverlay);
-            container.addEventListener('mouseleave', function() {
-                if (overlayIdleTimer) window.clearTimeout(overlayIdleTimer);
-                container.classList.remove('show-overlay');
-            });
-        })();
-
-        function getPhotoDetails(card) {
-            var imageEl = card.querySelector('.photo-image');
-            var titleEl = card.querySelector('.photo-title');
-            var metaEl = card.querySelector('.photo-meta');
-
-            return {
-                src: imageEl ? imageEl.getAttribute('src') : '',
-                title: titleEl ? titleEl.textContent : 'Untitled',
-                meta: metaEl ? metaEl.textContent.trim() : ''
             };
+            fullLoader.onerror = function () { resBadge.classList.remove("show"); };
+            fullLoader.src = p.full;
+        } else {
+            resBadge.classList.remove("show");
         }
 
-        function openModal(imgSrc, title, meta, cardEl) {
-            var modal = document.getElementById('photo-modal');
-            var modalImg = document.getElementById('modal-img');
-            var photo = getPhotoDetails(cardEl);
-            currentPhotos = Array.from(document.querySelectorAll('.photo-card:not(.tag-hidden)[onclick]'));
-            currentIndex = currentPhotos.indexOf(cardEl);
-            if (currentIndex === -1) currentIndex = 0;
-            modal.style.display = "flex";
-            modal.classList.remove('controls-hidden');
-            modalImg.src = photo.src || imgSrc;
-            modalImg.alt = photo.title || title;
-            setOverlayInfo(cardEl, photo.title || title, photo.meta || meta);
-            document.body.style.overflow = "hidden";
-            pokeImageOverlay();
-            preloadAdjacent();
+        document.getElementById("lbTitle").textContent = p.title;
+        document.getElementById("lbMeta").innerHTML =
+            "<span><i class='fas fa-location-dot'></i> " + p.city + "</span>" +
+            "<span><i class='fas fa-camera'></i> " + p.device + "</span>" +
+            (p.exif ? "<span>" + p.exif + "</span>" : "");
+        document.getElementById("lbCounter").textContent = pad(state.index + 1) + " / " + pad(list.length);
 
-            if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-        }
+        var thumbs = strip.querySelectorAll(".lb-thumb");
+        thumbs.forEach(function (t, ti) { t.classList.toggle("active", ti === state.index); });
+        var active = thumbs[state.index];
+        if (active && !viaStrip) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
 
-        function changePhoto(n) {
-            if (currentPhotos.length === 0) return;
-            currentIndex += n;
-            if (currentIndex >= currentPhotos.length) currentIndex = 0;
-            if (currentIndex < 0) currentIndex = currentPhotos.length - 1;
-            var card = currentPhotos[currentIndex];
-            var photo = getPhotoDetails(card);
-            var modalImg = document.getElementById('modal-img');
-            modalImg.src = photo.src;
-            modalImg.alt = photo.title;
-            setOverlayInfo(card, photo.title, photo.meta);
-            pokeImageOverlay();
-            preloadAdjacent();
-        }
+        document.getElementById("lbMapBtn").onclick = function () {
+            closeModal();
+            setTimeout(function () { showInlineMap(p); }, 150);
+        };
 
-        function closeModal() {
-            var modal = document.getElementById('photo-modal');
-            if (document.fullscreenElement || document.webkitFullscreenElement) {
-                if (document.exitFullscreen) document.exitFullscreen();
-                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-            }
-            modal.classList.remove('is-fullscreen');
-            modal.classList.remove('controls-hidden');
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-            stopFullscreenControlsTimer();
+        pokeOverlay();
+        preloadAdjacent();
+    }
 
-            requestAnimationFrame(function() {
-                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-            });
-        }
+    function preloadAdjacent() {
+        var list = visibleList();
+        [1, -1].forEach(function (d) {
+            var p = list[(state.index + d + list.length) % list.length];
+            var img = new Image();
+            img.src = fullLoaded[p.id] ? p.full : p.src;
+        });
+    }
 
-        function toggleFullscreen() {
-            var modal = document.getElementById('photo-modal');
-            var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
-            
-            if (!isNativeFS) {
-                if (modal.requestFullscreen) {
-                    modal.requestFullscreen();
-                } else if (modal.webkitRequestFullscreen) {
-                    modal.webkitRequestFullscreen();
-                } else {
-                    // Fallback to CSS fullscreen
-                    modal.classList.add('is-fullscreen');
-                }
-                showFullscreenControls();
+    window.openModal = function (photoIdx) {
+        var list = visibleList();
+        var i = list.indexOf(PHOTOS[photoIdx]);
+        if (i === -1) i = 0;
+        buildStrip();
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+        showPhoto(i);
+    };
+
+    window.changePhoto = function (d) { showPhoto(state.index + d); };
+
+    window.closeModal = function () {
+        if (document.fullscreenElement) document.exitFullscreen();
+        modal.classList.remove("open");
+        modal.classList.remove("is-fullscreen");
+        document.body.style.overflow = "";
+    };
+
+    window.toggleFullscreen = function () {
+        if (!document.fullscreenElement && !modal.classList.contains("is-fullscreen")) {
+            if (modal.requestFullscreen) {
+                modal.requestFullscreen().catch(function () { modal.classList.add("is-fullscreen"); });
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else {
-                    modal.classList.remove('is-fullscreen');
-                }
-                stopFullscreenControlsTimer();
+                modal.classList.add("is-fullscreen");
             }
-            
-            requestAnimationFrame(function() {
-                if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
-            });
+        } else {
+            if (document.fullscreenElement) document.exitFullscreen();
+            modal.classList.remove("is-fullscreen");
         }
-        
-        document.addEventListener('fullscreenchange', function() {
-            var modal = document.getElementById('photo-modal');
-            if (!document.fullscreenElement) {
-                modal.classList.remove('is-fullscreen');
-                stopFullscreenControlsTimer();
-            } else {
-                modal.classList.add('is-fullscreen');
-                showFullscreenControls();
-            }
-        });
-        document.addEventListener('webkitfullscreenchange', function() {
-            var modal = document.getElementById('photo-modal');
-            if (!document.webkitFullscreenElement) {
-                modal.classList.remove('is-fullscreen');
-                stopFullscreenControlsTimer();
-            } else {
-                modal.classList.add('is-fullscreen');
-                showFullscreenControls();
-            }
-        });
+    };
+    document.addEventListener("fullscreenchange", function () {
+        modal.classList.toggle("is-fullscreen", !!document.fullscreenElement);
+    });
 
-        document.getElementById('photo-modal').addEventListener('mousemove', function() {
-            if (isModalFullscreen()) showFullscreenControls();
-        });
+    lbImg.addEventListener("click", function () { window.toggleFullscreen(); });
 
-        document.getElementById('photo-modal').addEventListener('click', function(e) {
-            if (isModalFullscreen() && e.target !== document.getElementById('photo-modal')) {
-                showFullscreenControls();
-            }
-        });
+    /* caption shows while mouse moves */
+    var overlayTimer = null;
+    function pokeOverlay() {
+        lbStage.classList.add("show-overlay");
+        if (overlayTimer) clearTimeout(overlayTimer);
+        overlayTimer = setTimeout(function () { lbStage.classList.remove("show-overlay"); }, 2800);
+    }
+    lbStage.addEventListener("mousemove", pokeOverlay);
+    lbStage.addEventListener("touchstart", pokeOverlay, { passive: true });
 
-        window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('photo-modal') || event.target.closest('.modal-split-layout') && event.target.classList.contains('modal-split-layout')) {
-                var modal = document.getElementById('photo-modal');
-                var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
-                if (isNativeFS || modal.classList.contains('is-fullscreen')) {
-                    toggleFullscreen();
-                } else {
-                    closeModal();
-                }
-            }
-        });
-        document.addEventListener('keydown', function(event) {
-            var modal = document.getElementById('photo-modal');
-            if (modal.style.display === "flex") {
-                if (event.key === "Escape") {
-                    var isNativeFS = document.fullscreenElement || document.webkitFullscreenElement;
-                    if (isNativeFS || modal.classList.contains('is-fullscreen')) {
-                        if (document.exitFullscreen) {
-                            document.exitFullscreen();
-                        } else if (document.webkitExitFullscreen) {
-                            document.webkitExitFullscreen();
-                        } else {
-                            modal.classList.remove('is-fullscreen');
-                        }
-                    } else {
-                        closeModal();
-                    }
-                }
-                else if (event.key === "ArrowRight") changePhoto(1);
-                else if (event.key === "ArrowLeft") changePhoto(-1);
-            }
-        });
+    /* close on backdrop click */
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal || e.target === lbStage) closeModal();
+    });
 
-        // Preload the next/previous full images so navigation feels instant
-        function preloadAdjacent() {
-            if (!currentPhotos.length) return;
-            [1, -1].forEach(function(d) {
-                var i = (currentIndex + d + currentPhotos.length) % currentPhotos.length;
-                var card = currentPhotos[i];
-                var img = card && card.querySelector('.photo-image');
-                if (img && img.src) { var pre = new Image(); pre.src = img.src; }
-            });
+    /* keyboard */
+    document.addEventListener("keydown", function (e) {
+        if (!modal.classList.contains("open")) {
+            if (e.key === "Escape") closeInlineMap();
+            return;
         }
+        if (e.key === "Escape") {
+            if (document.fullscreenElement) document.exitFullscreen();
+            else if (modal.classList.contains("is-fullscreen")) modal.classList.remove("is-fullscreen");
+            else closeModal();
+        }
+        else if (e.key === "ArrowRight") changePhoto(1);
+        else if (e.key === "ArrowLeft") changePhoto(-1);
+        else if (e.key === "f" || e.key === "F") toggleFullscreen();
+    });
 
-        // Swipe left/right to navigate on touch devices
-        (function() {
-            var container = document.querySelector('.modal-image-container');
-            if (!container) return;
-            var startX = 0, startY = 0, tracking = false;
-            container.addEventListener('touchstart', function(e) {
-                if (e.touches.length !== 1) return;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                tracking = true;
-            }, { passive: true });
-            container.addEventListener('touchend', function(e) {
-                if (!tracking) return;
-                tracking = false;
-                var dx = e.changedTouches[0].clientX - startX;
-                var dy = e.changedTouches[0].clientY - startY;
-                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-                    changePhoto(dx < 0 ? 1 : -1);
-                }
-            }, { passive: true });
-        })();
-
-
-    </script>
-    <script>
-        (function() {
-            var key = 'visited-photography';
-            if (!localStorage.getItem(key)) {
-                document.querySelector('.content-area').classList.add('first-visit');
-                localStorage.setItem(key, '1');
-            }
-        })();
-    </script>
-    <script src="site-console.js"></script>
-    <script src="global_fx.js"></script>
+    /* swipe */
+    (function () {
+        var sx = 0, sy = 0, on = false;
+        lbStage.addEventListener("touchstart", function (e) {
+            if (e.touches.length !== 1) return;
+            sx = e.touches[0].clientX; sy = e.touches[0].clientY; on = true;
+        }, { passive: true });
+        lbStage.addEventListener("touchend", function (e) {
+            if (!on) return; on = false;
+            var dx = e.changedTouches[0].clientX - sx;
+            var dy = e.changedTouches[0].clientY - sy;
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) changePhoto(dx < 0 ? 1 : -1);
+        }, { passive: true });
+    })();
+})();
+</script>
+<script src="site-console.js"></script>
+<script src="global_fx.js"></script>
 </body>
 </html>

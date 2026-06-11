@@ -637,6 +637,12 @@ html.theme-transitioning *::after {
     50% { box-shadow: 0 8px 34px -6px rgba(34, 211, 238, 0.6); }
 }
 body.index-page #ag-console-fab { bottom: 92px; }
+/* Resume has a back-to-top button bottom-right; stack the console FAB above it */
+body.resume-page #ag-console-fab { bottom: 84px; }
+@media (max-width: 900px) {
+    /* back-to-top is hidden on mobile, reclaim the corner */
+    body.resume-page #ag-console-fab { bottom: 18px; }
+}
 @media (max-width: 800px) {
     body.index-page #ag-console-fab { bottom: 88px; }
     #ag-console .ag-console-inner { height: 72vh; width: 100vw; border-radius: 0 0 12px 12px; }

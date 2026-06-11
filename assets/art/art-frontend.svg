@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Abstract 3D front-end development illustration">
+  <defs>
+    <radialGradient id="fe-bg" cx="50%" cy="40%" r="68%">
+      <stop offset="0%" stop-color="#e6f5ef"/><stop offset="100%" stop-color="#cfe9de"/>
+    </radialGradient>
+    <linearGradient id="fe-win-back" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#8fccb8"/><stop offset="100%" stop-color="#5da98e"/>
+    </linearGradient>
+    <linearGradient id="fe-win-front" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#fffdf6"/><stop offset="100%" stop-color="#efe6d2"/>
+    </linearGradient>
+    <linearGradient id="fe-bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6fb89c"/><stop offset="100%" stop-color="#3f8a6c"/>
+    </linearGradient>
+    <radialGradient id="fe-sphere" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#f7b9a1"/><stop offset="55%" stop-color="#e58a68"/><stop offset="100%" stop-color="#c2613f"/>
+    </radialGradient>
+    <filter id="fe-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+
+  <path fill="url(#fe-bg)" d="M242 36c104-6 192 66 198 172 6 112-74 210-184 216C150 430 50 354 44 242 38 132 138 42 242 36Z"/>
+
+  <ellipse cx="240" cy="408" rx="132" ry="16" fill="#2f6b53" opacity="0.28" filter="url(#fe-blur)"/>
+
+  <!-- back window -->
+  <g transform="rotate(-4 300 200)">
+    <rect x="196" y="116" width="200" height="150" rx="18" fill="url(#fe-win-back)"/>
+    <rect x="196" y="116" width="200" height="34" rx="18" fill="#4f9a7e"/>
+    <rect x="196" y="134" width="200" height="16" fill="#4f9a7e"/>
+    <circle cx="218" cy="133" r="6" fill="#f4a6a0"/>
+    <circle cx="238" cy="133" r="6" fill="#f5d489"/>
+    <circle cx="258" cy="133" r="6" fill="#b6e3c8"/>
+  </g>
+
+  <!-- front window -->
+  <g transform="rotate(3 180 300)">
+    <rect x="84" y="190" width="230" height="170" rx="20" fill="url(#fe-win-front)"/>
+    <rect x="84" y="190" width="230" height="38" rx="20" fill="#dfd1b5"/>
+    <rect x="84" y="210" width="230" height="18" fill="#dfd1b5"/>
+    <circle cx="108" cy="209" r="6" fill="#e58a68"/>
+    <circle cx="128" cy="209" r="6" fill="#e8c25c"/>
+    <circle cx="148" cy="209" r="6" fill="#76ab8f"/>
+    <rect x="108" y="250" width="120" height="16" rx="8" fill="url(#fe-bar)"/>
+    <rect x="108" y="280" width="180" height="12" rx="6" fill="#cdbf9f"/>
+    <rect x="108" y="302" width="150" height="12" rx="6" fill="#cdbf9f"/>
+    <rect x="108" y="326" width="70" height="18" rx="9" fill="#e58a68"/>
+  </g>
+
+  <!-- cursor -->
+  <path d="M330 304 354 368l10-26 26-8-60-30Z" fill="#3c3c5c"/>
+  <path d="M330 304 354 368l10-26 26-8-60-30Z" fill="none" stroke="#fffdf6" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- accents -->
+  <circle cx="372" cy="120" r="22" fill="url(#fe-sphere)"/>
+  <ellipse cx="365" cy="112" rx="6" ry="4" fill="#ffffff" opacity="0.6"/>
+  <circle cx="96" cy="136" r="13" fill="none" stroke="#76ab8f" stroke-width="9"/>
+  <circle cx="404" cy="262" r="9" fill="#e8c25c"/>
+</svg>
