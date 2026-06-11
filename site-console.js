@@ -32,7 +32,17 @@
     fab.title = "Open terminal  ( ` )";
     fab.setAttribute("aria-label", "Open interactive terminal");
     fab.innerHTML = '<span aria-hidden="true">&gt;_</span>';
-    document.body.appendChild(fab);
+    // Prefer placing the launcher inside the site-tabs controls, to the left
+    // of the light/dark toggle. Fall back to a floating button otherwise.
+    var navControls = document.querySelector(".site-tabs-controls");
+    var themeBtn = document.getElementById("site-theme-btn");
+    if (navControls) {
+        fab.classList.add("in-nav");
+        if (themeBtn) navControls.insertBefore(fab, themeBtn);
+        else navControls.insertBefore(fab, navControls.firstChild);
+    } else {
+        document.body.appendChild(fab);
+    }
 
     var body = wrap.querySelector(".ag-console-body");
     var form = wrap.querySelector(".ag-console-inputrow");
