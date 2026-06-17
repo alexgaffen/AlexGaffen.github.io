@@ -575,10 +575,10 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
-        <a href="index.html" class="site-tab ">🏠 HOME</a>
-        <a href="resume.html" class="site-tab ">📄 RESUME</a>
-        <a href="photography.html" class="site-tab is-active">📷 PHOTOS</a>
-        <!-- Blog tab temporarily hidden: <a href="blog.html" class="site-tab ">✏️ BLOG</a> -->
+        <a href="index.html" class="site-tab " data-mobile-label="🏠">HOME</a>
+        <a href="resume.html" class="site-tab " data-mobile-label="📄">RESUME</a>
+        <a href="photography.html" class="site-tab is-active" data-mobile-label="📷">PHOTOS</a>
+        <!-- Blog tab temporarily hidden: <a href="blog.html" class="site-tab " data-mobile-label="✏️">BLOG</a> -->
     </div>
     <div class="site-tabs-controls">
         <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
@@ -599,9 +599,8 @@
 
 <div class="page-shell">
     <header class="gallery-hero">
-        <div class="hero-eyebrow">Field Notes · Travel Frames</div>
         <h1 class="gallery-title">Photography</h1>
-        <p class="gallery-tagline" id="galleryTagline">Frames collected on the road — fog, summits and golden hours.</p>
+        <p class="gallery-tagline" id="galleryTagline">Frames collected on the road, fog, summits and golden hours.</p>
         <div class="filter-nav" id="filterNav" role="group" aria-label="Filter photos by location"></div>
     </header>
 
@@ -651,24 +650,24 @@
 
     /* ============ Data ============ */
     var PHOTOS = [
-        { id: "ggbridge",     src: "photography/s10/ggbridge.webp",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",        loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8199, lng: -122.4783, exif: "f/2.4 · 1/1000s · ISO 50" },
-        { id: "alcatraz",     src: "photography/s10/alcatraz.webp",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                  loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8267, lng: -122.4233, exif: "f/2.4 · 1/800s · ISO 64" },
-        { id: "oakland",      src: "photography/s10/oaklandfromSF.webp",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",      loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7949, lng: -122.3994, exif: "f/1.5 · 1/500s · ISO 100" },
-        { id: "gardens",      src: "photography/s10/SFgardens.webp",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",         loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7672, lng: -122.4685, exif: "f/1.5 · 1/250s · ISO 100" },
-        { id: "slopes",       src: "photography/s10/SFslopes.webp",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",               loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7749, lng: -122.4194, exif: "f/2.4 · 1/640s · ISO 50" },
-        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.webp",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",   loc: "banff", city: "Banff",         device: "S10",  lat: 51.4254, lng: -116.1773 },
-        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.webp",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train", loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
-        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.webp",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",        loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
-        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.webp", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
-        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.webp",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",    loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1636, lng: -115.5623 },
-        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.webp",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
-        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.webp",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise",loc: "banff", city: "Banff",         device: "DSLR", lat: 51.4130, lng: -116.2289 },
-        { id: "ongondola",    src: "photography/DSLR/ongondola.webp",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",           loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 }
+        { id: "ggbridge",     src: "photography/s10/ggbridge.jpg",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",        loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8199, lng: -122.4783, exif: "f/2.4 · 1/1000s · ISO 50" },
+        { id: "alcatraz",     src: "photography/s10/alcatraz.jpg",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                  loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8267, lng: -122.4233, exif: "f/2.4 · 1/800s · ISO 64" },
+        { id: "oakland",      src: "photography/s10/oaklandfromSF.jpg",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",      loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7949, lng: -122.3994, exif: "f/1.5 · 1/500s · ISO 100" },
+        { id: "gardens",      src: "photography/s10/SFgardens.jpg",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",         loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7672, lng: -122.4685, exif: "f/1.5 · 1/250s · ISO 100" },
+        { id: "slopes",       src: "photography/s10/SFslopes.jpg",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",               loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7749, lng: -122.4194, exif: "f/2.4 · 1/640s · ISO 50" },
+        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.jpg",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",   loc: "banff", city: "Banff",         device: "S10",  lat: 51.4254, lng: -116.1773 },
+        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.JPG",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train", loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
+        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.JPG",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",        loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
+        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.JPG", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
+        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.JPG",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",    loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1636, lng: -115.5623 },
+        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.JPG",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
+        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.JPG",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise",loc: "banff", city: "Banff",         device: "DSLR", lat: 51.4130, lng: -116.2289 },
+        { id: "ongondola",    src: "photography/DSLR/ongondola.jpg",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",           loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 }
     ];
 
     var FILTERS = [
-        { key: "all",   label: "All",           theme: "theme-all",   tagline: "Frames collected on the road — fog, summits and golden hours." },
-        { key: "sf",    label: "San Francisco", theme: "theme-sf",    tagline: "Fog rolling over golden steel — shot on foot, uphill both ways." },
+        { key: "all",   label: "All",           theme: "theme-all",   tagline: "Frames collected on the road, fog, summits and golden hours." },
+        { key: "sf",    label: "San Francisco", theme: "theme-sf",    tagline: "Fog rolling over golden steel, shot on foot, uphill both ways." },
         { key: "banff", label: "Banff",         theme: "theme-banff", tagline: "Alpine light, glacial water, and one very scenic gondola." }
     ];
 
@@ -808,29 +807,9 @@
         state.index = ((i % list.length) + list.length) % list.length;
         var p = list[state.index];
 
-        /* webp instantly, then swap in the full-res original */
-        if (fullLoader) { fullLoader.onload = null; fullLoader = null; }
-        lbImg.classList.remove("swapping");
-        lbImg.src = fullLoaded[p.id] ? p.full : p.src;
+        lbImg.src = p.full;
         lbImg.alt = p.title;
-
-        if (!fullLoaded[p.id]) {
-            resBadge.classList.add("show");
-            fullLoader = new Image();
-            fullLoader.onload = function () {
-                fullLoaded[p.id] = true;
-                resBadge.classList.remove("show");
-                var cur = visibleList()[state.index];
-                if (cur && cur.id === p.id) {
-                    lbImg.classList.add("swapping");
-                    lbImg.src = p.full;
-                }
-            };
-            fullLoader.onerror = function () { resBadge.classList.remove("show"); };
-            fullLoader.src = p.full;
-        } else {
-            resBadge.classList.remove("show");
-        }
+        resBadge.classList.remove("show");
 
         document.getElementById("lbTitle").textContent = p.title;
         document.getElementById("lbMeta").innerHTML =
@@ -858,7 +837,7 @@
         [1, -1].forEach(function (d) {
             var p = list[(state.index + d + list.length) % list.length];
             var img = new Image();
-            img.src = fullLoaded[p.id] ? p.full : p.src;
+            img.src = p.full;
         });
     }
 

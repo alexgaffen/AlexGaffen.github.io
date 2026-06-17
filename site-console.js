@@ -100,6 +100,7 @@
         if (isOpen) return;
         isOpen = true;
         wrap.classList.add("open");
+        document.documentElement.classList.add("ag-console-open");
         wrap.setAttribute("aria-hidden", "false");
         fab.classList.add("hidden");
         if (!booted) { booted = true; boot(); }
@@ -114,10 +115,14 @@
         pendingTimers = [];
         busy = false;
         wrap.classList.remove("open");
+        document.documentElement.classList.remove("ag-console-open");
         wrap.setAttribute("aria-hidden", "true");
         fab.classList.remove("hidden");
         fab.focus();
     }
+    window.addEventListener("pagehide", function () {
+        document.documentElement.classList.remove("ag-console-open");
+    });
     function boot() {
         print([
             '<span class="ag-ascii">    _    ____</span>',
@@ -205,12 +210,12 @@
             desc: "list all commands",
             run: function () {
                 var rows = [
-                    ["ABOUT", "whoami · neofetch · interests · education"],
-                    ["CAREER", "experience · projects · skills · certs · awards"],
-                    ["LINKS", "contact · social · github"],
-                    ["GO TO", "home · resume · photos · play"],
-                    ["SYSTEM", "ls · cat <file> · echo · date · theme · history · clear · exit"],
-                    ["FUN", "hack · matrix · sudo · hint"]
+                    ["ABOUT   ", "whoami · neofetch · interests · education"],
+                    ["CAREER  ", "experience · projects · skills · certs · awards"],
+                    ["LINKS   ", "contact · social · github"],
+                    ["GO TO   ", "home · resume · photos · play"],
+                    ["SYSTEM  ", "ls · cat <file> · echo · date · theme · history · clear · exit"],
+                    ["FUN     ", "hack · matrix · sudo · hint"]
                 ];
                 print(rows.map(function (r) {
                     return '<span class="ag-key">' + r[0] + "</span>" + esc(r[1]);
@@ -496,6 +501,7 @@
     });
 
     input.addEventListener("keydown", function (e) {
+        e.stopPropagation();
         if (e.key === "c" && e.ctrlKey) { abortRun = true; return; }
         if (busy) {
             // allow typing while output animates; only swallow control keys
@@ -527,6 +533,14 @@
             if (!sel || sel.isCollapsed) input.focus();
         }
     });
+
+    document.addEventListener("keydown", function (e) {
+        if (!isOpen || e.target === input) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (e.key === "Escape" || e.key === "`" || e.key === "~") closeConsole();
+        else input.focus();
+    }, true);
 
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {

@@ -108,9 +108,78 @@ html.dark-mode body.has-site-tabs {
 
 /* Controls inside site-tabs */
 .site-tabs-controls {
+    --nav-control-size: 38px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+}
+
+.nav-socials {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-social-link {
+    width: var(--nav-control-size);
+    height: var(--nav-control-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(168, 85, 247, 0.65);
+    background: rgba(12, 12, 20, 0.92);
+    text-decoration: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(76, 29, 149, 0.9);
+    font-size: 1.18rem;
+    transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.nav-social-github {
+    color: #ffffff;
+    background: #050505;
+    border-color: rgba(255, 255, 255, 0.78);
+}
+
+.nav-social-linkedin {
+    color: #0a66c2;
+    border-color: rgba(10, 102, 194, 0.7);
+}
+
+.nav-social-thm {
+    color: #88cc14;
+    border-color: rgba(136, 204, 20, 0.7);
+}
+
+.nav-social-github:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.24), inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.nav-social-linkedin:hover {
+    color: #57a8ff;
+    border-color: rgba(87, 168, 255, 0.85);
+    box-shadow: 0 0 18px rgba(10, 102, 194, 0.38), inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.nav-social-thm:hover {
+    color: #a6ff1a;
+    border-color: rgba(166, 255, 26, 0.85);
+    box-shadow: 0 0 18px rgba(136, 204, 20, 0.34), inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.nav-social-link:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.nav-controls-divider {
+    width: 1px;
+    height: 30px;
+    margin: 0 2px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.24);
 }
 
 .site-tabs-btn {
@@ -129,8 +198,35 @@ html.dark-mode body.has-site-tabs {
 }
 
 @media (max-width: 760px) {
+    .site-tabs-controls {
+        --nav-control-size: 38px;
+    }
+
+    .nav-socials {
+        gap: 5px;
+    }
+
+    .nav-social-link {
+        font-size: 1rem;
+    }
+
     .site-tab {
         transition: none;
+    }
+
+    .site-tab[data-mobile-label] {
+        font-size: 0;
+        width: 38px;
+        min-width: 38px;
+        padding-left: 0;
+        padding-right: 0;
+        line-height: 1;
+    }
+
+    .site-tab[data-mobile-label]::before {
+        content: attr(data-mobile-label);
+        font-size: 1.15rem;
+        line-height: 1;
     }
 
     .site-tab:not(.is-active):hover {
@@ -362,7 +458,7 @@ html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
-    transition: all 0.6s ease !important;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.15s ease !important;
 }
 
 .theme-switch {
@@ -387,8 +483,8 @@ html.theme-transitioning *::after {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: var(--nav-control-size);
+    height: var(--nav-control-size);
     box-sizing: border-box;
     border-radius: 50%;
     overflow: hidden;
@@ -482,13 +578,61 @@ html.theme-transitioning *::after {
    ============================================================ */
 #ag-console {
     position: fixed;
-    inset: 0 0 auto 0;
+    inset: 0;
     z-index: 9000;
     display: flex;
+    align-items: flex-start;
     justify-content: center;
     pointer-events: none;
+    overflow: hidden;
+}
+#ag-console.open {
+    pointer-events: auto;
+}
+#ag-console::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+    z-index: 0;
+}
+#ag-console::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+    z-index: 1;
+}
+#ag-console::before {
+    background:
+        linear-gradient(180deg, rgba(6, 8, 18, 0.42), rgba(6, 8, 18, 0.62)),
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.14), transparent 42%);
+    backdrop-filter: blur(7px) saturate(1.18);
+    -webkit-backdrop-filter: blur(7px) saturate(1.18);
+}
+#ag-console::after {
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.92) 0 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(103,232,249,0.65) 0 1px, transparent 1.8px),
+        radial-gradient(circle, rgba(255,255,255,0.5) 0 0.8px, transparent 1.5px);
+    background-size: 110px 110px, 150px 150px, 82px 82px;
+    background-position: 0 -120px, 44px -180px, 20px -90px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.45));
+    animation: agSnowfall 8s linear infinite;
+}
+#ag-console.open::before { opacity: 1; }
+#ag-console.open::after { opacity: 0.72; }
+@keyframes agSnowfall {
+    from { background-position: 0 -120px, 44px -180px, 20px -90px; }
+    to { background-position: 30px 760px, -26px 920px, 58px 680px; }
 }
 #ag-console .ag-console-inner {
+    position: relative;
+    z-index: 2;
     width: min(860px, 100vw - 24px);
     height: min(62vh, 560px);
     margin-top: 0;
@@ -651,8 +795,8 @@ body.resume-page #ag-console-fab { bottom: 84px; }
 /* Launcher docked inside the nav, to the left of the theme toggle */
 #ag-console-fab.in-nav {
     position: static;
-    width: 38px;
-    height: 38px;
+    width: var(--nav-control-size);
+    height: var(--nav-control-size);
     border-radius: 50%;
     font-size: 0.92rem;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(76, 29, 149, 0.9);
