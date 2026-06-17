@@ -22,8 +22,33 @@
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     const themeBtn = document.getElementById("site-theme-btn");
+    const navControls = document.querySelector(".site-tabs-controls");
 
     let isDarkMode = localStorage.getItem("site-dark-mode") !== "false";
+
+    function initNavSocials() {
+        if (!navControls || navControls.querySelector(".nav-socials")) return;
+        const socials = document.createElement("div");
+        socials.className = "nav-socials";
+        socials.setAttribute("aria-label", "Profile links");
+        socials.innerHTML = `
+            <a class="nav-social-link nav-social-github" href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+                <i class="fab fa-github" aria-hidden="true"></i>
+            </a>
+            <a class="nav-social-link nav-social-linkedin" href="https://www.linkedin.com/in/alexgaffen/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+            </a>
+            <a class="nav-social-link nav-social-thm" href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer" aria-label="TryHackMe" title="TryHackMe">
+                <i class="fas fa-skull" aria-hidden="true"></i>
+            </a>
+        `;
+        const divider = document.createElement("span");
+        divider.className = "nav-controls-divider";
+        divider.setAttribute("aria-hidden", "true");
+        const firstFunctionControl = document.getElementById("ag-console-fab") || themeBtn || navControls.firstChild;
+        navControls.insertBefore(socials, firstFunctionControl);
+        navControls.insertBefore(divider, firstFunctionControl);
+    }
 
     function applyTheme() {
         const html = document.documentElement;
@@ -53,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+
+    initNavSocials();
 
     function setThemeState(nextState) {
         isDarkMode = nextState;

@@ -66,8 +66,8 @@
 
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            max-width: 1800px;
-            width: 90%;
+            max-width: 2200px;
+            width: 98%;
             min-height: 100vh;
             margin: 0 auto;
             padding: 84px 20px 56px;
@@ -77,7 +77,7 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            font-size: clamp(14px, 1.2vw, 24px);
+            font-size: clamp(18px, 1.46vw, 28px);
             box-sizing: border-box;
         }
 
@@ -95,21 +95,28 @@
          * Layout visibility is hidden initially until animation completes
          */
         #main-wrapper {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: minmax(260px, 420px) minmax(560px, 820px);
+            justify-content: center;
             align-items: center;
-            width: 100%;
-            gap: 50px;
+            width: min(100%, 2100px);
+            gap: clamp(78px, 6.8vw, 150px);
+            position: relative;
+            z-index: 5;
         }
 
-        .headshot-box {
-            float: left;
-            margin-right: 1.5em;
-            margin-bottom: 0.5em;
-            width: clamp(140px, 18vw, 240px);
-            aspect-ratio: 3 / 4;
-            border-radius: 14px;
+        .home-layout {
+            width: 100%;
+            max-width: none;
+            margin-bottom: 1em;
+            animation: dropAboutBox 2.2s forwards cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .headshot-card {
+            width: 100%;
+            max-width: 480px;
+            aspect-ratio: 4 / 5;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
             border: 4px solid transparent;
@@ -117,15 +124,63 @@
                         linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box;
             background-size: auto, 300% 300%;
             animation: glisten 6s ease-in-out infinite;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 0 20px rgba(138, 43, 226, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 0 25px rgba(138, 43, 226, 0.25);
+            flex-shrink: 0;
+            align-self: center;
+            justify-self: end;
+            z-index: 6;
         }
 
-        .headshot-box img {
+        .headshot-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 10px;
+            border-radius: 12px;
+        }
+
+        .bio-intro a {
+            font-family: inherit;
+            font-size: inherit;
+            text-transform: none;
+            line-height: inherit;
+            color: #22d3ee;
+            background-color: rgba(34, 211, 238, 0.08);
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 700;
+            display: inline-block;
+            transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bio-intro a:hover {
+            color: #a855f7;
+            background-color: rgba(168, 85, 247, 0.12);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+            text-decoration: none;
+        }
+
+        [data-theme="light"] .bio-intro a {
+            color: #166534;
+            background-color: rgba(22, 101, 52, 0.08);
+        }
+        [data-theme="light"] .bio-intro a:hover {
+            color: #a855f7;
+            background-color: rgba(168, 85, 247, 0.12);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        @media (max-width: 800px) {
+            .home-layout {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .headshot-card {
+                width: min(270px, 78vw);
+                height: auto;
+                aspect-ratio: 4 / 5;
+                align-self: center;
+            }
         }
 
         @keyframes fadeInContent {
@@ -185,9 +240,9 @@
             display: inline-flex;
             align-items: center;
             gap: 0.7em;
-            padding: 0.85em 1.6em 0.85em 1.4em;
+            padding: 1.05em 1.95em 1.05em 1.65em;
             font-family: 'Space Mono', monospace;
-            font-size: 0.95rem;
+            font-size: 1.08rem;
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: none;
@@ -294,14 +349,12 @@
         }
 
         .main-content {
-            flex: 1;
-            max-width: 1100px;
+            width: 100%;
+            max-width: none;
         }
 
         .sidebar {
-            text-align: right;
-            padding-left: 30px;
-            border-left: 1px dashed var(--border-color);
+            display: none;
         }
 
         .nav-links {
@@ -386,9 +439,11 @@
                 padding-bottom: 40px;
             }
             #main-wrapper {
+                display: flex;
                 flex-direction: column;
                 margin: 0 auto;
-                gap: 20px;
+                gap: 22px;
+                width: 100%;
             }
             .sidebar {
                 text-align: left;
@@ -412,7 +467,26 @@
                 text-align: left;
             }
             .main-content {
+                display: block;
                 text-align: center;
+                width: 100%;
+            }
+
+            .glistening-box {
+                width: 100%;
+                max-width: 100%;
+                padding: 1.35em 1.15em;
+                border-radius: 14px;
+            }
+
+            .box-inner-content > div > span:first-child {
+                font-size: clamp(2.3rem, 13vw, 3.1rem) !important;
+                overflow-wrap: anywhere;
+            }
+
+            .connect-btn {
+                font-size: 1rem;
+                padding: 1em 1.45em;
             }
         }
 
@@ -429,7 +503,31 @@
             margin-bottom: 1em;
             box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
             z-index: 1;
-            max-width: 780px;
+            max-width: 820px;
+            width: 100%;
+            justify-self: center;
+        }
+
+        @media (min-width: 900px) and (max-width: 1500px) {
+            body {
+                width: 99%;
+                font-size: clamp(20px, 1.72vw, 27px);
+            }
+
+            #main-wrapper {
+                grid-template-columns: minmax(250px, 420px) minmax(520px, 760px);
+                gap: clamp(66px, 6vw, 120px);
+            }
+
+            .headshot-card {
+                max-width: 420px;
+            }
+
+            .glistening-box {
+                max-width: 760px;
+                padding: 2.05em 2.25em;
+            }
+
         }
 
         @keyframes glisten {
@@ -627,11 +725,11 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
-        <a href="index.html" class="site-tab is-active">🏠 HOME</a>
-        <a href="resume.html" class="site-tab ">📄 RESUME</a>
-        <a href="photography.html" class="site-tab ">📷 PHOTOS</a>
+        <a href="index.html" class="site-tab is-active" data-mobile-label="🏠">HOME</a>
+        <a href="resume.html" class="site-tab " data-mobile-label="📄">RESUME</a>
+        <a href="photography.html" class="site-tab " data-mobile-label="📷">PHOTOS</a>
         <!-- Blog tab temporarily hidden:
-        <a href="blog.html" class="site-tab ">✏️ BLOG</a>
+        <a href="blog.html" class="site-tab " data-mobile-label="✏️">BLOG</a>
         -->
     </div>
     <div class="site-tabs-controls">
@@ -646,60 +744,33 @@
 </nav>
 
 
-    <!-- Supply Drop Animation -->
-
     <div id="main-wrapper">
-        <div class="main-content" id="main-content" tabindex="-1">
-            <div class="glistening-box">
-                <div class="box-inner-content">
-                    <div class="headshot-box">
-                        <img src="assets/frontheadshot.jpg" alt="Alex Gaffen">
-                    </div>
-                    <div>
-                        <span style="font-size: 2.1rem; font-weight: 700; letter-spacing: -0.05em; display: block; margin-top:-0.15em; margin-bottom: 0.2em; line-height: 1.2;">Alex Gaffen</span>
-                        <span style="display: block; font-size: 0.95em; margin-bottom: 1.2em; opacity: 0.8; font-style: italic;">
-                            Software Developer & Researcher <br> 
-                            <span style="margin-top:0.4em; display: block;">🧠 AI · 🤖 Robotics · 🔐 Cybersecurity · 🔬 Medtech</span>
-                        </span>
-                    </div>
-                    <p class="bio-intro">
-Hey! I'm a CS student at McMaster obsessed with the kind of engineering problems that don't have clean answers — <strong>medical AI, robotics, systems security</strong>. I like understanding how things work at a deep level, and then figuring out how they break.
+        <div class="headshot-card">
+            <img src="assets/frontheadshot.jpg" alt="Alex Gaffen">
+        </div>
+        <div class="main-content glistening-box" id="main-content" tabindex="-1">
+                    <div class="box-inner-content">
+                        <div>
+                            <span style="font-size: 3.45rem; font-weight: 700; letter-spacing: -0.04em; display: block; margin-top:-0.15em; margin-bottom: 0.22em; line-height: 1.12;">Alex Gaffen</span>
+                            <span style="display: block; font-size: 1.08em; margin-bottom: 1.2em; opacity: 0.82; font-style: italic;">
+                                Software Developer & Researcher
+                            </span>
+                        </div>
+                        <p class="bio-intro">
+Hey! I'm a CS student at McMaster obsessed with the kind of engineering problems that don't have clean answers — <a href="resume.html#workexperience"><strong>🧬 medical AI</strong></a>, <a href="resume.html#workexperience"><strong>🤖 robotics</strong></a>, and <a href="resume.html#projects"><strong>🛡️ systems security</strong></a>. I like understanding how things work at a deep level, and then figuring out how they break.
 
 Right now I'm doing research in <strong>biomedical ML and robotics</strong>. I'm always looking to connect with people working on challenging problems in these fields. Outside that, I'm often at the gym, on a run, or picking up something new just to see if I can.
-                    </p>
+                        </p>
 
-                    <p class="bio-cta-wrap">
-                        <a class="connect-btn" href="mailto:alexgaffen@gmail.com">
-                            <span class="connect-icon"><i class="fas fa-paper-plane"></i></span>
-                            <span class="connect-text">Let's connect</span>
-                            <span class="connect-arrow">&rarr;</span>
-                        </a>
-                    </p>
-                    <div style="clear: both;"></div>
-                   </div>
-              </div>
-          </div>
-        <div class="domain-row" aria-label="Focus areas">
-            <a class="domain-tile" href="resume.html#workexperience" title="Robotics experience">
-                <img src="assets/art/art-robotics.svg" alt="Abstract 3D robotic arm render">
-                <span>Robotics</span>
-            </a>
-            <a class="domain-tile" href="resume.html#workexperience" title="Medical AI research">
-                <img src="assets/art/art-medtech.svg" alt="Abstract 3D medical technology render">
-                <span>Medtech</span>
-            </a>
-            <a class="domain-tile" href="resume.html#projects" title="Cybersecurity projects">
-                <img src="assets/art/art-cyber.svg" alt="Abstract 3D cybersecurity shield render">
-                <span>Security</span>
-            </a>
-        </div>
-        <div class="sidebar">
-            <ul class="nav-links" style="display: flex; flex-direction: column; gap: 1.2em; margin-top: 0; padding-top: 0;">
-                <li><a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">> 👾 GITHUB</a></li>
-                <li><a href="https://www.linkedin.com/in/alexgaffen/" target="_blank" rel="noopener noreferrer">> 💼 LINKEDIN</a></li>
-                <li><a href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener noreferrer">> 💀 TRYHACKME</a></li>
-            </ul>
-            <span class="console-hint">press <kbd>`</kbd> for terminal</span>
+                        <p class="bio-cta-wrap">
+                            <a class="connect-btn" href="mailto:alexgaffen@gmail.com">
+                                <span class="connect-icon"><i class="fas fa-paper-plane"></i></span>
+                                <span class="connect-text">Let's connect</span>
+                                <span class="connect-arrow">&rarr;</span>
+                            </a>
+                        </p>
+                        <div style="clear: both;"></div>
+                    </div>
         </div>
     </div>
 
