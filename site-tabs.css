@@ -199,7 +199,8 @@ html.dark-mode body.has-site-tabs {
 
 @media (max-width: 760px) {
     .site-tabs-controls {
-        --nav-control-size: 38px;
+        --nav-control-size: 34px;
+        gap: 6px;
     }
 
     .nav-socials {
@@ -216,8 +217,8 @@ html.dark-mode body.has-site-tabs {
 
     .site-tab[data-mobile-label] {
         font-size: 0;
-        width: 38px;
-        min-width: 38px;
+        width: 34px;
+        min-width: 34px;
         padding-left: 0;
         padding-right: 0;
         line-height: 1;
@@ -342,7 +343,8 @@ body.resume-page .content {
 
     .site-tabs {
         width: 100%;
-        padding: 3px 4px;
+        gap: 4px;
+        padding: 3px 6px;
     }
 
     .site-tab {
@@ -369,6 +371,32 @@ body.resume-page .content {
 
     body.game-page #ui-layer {
         top: 64px;
+    }
+}
+
+@media (max-width: 350px) {
+    .site-tabs {
+        padding-right: 4px;
+        padding-left: 4px;
+    }
+
+    .site-tabs-controls {
+        --nav-control-size: 32px;
+        gap: 4px;
+    }
+
+    .nav-socials {
+        gap: 3px;
+    }
+
+    .nav-social-thm,
+    .nav-controls-divider {
+        display: none;
+    }
+
+    .site-tab[data-mobile-label] {
+        width: 32px;
+        min-width: 32px;
     }
 }
 
