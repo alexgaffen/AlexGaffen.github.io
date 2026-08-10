@@ -96,6 +96,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function initWorldCanvas() {
         if (body.classList.contains("resume-page")) return;
+        // The home page draws its backdrop entirely in CSS (a static grid and
+        // two still colour washes), so it opts out of the animated canvas.
+        if (body.classList.contains("index-page")) return;
         if (document.getElementById("site-world-canvas")) return;
 
         const canvas = document.createElement("canvas");

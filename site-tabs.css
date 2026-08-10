@@ -241,11 +241,51 @@ html.dark-mode body.has-site-tabs {
     }
 }
 
+/* ---------------------------------------------------------------------------
+   HOME BACKDROP — static, minimal, no canvas.
+   A faint ruled grid that is masked away behind the landing copy, plus two
+   motionless colour washes for depth. Purely declarative: index.html loads no
+   background script, and site-tabs.js skips its animated fallback for
+   .index-page, so this page now paints once and then never repaints.
+   --------------------------------------------------------------------------- */
 body.index-page {
-    --site-world-a: rgba(50, 190, 255, 0.22);
-    --site-world-b: rgba(255, 120, 60, 0.20);
-    --site-world-c: rgba(255, 230, 80, 0.20);
     padding-top: 76px !important;
+
+    --home-grid: rgba(16, 35, 94, 0.07);
+    --home-grid-size: 62px;
+    --home-wash-a: rgba(56, 142, 214, 0.13);
+    --home-wash-b: rgba(214, 32, 32, 0.07);
+}
+
+html.dark-mode body.index-page {
+    --home-grid: rgba(168, 200, 255, 0.07);
+    --home-wash-a: rgba(88, 148, 255, 0.13);
+    --home-wash-b: rgba(168, 85, 247, 0.11);
+}
+
+/* The grid. Masked to fade out in the middle so it never rules lines across
+   the landing text — it reads as texture at the edges only. */
+body.index-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(to right, var(--home-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--home-grid) 1px, transparent 1px);
+    background-size: var(--home-grid-size) var(--home-grid-size);
+    -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 46%, transparent 34%, #000 100%);
+    mask-image: radial-gradient(ellipse 78% 68% at 50% 46%, transparent 34%, #000 100%);
+}
+
+/* Two still washes, replacing the three animated ones from the shared rule.
+   Two classes here outrank the single-class body.has-site-tabs::after below. */
+body.index-page.has-site-tabs::after {
+    background:
+        radial-gradient(ellipse 62% 52% at 14% 8%, var(--home-wash-a), transparent 72%),
+        radial-gradient(ellipse 58% 48% at 88% 92%, var(--home-wash-b), transparent 72%);
+    opacity: 1;
 }
 
 body.blog-page {
