@@ -4,10 +4,12 @@ body.has-site-tabs {
     --site-tabs-top: 0;
     --site-tabs-shell-height: 52px;
     --site-tabs-gap: 6px;
-    --site-tabs-pad-x: clamp(14px, 4.2vw, 46px);
-    /* Deep translucent ink instead of the old flat navy slab. */
-    --site-tabs-shell-bg: rgba(9, 12, 24, 0.82);
-    --site-tabs-shell-border: rgba(255, 255, 255, 0.09);
+    --site-tabs-pad-x: clamp(8px, 1.4vw, 16px);
+    /* The page behind is near-black (#121010), so the bar is deliberately
+       LIGHTER and cooler than it — that separation is what makes it read as a
+       distinct surface instead of blending into the background. */
+    --site-tabs-shell-bg: rgba(31, 37, 54, 0.94);
+    --site-tabs-shell-border: rgba(255, 255, 255, 0.16);
     --site-tab-bg: transparent;
     --site-tab-border: transparent;
     --site-tab-fg: rgba(233, 236, 245, 0.62);
@@ -47,8 +49,8 @@ html.dark-mode body.has-site-tabs {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Horizontal padding tracks the page gutter so the tabs line up with the
-       content below instead of hugging the raw viewport edge. */
+    /* Tight gutter: tabs sit well to the left, controls well to the right,
+       the way a browser chrome strip does. */
     padding: 0 var(--site-tabs-pad-x);
     box-sizing: border-box;
     z-index: 1400;
@@ -56,7 +58,8 @@ html.dark-mode body.has-site-tabs {
     backdrop-filter: blur(16px) saturate(1.5);
     -webkit-backdrop-filter: blur(16px) saturate(1.5);
     border-bottom: 1px solid var(--site-tabs-shell-border);
-    box-shadow: 0 8px 28px -18px rgba(0, 0, 0, 0.85);
+    /* Enough drop to sell the bar as a layer above the page, not part of it. */
+    box-shadow: 0 4px 18px -6px rgba(0, 0, 0, 0.45);
     font-family: 'Space Mono', 'Courier New', Courier, monospace;
     view-transition-name: site-tabs;   /* stays put across page swaps */
 }
@@ -77,27 +80,25 @@ html.dark-mode body.has-site-tabs {
     gap: var(--site-tabs-gap);
 }
 
-/* Light theme: same structure, inverted ink. */
+/* Light theme. The page behind is warm beige (#fcefd4); a pale bar vanished
+   into it, so the bar goes deep navy instead. Tab text stays light in both
+   themes, which keeps one set of tab styles — and one white divider — correct. */
 [data-theme="light"] body.has-site-tabs,
 html:not(.dark-mode) body.has-site-tabs {
-    --site-tabs-shell-bg: rgba(252, 250, 245, 0.86);
-    --site-tabs-shell-border: rgba(60, 45, 20, 0.14);
-    --site-tab-fg: rgba(38, 32, 22, 0.58);
-    --site-tab-fg-hover: #16110a;
-    --site-tab-hover-bg: rgba(30, 24, 12, 0.06);
-    --site-tab-accent: #1d4ed8;
-    --site-tab-active-bg: rgba(29, 78, 216, 0.1);
-    --site-tab-active-fg: #10235e;
+    --site-tabs-shell-bg: rgba(21, 32, 71, 0.97);
+    --site-tabs-shell-border: rgba(9, 16, 42, 0.9);
+    --site-tab-accent: #ffd66b;
+    --site-tab-active-bg: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="light"] .site-tabs::before,
 html:not(.dark-mode) .site-tabs::before {
-    background: linear-gradient(90deg, transparent, rgba(29, 78, 216, 0.35), rgba(124, 58, 237, 0.28), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 214, 107, 0.55), rgba(125, 211, 252, 0.4), transparent);
 }
 
 [data-theme="light"] .site-tab.is-active::after,
 html:not(.dark-mode) .site-tab.is-active::after {
-    box-shadow: 0 0 10px rgba(29, 78, 216, 0.45);
+    box-shadow: 0 0 10px rgba(255, 214, 107, 0.6);
 }
 
 /* ---------------------------------------------------------------------------
@@ -110,8 +111,9 @@ html:not(.dark-mode) .site-tab.is-active::after {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-    animation-duration: 0.22s;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-duration: 0.1s;   /* long enough to hide the swap, short enough
+                                   that it never reads as switch latency */
+    animation-timing-function: ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -262,12 +264,27 @@ html:not(.dark-mode) .site-tab.is-active::after {
     text-decoration: none;
 }
 
+/* Sits on a dark shell in BOTH themes, so it stays light — but as a soft
+   gradient hairline rather than the old hard, glowing white bar. */
 .nav-controls-divider {
     width: 1px;
-    height: 30px;
-    margin: 0 2px;
-    background: rgba(255, 255, 255, 0.72);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.24);
+    height: 22px;
+    margin: 0 4px;
+    background: linear-gradient(180deg,
+        transparent,
+        rgba(255, 255, 255, 0.42) 25%,
+        rgba(255, 255, 255, 0.42) 75%,
+        transparent);
+    box-shadow: none;
+}
+
+[data-theme="light"] .nav-controls-divider,
+html:not(.dark-mode) .nav-controls-divider {
+    background: linear-gradient(180deg,
+        transparent,
+        rgba(255, 214, 107, 0.6) 25%,
+        rgba(255, 214, 107, 0.6) 75%,
+        transparent);
 }
 
 .site-tabs-btn {
@@ -392,7 +409,7 @@ body.resume-page {
 }
 
 body.resume-page .content {
-    padding-top: 72px;
+    padding-top: 56px;   /* 52px bar + a 4px hairline, no dead gap */
 }
 
 @media (max-width: 900px) {
