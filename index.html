@@ -843,23 +843,6 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
     }
 </style>
 
-<script>
-    // 1. TILT EFFECT
-    const glistenBox = document.querySelector('.glistening-box');
-    if (glistenBox) {
-        document.addEventListener('mousemove', (e) => {
-            if(window.innerWidth < 800) return;
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
-            const yAxis = -(window.innerHeight / 2 - e.pageY) / 50; 
-            glistenBox.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
-        glistenBox.addEventListener('mouseenter', () => { glistenBox.style.transition = 'none'; });
-        glistenBox.addEventListener('mouseleave', () => { 
-            glistenBox.style.transition = 'transform 0.5s ease'; 
-            glistenBox.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`; 
-        });
-    }
-</script>
 
 
     <!-- ====================================================
