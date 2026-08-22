@@ -96,9 +96,18 @@ html:not(.dark-mode) .site-tabs::before {
     background: linear-gradient(90deg, transparent, rgba(255, 214, 107, 0.55), rgba(125, 211, 252, 0.4), transparent);
 }
 
-/* The active indicator stays white in both themes (see .site-tab.is-active::after
-   below) — only the hover indicator picks up the theme accent, so it's clear
-   which rule is "you're here" and which is "you're pointing at this". */
+/* Light mode: the indicator (hover and active alike) is white rather than the
+   gold accent — gold stays for the top hairline, divider, and focus ring, but
+   the tab-name underline itself reads cleaner as plain white on the navy bar. */
+[data-theme="light"] .site-tab:not(.is-active):hover::after,
+[data-theme="light"] .site-tab:not(.is-active):focus-visible::after,
+[data-theme="light"] .site-tab.is-active::after,
+html:not(.dark-mode) .site-tab:not(.is-active):hover::after,
+html:not(.dark-mode) .site-tab:not(.is-active):focus-visible::after,
+html:not(.dark-mode) .site-tab.is-active::after {
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+}
 
 /* ---------------------------------------------------------------------------
    CROSS-DOCUMENT VIEW TRANSITIONS
@@ -188,8 +197,7 @@ html:not(.dark-mode) .site-tabs::before {
 .site-tab.is-active::after {
     width: calc(100% - 1.9rem);
     opacity: 1;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 10px rgba(125, 211, 252, 0.65);
 }
 
 @media (prefers-reduced-motion: reduce) {
