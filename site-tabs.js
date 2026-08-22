@@ -5,9 +5,11 @@
 (function applyInitialTheme() {
     try {
         if (localStorage.getItem("site-dark-mode") === null) {
-            localStorage.setItem("site-dark-mode", "true");
+            localStorage.setItem("site-dark-mode", "false");
         }
-        var dark = localStorage.getItem("site-dark-mode") !== "false";
+        // Opt-in dark: anything other than an explicit "true" renders light, so a
+        // first visit (or a browser that refuses storage) lands in light mode.
+        var dark = localStorage.getItem("site-dark-mode") === "true";
         var html = document.documentElement;
         if (dark) {
             html.classList.add("dark-mode");
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeBtn = document.getElementById("site-theme-btn");
     const navControls = document.querySelector(".site-tabs-controls");
 
-    let isDarkMode = localStorage.getItem("site-dark-mode") !== "false";
+    let isDarkMode = localStorage.getItem("site-dark-mode") === "true";
 
     function initNavSocials() {
         if (!navControls || navControls.querySelector(".nav-socials")) return;
@@ -348,11 +350,11 @@ document.addEventListener("DOMContentLoaded", () => {
             script.type = "speculationrules";
             script.textContent = JSON.stringify({
                 prefetch: [{ source: "list", urls: urls, eagerness: "immediate" }],
-                prerender: [{
-                    source: "document",
-                    where: { selector_matches: ".site-tab" },
-                    eagerness: "moderate"
-                }]
+                // "immediate" prerenders the other tabs as soon as this page
+                // loads, so the very first click is a swap rather than a build.
+                // Affordable now that the gallery grid is ~0.8 MB and the
+                // backdrop canvas stays paused until a prerender is activated.
+                prerender: [{ source: "list", urls: urls, eagerness: "immediate" }]
             });
             document.head.appendChild(script);
         } else {
@@ -379,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Immediately apply theme before DOMContentLoaded to prevent FOUC
 (function() {
-    var isDark = localStorage.getItem("site-dark-mode") !== "false";
+    var isDark = localStorage.getItem("site-dark-mode") === "true";
     if (isDark) {
         document.documentElement.classList.add("dark-mode");
         if (document.documentElement.classList.contains("resume-page") || window.location.pathname.indexOf("resume") !== -1) {

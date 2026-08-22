@@ -79,7 +79,11 @@
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
             max-width: 2200px;
             width: 98%;
+            /* 100vh on a phone is the viewport with the browser chrome HIDDEN, so
+               it always overshoots the visible area and leaves the page scrollable
+               past the fixed marquee. dvh tracks the chrome as it shows/hides. */
             min-height: 100vh;
+            min-height: 100dvh;
             margin: 0 auto;
             padding: 84px 20px 56px;
             line-height: 1.6;
@@ -609,6 +613,37 @@
             filter: blur(0.5px);
         }
 
+        /* ---- Light mode -------------------------------------------------
+           The page is warm beige, so a near-black strip looked like a hole in
+           it. Match the top bar's deep navy instead: the page ends up framed
+           by the same surface top and bottom, and the item accent colours stay
+           legible because they are still sitting on a dark ground. */
+        [data-theme="light"] .highlight-marquee,
+        html:not(.dark-mode) .highlight-marquee {
+            background:
+                linear-gradient(90deg,
+                    rgba(16, 25, 58, 0.98) 0%,
+                    rgba(24, 36, 79, 0.98) 25%,
+                    rgba(21, 32, 71, 0.98) 50%,
+                    rgba(24, 36, 79, 0.98) 75%,
+                    rgba(16, 25, 58, 0.98) 100%);
+            border-top: 1px solid rgba(255, 214, 107, 0.45);
+            box-shadow:
+                0 -8px 28px rgba(21, 32, 71, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] .highlight-marquee::after,
+        html:not(.dark-mode) .highlight-marquee::after {
+            background: linear-gradient(90deg,
+                transparent,
+                #ffd66b,
+                #7dd3fc,
+                #ffd66b,
+                transparent);
+            background-size: 200% 100%;
+        }
+
         @keyframes marqueeLine {
             0%   { background-position: 0% 0; }
             100% { background-position: 200% 0; }
@@ -714,6 +749,22 @@
             color: rgba(168, 85, 247, 0.7);
             font-size: 0.8rem;
             user-select: none;
+        }
+
+        /* On the navy light-mode strip, mid purple sits too close to the ground.
+           Lift the separator and the project accent so every item reads. */
+        [data-theme="light"] .marquee-sep,
+        html:not(.dark-mode) .marquee-sep {
+            color: rgba(255, 214, 107, 0.65);
+        }
+        [data-theme="light"] .marquee-item.m-proj,
+        html:not(.dark-mode) .marquee-item.m-proj {
+            color: #c9a4f8;
+        }
+        [data-theme="light"] .marquee-item.m-proj .m-tag,
+        html:not(.dark-mode) .marquee-item.m-proj .m-tag {
+            color: #d8bcfb;
+            border-color: rgba(200, 164, 248, 0.6);
         }
 
         @media (prefers-reduced-motion: reduce) {
