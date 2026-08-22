@@ -72,18 +72,6 @@
 </div>
 <div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
 
-<div class="top-social-bar">
-    <div class="top-bar-identity">
-        <span class="top-bar-name">Alex Gaffen</span>
-    </div>
-    <div class="top-bar-links">
-        <a class="top-social-link social-linkedin" href="https://www.linkedin.com/in/alexgaffen" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i><span>LinkedIn</span></a>
-        <a class="top-social-link social-github" href="https://github.com/alexgaffen" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i><span>GitHub</span></a>
-        <a class="top-social-link social-email" href="mailto:alexgaffen@gmail.com" title="Email"><i class="fas fa-envelope"></i><span>Email</span></a>
-        <a class="top-social-link social-thm" href="https://tryhackme.com/p/alexgaffen" target="_blank" rel="noopener" title="TryHackMe"><i class="fas fa-shield-halved"></i><span>TryHackMe</span></a>
-    </div>
-</div>
-
 <div class="container">
 <main class="content" id="main-content" tabindex="-1">
 <header class="resume-hero">
@@ -94,7 +82,7 @@
     </div>
     <div class="hero-grid">
         <div class="hero-left">
-            <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · v2026.05</span>
+            <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · <span id="cvVersion">v2026.08</span></span>
             <h1 class="hero-name">Alex <span class="accent">Gaffen</span></h1>
             <div class="hero-status">
                 <span class="chip"><i class="fas fa-location-dot"></i> Hamilton, ON</span>
@@ -160,7 +148,6 @@
 <img alt="McMaster University" class="edu-logo" loading="lazy" src="assets/mcmaster.png"/>
 <h4>McMaster University, Hamilton ON</h4>
 </div>
-<img class="job-art" src="assets/art/art-education.svg" alt="" aria-hidden="true" loading="lazy"/>
                     <div class="tl-card"><div class="tl-card-title">Honours Computer Science Co-op (B.A.Sc.)</div><div class="edu-stats">
 <span class="edu-badge">📅 Currently Enrolled in 4th Year</span>
 </div><div class="relevant-courses">
@@ -198,7 +185,6 @@
                     <div class="job-sub">
 <h4>McMaster University – Wang Lab, Hamilton, ON</h4>
 </div>
-<img class="job-art" src="assets/art/art-medtech.svg" alt="" aria-hidden="true" loading="lazy"/>
                     <div class="tl-card"><div class="tl-card-title">AI &amp; Full Stack Developer - Undergraduate Research Assistant</div><div class="project-skills-list">
 <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
 <div class="skill-box flask"><i class="fas fa-flask"></i> Flask</div>
@@ -228,7 +214,6 @@
 <div class="job-sub">
 <h4>Bonbon Technologies, Los Angeles, California (Remote)</h4>
 </div>
-<img class="job-art" src="assets/art/art-frontend.svg" alt="" aria-hidden="true" loading="lazy"/>
                     <div class="tl-card"><div class="tl-card-title">Front End Developer Intern</div><div class="project-skills-list">
 <div class="skill-box frontend html"><i class="devicon-html5-plain colored"></i> HTML</div>
 <div class="skill-box frontend css"><i class="devicon-css3-plain colored"></i> CSS</div>
@@ -251,7 +236,6 @@
 <div class="job-sub">
 <h4>City of Ottawa, Ottawa ON</h4>
 </div>
-<img class="job-art" src="assets/art/art-lifeguard.svg" alt="" aria-hidden="true" loading="lazy"/>
                     <div class="tl-card"><div class="tl-card-title">Lifeguard &amp; Pool Supervisor</div><div class="project-skills-list">
 <div class="skill-box leadership"><i class="fas fa-users-cog"></i> Leadership</div>
 <div class="skill-box communication"><i class="fas fa-comments"></i> Mentorship</div>
@@ -272,7 +256,6 @@
 <div class="job-sub">
 <h4>Hamilton, ON (Remote)</h4>
 </div>
-<img class="job-art" src="assets/art/art-teaching.svg" alt="" aria-hidden="true" loading="lazy"/>
                     <div class="tl-card"><div class="tl-card-title">Computer Science High School Tutor</div><div class="project-skills-list">
 <div class="skill-box communication"><i class="fas fa-chalkboard-teacher"></i> Teaching</div>
 <div class="skill-box python"><i class="devicon-python-plain colored"></i> Python</div>
@@ -607,6 +590,14 @@
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <script>
+        // Stamp the CV version with the current year/month so it never goes stale
+        (function stampCvVersion() {
+            const el = document.getElementById('cvVersion');
+            if (!el) return;
+            const now = new Date();
+            el.textContent = 'v' + now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
+        })();
+
         // Always start at the top on page load/refresh
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
@@ -842,34 +833,11 @@
         const mobileNavOverlay = document.getElementById('mobileNavOverlay');
         const sidebar = document.querySelector('.sidebar');
 
-        // Dynamically compute when to show the name in the top bar
-        const resumeHero = document.querySelector('.resume-hero');
-        const topBarIdentity = document.querySelector('.top-bar-identity');
-        let heroScrollThreshold = 300;
-
-        function updateHeroThreshold() {
-            if (resumeHero) {
-                const rect = resumeHero.getBoundingClientRect();
-                heroScrollThreshold = rect.bottom + window.scrollY - 60;
-            }
-        }
-        updateHeroThreshold();
-        window.addEventListener('resize', updateHeroThreshold);
-
         window.addEventListener('scroll', () => {
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
-
-            // Show name smoothly only when scrolled past the hero/highlight box
-            if (topBarIdentity) {
-                if (scrollTop > heroScrollThreshold) {
-                    topBarIdentity.classList.add('show-name');
-                } else {
-                    topBarIdentity.classList.remove('show-name');
-                }
-            }
 
             lastScrollY = scrollTop;
 

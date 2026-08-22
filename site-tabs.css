@@ -315,7 +315,7 @@ body.resume-page .site-tabs {
 }
 
 body.resume-page .content {
-    padding-top: 96px;
+    padding-top: 72px;
 }
 
 [data-theme="light"] body.resume-page {
@@ -430,9 +430,6 @@ body.hacker-mode.game-page canvas {
         height: calc(100vh - 52px) !important;
         justify-content: center !important;
         padding-top: 0 !important;
-    }
-    body.resume-page .top-social-bar {
-        top: 52px !important;
     }
 }
 
