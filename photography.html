@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Resource hints: open the TLS connections to the asset CDNs while the
+         HTML is still parsing, so the stylesheets below do not pay for a cold
+         handshake before they can start downloading. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Alex Gaffen - Amateur DSLR and Mobile Photography. High-quality street, landscape, and macro shots from San Francisco and Banff.">
     <meta name="keywords" content="Alex Gaffen Photography, McMaster DSLR, Street Photography, Landscape Photography, Travel DSLR, Hamilton Photography">
@@ -22,7 +28,25 @@
     <link href="assets/favicon.png" rel="icon" type="image/png" sizes="any">
     <link href="assets/favicon.png" rel="apple-touch-icon">
     <link href="site.webmanifest" rel="manifest">
-    <script defer data-domain="alexgaffen.com" src="https://plausible.io/js/script.js"></script>
+    <script>
+        /* Privacy-friendly analytics. Held back while the browser is pre-rendering
+           this page for an instant tab switch, so speculative loads never register
+           a pageview for a page the visitor did not actually open. */
+        (function () {
+            function loadAnalytics() {
+                var s = document.createElement('script');
+                s.defer = true;
+                s.setAttribute('data-domain', 'alexgaffen.com');
+                s.src = 'https://plausible.io/js/script.js';
+                document.head.appendChild(s);
+            }
+            if (document.prerendering) {
+                document.addEventListener('prerenderingchange', loadAnalytics, { once: true });
+            } else {
+                loadAnalytics();
+            }
+        })();
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -32,7 +56,7 @@
       "author": { "@type": "Person", "name": "Alex Gaffen", "url": "https://alexgaffen.com/" }
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4;
@@ -241,6 +265,7 @@
         }
         .photo-card img.photo-image {
             width: 100%;
+            height: auto;          /* honour the intrinsic width/height attrs */
             display: block;
             transform: scale(1.001);
             transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
@@ -357,6 +382,49 @@
             cursor: zoom-in;
         }
         .lb-img.swapping { animation: none; }
+
+        /* While the full-resolution original is still downloading, a small
+           unobtrusive pill sits in the stage corner. No spinner over the photo. */
+        .lb-res-hint {
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(12, 10, 20, 0.62);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            z-index: 6;
+        }
+        .lb-stage.is-upgrading .lb-res-hint { opacity: 1; transform: none; }
+        .lb-res-hint::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #a855f7;
+            animation: lbResPulse 1.1s ease-in-out infinite;
+        }
+        @keyframes lbResPulse {
+            0%, 100% { opacity: 0.35; transform: scale(0.8); }
+            50%      { opacity: 1;    transform: scale(1.15); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .lb-res-hint::before { animation: none; opacity: 0.9; }
+        }
         @keyframes lbZoom { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .lb-caption {
@@ -465,7 +533,10 @@
             .lb-img { animation: none !important; }
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Font Awesome: loaded non-blocking so it never delays first paint. -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
@@ -518,7 +589,10 @@
     <button class="modal-nav next" onclick="changePhoto(1)" aria-label="Next photo">&#10095;</button>
 
     <div class="lb-stage" id="lbStage">
-        <img class="lb-img" id="lbImg" alt="">
+        <span class="lb-res-hint" aria-hidden="true">Loading full res</span>
+        <!-- data-no-reveal: the lightbox drives its own lbZoom animation and swaps
+             src mid->full, which would otherwise re-trigger the global blur-up. -->
+        <img class="lb-img" id="lbImg" alt="" data-no-reveal>
         <div class="lb-caption">
             <div class="lb-cap-title" id="lbTitle"></div>
             <div class="lb-cap-city" id="lbCity"></div>
@@ -534,19 +608,19 @@
 
     /* ============ Data ============ */
     var PHOTOS = [
-        { id: "ggbridge",     src: "photography/s10/ggbridge.jpg",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",         loc: "sf",    city: "San Francisco" },
-        { id: "alcatraz",     src: "photography/s10/alcatraz.jpg",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                   loc: "sf",    city: "San Francisco" },
-        { id: "oakland",      src: "photography/s10/oaklandfromSF.jpg",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",       loc: "sf",    city: "San Francisco" },
-        { id: "gardens",      src: "photography/s10/SFgardens.jpg",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",          loc: "sf",    city: "San Francisco" },
-        { id: "slopes",       src: "photography/s10/SFslopes.jpg",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",                loc: "sf",    city: "San Francisco" },
-        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.jpg",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",    loc: "banff", city: "Banff" },
-        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.JPG",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train",  loc: "banff", city: "Banff" },
-        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.JPG",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",         loc: "banff", city: "Banff" },
-        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.JPG", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",       loc: "banff", city: "Banff" },
-        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.JPG",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",     loc: "banff", city: "Banff" },
-        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.JPG",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",       loc: "banff", city: "Banff" },
-        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.JPG",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise", loc: "banff", city: "Banff" },
-        { id: "ongondola",    src: "photography/DSLR/ongondola.jpg",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",            loc: "banff", city: "Banff" }
+        { id: "ggbridge", thumb: "photography/thumbs/ggbridge.webp", mid: "photography/s10/ggbridge.webp", full: "photography/s10/ggbridge.jpg", w: 900, h: 675, title: "Golden Gate Bridge", loc: "sf", city: "San Francisco" },
+        { id: "alcatraz", thumb: "photography/thumbs/alcatraz.webp", mid: "photography/s10/alcatraz.webp", full: "photography/s10/alcatraz.jpg", w: 900, h: 502, title: "Alcatraz", loc: "sf", city: "San Francisco" },
+        { id: "oakland", thumb: "photography/thumbs/oaklandfromSF.webp", mid: "photography/s10/oaklandfromSF.webp", full: "photography/s10/oaklandfromSF.jpg", w: 900, h: 675, title: "Oakland, From Across", loc: "sf", city: "San Francisco" },
+        { id: "gardens", thumb: "photography/thumbs/SFgardens.webp", mid: "photography/s10/SFgardens.webp", full: "photography/s10/SFgardens.jpg", w: 900, h: 1200, title: "Botanical Scenery", loc: "sf", city: "San Francisco" },
+        { id: "slopes", thumb: "photography/thumbs/SFslopes.webp", mid: "photography/s10/SFslopes.webp", full: "photography/s10/SFslopes.jpg", w: 900, h: 675, title: "City Slopes", loc: "sf", city: "San Francisco" },
+        { id: "nordicstop", thumb: "photography/thumbs/lakelouisenordicstop.webp", mid: "photography/s10/lakelouisenordicstop.webp", full: "photography/s10/lakelouisenordicstop.jpg", w: 900, h: 675, title: "Lake Louise Nordic Stop", loc: "banff", city: "Banff" },
+        { id: "sisters", thumb: "photography/thumbs/3sisterstrailtrain.webp", mid: "photography/DSLR/3sisterstrailtrain.webp", full: "photography/DSLR/3sisterstrailtrain.JPG", w: 900, h: 364, title: "Three Sisters Trail Train", loc: "banff", city: "Banff" },
+        { id: "gondolaeast", thumb: "photography/thumbs/banffgondolaeast.webp", mid: "photography/DSLR/banffgondolaeast.webp", full: "photography/DSLR/banffgondolaeast.JPG", w: 900, h: 599, title: "Banff Gondola East", loc: "banff", city: "Banff" },
+        { id: "gondolasun", thumb: "photography/thumbs/banffgondolasunisset.webp", mid: "photography/DSLR/banffgondolasunisset.webp", full: "photography/DSLR/banffgondolasunisset.JPG", w: 900, h: 599, title: "Banff Gondola Sunset", loc: "banff", city: "Banff" },
+        { id: "fairmont", thumb: "photography/thumbs/fairmontbanff.webp", mid: "photography/DSLR/fairmontbanff.webp", full: "photography/DSLR/fairmontbanff.JPG", w: 900, h: 599, title: "Fairmont Banff Springs", loc: "banff", city: "Banff" },
+        { id: "goldenhour", thumb: "photography/thumbs/goldenhourmountain.webp", mid: "photography/DSLR/goldenhourmountain.webp", full: "photography/DSLR/goldenhourmountain.JPG", w: 900, h: 599, title: "Golden Hour Mountain", loc: "banff", city: "Banff" },
+        { id: "leftmntn", thumb: "photography/thumbs/leftmntnlakelouise.webp", mid: "photography/DSLR/leftmntnlakelouise.webp", full: "photography/DSLR/leftmntnlakelouise.JPG", w: 900, h: 599, title: "Left Mountain, Lake Louise", loc: "banff", city: "Banff" },
+        { id: "ongondola", thumb: "photography/thumbs/ongondola.webp", mid: "photography/DSLR/ongondola.webp", full: "photography/DSLR/ongondola.jpg", w: 900, h: 564, title: "On Gondola View", loc: "banff", city: "Banff" }
     ];
 
     var FILTERS = [
@@ -579,7 +653,11 @@
         card.setAttribute("role", "button");
         card.setAttribute("aria-label", "Open " + p.title);
         card.innerHTML =
-            '<img class="photo-image" src="' + p.src + '" alt="' + p.title + '" loading="lazy" decoding="async">' +
+            '<img class="photo-image" src="' + p.thumb + '"' +
+                ' srcset="' + p.thumb + ' 900w, ' + p.mid + ' 2560w"' +
+                ' sizes="(max-width: 560px) 92vw, (max-width: 980px) 46vw, 31vw"' +
+                ' width="' + p.w + '" height="' + p.h + '"' +
+                ' alt="' + p.title + '" loading="lazy" decoding="async">' +
             '<div class="card-veil">' +
                 '<div class="card-line">' +
                     '<span class="card-title">' + p.title + "</span>" +
@@ -642,6 +720,9 @@
     var lbStage = document.getElementById("lbStage");
     var strip = document.getElementById("lbFilmstrip");
 
+    var fullReady = {};      // photo id -> full-res original already in cache
+    var loadToken = 0;       // invalidates in-flight full-res loads on navigate
+
     function visibleList() { return state.visible.length ? state.visible : PHOTOS; }
 
     function buildStrip() {
@@ -651,7 +732,7 @@
             t.className = "lb-thumb";
             t.type = "button";
             t.setAttribute("aria-label", p.title);
-            t.innerHTML = '<img src="' + p.src + '" alt="" loading="lazy">';
+            t.innerHTML = '<img src="' + p.thumb + '" alt="" loading="lazy" decoding="async">';
             t.addEventListener("click", function () { showPhoto(i, true); });
             strip.appendChild(t);
         });
@@ -664,8 +745,29 @@
         state.index = ((i % list.length) + list.length) % list.length;
         var p = list[state.index];
 
-        lbImg.src = p.full;
+        // Two-stage load: the ~0.5 MB mid tier paints almost immediately, then the
+        // full-resolution original swaps in underneath once it has finished
+        // decoding. Guarded by a token so a fast next/prev can't let a stale
+        // full-res image land on top of the photo you actually navigated to.
+        var token = ++loadToken;
+        lbImg.src = fullReady[p.id] ? p.full : p.mid;
         lbImg.alt = p.title;
+        lbStage.classList.toggle("is-upgrading", !fullReady[p.id]);
+
+        if (!fullReady[p.id]) {
+            var hi = new Image();
+            hi.decoding = "async";
+            hi.onload = function () {
+                fullReady[p.id] = true;
+                if (token !== loadToken) return;   // user moved on; drop it
+                lbImg.src = p.full;
+                lbStage.classList.remove("is-upgrading");
+            };
+            hi.onerror = function () {
+                if (token === loadToken) lbStage.classList.remove("is-upgrading");
+            };
+            hi.src = p.full;
+        }
 
         document.getElementById("lbTitle").textContent = p.title;
         document.getElementById("lbCity").textContent = p.city;
@@ -685,7 +787,8 @@
         [1, -1].forEach(function (d) {
             var p = list[(state.index + d + list.length) % list.length];
             var img = new Image();
-            img.src = p.full;
+            img.decoding = "async";
+            img.src = p.mid;   // ~0.5 MB, not the ~4 MB original
         });
     }
 

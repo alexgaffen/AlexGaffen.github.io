@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Resource hints: open the TLS connections to the asset CDNs while the
+         HTML is still parsing, so the stylesheets below do not pay for a cold
+         handshake before they can start downloading. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex Gaffen</title>
     <link href="assets/favicon.png" rel="icon" type="image/png"/>
@@ -1066,7 +1072,10 @@
             }
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Font Awesome: loaded non-blocking so it never delays first paint. -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>

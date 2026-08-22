@@ -1,16 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Press Start 2P is loaded via <link> in each page's <head> (was an @import
+   here, which forced the font request to wait for this stylesheet to parse). */
 body.has-site-tabs {
     --site-tabs-top: 0;
     --site-tabs-shell-height: 52px;
-    --site-tabs-gap: 4px;
-    --site-tabs-shell-bg: #263f8a;
-    --site-tabs-shell-border: #10235e;
-    --site-tab-bg: rgba(10, 14, 28, 0.94);
-    --site-tab-border: rgba(240, 240, 240, 0.22);
-    --site-tab-fg: #f0f0f0;
-    --site-tab-active-bg: #fcefd4;
-    --site-tab-active-fg: #10235e;
-    --site-tab-active-border: rgba(16, 35, 94, 0.9);
+    --site-tabs-gap: 6px;
+    --site-tabs-pad-x: clamp(14px, 4.2vw, 46px);
+    /* Deep translucent ink instead of the old flat navy slab. */
+    --site-tabs-shell-bg: rgba(9, 12, 24, 0.82);
+    --site-tabs-shell-border: rgba(255, 255, 255, 0.09);
+    --site-tab-bg: transparent;
+    --site-tab-border: transparent;
+    --site-tab-fg: rgba(233, 236, 245, 0.62);
+    --site-tab-fg-hover: #f4f6fb;
+    --site-tab-hover-bg: rgba(255, 255, 255, 0.07);
+    --site-tab-accent: #7dd3fc;
+    --site-tab-active-bg: rgba(255, 255, 255, 0.11);
+    --site-tab-active-fg: #ffffff;
+    --site-tab-active-border: transparent;
     --site-world-link-alpha: 0.48;
     --site-world-glow-alpha: 0.32;
     --site-world-node-alpha: 1;
@@ -41,69 +47,151 @@ html.dark-mode body.has-site-tabs {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 12px;
+    /* Horizontal padding tracks the page gutter so the tabs line up with the
+       content below instead of hugging the raw viewport edge. */
+    padding: 0 var(--site-tabs-pad-x);
     box-sizing: border-box;
     z-index: 1400;
     background: var(--site-tabs-shell-bg);
-    border-bottom: 2px solid var(--site-tabs-shell-border);
-    box-shadow: 0 2px 0 0 #ffffff;
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    border-bottom: 1px solid var(--site-tabs-shell-border);
+    box-shadow: 0 8px 28px -18px rgba(0, 0, 0, 0.85);
     font-family: 'Space Mono', 'Courier New', Courier, monospace;
+    view-transition-name: site-tabs;   /* stays put across page swaps */
+}
+
+/* Hairline of colour along the very top edge — replaces the old hard white bar. */
+.site-tabs::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.5), rgba(167, 139, 250, 0.4), transparent);
+    pointer-events: none;
 }
 
 .site-tabs-group {
     display: flex;
+    align-items: center;
     gap: var(--site-tabs-gap);
+}
+
+/* Light theme: same structure, inverted ink. */
+[data-theme="light"] body.has-site-tabs,
+html:not(.dark-mode) body.has-site-tabs {
+    --site-tabs-shell-bg: rgba(252, 250, 245, 0.86);
+    --site-tabs-shell-border: rgba(60, 45, 20, 0.14);
+    --site-tab-fg: rgba(38, 32, 22, 0.58);
+    --site-tab-fg-hover: #16110a;
+    --site-tab-hover-bg: rgba(30, 24, 12, 0.06);
+    --site-tab-accent: #1d4ed8;
+    --site-tab-active-bg: rgba(29, 78, 216, 0.1);
+    --site-tab-active-fg: #10235e;
+}
+
+[data-theme="light"] .site-tabs::before,
+html:not(.dark-mode) .site-tabs::before {
+    background: linear-gradient(90deg, transparent, rgba(29, 78, 216, 0.35), rgba(124, 58, 237, 0.28), transparent);
+}
+
+[data-theme="light"] .site-tab.is-active::after,
+html:not(.dark-mode) .site-tab.is-active::after {
+    box-shadow: 0 0 10px rgba(29, 78, 216, 0.45);
+}
+
+/* ---------------------------------------------------------------------------
+   CROSS-DOCUMENT VIEW TRANSITIONS
+   Every page loads this stylesheet, so navigating between tabs crossfades the
+   content while the tab bar (view-transition-name: site-tabs, above) stays
+   pinned — no white flash, no visible rebuild.
+   --------------------------------------------------------------------------- */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.22s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition { navigation: none; }
 }
 
 .site-tab {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 24px;
-    padding: 0.3rem 0.8rem;
+    min-height: 34px;
+    padding: 0 0.95rem;
     border: 1px solid var(--site-tab-border);
-    border-bottom: none;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-radius: 9px;
     background: var(--site-tab-bg);
     color: var(--site-tab-fg);
     text-decoration: none;
     text-align: center;
     font-family: 'Press Start 2P', monospace;
-    font-size: clamp(0.5rem, 0.85vw, 0.75rem);
-    line-height: 2;
-    letter-spacing: 0.02em;
+    font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+    line-height: 1;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    transition: all 0.2s ease;
     white-space: nowrap;
     position: relative;
-    top: 2px; /* Push down slightly so it rests on bottom border */
-    overflow: hidden;
-    box-sizing: content-box;
+    box-sizing: border-box;
+    transition: color 0.18s ease, background-color 0.18s ease;
 }
 
-@keyframes site-tab-text-glitch {
-    0%, 100% { text-shadow: none; }
-    20% { text-shadow: -2px 0 red, 2px 0 #00ffff; }
-    40% { text-shadow: 2px 0 red, -2px 0 #00ffff; }
-    60% { text-shadow: none; }
-    80% { text-shadow: -1px 0 #00ff00, 1px 0 red; }
+/* The indicator: a short accent rule that grows out from the centre.
+   Replaces the old infinite RGB-split glitch — same affordance, no noise. */
+.site-tab::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 5px;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--site-tab-accent);
+    transform: translateX(-50%);
+    transition: width 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease;
+    opacity: 0;
+    pointer-events: none;
 }
 
-.site-tab:not(.is-active):hover {
-    color: #d62020;
-    text-decoration: underline;
-    animation: site-tab-text-glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+.site-tab:not(.is-active):hover,
+.site-tab:not(.is-active):focus-visible {
+    color: var(--site-tab-fg-hover);
+    background: var(--site-tab-hover-bg);
+    text-decoration: none;
+}
+
+.site-tab:not(.is-active):hover::after,
+.site-tab:not(.is-active):focus-visible::after {
+    width: calc(100% - 1.9rem);
+    opacity: 0.9;
+}
+
+.site-tab:focus-visible {
+    outline: 2px solid var(--site-tab-accent);
+    outline-offset: 2px;
 }
 
 .site-tab.is-active {
     background: var(--site-tab-active-bg);
     color: var(--site-tab-active-fg);
     border-color: var(--site-tab-active-border);
-    top: 0;
-    padding-bottom: calc(0.3rem + 2px);
     pointer-events: none;
     font-weight: bold;
+}
+
+.site-tab.is-active::after {
+    width: calc(100% - 1.9rem);
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(125, 211, 252, 0.65);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-tab, .site-tab::after { transition: none; }
 }
 
 /* Controls inside site-tabs */
@@ -231,9 +319,7 @@ html.dark-mode body.has-site-tabs {
     }
 
     .site-tab:not(.is-active):hover {
-        color: var(--site-tab-fg);
-        text-decoration: none;
-        animation: none;
+        color: var(--site-tab-fg-hover);
     }
 
     .site-tabs-btn:hover {
@@ -300,30 +386,13 @@ body.game-page #ui-layer {
 
 body.resume-page {
     --site-tabs-top: 0;
-    --site-tabs-shell-bg: #263f8a;
-    --site-tabs-shell-border: #10235e;
-    --site-tab-active-bg: #fcefd4;
-    --site-tab-active-fg: #10235e;
-    --site-tab-active-border: rgba(16, 35, 94, 0.9);
     --site-world-a: rgba(70, 240, 210, 0.18);
     --site-world-b: rgba(110, 80, 255, 0.16);
     --site-world-c: rgba(255, 200, 60, 0.14);
 }
 
-body.resume-page .site-tabs {
-    box-shadow: none !important;
-}
-
 body.resume-page .content {
     padding-top: 72px;
-}
-
-[data-theme="light"] body.resume-page {
-    --site-tabs-shell-bg: #263f8a;
-    --site-tabs-shell-border: #10235e;
-    --site-tab-active-bg: #fcefd4;
-    --site-tab-active-fg: #10235e;
-    --site-tab-active-border: rgba(16, 35, 94, 0.9);
 }
 
 @media (max-width: 900px) {
@@ -353,13 +422,24 @@ body.resume-page .content {
     .site-tabs {
         width: 100%;
         gap: 4px;
-        padding: 3px 6px;
+        padding: 0 10px;
     }
 
     .site-tab {
-        padding: 0.15rem 0.25rem;
+        min-height: 32px;
+        padding: 0 0.45rem;
         font-size: clamp(0.32rem, 1.6vw, 0.45rem);
     }
+
+    /* Icon-only tabs are ~34px wide, so the indicator needs a fixed short rule
+       rather than the desktop calc() which would collapse to a few pixels. */
+    .site-tab[data-mobile-label]::after,
+    .site-tab[data-mobile-label]:hover::after,
+    .site-tab[data-mobile-label].is-active::after {
+        width: 16px;
+        bottom: 4px;
+    }
+    .site-tab[data-mobile-label]:not(.is-active)::after { width: 0; }
 
     .site-tabs-btn {
         font-size: 0.8rem;

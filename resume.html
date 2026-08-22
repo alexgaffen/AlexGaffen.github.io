@@ -3,6 +3,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<!-- Resource hints: open the TLS connections to the asset CDNs while the
+     HTML is still parsing, so the stylesheets below do not pay for a cold
+     handshake before they can start downloading. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta name="description" content="Alex Gaffen - Web CV & Resume. Honours Computer Science student at McMaster University. Highlighting technical expertise, work history in research & industry co-ops, and shipped engineering works.">
 <meta name="keywords" content="Alex Gaffen Resume, Alex Gaffen McMaster, CS Co-op, AI Developer, Exploit Researcher, Systems Engineering Resume">
@@ -20,7 +27,25 @@
 <meta property="og:site_name" content="Alex Gaffen">
 <meta name="twitter:image" content="https://alexgaffen.com/assets/frontheadshot.jpg">
 <!-- Privacy-friendly analytics (sign up at plausible.io and the domain matches your site) -->
-<script defer data-domain="alexgaffen.com" src="https://plausible.io/js/script.js"></script>
+<script>
+    /* Privacy-friendly analytics. Held back while the browser is pre-rendering
+       this page for an instant tab switch, so speculative loads never register
+       a pageview for a page the visitor did not actually open. */
+    (function () {
+        function loadAnalytics() {
+            var s = document.createElement('script');
+            s.defer = true;
+            s.setAttribute('data-domain', 'alexgaffen.com');
+            s.src = 'https://plausible.io/js/script.js';
+            document.head.appendChild(s);
+        }
+        if (document.prerendering) {
+            document.addEventListener('prerenderingchange', loadAnalytics, { once: true });
+        } else {
+            loadAnalytics();
+        }
+    })();
+</script>
 <link href="assets/favicon.png" rel="icon" type="image/png"/>
 <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
 <link href="assets/favicon.png" rel="apple-touch-icon"/>
@@ -39,9 +64,15 @@
 }
 </script>
 <link href="style.css" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;display=swap" rel="stylesheet"/>
+<!-- Font Awesome: loaded non-blocking so it never delays first paint. -->
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+<!-- Devicon: loaded non-blocking so it never delays first paint. -->
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"
+      onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Press+Start+2P&amp;family=Syne:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>

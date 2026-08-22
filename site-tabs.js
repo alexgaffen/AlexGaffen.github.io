@@ -174,6 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
         function drawFrame(time) {
             ctx.clearRect(0, 0, width, height);
 
+            const linkDistanceSq = linkDistance * linkDistance;
+            const nearCut = linkDistance * 0.4;
+            const farCut = linkDistance * 0.7;
             const orbit = time * 0.00016;
             const points = stars.map((star) => {
                 if (!prefersReducedMotion) {
@@ -198,10 +201,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     const peer = points[linkIndex];
                     const dx = point.x - peer.x;
                     const dy = point.y - peer.y;
-                    const distance = Math.hypot(dx, dy);
 
-                    if (distance > linkDistance) continue;
+                    // Compare squared distances first — most pairs are out of
+                    // range, and this skips the sqrt for all of them.
+                    const distSq = dx * dx + dy * dy;
+                    if (distSq > linkDistanceSq) continue;
 
+                    const distance = Math.sqrt(distSq);
                     const fade = 1 - distance / linkDistance;
                     const alpha = fade * fade * visualProfile.linkAlpha;
                     ctx.beginPath();
@@ -209,9 +215,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctx.lineTo(peer.x, peer.y);
                     ctx.strokeStyle = star.color;
                     ctx.globalAlpha = Math.min(1, alpha * 1.6);
-                    ctx.lineWidth = distance < linkDistance * 0.4
+                    ctx.lineWidth = distance < nearCut
                         ? visualProfile.nearLineWidth
-                        : distance < linkDistance * 0.7
+                        : distance < farCut
                             ? (visualProfile.nearLineWidth + visualProfile.farLineWidth) / 2
                             : visualProfile.farLineWidth;
                     ctx.stroke();
@@ -247,13 +253,54 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             ctx.globalAlpha = 1;
-            if (!prefersReducedMotion) requestAnimationFrame(drawFrame);
+        }
+
+        // The backdrop drifts slowly, so painting it at ~30fps looks identical to
+        // 60fps while halving the work. The loop also stops entirely whenever the
+        // tab is hidden, so a background tab costs nothing.
+        const FRAME_MS = 1000 / 30;
+        let rafId = null;
+        let lastPaint = 0;
+
+        function loop(time) {
+            rafId = requestAnimationFrame(loop);
+            if (time - lastPaint < FRAME_MS) return;
+            lastPaint = time;
+            drawFrame(time);
+        }
+
+        function startLoop() {
+            if (rafId !== null || prefersReducedMotion) return;
+            lastPaint = 0;
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function stopLoop() {
+            if (rafId === null) return;
+            cancelAnimationFrame(rafId);
+            rafId = null;
         }
 
         refreshVisualProfile();
         resizeCanvas();
-        if (prefersReducedMotion) drawFrame(0);
-        else requestAnimationFrame(drawFrame);
+
+        function begin() {
+            if (prefersReducedMotion) drawFrame(0);
+            else if (!document.hidden) startLoop();
+        }
+
+        // A page being pre-rendered for an instant tab switch must not burn CPU
+        // animating a backdrop nobody is looking at yet.
+        if (document.prerendering) {
+            document.addEventListener("prerenderingchange", begin, { once: true });
+        } else {
+            begin();
+        }
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) stopLoop();
+            else if (!document.prerendering) begin();
+        });
 
         window.addEventListener("resize", () => {
             resizeCanvas();
@@ -267,8 +314,61 @@ document.addEventListener("DOMContentLoaded", () => {
         themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     }
 
+    /* -----------------------------------------------------------------------
+       INSTANT TAB SWITCHING
+       The tabs are still ordinary links, but the browser is told to fetch and
+       pre-render the other pages ahead of the click, so switching swaps to an
+       already-built page instead of tearing down and re-rendering from scratch.
+
+         prefetch  (immediate) - pulls each tab's HTML into cache right away.
+         prerender (moderate)  - on hover / pointerdown, fully renders the page
+                                 in the background; the click is then a swap.
+
+       Chromium runs the speculation rules; everything else falls back to plain
+       <link rel="prefetch">, which still removes the HTML round-trip.
+       ----------------------------------------------------------------------- */
+    function initInstantNav() {
+        var tabs = Array.prototype.slice.call(document.querySelectorAll(".site-tab"));
+        var urls = tabs
+            .filter(function (a) { return !a.classList.contains("is-active"); })
+            .map(function (a) { return a.getAttribute("href"); })
+            .filter(function (h) { return h && h.charAt(0) !== "#"; });
+        if (!urls.length) return;
+
+        var supportsRules = typeof HTMLScriptElement !== "undefined" &&
+            HTMLScriptElement.supports &&
+            HTMLScriptElement.supports("speculationrules");
+
+        // Respect data-saver / metered connections: skip speculative loading.
+        var conn = navigator.connection;
+        if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""))) return;
+
+        if (supportsRules) {
+            var script = document.createElement("script");
+            script.type = "speculationrules";
+            script.textContent = JSON.stringify({
+                prefetch: [{ source: "list", urls: urls, eagerness: "immediate" }],
+                prerender: [{
+                    source: "document",
+                    where: { selector_matches: ".site-tab" },
+                    eagerness: "moderate"
+                }]
+            });
+            document.head.appendChild(script);
+        } else {
+            urls.forEach(function (href) {
+                var link = document.createElement("link");
+                link.rel = "prefetch";
+                link.as = "document";
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        }
+    }
+
     applyTheme();
     window.toggleSiteTheme = toggleTheme;
+    initInstantNav();
 
     if (themeBtn) {
         themeBtn.addEventListener("click", toggleTheme);
