@@ -115,7 +115,11 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 14px;
+            /* 100vh is the viewport with mobile browser chrome hidden, so it
+               overshoots the real visible height and leaves the page scrollable
+               past its own content. dvh tracks the chrome as it shows/hides. */
             min-height: 100vh;
+            min-height: 100dvh;
             overflow-x: hidden;
             transition: background-color 0.8s ease;
         }
