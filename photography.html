@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Alex Gaffen - Amateur DSLR and Mobile Photography. Explore high-quality street, landscape, and macro shots geolocated on an interactive map.">
-    <meta name="keywords" content="Alex Gaffen Photography, McMaster DSLR, Street Photography, Geolocated Map Photos, Travel DSLR, Hamilton Photography">
+    <meta name="description" content="Alex Gaffen - Amateur DSLR and Mobile Photography. High-quality street, landscape, and macro shots from San Francisco and Banff.">
+    <meta name="keywords" content="Alex Gaffen Photography, McMaster DSLR, Street Photography, Landscape Photography, Travel DSLR, Hamilton Photography">
     <meta property="og:title" content="Alex Gaffen — Photography">
-    <meta property="og:description" content="A visual diary of amateur landscape, structural, and macro photography captured via DSLR and Samsung geolocated on an interactive map.">
+    <meta property="og:description" content="A visual diary of amateur landscape, structural, and macro photography captured via DSLR and Samsung.">
     <meta property="og:image" content="https://alexgaffen.com/assets/frontheadshot.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alexgaffen.com/photography.html">
     <meta property="og:site_name" content="Alex Gaffen">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Alex Gaffen — Photography">
-    <meta name="twitter:description" content="Geolocated visual media, travel galleries, and street exploration images shot by Alex Gaffen.">
+    <meta name="twitter:description" content="Visual media, travel galleries, and street exploration images shot by Alex Gaffen.">
     <meta name="twitter:image" content="https://alexgaffen.com/assets/frontheadshot.jpg">
     <title>Alex Gaffen — Photography</title>
     <link rel="canonical" href="https://alexgaffen.com/photography.html">
@@ -33,7 +33,6 @@
     }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --bg-color: #fcefd4;
@@ -264,95 +263,30 @@
         @media (hover: none) {
             .card-veil { opacity: 1; background: linear-gradient(to top, rgba(8,6,14,0.78) 0%, transparent 46%); }
         }
+        /* Caption row: title on the left, city on the right */
+        .card-line {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            transform: translateY(8px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .photo-card:hover .card-line { transform: translateY(0); }
         .card-title {
             font-family: 'Inter', sans-serif;
             font-weight: 800;
             font-size: 1.02rem;
             color: #fff;
             letter-spacing: -0.01em;
-            transform: translateY(8px);
-            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .photo-card:hover .card-title { transform: translateY(0); }
-        .card-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 5px;
+        .card-city {
+            flex: 0 0 auto;
             font-size: 0.74rem;
             color: #cdc4e8;
-            transform: translateY(8px);
-            transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .photo-card:hover .card-meta { transform: translateY(0); }
-        .card-loc-btn {
-            pointer-events: auto;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(168, 85, 247, 0.28);
-            border: 1px solid rgba(216, 180, 254, 0.5);
-            color: #fff;
-            padding: 5px 11px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
+            text-align: right;
             white-space: nowrap;
-            backdrop-filter: blur(3px);
-            transition: background 0.25s ease, transform 0.2s ease;
         }
-        .card-loc-btn:hover { background: rgba(168, 85, 247, 0.5); transform: translateY(-1px); }
-        .card-device {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.62rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: #fff;
-            background: rgba(10, 8, 18, 0.55);
-            border: 1px solid rgba(255,255,255,0.22);
-            padding: 4px 10px;
-            border-radius: 999px;
-            backdrop-filter: blur(4px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .photo-card:hover .card-device { opacity: 1; }
-
-        /* ===== Inline map popover ===== */
-        .inline-map-panel {
-            position: fixed;
-            bottom: 86px;
-            right: 18px;
-            width: min(380px, calc(100vw - 36px));
-            z-index: 8000;
-            border-radius: 14px;
-            border: 1px solid rgba(168, 85, 247, 0.45);
-            overflow: hidden;
-            box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-            background: var(--bg-color);
-            animation: mapPop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @keyframes mapPop { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
-        .inline-map-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 9px 14px;
-            background: rgba(18, 14, 26, 0.96);
-            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
-            font-family: 'Space Mono', monospace; font-size: 0.82em; color: #c084fc;
-        }
-        .inline-map-close {
-            background: none; border: none; color: #888; cursor: pointer;
-            font-size: 1.4em; transition: color 0.2s; padding: 0 4px;
-        }
-        .inline-map-close:hover { color: #fff; }
-        #inlineMap { width: 100%; height: 280px; }
-        .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2); }
-        html:not(.dark-mode) .leaflet-tile-pane { filter: none; }
-        .leaflet-control-attribution { display: none; }
 
         /* ===== Lightbox ===== */
         .modal {
@@ -379,42 +313,29 @@
             z-index: 20;
             user-select: none;
         }
-        .lb-res-badge {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.66rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: #d8b4fe;
-            background: rgba(168, 85, 247, 0.15);
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            padding: 6px 14px;
-            border-radius: 999px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-        .lb-res-badge.show { opacity: 1; }
-        .modal-close {
+        .lb-tools {
             position: absolute;
             top: 14px;
             right: 18px;
+            z-index: 30;
+            display: flex;
+            gap: 10px;
+        }
+        .lb-tool {
             width: 46px; height: 46px;
             display: flex; align-items: center; justify-content: center;
             color: #f1f1f1;
-            font-size: 30px;
+            font-size: 18px;
+            line-height: 1;
             border-radius: 999px;
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.16);
             cursor: pointer;
-            z-index: 30;
             transition: background 0.25s, transform 0.2s;
         }
-        .modal-close:hover { background: rgba(255,255,255,0.14); transform: rotate(90deg); }
+        .lb-tool:hover { background: rgba(255,255,255,0.14); }
+        .lb-tool.close { font-size: 30px; }
+        .lb-tool.close:hover { transform: rotate(90deg); }
 
         .lb-stage {
             position: relative;
@@ -459,35 +380,12 @@
             font-size: clamp(1rem, 2.4vw, 1.35rem);
             color: #fff;
         }
-        .lb-cap-meta {
-            font-size: 0.8rem;
+        .lb-cap-city {
+            flex: 0 0 auto;
+            font-size: 0.85rem;
             color: #c9bdf0;
-            margin-top: 4px;
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
+            text-align: right;
         }
-        .lb-cap-actions { display: flex; gap: 10px; pointer-events: auto; flex: 0 0 auto; }
-        .lb-act-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 11px;
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid rgba(216, 180, 254, 0.45);
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            white-space: nowrap;
-            backdrop-filter: blur(4px);
-            transition: background 0.25s, transform 0.2s;
-            text-decoration: none;
-        }
-        .lb-act-btn:hover { background: rgba(168, 85, 247, 0.42); transform: translateY(-1px); }
 
         .modal-nav {
             position: absolute;
@@ -554,7 +452,7 @@
 
         @media (max-width: 760px) {
             .lb-stage { padding: 58px 12px 10px; }
-            .lb-caption { padding: 50px 16px 16px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .lb-caption { padding: 50px 16px 16px; gap: 12px; }
             .modal-nav { width: 44px; height: 44px; font-size: 18px; }
             .modal-nav.prev { left: 8px; }
             .modal-nav.next { right: 8px; }
@@ -609,60 +507,46 @@
     </main>
 </div>
 
-<!-- Inline map popover -->
-<div id="inlineMapPanel" class="inline-map-panel" style="display:none;">
-    <div class="inline-map-header">
-        <span id="inlineMapTitle">Location</span>
-        <button onclick="closeInlineMap()" class="inline-map-close" aria-label="Close map">&times;</button>
-    </div>
-    <div id="inlineMap"></div>
-</div>
-
 <!-- Lightbox -->
 <div id="photo-modal" class="modal" role="dialog" aria-modal="true" aria-label="Photo viewer">
     <div class="lb-counter" id="lbCounter">01 / 13</div>
-    <div class="lb-res-badge" id="lbResBadge">Loading full resolution…</div>
-    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <div class="lb-tools">
+        <button class="lb-tool" onclick="toggleFullscreen()" type="button" aria-label="Toggle fullscreen"><i class="fas fa-expand"></i></button>
+        <button class="lb-tool close" onclick="closeModal()" type="button" aria-label="Close">&times;</button>
+    </div>
     <button class="modal-nav prev" onclick="changePhoto(-1)" aria-label="Previous photo">&#10094;</button>
     <button class="modal-nav next" onclick="changePhoto(1)" aria-label="Next photo">&#10095;</button>
 
     <div class="lb-stage" id="lbStage">
         <img class="lb-img" id="lbImg" alt="">
         <div class="lb-caption">
-            <div>
-                <div class="lb-cap-title" id="lbTitle"></div>
-                <div class="lb-cap-meta" id="lbMeta"></div>
-            </div>
-            <div class="lb-cap-actions">
-                <button class="lb-act-btn" id="lbMapBtn" type="button"><i class="fas fa-location-dot"></i> Map</button>
-                <button class="lb-act-btn" onclick="toggleFullscreen()" type="button"><i class="fas fa-expand"></i> Fullscreen</button>
-            </div>
+            <div class="lb-cap-title" id="lbTitle"></div>
+            <div class="lb-cap-city" id="lbCity"></div>
         </div>
     </div>
 
     <div class="lb-filmstrip" id="lbFilmstrip" aria-label="Photo thumbnails"></div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function () {
     "use strict";
 
     /* ============ Data ============ */
     var PHOTOS = [
-        { id: "ggbridge",     src: "photography/s10/ggbridge.jpg",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",        loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8199, lng: -122.4783, exif: "f/2.4 · 1/1000s · ISO 50" },
-        { id: "alcatraz",     src: "photography/s10/alcatraz.jpg",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                  loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.8267, lng: -122.4233, exif: "f/2.4 · 1/800s · ISO 64" },
-        { id: "oakland",      src: "photography/s10/oaklandfromSF.jpg",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",      loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7949, lng: -122.3994, exif: "f/1.5 · 1/500s · ISO 100" },
-        { id: "gardens",      src: "photography/s10/SFgardens.jpg",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",         loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7672, lng: -122.4685, exif: "f/1.5 · 1/250s · ISO 100" },
-        { id: "slopes",       src: "photography/s10/SFslopes.jpg",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",               loc: "sf",    city: "San Francisco", device: "S10",  lat: 37.7749, lng: -122.4194, exif: "f/2.4 · 1/640s · ISO 50" },
-        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.jpg",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",   loc: "banff", city: "Banff",         device: "S10",  lat: 51.4254, lng: -116.1773 },
-        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.JPG",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train", loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
-        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.JPG",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",        loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
-        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.JPG", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 },
-        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.JPG",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",    loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1636, lng: -115.5623 },
-        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.JPG",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",      loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1784, lng: -115.5708 },
-        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.JPG",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise",loc: "banff", city: "Banff",         device: "DSLR", lat: 51.4130, lng: -116.2289 },
-        { id: "ongondola",    src: "photography/DSLR/ongondola.jpg",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",           loc: "banff", city: "Banff",         device: "DSLR", lat: 51.1444, lng: -115.5564 }
+        { id: "ggbridge",     src: "photography/s10/ggbridge.jpg",              full: "photography/s10/ggbridge.jpg",              title: "Golden Gate Bridge",         loc: "sf",    city: "San Francisco" },
+        { id: "alcatraz",     src: "photography/s10/alcatraz.jpg",              full: "photography/s10/alcatraz.jpg",              title: "Alcatraz",                   loc: "sf",    city: "San Francisco" },
+        { id: "oakland",      src: "photography/s10/oaklandfromSF.jpg",         full: "photography/s10/oaklandfromSF.jpg",         title: "Oakland, From Across",       loc: "sf",    city: "San Francisco" },
+        { id: "gardens",      src: "photography/s10/SFgardens.jpg",             full: "photography/s10/SFgardens.jpg",             title: "Botanical Scenery",          loc: "sf",    city: "San Francisco" },
+        { id: "slopes",       src: "photography/s10/SFslopes.jpg",              full: "photography/s10/SFslopes.jpg",              title: "City Slopes",                loc: "sf",    city: "San Francisco" },
+        { id: "nordicstop",   src: "photography/s10/lakelouisenordicstop.jpg",  full: "photography/s10/lakelouisenordicstop.jpg",  title: "Lake Louise Nordic Stop",    loc: "banff", city: "Banff" },
+        { id: "sisters",      src: "photography/DSLR/3sisterstrailtrain.JPG",   full: "photography/DSLR/3sisterstrailtrain.JPG",   title: "Three Sisters Trail Train",  loc: "banff", city: "Banff" },
+        { id: "gondolaeast",  src: "photography/DSLR/banffgondolaeast.JPG",     full: "photography/DSLR/banffgondolaeast.JPG",     title: "Banff Gondola East",         loc: "banff", city: "Banff" },
+        { id: "gondolasun",   src: "photography/DSLR/banffgondolasunisset.JPG", full: "photography/DSLR/banffgondolasunisset.JPG", title: "Banff Gondola Sunset",       loc: "banff", city: "Banff" },
+        { id: "fairmont",     src: "photography/DSLR/fairmontbanff.JPG",        full: "photography/DSLR/fairmontbanff.JPG",        title: "Fairmont Banff Springs",     loc: "banff", city: "Banff" },
+        { id: "goldenhour",   src: "photography/DSLR/goldenhourmountain.JPG",   full: "photography/DSLR/goldenhourmountain.JPG",   title: "Golden Hour Mountain",       loc: "banff", city: "Banff" },
+        { id: "leftmntn",     src: "photography/DSLR/leftmntnlakelouise.JPG",   full: "photography/DSLR/leftmntnlakelouise.JPG",   title: "Left Mountain, Lake Louise", loc: "banff", city: "Banff" },
+        { id: "ongondola",    src: "photography/DSLR/ongondola.jpg",            full: "photography/DSLR/ongondola.jpg",            title: "On Gondola View",            loc: "banff", city: "Banff" }
     ];
 
     var FILTERS = [
@@ -696,22 +580,15 @@
         card.setAttribute("aria-label", "Open " + p.title);
         card.innerHTML =
             '<img class="photo-image" src="' + p.src + '" alt="' + p.title + '" loading="lazy" decoding="async">' +
-            '<span class="card-device">' + p.device + "</span>" +
             '<div class="card-veil">' +
-                '<div class="card-title">' + p.title + "</div>" +
-                '<div class="card-meta"><span>' + p.city + (p.exif ? " · " + p.exif : "") + "</span>" +
-                '<button class="card-loc-btn" type="button"><i class="fas fa-location-dot"></i> Map</button></div>' +
+                '<div class="card-line">' +
+                    '<span class="card-title">' + p.title + "</span>" +
+                    '<span class="card-city">' + p.city + "</span>" +
+                "</div>" +
             "</div>";
-        card.addEventListener("click", function (e) {
-            if (e.target.closest(".card-loc-btn")) return;
-            openModal(i);
-        });
+        card.addEventListener("click", function () { openModal(i); });
         card.addEventListener("keydown", function (e) {
             if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(i); }
-        });
-        card.querySelector(".card-loc-btn").addEventListener("click", function (e) {
-            e.stopPropagation();
-            showInlineMap(p);
         });
         grid.appendChild(card);
     });
@@ -759,31 +636,11 @@
         }, 230);
     }
 
-    /* ============ Inline map ============ */
-    var inlineMap = null;
-    window.showInlineMap = function (p) {
-        var panel = document.getElementById("inlineMapPanel");
-        panel.style.display = "block";
-        document.getElementById("inlineMapTitle").textContent = "📍 " + p.title;
-        if (inlineMap) { inlineMap.remove(); inlineMap = null; }
-        inlineMap = L.map("inlineMap").setView([p.lat, p.lng], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(inlineMap);
-        L.marker([p.lat, p.lng]).addTo(inlineMap).bindPopup("<strong>" + p.title + "</strong>").openPopup();
-        setTimeout(function () { inlineMap.invalidateSize(); }, 120);
-    };
-    window.closeInlineMap = function () {
-        document.getElementById("inlineMapPanel").style.display = "none";
-        if (inlineMap) { inlineMap.remove(); inlineMap = null; }
-    };
-
     /* ============ Lightbox ============ */
     var modal = document.getElementById("photo-modal");
     var lbImg = document.getElementById("lbImg");
     var lbStage = document.getElementById("lbStage");
     var strip = document.getElementById("lbFilmstrip");
-    var resBadge = document.getElementById("lbResBadge");
-    var fullLoader = null;
-    var fullLoaded = {};
 
     function visibleList() { return state.visible.length ? state.visible : PHOTOS; }
 
@@ -809,24 +666,15 @@
 
         lbImg.src = p.full;
         lbImg.alt = p.title;
-        resBadge.classList.remove("show");
 
         document.getElementById("lbTitle").textContent = p.title;
-        document.getElementById("lbMeta").innerHTML =
-            "<span><i class='fas fa-location-dot'></i> " + p.city + "</span>" +
-            "<span><i class='fas fa-camera'></i> " + p.device + "</span>" +
-            (p.exif ? "<span>" + p.exif + "</span>" : "");
+        document.getElementById("lbCity").textContent = p.city;
         document.getElementById("lbCounter").textContent = pad(state.index + 1) + " / " + pad(list.length);
 
         var thumbs = strip.querySelectorAll(".lb-thumb");
         thumbs.forEach(function (t, ti) { t.classList.toggle("active", ti === state.index); });
         var active = thumbs[state.index];
         if (active && !viaStrip) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-
-        document.getElementById("lbMapBtn").onclick = function () {
-            closeModal();
-            setTimeout(function () { showInlineMap(p); }, 150);
-        };
 
         pokeOverlay();
         preloadAdjacent();
@@ -895,10 +743,7 @@
 
     /* keyboard */
     document.addEventListener("keydown", function (e) {
-        if (!modal.classList.contains("open")) {
-            if (e.key === "Escape") closeInlineMap();
-            return;
-        }
+        if (!modal.classList.contains("open")) return;
         if (e.key === "Escape") {
             if (document.fullscreenElement) document.exitFullscreen();
             else if (modal.classList.contains("is-fullscreen")) modal.classList.remove("is-fullscreen");
