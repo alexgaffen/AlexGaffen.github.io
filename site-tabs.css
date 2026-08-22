@@ -96,10 +96,9 @@ html:not(.dark-mode) .site-tabs::before {
     background: linear-gradient(90deg, transparent, rgba(255, 214, 107, 0.55), rgba(125, 211, 252, 0.4), transparent);
 }
 
-[data-theme="light"] .site-tab.is-active::after,
-html:not(.dark-mode) .site-tab.is-active::after {
-    box-shadow: 0 0 10px rgba(255, 214, 107, 0.6);
-}
+/* The active indicator stays white in both themes (see .site-tab.is-active::after
+   below) — only the hover indicator picks up the theme accent, so it's clear
+   which rule is "you're here" and which is "you're pointing at this". */
 
 /* ---------------------------------------------------------------------------
    CROSS-DOCUMENT VIEW TRANSITIONS
@@ -189,7 +188,8 @@ html:not(.dark-mode) .site-tab.is-active::after {
 .site-tab.is-active::after {
     width: calc(100% - 1.9rem);
     opacity: 1;
-    box-shadow: 0 0 10px rgba(125, 211, 252, 0.65);
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {
