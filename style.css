@@ -120,7 +120,11 @@ body::before {
 /* ------------------------------------------------------------- */
 .container {
     display: flex;
+    /* 100vh is the viewport with mobile browser chrome hidden, so it always
+       overshoots the real visible height and leaves the page scrollable past
+       its own content. dvh tracks the chrome as it shows/hides. */
     min-height: 100vh;
+    min-height: 100dvh;
 }
 
 /* CONTENT CONTAINER */
@@ -3476,7 +3480,10 @@ body.resume-page::before {
     position: relative;
     z-index: 2;
 }
-.hero-left { display: flex; flex-direction: column; justify-content: center; }
+/* Top-aligned, not centered: hero-left shares its grid row with the 272px-tall
+   terminal card, and centering it there pushed "CURRICULUM VITAE" down by
+   half the leftover space -- the last bit of gap above the hero text. */
+.hero-left { display: flex; flex-direction: column; justify-content: flex-start; }
 
 /* Fixed-size terminal window on the right of the hero */
 .hero-terminal {
