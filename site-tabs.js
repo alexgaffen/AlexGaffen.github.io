@@ -372,6 +372,17 @@ document.addEventListener("DOMContentLoaded", () => {
     window.toggleSiteTheme = toggleTheme;
     initInstantNav();
 
+    // A prerendered tab can sit fully built in the background for a while --
+    // "immediate" eagerness above starts that the moment this page loads. If
+    // the theme toggle fires during that window, the OTHER document's classes
+    // were already set from the localStorage value at prerender time, and
+    // activating it doesn't re-run any script. Re-sync right as it goes live,
+    // so a toggle-then-switch never lands you back on the old theme.
+    document.addEventListener("prerenderingchange", () => {
+        isDarkMode = localStorage.getItem("site-dark-mode") === "true";
+        applyTheme();
+    }, { once: true });
+
     if (themeBtn) {
         themeBtn.addEventListener("click", toggleTheme);
     }
