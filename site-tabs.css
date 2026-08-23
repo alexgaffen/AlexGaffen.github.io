@@ -417,7 +417,7 @@ body.resume-page {
 }
 
 body.resume-page .content {
-    padding-top: 56px;   /* 52px bar + a 4px hairline, no dead gap */
+    padding-top: 52px;   /* flush with the 52px bar -- no hairline gap */
 }
 
 @media (max-width: 900px) {
