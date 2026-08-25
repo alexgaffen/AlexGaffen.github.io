@@ -153,6 +153,16 @@
             .aurora .blob { animation: none !important; }
         }
 
+        /* The terminal lays two full-screen backdrop-filter layers over the page,
+           and every frame of its drop-down has to re-read the backdrop beneath.
+           Three animated blur(110px) blobs make that read expensive enough to
+           stutter on a phone, so the aurora holds still while the console is up.
+           It sits behind an opaque scrim there, so nothing visible changes. */
+        html.ag-console-open .aurora .blob {
+            animation-play-state: paused;
+            will-change: auto;
+        }
+
         /* Hide the shared 2D canvas — aurora replaces it here */
         #site-world-canvas, .site-world-canvas { display: none !important; opacity: 0 !important; }
 
@@ -172,7 +182,11 @@
 
         /* ===== Editorial header ===== */
         header.gallery-hero {
-            padding: 30px 0 8px;
+            /* Top/bottom only: the padding shorthand here out-specifies the
+               shared .gallery-hero rule below and was zeroing the side gutters,
+               letting the title, tagline and filter pills run off-screen. */
+            padding-top: 30px;
+            padding-bottom: 8px;
             margin-bottom: 10px;
         }
         .hero-eyebrow {
@@ -880,7 +894,7 @@
     })();
 })();
 </script>
-<script src="site-console.js"></script>
+<script src="site-console.js" defer></script>
 <script src="global_fx.js"></script>
 </body>
 </html>
