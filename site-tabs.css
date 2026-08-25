@@ -61,7 +61,6 @@ html.dark-mode body.has-site-tabs {
     /* Enough drop to sell the bar as a layer above the page, not part of it. */
     box-shadow: 0 4px 18px -6px rgba(0, 0, 0, 0.45);
     font-family: 'Space Mono', 'Courier New', Courier, monospace;
-    view-transition-name: site-tabs;   /* stays put across page swaps */
 }
 
 /* Hairline of colour along the very top edge — replaces the old hard white bar. */
@@ -107,37 +106,6 @@ html:not(.dark-mode) .site-tab:not(.is-active):focus-visible::after,
 html:not(.dark-mode) .site-tab.is-active::after {
     background: #ffffff;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.55);
-}
-
-/* ---------------------------------------------------------------------------
-   CROSS-DOCUMENT VIEW TRANSITIONS
-   Every page loads this stylesheet, so switching tabs uses the View
-   Transition API instead of a plain navigation. The browser's default here
-   is a crossfade of the whole page (old snapshot fading out under the new
-   one, blended with plus-lighter) — with prerendering already making the
-   swap instant, that crossfade only adds a visible flash, most noticeable on
-   the tab bar itself since it's pixel-identical before and after. Both are
-   switched off below: root cuts straight to the new page with no animation,
-   and the bar (view-transition-name: site-tabs, above) is pinned so it never
-   takes part in the crossfade at all.
-   --------------------------------------------------------------------------- */
-@view-transition { navigation: auto; }
-
-::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation: none;
-}
-
-::view-transition-group(site-tabs),
-::view-transition-old(site-tabs),
-::view-transition-new(site-tabs) {
-    animation: none;
-    mix-blend-mode: normal;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    @view-transition { navigation: none; }
 }
 
 .site-tab {
