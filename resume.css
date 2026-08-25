@@ -54,21 +54,23 @@
 /* ---- dark (default) ---- */
 :root,
 :root[data-theme="aurora"] {
-    --canvas: #090b0f;
-    --surface: #11141b;
-    --surface-2: #161a23;
-    --surface-3: #1c212c;
-    --line: rgba(255, 255, 255, 0.09);
-    --line-strong: rgba(255, 255, 255, 0.16);
+    --canvas: #000000;
+    --surface: #0e0f12;
+    --surface-2: #15161a;
+    --surface-3: #1c1e23;
+    --line: rgba(255, 255, 255, 0.10);
+    --line-strong: rgba(255, 255, 255, 0.18);
 
-    --text: #e9ecf3;
-    --text-2: #a7b0c0;
-    --text-3: #737d8e;
+    --text: #f0f1f4;
+    --text-2: #a8acb6;
+    --text-3: #74787f;
 
-    --accent: #5eead4;
-    --accent-ink: #04201c;
-    --accent-soft: rgba(94, 234, 212, 0.12);
-    --accent-line: rgba(94, 234, 212, 0.34);
+    /* Off-white rather than a coloured accent: on true black it reads
+       cleaner than the mint it replaced, and nothing on the page is green. */
+    --accent: #eceef3;
+    --accent-ink: #0a0b0d;
+    --accent-soft: rgba(255, 255, 255, 0.09);
+    --accent-line: rgba(255, 255, 255, 0.26);
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 12px 32px -18px rgba(0, 0, 0, 0.9);
@@ -90,10 +92,10 @@
     --text-2: #4e5663;
     --text-3: #79818f;
 
-    --accent: #0f766e;
+    --accent: #16181d;
     --accent-ink: #ffffff;
-    --accent-soft: rgba(15, 118, 110, 0.09);
-    --accent-line: rgba(15, 118, 110, 0.30);
+    --accent-soft: rgba(22, 24, 29, 0.07);
+    --accent-line: rgba(22, 24, 29, 0.26);
 
     --shadow-sm: 0 1px 2px rgba(40, 30, 10, 0.06);
     --shadow-md: 0 12px 30px -20px rgba(40, 30, 10, 0.35);
@@ -102,22 +104,10 @@
     color-scheme: light;
 }
 
-/* Per-section accents. Quiet by design: they tint the section number and the
-   timeline dot only, so the page reads as one palette instead of six. */
-section           { --sect: var(--accent); }
-.section-burgundy { --sect: #e0849a; }
-.section-teal     { --sect: #4fd6c3; }
-.section-orange   { --sect: #f4a15d; }
-.section-gold     { --sect: #e8c25a; }
-.section-purple   { --sect: #b294f8; }
-.section-coral    { --sect: #f78ca0; }
-
-:root[data-theme="light"] .section-burgundy { --sect: #b0455f; }
-:root[data-theme="light"] .section-teal     { --sect: #0f766e; }
-:root[data-theme="light"] .section-orange   { --sect: #c2570f; }
-:root[data-theme="light"] .section-gold     { --sect: #9a7511; }
-:root[data-theme="light"] .section-purple   { --sect: #6d3fc4; }
-:root[data-theme="light"] .section-coral    { --sect: #c4405c; }
+/* The .section-* classes stay in the markup but no longer carry their own
+   hue -- six competing accents worked against a monochrome page. Everything
+   that used to be section-tinted now takes the single accent. */
+section { --sect: var(--accent); }
 
 /* --------------------------------------------------------------------------
    2. BASE
@@ -204,10 +194,10 @@ main.content {
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 .about-theme-fx canvas { width: 100%; height: 100%; display: block; }
-:root[data-theme="light"] .about-theme-fx { opacity: 0.3; }
+:root[data-theme="light"] .about-theme-fx { opacity: 0.22; }
 
 .cursor-glow {
     position: fixed;
@@ -250,10 +240,10 @@ main.content { position: relative; z-index: 1; }
     filter: blur(90px);
     opacity: 0.5;
 }
-.hero-orb-a { width: 340px; height: 340px; left: 4%;  top: -60px; background: var(--accent); opacity: 0.16; }
-.hero-orb-b { width: 300px; height: 300px; left: 44%; top: -110px; background: #7c8cf8; opacity: 0.12; }
-.hero-orb-c { width: 280px; height: 280px; right: 6%; top: -40px; background: #f78ca0; opacity: 0.10; }
-:root[data-theme="light"] .hero-orb { opacity: 0.13; }
+.hero-orb-a { width: 340px; height: 340px; left: 4%;  top: -60px; background: #ffffff; opacity: 0.05; }
+.hero-orb-b { width: 300px; height: 300px; left: 44%; top: -110px; background: #ffffff; opacity: 0.035; }
+.hero-orb-c { width: 280px; height: 280px; right: 6%; top: -40px; background: #ffffff; opacity: 0.03; }
+:root[data-theme="light"] .hero-orb { background: #6b6152; opacity: 0.10; }
 
 .hero-grid {
     display: grid;
@@ -376,18 +366,18 @@ main.content { position: relative; z-index: 1; }
     min-height: 210px;
     font-size: 0.78rem;
     line-height: 1.75;
-    color: #c3ccdb;
+    color: #c6c9d0;
 }
 .term-line { white-space: pre-wrap; word-break: break-word; }
-.term-prompt-user { color: #4ade80; }
-.term-prompt-path { color: #5eead4; }
-.term-prompt-sign { color: #6b7383; margin: 0 0.35em; }
-.term-cmd { color: #f1f5f9; }
-.term-out { display: block; color: #8b95a6; margin: 0.1em 0 0.9em; }
+.term-prompt-user { color: #d7dae1; font-weight: 700; }
+.term-prompt-path { color: #9aa0ab; }
+.term-prompt-sign { color: #63666d; margin: 0 0.35em; }
+.term-cmd { color: #ffffff; }
+.term-out { display: block; color: #878b93; margin: 0.1em 0 0.9em; }
 .term-cursor {
     display: inline-block;
     width: 7px; height: 1.05em;
-    background: #5eead4;
+    background: #e6e8ec;
     vertical-align: text-bottom;
     margin-left: 3px;
     animation: caret 1.05s steps(1) infinite;
@@ -454,12 +444,9 @@ main.content { position: relative; z-index: 1; }
 /* --------------------------------------------------------------------------
    6. SECTION HEADERS
    -------------------------------------------------------------------------- */
-main.content { counter-reset: sect; }
-
 section { margin-bottom: var(--s-9); position: relative; }
 
 section > h2 {
-    counter-increment: sect;
     display: flex;
     align-items: center;
     gap: var(--s-4);
@@ -469,18 +456,6 @@ section > h2 {
     letter-spacing: 0.02em;
     margin: 0 0 var(--s-7);
     color: var(--text);
-}
-section > h2::before {
-    content: counter(sect, decimal-leading-zero);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--sect);
-    padding: 0.3em 0.6em;
-    border: 1px solid currentColor;
-    border-radius: var(--r-sm);
-    flex: 0 0 auto;
 }
 /* hairline that runs out to the right of every section title */
 section > h2::after {
