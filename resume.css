@@ -702,11 +702,19 @@ main.content > hr { display: none; }
 @media (min-width: 901px) {
     section:has(.job-item) {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        /* 420px floor gives two columns at this page width. The old 340px gave
+           three, which left the entry cards too narrow for their bullets. */
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
         column-gap: var(--s-4);
         align-items: start;
     }
     section:has(.job-item) > h2 { grid-column: 1 / -1; }
+
+    /* A section with a single entry cannot rely on auto-fit collapsing the
+       spare tracks -- the h2 spans 1/-1, so every track counts as occupied and
+       none collapse. Education was left as one narrow column with dead space
+       beside it; span the row instead. */
+    #education .job-item { grid-column: 1 / -1; }
 }
 
 /* --------------------------------------------------------------------------
