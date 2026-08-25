@@ -76,7 +76,10 @@
 
 /* ---- light ---- */
 :root[data-theme="light"] {
-    --canvas: #faf7f1;
+    /* Same warm beige the home and photography pages use in light mode, so
+       the site reads as one canvas rather than the resume having its own
+       slightly different off-white. */
+    --canvas: #fcefd4;
     --surface: #ffffff;
     --surface-2: #f6f2ea;
     --surface-3: #efe9de;
