@@ -886,9 +886,13 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
 
     
 <style>
+    /* Dark mode keeps the same violet/blue border the light theme uses rather
+       than swapping to the old #00ff00 terminal green, which was the loudest
+       thing on the page. */
     body.hacker-mode .glistening-box {
-        background: #000 padding-box, linear-gradient(135deg, #00ff00, #003300, #00ff00) border-box !important;
-        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
+        background: #000 padding-box,
+                    linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box !important;
+        box-shadow: 0 0 22px rgba(138, 43, 226, 0.22) !important;
         border: 4px solid transparent !important;
     }
 </style>

@@ -1655,29 +1655,6 @@
         runNext();
     }
 
-    // Auto count badge for each resume section
-    var nounMap = {
-        education: 'PROGRAM',
-        workexperience: 'ROLES',
-        projects: 'PROJECTS',
-        'competitions-awards': 'AWARDS',
-        skills: 'TRACKS',
-        certifications: 'CERTS',
-        'hobbies-interests': 'PURSUITS'
-    };
-    document.querySelectorAll('main.content > section').forEach(function(sec) {
-        var h2 = sec.querySelector('h2');
-        if (!h2) return;
-        var count = sec.querySelectorAll('.job-item').length;
-        if (!count) count = sec.querySelectorAll('.skill-category').length;
-        if (!count) return;
-        var badge = document.createElement('span');
-        badge.className = 'section-count';
-        var noun = nounMap[sec.id] || 'ITEMS';
-        if (count === 1 && noun.endsWith('S')) noun = noun.slice(0, -1);
-        badge.textContent = count + ' ' + noun;
-        h2.appendChild(badge);
-    });
 })();
 </script>
 <script>

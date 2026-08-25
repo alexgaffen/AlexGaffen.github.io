@@ -5,10 +5,10 @@ body.has-site-tabs {
     --site-tabs-shell-height: 52px;
     --site-tabs-gap: 6px;
     --site-tabs-pad-x: clamp(8px, 1.4vw, 16px);
-    /* The page behind is near-black (#121010), so the bar is deliberately
-       LIGHTER and cooler than it — that separation is what makes it read as a
-       distinct surface instead of blending into the background. */
-    --site-tabs-shell-bg: rgba(31, 37, 54, 0.94);
+    /* The page behind is true black, so the bar is deliberately LIGHTER and
+       cooler than it — that separation is what makes it read as a distinct
+       surface instead of blending into the background. */
+    --site-tabs-shell-bg: rgba(34, 40, 56, 0.95);
     --site-tabs-shell-border: rgba(255, 255, 255, 0.16);
     --site-tab-bg: transparent;
     --site-tab-border: transparent;
@@ -198,9 +198,19 @@ html:not(.dark-mode) .site-tab.is-active::after {
     gap: 8px;
 }
 
+.site-tabs-controls,
+.site-tabs-controls * {
+    box-sizing: border-box;
+}
+
 .nav-social-link {
     width: var(--nav-control-size);
     height: var(--nav-control-size);
+    flex: 0 0 auto;
+    font-family: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -494,13 +504,16 @@ body.resume-page .content {
     }
 }
 
-/* Global Dark/Hacker mode overrides for consistency across pages */
+/* Global dark mode palette, shared by every page that uses these vars.
+   Was a literal "hacker" theme: a red-tinted near-black (#121010) under pure
+   #00ff00 terminal green with magenta hovers. Now a neutral black with
+   off-white text, which is far easier to read and does not cast the page. */
 body.hacker-mode {
-    --bg-color: #121010 !important;
-    --text-color: #00ff00 !important;
-    --border-color: #1a4a1a !important;
-    --link-color: #00ff00 !important;
-    --link-hover: #ff00ff !important;
+    --bg-color: #000000 !important;
+    --text-color: #e9e9ec !important;
+    --border-color: #2a2b30 !important;
+    --link-color: #e9e9ec !important;
+    --link-hover: #7dd3fc !important;   /* matches the tab-bar accent */
 }
 
 body.hacker-mode.game-page #ui-layer, 
@@ -918,6 +931,9 @@ body.resume-page #ag-console-fab { bottom: 84px; }
     height: var(--nav-control-size);
     border-radius: 50%;
     font-size: 0.92rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(76, 29, 149, 0.9);
     animation: none;
     flex: 0 0 auto;
