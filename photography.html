@@ -110,16 +110,11 @@
         body {
             font-family: 'Space Mono', 'Courier New', Courier, monospace;
             margin: 0;
-            padding: 84px 0 80px;
+            padding: 0;
             line-height: 1.6;
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 14px;
-            /* 100vh is the viewport with mobile browser chrome hidden, so it
-               overshoots the real visible height and leaves the page scrollable
-               past its own content. dvh tracks the chrome as it shows/hides. */
-            min-height: 100vh;
-            min-height: 100dvh;
             overflow-x: hidden;
             transition: background-color 0.8s ease;
         }
@@ -161,13 +156,19 @@
         /* Hide the shared 2D canvas — aurora replaces it here */
         #site-world-canvas, .site-world-canvas { display: none !important; opacity: 0 !important; }
 
-        .page-shell {
-            position: relative;
-            z-index: 1;
+        /* .page-shell carries .inner-scroll: site-tabs.css pins it beneath the
+           tab bar and scrolls it, so the measure moves onto its children. */
+        .page-shell { z-index: 1; }
+        .gallery-hero,
+        .content-area {
             max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 28px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 28px;
+            padding-right: 28px;
         }
+        .gallery-hero { padding-top: 28px; }
+        .content-area { padding-bottom: 80px; }
 
         /* ===== Editorial header ===== */
         header.gallery-hero {
@@ -529,7 +530,7 @@
             .modal-nav.prev { left: 8px; }
             .modal-nav.next { right: 8px; }
             .lb-counter { left: 16px; }
-            .page-shell { padding: 0 16px; }
+            .gallery-hero, .content-area { padding-left: 16px; padding-right: 16px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -544,7 +545,7 @@
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
-<body class="has-site-tabs photo-page theme-all">
+<body class="has-site-tabs photo-page theme-all has-inner-scroll">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
@@ -570,7 +571,7 @@
     <div class="blob b3"></div>
 </div>
 
-<div class="page-shell">
+<div class="page-shell inner-scroll">
     <header class="gallery-hero">
         <h1 class="gallery-title">Photography</h1>
         <p class="gallery-tagline" id="galleryTagline">Frames collected on the road, fog, summits and golden hours.</p>
@@ -802,7 +803,8 @@
         if (i === -1) i = 0;
         buildStrip();
         modal.classList.add("open");
-        document.body.style.overflow = "hidden";
+        var sc = document.querySelector(".inner-scroll");
+        if (sc) sc.style.overflowY = "hidden";
         showPhoto(i);
     };
 
@@ -812,7 +814,8 @@
         if (document.fullscreenElement) document.exitFullscreen();
         modal.classList.remove("open");
         modal.classList.remove("is-fullscreen");
-        document.body.style.overflow = "";
+        var sc = document.querySelector(".inner-scroll");
+        if (sc) sc.style.overflowY = "";
     };
 
     window.toggleFullscreen = function () {

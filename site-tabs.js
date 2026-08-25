@@ -422,21 +422,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })();
 
+/* The element that actually scrolls: a pinned inner panel where the page opts
+   into one, otherwise the document itself. */
+function getSiteScroller() {
+    return document.querySelector('.inner-scroll') || document.scrollingElement || document.documentElement;
+}
+window.getSiteScroller = getSiteScroller;
+
 function updateSiteScrollProgress() {
     if (document.body.classList.contains('resume-page')) return;
 
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = height > 0 ? (winScroll / height) * 100 : 0;
-    let activeTab = document.querySelector('.site-tab.is-active');
+    var el = getSiteScroller();
+    var height = el.scrollHeight - el.clientHeight;
+    var scrolled = height > 0 ? (el.scrollTop / height) * 100 : 0;
+    var activeTab = document.querySelector('.site-tab.is-active');
     if (activeTab) activeTab.style.setProperty('--tab-scroll-progress', scrolled + '%');
-    let fullBar = document.getElementById('site-full-progress');
+    var fullBar = document.getElementById('site-full-progress');
     if (fullBar) fullBar.style.width = scrolled + '%';
 }
 
 window.updateSiteScrollProgress = updateSiteScrollProgress;
-window.addEventListener('scroll', updateSiteScrollProgress);
 window.addEventListener('resize', updateSiteScrollProgress);
+document.addEventListener('DOMContentLoaded', function () {
+    var el = getSiteScroller();
+    (el === document.scrollingElement || el === document.documentElement ? window : el)
+        .addEventListener('scroll', updateSiteScrollProgress, { passive: true });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.body.classList.contains('resume-page')) return;

@@ -509,11 +509,13 @@ body.resume-page .content {
    #00ff00 terminal green with magenta hovers. Now a neutral black with
    off-white text, which is far easier to read and does not cast the page. */
 body.hacker-mode {
+    /* Same values the resume page uses for --canvas / --text / --line, so the
+       home and photo pages read as the same product in dark mode. */
     --bg-color: #000000 !important;
-    --text-color: #e9e9ec !important;
-    --border-color: #2a2b30 !important;
-    --link-color: #e9e9ec !important;
-    --link-hover: #7dd3fc !important;   /* matches the tab-bar accent */
+    --text-color: #f0f1f4 !important;
+    --border-color: rgba(255, 255, 255, 0.10) !important;
+    --link-color: #f0f1f4 !important;
+    --link-hover: #ffffff !important;
 }
 
 body.hacker-mode.game-page #ui-layer, 
@@ -537,7 +539,68 @@ body.hacker-mode.game-page canvas {
 ::-webkit-scrollbar { display: none; }
 html, body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden; }
 
-body:not(.resume-page) #site-full-progress {
+/* ---------------------------------------------------------------------------
+   INNER SCROLL REGION
+   Pages that opt in (body.has-inner-scroll + an .inner-scroll element) stop
+   scrolling the document and scroll a panel pinned beneath the tab bar
+   instead. The bar is then genuinely outside the scroll area -- the page
+   reads like content inside its own window rather than sliding under a
+   floating strip -- and the scrollbar spans only the content, not the bar.
+   --------------------------------------------------------------------------- */
+body.has-inner-scroll {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.inner-scroll {
+    position: fixed;
+    top: var(--site-tabs-shell-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+}
+
+/* This panel gets a real scrollbar, unlike the hidden document one above. */
+.inner-scroll { scrollbar-width: thin; scrollbar-color: var(--inner-sb, rgba(255,255,255,0.22)) transparent; }
+.inner-scroll::-webkit-scrollbar { display: block; width: 10px; }
+.inner-scroll::-webkit-scrollbar-track { background: transparent; }
+.inner-scroll::-webkit-scrollbar-thumb {
+    background: var(--inner-sb, rgba(255, 255, 255, 0.22));
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+}
+.inner-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--inner-sb-hover, rgba(255, 255, 255, 0.36));
+    background-clip: content-box;
+}
+[data-theme="light"] .inner-scroll,
+html:not(.dark-mode) .inner-scroll {
+    --inner-sb: rgba(20, 18, 12, 0.28);
+    --inner-sb-hover: rgba(20, 18, 12, 0.45);
+}
+
+/* The across-screen read-progress bar sits just under the tab bar. */
+.scroll-progress,
+body.has-inner-scroll #site-full-progress {
+    position: fixed;
+    top: var(--site-tabs-shell-height);
+    left: 0;
+    height: 2px;
+    width: 0;
+    z-index: 1401;
+    pointer-events: none;
+    transition: width 0.1s linear;
+}
+body.has-inner-scroll #site-full-progress {
+    background: linear-gradient(90deg, #22d3ee, #a78bfa, #14b8a6);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+}
+
+body:not(.resume-page):not(.has-inner-scroll) #site-full-progress {
     position: fixed;
     top: 0;
     left: 0;
@@ -913,12 +976,8 @@ html.theme-transitioning *::after {
     50% { box-shadow: 0 8px 34px -6px rgba(34, 211, 238, 0.6); }
 }
 body.index-page #ag-console-fab { bottom: 92px; }
-/* Resume has a back-to-top button bottom-right; stack the console FAB above it */
-body.resume-page #ag-console-fab { bottom: 84px; }
-@media (max-width: 900px) {
-    /* back-to-top is hidden on mobile, reclaim the corner */
-    body.resume-page #ag-console-fab { bottom: 18px; }
-}
+/* The resume's back-to-top arrow was removed, so nothing to stack above. */
+body.resume-page #ag-console-fab { bottom: 18px; }
 @media (max-width: 800px) {
     body.index-page #ag-console-fab { bottom: 88px; }
     #ag-console .ag-console-inner { height: 72vh; width: 100vw; border-radius: 0 0 12px 12px; }

@@ -76,7 +76,7 @@
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
-<body class="has-site-tabs resume-page">
+<body class="has-site-tabs resume-page has-inner-scroll">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav class="site-tabs" aria-label="Primary">
     <div class="site-tabs-group">
@@ -103,7 +103,7 @@
 </div>
 <div aria-hidden="true" class="cursor-glow" id="cursorGlow"></div>
 
-<div class="container">
+<div class="container inner-scroll">
 <main class="content" id="main-content" tabindex="-1">
 <header class="resume-hero">
     <div class="hero-bg" aria-hidden="true">
@@ -591,10 +591,6 @@
 </div>
 <div class="scroll-progress" id="scrollProgress"></div>
 <div aria-hidden="true" class="card-hover-hint" id="cardHoverHint"></div>
-<!-- Back to Top Button -->
-<button class="back-to-top" id="backToTop" title="Back to top">
-<i class="fas fa-arrow-up"></i>
-</button>
 <!-- Mobile Bottom Buttons (appear after scrolling past sidebar, mobile only) -->
 <div class="mobile-bottom-btns" id="mobileBottomBtns">
 <button class="mobile-bottom-btn" id="mobileBottomUp" title="Back to top" aria-label="Back to top">
@@ -629,11 +625,20 @@
             el.textContent = 'v' + now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
         })();
 
+        // The page scrolls an inner panel pinned under the tab bar, not the
+        // document, so every scroll read/write below goes through SCROLLER.
+        const SCROLLER = document.querySelector('.inner-scroll') || document.scrollingElement;
+        const scrollTopOf = () => SCROLLER.scrollTop;
+        const scrollToTop = (smooth) => SCROLLER.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+        // Offset of an element from the top of the scroll panel's content.
+        const offsetInScroller = (el) =>
+            el.getBoundingClientRect().top - SCROLLER.getBoundingClientRect().top + SCROLLER.scrollTop;
+
         // Always start at the top on page load/refresh
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
-        window.scrollTo(0, 0);
+        scrollToTop(false);
 
         // Scroll reveal animation with staggered children
         const observer = new IntersectionObserver((entries) => {
@@ -777,7 +782,7 @@
 
             if (e.key === 'ArrowUp' && window.innerWidth > 900) {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                scrollToTop(true);
             }
             if (e.key === 'Escape') {
                 window.location.href = 'index.html';
@@ -789,7 +794,7 @@
         const sections = document.querySelectorAll('section[id]');
 
         function updateActiveNav() {
-            const scrollPos = window.scrollY + 120;
+            const scrollPos = scrollTopOf() + 120;
 
             let currentId = '';
             sections.forEach((section) => {
@@ -799,7 +804,7 @@
             });
 
             // If at the very top, default to about
-            if (window.scrollY < 50) currentId = 'about';
+            if (scrollTopOf() < 50) currentId = 'about';
 
             navLinks.forEach((link) => {
                 link.classList.remove('active');
@@ -809,7 +814,7 @@
             });
         }
 
-        window.addEventListener('scroll', updateActiveNav);
+        SCROLLER.addEventListener('scroll', updateActiveNav, { passive: true });
         updateActiveNav();
 
         // Smooth scroll with offset for sidebar nav links so section h2 sits below header
@@ -823,10 +828,9 @@
                 const target = document.getElementById(targetId);
                 if (!target) return;
                 if (targetId === 'about') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    scrollToTop(true);
                 } else {
-                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
-                    window.scrollTo({ top: top, behavior: 'smooth' });
+                    SCROLLER.scrollTo({ top: offsetInScroller(target) - NAV_OFFSET, behavior: 'smooth' });
                 }
                 // Keep URL clean (no hash fragment)
                 history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -841,22 +845,21 @@
             const el = document.getElementById(id);
             if (el) {
                 if (id === 'about') {
-                    window.scrollTo(0, 0);
+                    scrollToTop(false);
                 } else {
-                    const top = el.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
-                    window.scrollTo(0, top);
+                    SCROLLER.scrollTo({ top: offsetInScroller(el) - NAV_OFFSET });
                 }
             }
             history.replaceState(null, '', window.location.pathname + window.location.search);
         }
 
-        // Scroll progress bar & back-to-top button (desktop only)
+        // Scroll progress bar (the desktop back-to-top arrow was removed: the
+        // pinned panel scrolls with the wheel, so it earned nothing).
         const scrollProgress = document.getElementById('scrollProgress');
-        const backToTop = document.getElementById('backToTop');
         const mobileBottomBtns = document.getElementById('mobileBottomBtns');
         const mobileBottomUp = document.getElementById('mobileBottomUp');
         const mobileBottomNav = document.getElementById('mobileBottomNav');
-        let lastScrollY = window.scrollY;
+        let lastScrollY = scrollTopOf();
 
         // Mobile nav menu toggle
         const mobileNavPanel = document.getElementById('mobileNavPanel');
@@ -864,22 +867,13 @@
         const mobileNavOverlay = document.getElementById('mobileNavOverlay');
         const sidebar = document.querySelector('.sidebar');
 
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        SCROLLER.addEventListener('scroll', () => {
+            const scrollTop = scrollTopOf();
+            const docHeight = SCROLLER.scrollHeight - SCROLLER.clientHeight;
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
 
             lastScrollY = scrollTop;
-
-            // Desktop: show/hide back-to-top arrow
-            if (window.innerWidth > 900) {
-                if (scrollTop > 400) {
-                    backToTop.classList.add('visible');
-                } else {
-                    backToTop.classList.remove('visible');
-                }
-            }
 
             // Mobile: show/hide bottom buttons after scrolling past sidebar
             if (window.innerWidth <= 900) {
@@ -892,13 +886,9 @@
             }
         });
 
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
         // Mobile bottom buttons
         mobileBottomUp.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            scrollToTop(true);
         });
         mobileBottomNav.addEventListener('click', openMobileNav);
 
@@ -927,10 +917,9 @@
                 const target = document.getElementById(targetId);
                 if (!target) return;
                 if (targetId === 'about') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    scrollToTop(true);
                 } else {
-                    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
-                    window.scrollTo({ top: top, behavior: 'smooth' });
+                    SCROLLER.scrollTo({ top: offsetInScroller(target) - NAV_OFFSET, behavior: 'smooth' });
                 }
                 history.replaceState(null, '', window.location.pathname + window.location.search);
             });
