@@ -65,7 +65,7 @@
       ]
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4; /* Nice warm beige */
@@ -478,6 +478,13 @@
             max-width: 1120px;
             width: 100%;
             justify-self: center;
+        }
+
+        /* The card's copy reads as prose, so it uses the same humanist sans the
+           resume page does rather than the site-wide monospace. The mono face
+           stays on the chrome around it (tabs, marquee, console). */
+        .box-inner-content {
+            font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
         .home-title {
@@ -1008,7 +1015,7 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
         </div>
     </aside>
 
-    <script src="site-console.js"></script>
+    <script src="site-console.js" defer></script>
     <script src="global_fx.js"></script>
     <script>
     // Fit the landing content to the viewport on desktop so the home page

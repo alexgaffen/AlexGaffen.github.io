@@ -415,8 +415,11 @@ body.resume-page .content {
         --site-tabs-top: 0;
     }
 
+    /* The inner-scroll panel already starts below the 52px bar, so this only
+       needs breathing room -- the old 72px was clearance for a top bar that
+       no longer overlaps the content. */
     body.resume-page .content {
-        padding-top: 72px !important;
+        padding-top: 20px !important;
     }
 
     body.resume-page .sidebar {
@@ -600,17 +603,19 @@ body.has-inner-scroll #site-full-progress {
     box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
 }
 
+/* Pages that scroll the document (home, blog) park the bar in the same place
+   as the inner-scroll pages: tucked under the tab bar, not above it. */
 body:not(.resume-page):not(.has-inner-scroll) #site-full-progress {
     position: fixed;
-    top: 0;
+    top: var(--site-tabs-shell-height);
     left: 0;
-    height: 3px;
+    height: 2px;
     width: 0%;
     background: linear-gradient(90deg, #22d3ee, #a78bfa, #14b8a6);
-    z-index: 9999;
+    z-index: 1401;
     transition: width 0.08s linear;
     pointer-events: none;
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
 }
 
 html.dark-mode body:not(.resume-page) #site-full-progress {
@@ -649,11 +654,14 @@ body.has-site-tabs::after {
 /* =================================================############ */
 /* SYNCHRONIZED DARK/LIGHT THEME SWITCH & TRANSITIONS */
 /* =================================================############ */
+/* Every themed property runs on one clock. Giving text a shorter duration than
+   its background made the copy land first and read as a second, trailing
+   animation; matched durations make the whole page turn over at once. */
 html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
-    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.15s ease !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, fill 0.2s ease !important;
 }
 
 .theme-switch {
