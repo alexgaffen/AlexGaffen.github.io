@@ -3052,6 +3052,19 @@ body.resume-page main.content section > h2::before {
 .section-purple   h2::before { color: var(--purple) !important;   background: rgba(168, 85, 247, 0.08) !important; border-color: rgba(168, 85, 247, 0.4) !important; box-shadow: 0 0 16px -4px rgba(168, 85, 247, 0.4) !important; }
 .section-coral    h2::before { color: var(--coral) !important;    background: rgba(251, 113, 133, 0.08) !important; border-color: rgba(251, 113, 133, 0.4) !important; box-shadow: 0 0 16px -4px rgba(251, 113, 133, 0.4) !important; }
 
+/* ----------------------------------------------------------------------
+   TIMELINE GEOMETRY
+   The meta column, the spine and the dot all have to agree on where the
+   centre line falls. They used to hardcode 200px/60px in four places, so
+   the column could not flex without the spine drifting off it. One pair of
+   variables now drives all of them, and both scale with the viewport.
+   ---------------------------------------------------------------------- */
+body.resume-page main.content {
+    --tl-meta: clamp(140px, 13vw, 230px);   /* date + org column */
+    --tl-gutter: clamp(34px, 3.4vw, 60px);  /* spine column      */
+    --tl-axis: calc(var(--tl-meta) + var(--tl-gutter) / 2);
+}
+
 /* Each section becomes a timeline container */
 section {
     display: flex !important;
@@ -3072,7 +3085,7 @@ section > h2 {
 /* Timeline wrapper: each job-item becomes a row with left info + dot + right card */
 .job-item {
     display: grid !important;
-    grid-template-columns: 200px 60px 1fr;
+    grid-template-columns: var(--tl-meta) var(--tl-gutter) minmax(0, 1fr);
     grid-template-rows: auto;
     gap: 0;
     align-items: start;
@@ -3148,7 +3161,7 @@ section > h2 {
 .job-item > .job-header::after {
     content: '';
     position: absolute;
-    left: calc(200px + 24px); /* center of 60px column */
+    left: calc(var(--tl-axis) - 10px);   /* 14px dot + 3px border = 20px box */
     top: 18px;
     width: 14px;
     height: 14px;
@@ -3163,7 +3176,7 @@ section > h2 {
 section::before {
     content: '';
     position: absolute;
-    left: calc(200px + 30px); /* center of the dot column */
+    left: calc(var(--tl-axis) - 1px);    /* 2px spine, centred on the axis */
     top: 55px;
     bottom: 10px;
     width: 2px;
@@ -3303,7 +3316,7 @@ section::before {
 /* Progress line that fills as you scroll */
 .tl-progress-line {
     position: absolute;
-    left: calc(200px + 30px);
+    left: calc(var(--tl-axis) - 1px);
     top: 55px;
     width: 2px;
     height: 0;
@@ -3374,6 +3387,102 @@ section::before {
 }
 
 /* Radar chart removed */
+
+/* ----------------------------------------------------------------------
+   WIDE-SCREEN LAYOUT
+   Two problems the extra width created, fixed here.
+
+   1. Measure. A 1440px container makes a single timeline card wide enough
+      that bullet lines run past 120 characters, which is well beyond
+      comfortable reading. The card still spans the column; only the running
+      text inside it is held to a sane measure.
+
+   2. Collections. Awards, certifications and interests are short, unordered
+      entries -- stacking them one-per-row down a chronological spine wasted
+      most of the width and made the page far longer than it needed to be.
+      On wide screens they become a two-column card grid instead, and the
+      spine (which was only ever meaningful for dated history) is dropped.
+      Education / experience / projects keep the timeline.
+   ---------------------------------------------------------------------- */
+.tl-card > ul,
+.tl-card > p,
+.tl-card > .tl-card-title {
+    max-width: 84ch;
+}
+
+@media (min-width: 1100px) {
+    #competitions-awards,
+    #certifications,
+    #hobbies-interests {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: clamp(22px, 2.2vw, 34px);
+        align-items: start;
+    }
+
+    #competitions-awards > h2,
+    #certifications > h2,
+    #hobbies-interests > h2 {
+        grid-column: 1 / -1;
+    }
+
+    /* No dated spine, no dot, no scroll-fill line for these three. */
+    #competitions-awards::before,
+    #certifications::before,
+    #hobbies-interests::before,
+    #competitions-awards .tl-progress-line,
+    #certifications .tl-progress-line,
+    #hobbies-interests .tl-progress-line,
+    #competitions-awards .job-item > .job-header::after,
+    #certifications .job-item > .job-header::after,
+    #hobbies-interests .job-item > .job-header::after {
+        display: none !important;
+    }
+
+    /* Each entry collapses from a 3-column timeline row to a plain block, so
+       date and org stack above the card as a compact heading. */
+    #competitions-awards .job-item,
+    #certifications .job-item,
+    #hobbies-interests .job-item {
+        display: block !important;
+    }
+
+    #competitions-awards .job-header,
+    #certifications .job-header,
+    #hobbies-interests .job-header,
+    #competitions-awards .job-sub,
+    #certifications .job-sub,
+    #hobbies-interests .job-sub {
+        text-align: left;
+        padding-right: 0;
+        padding-top: 0;
+    }
+
+    #competitions-awards .job-date,
+    #certifications .job-date,
+    #hobbies-interests .job-date {
+        font-size: 0.82rem !important;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.75;
+        margin-bottom: 2px;
+    }
+
+    /* The card carries the title in these sections, so the hidden h3 stays
+       hidden -- but the card must not slide in from the right any more, since
+       it is no longer entering from beside a spine. */
+    #competitions-awards .tl-card,
+    #certifications .tl-card,
+    #hobbies-interests .tl-card {
+        margin-bottom: 22px;
+        transform: translateY(18px);
+    }
+    #competitions-awards .job-item.in-view .tl-card,
+    #certifications .job-item.in-view .tl-card,
+    #hobbies-interests .job-item.in-view .tl-card {
+        transform: translateY(0);
+    }
+}
 
 /* Mobile responsive */
 @media (max-width: 900px) {
@@ -3474,8 +3583,8 @@ body.resume-page::before {
 
 .hero-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 430px);
-    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, clamp(360px, 34%, 520px));
+    gap: clamp(28px, 3vw, 48px);
     align-items: stretch;
     position: relative;
     z-index: 2;
@@ -3566,12 +3675,14 @@ body.resume-page::before {
 .hero-name {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: clamp(2.6rem, 5vw, 4.4rem);
+    font-size: clamp(2.6rem, 3.6vw, 4.2rem);
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.035em;
     margin: 0 0 0.6rem;
     color: #f8fafc;
+    text-wrap: balance;
 }
+
 .hero-name .accent {
     background: linear-gradient(110deg, #22d3ee 0%, #a78bfa 50%, #14b8a6 100%);
     background-size: 200% 100%;
@@ -3823,9 +3934,9 @@ body.resume-page::before {
     margin-left: auto !important;
     margin-right: auto !important;
     width: 100% !important;
-    max-width: 1180px;
-    padding-left: 3rem;
-    padding-right: 3rem;
+    max-width: 1440px;
+    padding-left: clamp(1.4rem, 3.4vw, 3.5rem);
+    padding-right: clamp(1.4rem, 3.4vw, 3.5rem);
     padding-bottom: 4rem;
 }
 @media (max-width: 700px) {
@@ -3836,17 +3947,15 @@ body.resume-page::before {
     }
 }
 
-/* Highlight hero box spans the full screen width (full-bleed) */
+/* Hero sits on the same measure as the content below it, not full-bleed.
+   Top padding stays deliberately tight (and the card takes a small top margin
+   so its rounded corners read as floating below the bar rather than glued to
+   it) -- total clearance above the CV badge is ~38px, down from ~62px when
+   the hero was full-bleed. */
 .resume-page .resume-hero {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    padding-top: 10px;
-    padding-left: clamp(1.4rem, 6vw, 7rem);
-    padding-right: clamp(1.4rem, 6vw, 7rem);
+    margin-top: 14px;
+    margin-bottom: clamp(40px, 4vw, 64px);
+    padding: 24px clamp(24px, 3vw, 46px) clamp(26px, 2.6vw, 38px);
 }
 
 /* Accessibility: prefers-reduced-motion override rules */

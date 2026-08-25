@@ -637,7 +637,7 @@
             display: flex;
             width: max-content;
             gap: 0;
-            animation: marqueeScroll 45s linear infinite;
+            animation: marqueeScroll 56.25s linear infinite;
             will-change: transform;
         }
 
@@ -648,7 +648,9 @@
 
         .marquee-item {
             display: inline-flex;
-            align-items: center;
+            /* baseline, not center: .m-sub is 0.85em, so centering the two boxes
+               left the smaller text sitting off the title's baseline. */
+            align-items: baseline;
             gap: 0.7em;
             padding: 0.5em 1.1em;
             margin: 0 0.4em;
@@ -670,7 +672,7 @@
 
         .marquee-item a {
             display: inline-flex;
-            align-items: center;
+            align-items: baseline;
             gap: 0.5em;
             color: inherit;
             font-family: inherit;
@@ -689,6 +691,7 @@
             font-size: 0.85em;
         }
         .marquee-item .m-tag {
+            align-self: center;
             font-family: 'Press Start 2P', monospace;
             font-size: 0.5rem;
             padding: 0.4em 0.55em;
@@ -902,49 +905,49 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                 <div class="marquee-item m-edu">
                     <span class="m-tag">EDU</span>
                     <span class="m-title">Honours Computer Science</span>
-                    <span class="m-sub">— McMaster University</span>
+                    <span class="m-sub">McMaster University</span>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-work">
                     <span class="m-tag">CO-OP</span>
                     <span class="m-title">AI &amp; Robotics Research Engineer</span>
-                    <span class="m-sub">— Adaptron Inc · 8 months</span>
+                    <span class="m-sub">Adaptron Inc · 8 months</span>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-bio">
                     <span class="m-tag">RESEARCH</span>
                     <span class="m-title">Biomedical ML Research Engineer</span>
-                    <span class="m-sub">— McMaster Dept. of Medicine · 4 months</span>
+                    <span class="m-sub">McMaster Dept. of Medicine · 4 months</span>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-free">
                     <span class="m-tag">FREELANCE</span>
                     <span class="m-title">Frontend Developer</span>
-                    <span class="m-sub">— Bonbon Tech · 12 weeks</span>
+                    <span class="m-sub">Bonbon Tech · 12 weeks</span>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-proj">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Mock Market</span>
-                        <span class="m-sub">— Full-Stack Trading Sim</span></a>
+                        <span class="m-sub">Full-Stack Trading Sim</span></a>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-proj">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Ghost Shell</span>
-                        <span class="m-sub">— Stealth Reverse Shell</span></a>
+                        <span class="m-sub">Stealth Reverse Shell</span></a>
                 </div>
                 <span class="marquee-sep">◆</span>
 
                 <div class="marquee-item m-proj">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Networked Battle Game</span>
-                        <span class="m-sub">— C++ Multiplayer Engine</span></a>
+                        <span class="m-sub">C++ Multiplayer Engine</span></a>
                 </div>
                 <span class="marquee-sep">◆</span>
 
@@ -952,49 +955,49 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                 <div class="marquee-item m-edu" aria-hidden="true">
                     <span class="m-tag">EDU</span>
                     <span class="m-title">Honours Computer Science</span>
-                    <span class="m-sub">— McMaster University</span>
+                    <span class="m-sub">McMaster University</span>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-work" aria-hidden="true">
                     <span class="m-tag">CO-OP</span>
                     <span class="m-title">AI &amp; Robotics Research Engineer</span>
-                    <span class="m-sub">— Adaptron Inc · 8 months</span>
+                    <span class="m-sub">Adaptron Inc · 8 months</span>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-bio" aria-hidden="true">
                     <span class="m-tag">RESEARCH</span>
                     <span class="m-title">Biomedical ML Research Engineer</span>
-                    <span class="m-sub">— McMaster Dept. of Medicine · 4 months</span>
+                    <span class="m-sub">McMaster Dept. of Medicine · 4 months</span>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-free" aria-hidden="true">
                     <span class="m-tag">FREELANCE</span>
                     <span class="m-title">Frontend Developer</span>
-                    <span class="m-sub">— Bonbon Tech · 12 weeks</span>
+                    <span class="m-sub">Bonbon Tech · 12 weeks</span>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-proj" aria-hidden="true">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Mock Market</span>
-                        <span class="m-sub">— Full-Stack Trading Sim</span></a>
+                        <span class="m-sub">Full-Stack Trading Sim</span></a>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-proj" aria-hidden="true">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Ghost Shell</span>
-                        <span class="m-sub">— Stealth Reverse Shell</span></a>
+                        <span class="m-sub">Stealth Reverse Shell</span></a>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
 
                 <div class="marquee-item m-proj" aria-hidden="true">
                     <span class="m-tag">PROJECT</span>
                     <a href="resume.html#projects"><span class="m-title">Networked Battle Game</span>
-                        <span class="m-sub">— C++ Multiplayer Engine</span></a>
+                        <span class="m-sub">C++ Multiplayer Engine</span></a>
                 </div>
                 <span class="marquee-sep" aria-hidden="true">◆</span>
             </div>
