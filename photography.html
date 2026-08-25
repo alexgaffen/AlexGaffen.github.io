@@ -499,25 +499,50 @@
         .lb-thumb:hover { opacity: 0.85; transform: translateY(-2px); }
         .lb-thumb.active { opacity: 1; border-color: #a855f7; }
 
-        /* Fullscreen */
-        /* Fullscreen drops the thumbnails but keeps the tray, so the arrows
-           stay available instead of vanishing with the strip. */
+        /* Fullscreen — unchanged from how it always behaved: thumbnails hidden,
+           image edge to edge, arrows floating over it at the left and right.
+           The tray stops being a layout row here and becomes a transparent
+           overlay so it claims no height at the bottom; it stays click-through
+           except for the arrows themselves, so clicking the photo still exits. */
         .modal.is-fullscreen .lb-filmstrip,
         .modal:fullscreen .lb-filmstrip { display: none; }
         .modal.is-fullscreen .lb-tray,
-        .modal:fullscreen .lb-tray { justify-content: center; }
+        .modal:fullscreen .lb-tray {
+            position: absolute;
+            inset: 0;
+            padding: 0;
+            gap: 0;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+            z-index: 25;
+        }
+        .modal.is-fullscreen .modal-nav,
+        .modal:fullscreen .modal-nav {
+            pointer-events: auto;
+            width: 58px;
+            height: 58px;
+            font-size: 24px;
+            margin: 0 22px;
+        }
         .modal.is-fullscreen .lb-stage,
         .modal:fullscreen .lb-stage { padding: 0; }
         .modal.is-fullscreen .lb-img,
         .modal:fullscreen .lb-img { border-radius: 0; cursor: zoom-out; max-width: 100vw; max-height: 100vh; }
         .modal.is-fullscreen .lb-caption,
-        .modal:fullscreen .lb-caption { padding: 60px 28px 22px; }
+        .modal:fullscreen .lb-caption { padding: 60px 40px 22px; }
 
         @media (max-width: 760px) {
             .lb-stage { padding: 58px 12px 10px; }
             .lb-caption { padding: 50px 14px 16px; gap: 12px; }
             .lb-tray { gap: 8px; padding: 8px 10px 14px; }
             .modal-nav { width: 38px; height: 38px; font-size: 16px; }
+            /* Keep phone-sized arrows in fullscreen too; the desktop rule above
+               bumps them to 58px and would otherwise win here on specificity. */
+            .modal.is-fullscreen .modal-nav,
+            .modal:fullscreen .modal-nav {
+                width: 44px; height: 44px; font-size: 18px; margin: 0 8px;
+            }
             .lb-counter { left: 16px; }
             .gallery-hero, .content-area { padding-left: 16px; padding-right: 16px; }
         }
