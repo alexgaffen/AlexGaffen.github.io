@@ -65,7 +65,7 @@
       ]
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4; /* Nice warm beige */
@@ -343,8 +343,15 @@
 
         strong {
             font-weight: bold;
-            background-color: rgba(5, 5, 5, 0.08); /* light highlight behind bold text */
+            /* A dark 8% wash reads fine on the light beige card, but the same
+               value on the near-black dark-mode fill is basically invisible
+               (8% black over black is still black) -- so the tint direction
+               flips with the theme instead of using one fixed dark value. */
+            background-color: rgba(5, 5, 5, 0.08);
             padding: 0 4px;
+        }
+        html.dark-mode strong {
+            background-color: rgba(255, 255, 255, 0.16);
         }
 
         /* ===== Domain art tiles (Wealthsimple-style renders) ===== */
@@ -451,8 +458,11 @@
             .glistening-box {
                 width: 100%;
                 max-width: 100%;
-                padding: 1.35em 1.15em;
                 border-radius: 14px;
+            }
+            .glisten-fill {
+                border-radius: 10px;
+                padding: 1.35em 1.15em;
             }
 
             .connect-btn {
@@ -461,17 +471,26 @@
             }
         }
 
-        /* GLISTENING BOX STYLES */
+        /* GLISTENING BOX STYLES
+           Split into a frame (this element: the animated gradient ring, using
+           fixed brand colors that never change with theme) and .glisten-fill
+           (a plain background-color for the card's actual fill). They used to
+           be one element with the fill baked into the SAME gradient as a
+           "linear-gradient(var(--bg-color), var(--bg-color))" trick -- but a
+           gradient whose color stop is wired to a custom property does not
+           crossfade on a theme switch in any browser tested; it snaps to the
+           new colour instantly while the rest of the page (using a real
+           background-color) fades over the transition. That's what made the
+           box look like it changed a beat ahead of the surrounding text. A
+           plain background-color animates reliably, so the fill moved there. */
         .glistening-box {
             position: relative;
             box-sizing: border-box;
-            border: 4px solid transparent;
             border-radius: 16px;
-            background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
-                        linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box;
-            background-size: auto, 300% 300%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6);
+            background-size: 300% 300%;
             animation: glisten 6s ease-in-out infinite;
-            padding: 2.25em 2.5em;
+            padding: 4px; /* ring thickness -- was `border: 4px solid transparent` */
             margin-bottom: 1em;
             box-shadow: 0 0 20px rgba(138, 43, 226, 0.2);
             z-index: 1;
@@ -479,12 +498,21 @@
             width: 100%;
             justify-self: center;
         }
+        .glisten-fill {
+            background-color: var(--bg-color);
+            border-radius: 12px;
+            box-sizing: border-box;
+            height: 100%;
+            padding: 2.25em 2.5em;
+        }
 
-        /* The card's copy reads as prose, so it uses the same humanist sans the
-           resume page does rather than the site-wide monospace. The mono face
+        /* The card's copy reads as prose, so it uses Inter -- the free
+           substitute Anthropic's own docs point to for Claude.ai's interface
+           face (Styrene B, a licensed commercial font, isn't available as a
+           web font) -- instead of the site-wide monospace. The mono face
            stays on the chrome around it (tabs, marquee, console). */
         .box-inner-content {
-            font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
         .home-title {
@@ -522,6 +550,8 @@
 
             .glistening-box {
                 max-width: 900px;
+            }
+            .glisten-fill {
                 padding: 2.05em 2.25em;
             }
 
@@ -768,17 +798,21 @@
                 box-sizing: border-box;
             }
             .headshot-card {
-                width: clamp(148px, 43vw, 180px);
+                /* 25% bigger than the old clamp(148px, 43vw, 180px) */
+                width: clamp(185px, 54vw, 225px);
                 border-width: 3px;
                 border-radius: 14px;
             }
             .glistening-box {
                 min-width: 0;
                 max-width: 100%;
-                padding: clamp(1.25rem, 5vw, 1.75rem);
                 margin-bottom: 0;
-                border-width: 3px;
+                padding: 3px; /* ring thickness, was border-width: 3px */
                 border-radius: 14px;
+            }
+            .glisten-fill {
+                padding: clamp(1.25rem, 5vw, 1.75rem);
+                border-radius: 11px;
             }
             .home-title {
                 margin-top: 0;
@@ -818,8 +852,8 @@
                 font-size: 15px;
             }
             #main-wrapper { gap: 14px; }
-            .headshot-card { width: 140px; }
-            .glistening-box { padding: 1.1rem; }
+            .headshot-card { width: 175px; } /* 25% bigger than the old 140px */
+            .glisten-fill { padding: 1.1rem; }
             .home-title { font-size: clamp(2rem, 10.5vw, 2.35rem); }
             .connect-btn {
                 width: 100%;
@@ -864,6 +898,7 @@
             <img src="assets/frontheadshot.jpg" alt="Alex Gaffen">
         </div>
         <div class="main-content glistening-box" id="main-content" tabindex="-1">
+                <div class="glisten-fill">
                     <div class="box-inner-content">
                         <div>
                             <span class="home-title">Alex Gaffen</span>
@@ -872,7 +907,7 @@
                             </span>
                         </div>
                         <p class="bio-intro">
-Hey! I'm a 4th year CS student at McMaster. I am obsessed with engineering problems that don't have clean answers in the fields and intersections of <strong>medical AI</strong>, <strong>robotics</strong>, and <strong>systems security</strong>. I thrive on understanding how things work deeply, optimizing them with creative solutions, and figuring out how they break.
+Hey! I'm a <strong>4th year CS</strong> student at <strong>McMaster</strong>. I am obsessed with engineering problems that don't have clean answers in the fields and intersections of <strong>medical AI</strong>, <strong>robotics</strong>, and <strong>systems security</strong>. I thrive on understanding how things work deeply, optimizing them with creative solutions, and figuring out how they break.
 
 I currently research <strong>biomedical ML algorithms and interpretable AI models</strong>. I'm always looking to connect with people passionate about these areas and beyond. Aside from work, I enjoy playing soccer, reading novels, playing violin in the McMaster Symphony Orchestra, and exploring new music genres.
                         </p>
@@ -884,6 +919,7 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                         </p>
                         <div style="clear: both;"></div>
                     </div>
+                </div>
         </div>
     </div>
 
@@ -895,12 +931,13 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
 <style>
     /* Dark mode keeps the same violet/blue border the light theme uses rather
        than swapping to the old #00ff00 terminal green, which was the loudest
-       thing on the page. */
+       thing on the page; just a slightly stronger glow. (The fill and ring
+       themselves live in .glistening-box/.glisten-fill above -- this used to
+       also try to override the background and border here, but that
+       "background: #000 padding-box, ... border-box" value is invalid CSS
+       for a non-final background layer, so browsers silently dropped it.) */
     body.hacker-mode .glistening-box {
-        background: #000 padding-box,
-                    linear-gradient(135deg, #a855f7, #3b82f6, #a855f7, #3b82f6) border-box !important;
         box-shadow: 0 0 22px rgba(138, 43, 226, 0.22) !important;
-        border: 4px solid transparent !important;
     }
 </style>
 
