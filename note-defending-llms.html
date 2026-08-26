@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="The common criticisms of LLMs — data hunger, unreliability, agentic risk, and sycophancy — measured against the human baseline they are implicitly compared to.">
     <meta name="keywords" content="LLM criticism, AI reliability, hallucination rate, AGI, scaling laws, Alex Gaffen">
@@ -56,6 +57,11 @@
     }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+    <!-- Font Awesome: the nav's social icons and the theme toggle glyphs
+         come from here. Loaded non-blocking so it never delays first paint. -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link href="notes.css" rel="stylesheet">
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
@@ -94,12 +100,12 @@
             <div class="note-body">
                 <p>People frequently cite a few major flaws of LLMs. Four examples come up most:</p>
 
-                <ol class="note-claims">
+                <ul class="note-claims">
                     <li>A child consumes about 50 million words by kindergarten to speak fluently, and an LLM requires hundreds of billions to trillions of words (GPT-3: 300 billion tokens, Llama 3: 15 trillion tokens) and well over a million kWh of energy (GPT-3's training run alone used an estimated 1,287,000 kWh) to achieve the same level of fluency.</li>
                     <li>LLMs are not reliable because roughly 5% of the time (in reality this ranges from under 5% on grounded tasks to over 50% on open ended ones, it's task dependent), they behave absurdly and ultimately embarrass themselves. A known example: in 2023 two lawyers filed a federal court brief citing six cases ChatGPT had invented outright, and got sanctioned $5,000 once it came out none of them were real.</li>
                     <li>AI agents get painted as a runaway security threat because once they act on their own, they can move at a speed and scale no human team can match. A known example: in September 2025, Anthropic disclosed that a Chinese state-sponsored group used Claude Code to run cyber-espionage against roughly 30 organizations, with the AI executing 80-90% of the operation itself.</li>
                     <li>LLMs get blamed for convincing people of falsehoods or radical ideas, sometimes that they've stumbled onto something revolutionary, because the same design that makes a model agreeable can validate a belief instead of testing it.</li>
-                </ol>
+                </ul>
 
                 <p>Sci-fi stories often discuss these traits as reasons for mistrust and foundations for apocalypse or corruption.</p>
 
@@ -138,9 +144,7 @@
         </article>
 
         <footer class="note-foot">
-            <a href="notes.html">&larr; All notes</a> ·
-            <a href="mailto:alexgaffen@gmail.com">Email</a> ·
-            <a href="https://github.com/alexgaffen" target="_blank" rel="noopener">GitHub</a>
+            <a href="notes.html">&larr; All notes</a>
         </footer>
     </main>
 </div>

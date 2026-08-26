@@ -56,6 +56,15 @@ body.notes-page {
    bar sits outside the scroll area exactly as it does on resume and photos. */
 .notes-wrap { width: 100%; }
 
+/* Plain background, nothing behind the text. site-tabs.js already skips the
+   drifting node-and-line canvas for .notes-page, but hide it here too so the page
+   cannot inherit it however it is reached (including a prerendered tab swap,
+   where the canvas may already exist in the document being activated). */
+body.notes-page .site-world-canvas,
+body.notes-page #site-world-canvas { display: none !important; }
+body.notes-page::before,
+body.notes-page::after { content: none !important; }
+
 .notes-inner {
     max-width: 760px;
     margin: 0 auto;
@@ -90,15 +99,6 @@ body.notes-page {
     line-height: 1.1;
     margin: 0 0 14px;
 }
-
-.notes-intro {
-    margin: 0;
-    max-width: var(--n-measure);
-    color: var(--n-text-2);
-    font-size: 1rem;
-}
-.notes-intro a { color: var(--n-accent); text-underline-offset: 3px; }
-.notes-intro em { color: var(--n-text-3); }
 
 /* --------------------------------------------------------------------------
    Index list
@@ -206,30 +206,27 @@ body.notes-page {
     margin: 1.9em 0 1.5em;
 }
 
-/* the four cited flaws */
+/* the four cited flaws — plain bullets */
 .note-claims {
     margin: 0 0 1.6em;
     padding: 0;
     list-style: none;
-    counter-reset: claim;
 }
 .note-claims li {
-    counter-increment: claim;
     position: relative;
-    padding-left: 42px;
+    padding-left: 24px;
     margin-bottom: 1.15em;
     color: var(--n-text-2);
 }
 .note-claims li::before {
-    content: counter(claim, decimal-leading-zero);
+    content: '';
     position: absolute;
-    left: 0;
-    top: 0.28em;
-    font-family: var(--n-font-mono);
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--n-accent);
-    letter-spacing: 0.04em;
+    left: 4px;
+    top: 0.72em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--n-text-3);
 }
 
 /* the Three-Body Problem digression — an aside, not the main line */
