@@ -1,0 +1,271 @@
+/* ==========================================================================
+   notes.css — Notes index + individual notes
+   --------------------------------------------------------------------------
+   Deliberately plain: a reading surface, not a designed page. Prose runs in
+   Inter, every piece of metadata (dates, labels, the back link) runs in the
+   site's monospace, and there is exactly one accent.
+
+   Themes follow the rest of the site: html.dark-mode for dark, everything
+   else light. Tokens are declared once per theme; nothing below hardcodes a
+   colour.
+   ========================================================================== */
+
+:root {
+    --n-font-prose: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --n-font-mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+
+    /* light — the site's warm beige */
+    --n-bg: #fcefd4;
+    --n-surface: rgba(255, 255, 255, 0.5);
+    --n-text: #17150f;
+    --n-text-2: #4a4535;
+    --n-text-3: #837c66;
+    --n-line: rgba(28, 24, 14, 0.14);
+    --n-line-soft: rgba(28, 24, 14, 0.08);
+    --n-accent: #a3391f;
+    --n-measure: 68ch;
+}
+
+html.dark-mode {
+    --n-bg: #000000;
+    --n-surface: rgba(255, 255, 255, 0.03);
+    --n-text: #f0f1f4;
+    --n-text-2: #b3b7c0;
+    --n-text-3: #7c818b;
+    --n-line: rgba(255, 255, 255, 0.14);
+    --n-line-soft: rgba(255, 255, 255, 0.07);
+    --n-accent: #ff9e7a;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body.notes-page {
+    margin: 0;
+    padding: 0;
+    background: var(--n-bg);
+    color: var(--n-text);
+    font-family: var(--n-font-prose);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* The page scrolls a panel pinned under the tab bar (site-tabs.css), so the
+   bar sits outside the scroll area exactly as it does on resume and photos. */
+.notes-wrap { width: 100%; }
+
+.notes-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(38px, 6vw, 76px) clamp(20px, 5vw, 32px) clamp(64px, 9vw, 120px);
+}
+
+::selection { background: var(--n-accent); color: var(--n-bg); }
+
+:focus-visible { outline: 2px solid var(--n-accent); outline-offset: 3px; border-radius: 3px; }
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 2000;
+    padding: 12px 22px;
+    background: var(--n-accent);
+    color: var(--n-bg);
+    font-weight: 700;
+}
+.skip-link:focus { left: 0; }
+
+/* --------------------------------------------------------------------------
+   Masthead
+   -------------------------------------------------------------------------- */
+.notes-head { margin-bottom: clamp(34px, 5vw, 52px); }
+
+.notes-title {
+    font-size: clamp(1.9rem, 4.4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    margin: 0 0 14px;
+}
+
+.notes-intro {
+    margin: 0;
+    max-width: var(--n-measure);
+    color: var(--n-text-2);
+    font-size: 1rem;
+}
+.notes-intro a { color: var(--n-accent); text-underline-offset: 3px; }
+.notes-intro em { color: var(--n-text-3); }
+
+/* --------------------------------------------------------------------------
+   Index list
+   Title left, date hard right, hairline between rows. The whole row is the
+   hit target, and the rule under the title grows on hover rather than the
+   text changing colour.
+   -------------------------------------------------------------------------- */
+.notes-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--n-line);
+}
+.notes-list li { border-bottom: 1px solid var(--n-line-soft); }
+
+.note-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 2px;
+    text-decoration: none;
+    color: inherit;
+}
+.note-link:hover { color: var(--n-accent); }
+
+.note-name {
+    position: relative;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    min-width: 0;
+}
+.note-name::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.note-link:hover .note-name::after,
+.note-link:focus-visible .note-name::after { width: 100%; }
+
+.note-date {
+    flex: 0 0 auto;
+    font-family: var(--n-font-mono);
+    font-size: 0.78rem;
+    color: var(--n-text-3);
+    font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   A single note
+   -------------------------------------------------------------------------- */
+.note-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    font-family: var(--n-font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--n-text-3);
+    text-decoration: none;
+}
+.note-back:hover { color: var(--n-accent); }
+
+.note-header {
+    margin-bottom: clamp(30px, 4vw, 44px);
+    padding-bottom: clamp(22px, 3vw, 30px);
+    border-bottom: 1px solid var(--n-line);
+}
+.note-title {
+    font-size: clamp(1.75rem, 4.2vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.14;
+    margin: 0 0 12px;
+    text-wrap: balance;
+}
+.note-meta {
+    font-family: var(--n-font-mono);
+    font-size: 0.76rem;
+    color: var(--n-text-3);
+    letter-spacing: 0.04em;
+}
+
+.note-body { max-width: var(--n-measure); }
+.note-body > * { margin-left: 0; margin-right: 0; }
+.note-body p { margin: 0 0 1.35em; color: var(--n-text-2); }
+.note-body strong { color: var(--n-text); font-weight: 600; }
+.note-body a { color: var(--n-accent); text-underline-offset: 3px; }
+
+/* A standalone line that carries the argument — set larger and in full-strength
+   ink so the piece has landmarks instead of one undifferentiated column. */
+.note-body .lede {
+    font-size: 1.16rem;
+    line-height: 1.55;
+    letter-spacing: -0.015em;
+    color: var(--n-text);
+    font-weight: 500;
+    margin: 1.9em 0 1.5em;
+}
+
+/* the four cited flaws */
+.note-claims {
+    margin: 0 0 1.6em;
+    padding: 0;
+    list-style: none;
+    counter-reset: claim;
+}
+.note-claims li {
+    counter-increment: claim;
+    position: relative;
+    padding-left: 42px;
+    margin-bottom: 1.15em;
+    color: var(--n-text-2);
+}
+.note-claims li::before {
+    content: counter(claim, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.28em;
+    font-family: var(--n-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--n-accent);
+    letter-spacing: 0.04em;
+}
+
+/* the Three-Body Problem digression — an aside, not the main line */
+.note-aside {
+    margin: 0 0 1.5em;
+    padding: 16px 20px;
+    border-left: 2px solid var(--n-line);
+    background: var(--n-surface);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.95rem;
+    color: var(--n-text-3);
+}
+.note-aside p { margin: 0; color: inherit; }
+.note-aside p + p { margin-top: 0.8em; }
+
+.note-foot {
+    margin-top: clamp(48px, 7vw, 76px);
+    padding-top: 22px;
+    border-top: 1px solid var(--n-line);
+    font-family: var(--n-font-mono);
+    font-size: 0.74rem;
+    color: var(--n-text-3);
+}
+.note-foot a { color: inherit; }
+.note-foot a:hover { color: var(--n-accent); }
+
+/* --------------------------------------------------------------------------
+   Motion / print
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .note-name::after { transition: none; }
+}
+
+@media print {
+    .site-tabs, .note-back, .skip-link { display: none !important; }
+    body.notes-page { background: #fff; color: #000; }
+    .notes-inner { max-width: none; padding: 0; }
+    .note-body { max-width: none; }
+}

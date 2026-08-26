@@ -101,6 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // The home page draws its backdrop entirely in CSS (a static grid and
         // two still colour washes), so it opts out of the animated canvas.
         if (body.classList.contains("index-page")) return;
+        // Notes is a reading surface; a drifting starfield behind body copy is
+        // just noise, so it opts out the same way home does.
+        if (body.classList.contains("notes-page")) return;
         if (document.getElementById("site-world-canvas")) return;
 
         const canvas = document.createElement("canvas");

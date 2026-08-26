@@ -358,6 +358,11 @@ body.index-page.has-site-tabs::after {
     content: none;
 }
 
+/* Notes is a reading surface: no animated canvas, no decorative wash. */
+body.notes-page.has-site-tabs::after {
+    content: none;
+}
+
 body.blog-page {
     --site-world-a: rgba(40, 240, 150, 0.12);
     --site-world-b: rgba(60, 130, 255, 0.12);
