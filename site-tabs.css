@@ -77,7 +77,11 @@ html.dark-mode body.has-site-tabs {
     display: flex;
     align-items: center;
     gap: var(--site-tabs-gap);
+    min-width: 0;
 }
+
+/* The controls keep their size; the tab group yields first if space is tight. */
+.site-tabs-controls { flex: 0 0 auto; }
 
 /* Light theme. The page behind is warm beige (#fcefd4); a pale bar vanished
    into it, so the bar goes deep navy instead. Tab text stays light in both
@@ -128,6 +132,10 @@ html:not(.dark-mode) .site-tab.is-active::after {
     white-space: nowrap;
     position: relative;
     box-sizing: border-box;
+    /* Without this a flex item may shrink below its content width. With four
+       tabs the group could compress and slide under the controls on the right,
+       leaving the last tab overlapped and unclickable. */
+    flex: 0 0 auto;
     transition: color 0.18s ease, background-color 0.18s ease;
 }
 
