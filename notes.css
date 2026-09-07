@@ -114,6 +114,12 @@ body.notes-page::after { content: none !important; }
 }
 .notes-list li { border-bottom: 1px solid var(--n-line-soft); }
 
+.notes-empty-msg {
+    padding: 17px 2px;
+    color: var(--n-text-3);
+    font-style: italic;
+}
+
 .note-link {
     display: flex;
     align-items: baseline;
