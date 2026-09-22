@@ -483,43 +483,6 @@ html:not(.dark-mode) .inner-scroll {
     --inner-sb-hover: rgba(20, 18, 12, 0.45);
 }
 
-/* The across-screen read-progress bar sits just under the tab bar. */
-.scroll-progress,
-body.has-inner-scroll #site-full-progress {
-    position: fixed;
-    top: var(--site-tabs-shell-height);
-    left: 0;
-    height: 2px;
-    width: 0;
-    z-index: 1401;
-    pointer-events: none;
-    transition: width 0.1s linear;
-}
-body.has-inner-scroll #site-full-progress {
-    background: #a78bfa;
-    box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
-}
-
-/* Pages that scroll the document (home, blog) park the bar in the same place
-   as the inner-scroll pages: tucked under the tab bar, not above it. */
-body:not(.resume-page):not(.has-inner-scroll) #site-full-progress {
-    position: fixed;
-    top: var(--site-tabs-shell-height);
-    left: 0;
-    height: 2px;
-    width: 0%;
-    background: #a78bfa;
-    z-index: 1401;
-    transition: width 0.08s linear;
-    pointer-events: none;
-    box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
-}
-
-html.dark-mode body:not(.resume-page) #site-full-progress {
-    background: #a78bfa;
-    box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
-}
-
 /* Shared world canvas */
 .site-world-canvas {
     position: fixed;

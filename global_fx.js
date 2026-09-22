@@ -31,8 +31,43 @@ console.log(`%c
         " transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }";
     (document.head || document.documentElement).appendChild(style);
 
+    // Which images have already blurred up in this tab. Kept in sessionStorage
+    // so it survives tab-to-tab navigation (the pages are separate documents),
+    // but not a new session -- an image softens in once and is then simply
+    // sharp every other time you meet it, instead of re-blurring on every visit
+    // to the page and on every lightbox revisit. sessionStorage can throw or
+    // come back empty (private windows, blocked site data), in which case the
+    // effect just behaves as it did before.
+    var SEEN_KEY = "img-revealed";
+    var seen;
+    try {
+        seen = new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));
+    } catch (e) {
+        seen = new Set();
+    }
+
+    function remember(img) {
+        // Record both: at arm time an unloaded image has no currentSrc, while a
+        // srcset-driven one may settle on a different candidate than .src.
+        if (img.src) seen.add(img.src);
+        if (img.currentSrc) seen.add(img.currentSrc);
+        try {
+            sessionStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seen)));
+        } catch (e) { /* quota or blocked storage: just don't persist */ }
+    }
+
+    function alreadySeen(img) {
+        return (img.src && seen.has(img.src)) || (img.currentSrc && seen.has(img.currentSrc));
+    }
+
     function arm(img) {
         if (img.hasAttribute("data-no-reveal")) return;
+        if (alreadySeen(img)) {
+            // Strip both classes rather than jumping to the revealed state, so
+            // there is no transition left to run -- the image is just sharp.
+            img.classList.remove("img-reveal", "is-revealed");
+            return;
+        }
         img.classList.remove("is-revealed");
         img.classList.add("img-reveal");
 
@@ -40,6 +75,7 @@ console.log(`%c
         function reveal() {
             if (settled) return;
             settled = true;
+            remember(img);
             // Two frames so the blurred state paints before the transition starts.
             requestAnimationFrame(function () {
                 requestAnimationFrame(function () { img.classList.add("is-revealed"); });
