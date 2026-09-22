@@ -185,28 +185,17 @@ main.content {
 }
 .site-footer p { margin: 0; }
 
-/* Ambient background layers — deliberately faint so they read as atmosphere
-   rather than decoration competing with the content. */
-.about-theme-fx {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.3;
-}
+/* Ambient background layers -- hidden. The page now uses a plain flat
+   background (--canvas, set on body.resume-page), matching the flat
+   treatment on home and photography, instead of the animated particle
+   canvas and mouse-following glow that used to sit behind the content.
+   The underlying canvas animation and its JS are untouched, just not
+   painted -- display:none is a one-line, fully-reversible way to turn
+   this off. */
+.about-theme-fx { display: none; }
 .about-theme-fx canvas { width: 100%; height: 100%; display: block; }
-:root[data-theme="light"] .about-theme-fx { opacity: 0.22; }
 
-.cursor-glow {
-    position: fixed;
-    width: 380px; height: 380px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%);
-    transition: opacity 0.4s ease;
-}
+.cursor-glow { display: none; }
 
 main.content { position: relative; z-index: 1; }
 
@@ -231,7 +220,7 @@ main.content { position: relative; z-index: 1; }
     border-bottom: 1px solid var(--line);
 }
 
-.hero-bg { position: absolute; inset: -10% -20% auto; height: 420px; z-index: -1; pointer-events: none; overflow: hidden; }
+.hero-bg { display: none; }
 .hero-orb {
     position: absolute;
     border-radius: 50%;
@@ -338,7 +327,6 @@ main.content { position: relative; z-index: 1; }
     font-family: var(--font-mono);
     min-width: 0;
 }
-:root[data-theme="light"] .hero-terminal { background: #12151c; border-color: rgba(0, 0, 0, 0.2); }
 
 .term-bar {
     display: flex;
@@ -381,6 +369,29 @@ main.content { position: relative; z-index: 1; }
     animation: caret 1.05s steps(1) infinite;
 }
 @keyframes caret { 50% { opacity: 0; } }
+
+/* Light mode: this was still rendering as a near-black terminal (#12151c)
+   even under the light theme -- the one override it had only changed the
+   shade of dark. Flipped to the same beige the rest of light mode uses
+   (page canvas, home card, photography background), with dark text, so it
+   reads as a light terminal rather than a dark box stranded on a beige
+   page. */
+:root[data-theme="light"] .hero-terminal {
+    background: #fcefd4;
+    border-color: rgba(60, 40, 10, 0.18);
+}
+:root[data-theme="light"] .term-bar {
+    background: rgba(0, 0, 0, 0.035);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+:root[data-theme="light"] .term-title { color: rgba(40, 30, 12, 0.65); }
+:root[data-theme="light"] .term-body { color: #2a2010; }
+:root[data-theme="light"] .term-prompt-user { color: #1a1206; }
+:root[data-theme="light"] .term-prompt-path { color: rgba(40, 30, 12, 0.55); }
+:root[data-theme="light"] .term-prompt-sign { color: rgba(40, 30, 12, 0.4); }
+:root[data-theme="light"] .term-cmd { color: #1a1206; }
+:root[data-theme="light"] .term-out { color: rgba(40, 30, 12, 0.6); }
+:root[data-theme="light"] .term-cursor { background: #2a2010; }
 
 /* ---- stats ---- */
 .hero-stats {
