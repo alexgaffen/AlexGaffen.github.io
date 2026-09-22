@@ -65,7 +65,7 @@
       ]
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=optional" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4; /* Nice warm beige */
@@ -1011,10 +1011,20 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                 wrapper.style.zoom = String(Math.max(0.55, avail / h));
             }
         }
+        // Fit synchronously, right now. This script is at the end of <body>, so
+        // the wrapper and the marquee already exist and can be measured -- doing
+        // it here means the zoom is in place before the first paint.
+        //
+        // This used to run only at +60ms and +700ms (plus 'load'). The page
+        // therefore painted at full size and then visibly shrank and re-centred
+        // a beat later -- roughly a 30px jump -- every single time you opened
+        // the HOME tab, which is what read as the page wobbling on arrival.
+        // 'load' is kept as a safety net for anything that settles late; it
+        // recomputes the same value and re-setting an identical zoom paints
+        // nothing, so it is invisible in the normal case.
+        fit();
         window.addEventListener('resize', fit);
         window.addEventListener('load', fit);
-        setTimeout(fit, 60);
-        setTimeout(fit, 700);
     })();
     </script>
 </body>

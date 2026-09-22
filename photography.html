@@ -56,7 +56,7 @@
       "author": { "@type": "Person", "name": "Alex Gaffen", "url": "https://alexgaffen.com/" }
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=optional" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4;
@@ -270,9 +270,11 @@
             column-count: 3;
             column-gap: 22px;
             margin-top: 28px;
-            transition: opacity 0.22s ease, transform 0.22s ease;
+            transition: opacity 0.22s ease;
         }
-        .photo-grid.switching { opacity: 0; transform: translateY(8px); }
+        /* Filter switches cross-fade only -- the translateY(8px) that used to ride
+           along made the whole grid bob every time a city filter changed. */
+        .photo-grid.switching { opacity: 0; }
         @media (max-width: 980px) { .photo-grid { column-count: 2; } }
         @media (max-width: 560px) { .photo-grid { column-count: 1; } }
 
@@ -285,11 +287,17 @@
             cursor: pointer;
             background: #15131c;
             box-shadow: 0 10px 30px -12px rgba(0,0,0,0.5);
-            transform: translateY(24px);
-            opacity: 0;
-            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease, box-shadow 0.35s ease;
+            transition: box-shadow 0.35s ease;
         }
-        .photo-card.seen { transform: translateY(0); opacity: 1; }
+        /* No scroll-reveal. Cards used to start at translateY(24px)/opacity:0 and
+           slide up when an IntersectionObserver marked them .seen. Because the
+           tabs are prerendered and activated instantly, that reveal replayed on
+           every switch INTO this tab -- the grid slid up from underneath each
+           time, and cards partway through the observer's staggered pass landed
+           mid-animation, which is what read as wobbly. The photos are now simply
+           there. .seen is still applied by the observer below; it just no longer
+           gates visibility. */
+        .photo-card.seen { transform: none; opacity: 1; }
         .photo-card.tag-hidden { display: none; }
         .photo-card:hover {
             box-shadow: 0 24px 50px -16px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.4);

@@ -257,8 +257,16 @@ body.index-page.has-site-tabs::after {
     content: none;
 }
 
-/* Notes is a reading surface: no animated canvas, no decorative wash. */
-body.notes-page.has-site-tabs::after {
+/* Every tab except the ones that genuinely want a backdrop paints one flat
+   colour. `body.has-site-tabs::after` (further down) lays three radial-gradient
+   colour washes over the whole viewport; that wash is the last thing that was
+   still making resume and photos look gradient-y after their own ambient
+   effects (.aurora, .about-theme-fx, .hero-bg, .cursor-glow) were switched off.
+   Notes is a reading surface, and resume/photos are meant to match home, so all
+   three cancel it the same way home does. */
+body.notes-page.has-site-tabs::after,
+body.resume-page.has-site-tabs::after,
+body.photo-page.has-site-tabs::after {
     content: none;
 }
 

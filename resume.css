@@ -484,13 +484,17 @@ main.content > hr { display: none; }
    which on a wide screen wasted most of the width and made the page far
    longer than it needed to be. Sections lay these out in a grid (section 12).
    -------------------------------------------------------------------------- */
+/* No scroll-reveal. These used to start at opacity:0/translateY(16px) and fade
+   up when an IntersectionObserver marked them .in-view. The tabs are prerendered
+   and activated instantly, so that reveal replayed on every switch INTO the
+   resume tab: the cards slid up from underneath, and any caught mid-pass landed
+   part-way through, which is what read as wobbly. The content is now simply
+   there. .in-view/.show-child are still applied elsewhere; they just no longer
+   gate visibility. */
 .job-item {
     display: block;
     position: relative;
     margin-bottom: var(--s-5);
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
 }
 .job-item.show-child,
 .job-item.in-view { opacity: 1; transform: none; }
