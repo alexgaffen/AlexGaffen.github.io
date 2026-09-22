@@ -81,7 +81,7 @@
             width: 98%;
             /* 100vh on a phone is the viewport with the browser chrome HIDDEN, so
                it always overshoots the visible area and leaves the page scrollable
-               past the fixed marquee. dvh tracks the chrome as it shows/hides. */
+               past its end. dvh tracks the chrome as it shows/hides. */
             min-height: 100vh;
             min-height: 100dvh;
             margin: 0 auto;
@@ -229,27 +229,45 @@
             font-size: 1.275rem;
             letter-spacing: 0.06em;
         }
-        .bio-link {
-            text-decoration: none;
-            padding: 2px 2px;
+        /* Links out of the site are always underlined so they read as links:
+           the contact row, and the project names inline in the bio (which also
+           undo the page-wide <a> styling -- pixel font, uppercase, 0.7em). */
+        .bio-link,
+        .bio-inline-link {
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
             transition: color 0.18s ease;
-            font-family: 'Space Mono', monospace;
             text-transform: none;
-            font-size: 1em;
             line-height: inherit;
         }
+        .bio-link {
+            padding: 2px 2px;
+            font-family: 'Space Mono', monospace;
+            font-size: 1em;
+        }
+        .bio-inline-link {
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 600;
+        }
         .bio-link:hover,
-        .bio-link:focus-visible {
+        .bio-link:focus-visible,
+        .bio-inline-link:hover,
+        .bio-inline-link:focus-visible {
             color: var(--text-color);
             text-decoration: underline;
-            text-underline-offset: 3px;
+            text-decoration-thickness: 2px;
         }
         .bio-link-sep {
             color: var(--border-color);
         }
-        html.dark-mode .bio-link { color: #cdc4e8; }
+        html.dark-mode .bio-link,
+        html.dark-mode .bio-inline-link { color: #cdc4e8; }
         [data-theme="light"] .bio-link,
-        html:not(.dark-mode) .bio-link {
+        [data-theme="light"] .bio-inline-link,
+        html:not(.dark-mode) .bio-link,
+        html:not(.dark-mode) .bio-inline-link {
             color: #b5651d;
         }
 
@@ -471,7 +489,7 @@
            substitute Anthropic's own docs point to for Claude.ai's interface
            face (Styrene B, a licensed commercial font, isn't available as a
            web font) -- instead of the site-wide monospace. The mono face
-           stays on the chrome around it (tabs, marquee, console). */
+           stays on the chrome around it (tabs, console). */
         .box-inner-content {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
@@ -493,6 +511,10 @@
             font-style: italic;
             opacity: 0.82;
         }
+        /* One role per line; "@ organisation" never splits, so when a role is
+           too long for the line it breaks cleanly before the "@". */
+        .role-line { display: block; }
+        .role-org { white-space: nowrap; }
 
         @media (min-width: 900px) and (max-width: 1500px) {
             body {
@@ -524,167 +546,12 @@
 
         /* Outline decoding effect class removed */
 
-        /* ============================================================
-           HIGHLIGHTS STRIP -- bottom-fixed, one highlight at a time.
-           This used to be a continuously scrolling ticker, and text you
-           have to chase across the screen is hard to read. Now each
-           highlight holds still while you read it, then the next one rolls
-           in word by word. The rail on the right shows where you are, fills
-           as the current highlight's time runs out, and jumps on click.
-           Hover or keyboard focus pauses it. Same surface and border as the
-           top bar, so the page is framed by one flat colour top and bottom.
-           ============================================================ */
-        body {
-            padding-bottom: 78px; /* room for the strip */
-        }
-
-        .highlight-marquee {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1200;
-            height: 52px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 0 clamp(12px, 2vw, 24px);
-            background: var(--site-tabs-shell-bg);
-            border-top: 1px solid var(--site-tabs-shell-border);
-            box-shadow: 0 -4px 18px -6px rgba(0, 0, 0, 0.45);
-            color: #fcefd4;
-            font-family: 'Space Mono', 'Courier New', Courier, monospace;
-            overflow: hidden;
-        }
-
-        /* Category colours: the tag chip and the rail segment share one. */
-        .highlight-marquee .m-work { --hl-accent: #22d3ee; }
-        .highlight-marquee .m-bio  { --hl-accent: #fb7185; }
-        .highlight-marquee .m-free { --hl-accent: #ffd66b; }
-        .highlight-marquee .m-proj { --hl-accent: #c4b5fd; }
-
-        /* Every highlight sits in the same grid cell; only the current one
-           (and, briefly, the one leaving) is visible. */
-        .hl-stage {
-            flex: 1 1 auto;
-            min-width: 0;
-            display: grid;
-            align-items: center;
-        }
-        .hl-item {
-            grid-area: 1 / 1;
-            display: flex;
-            align-items: baseline;
-            gap: 14px;
-            min-width: 0;
-            white-space: nowrap;
-            visibility: hidden;
-            /* undo the page-wide <a> styling (pixel font, uppercase, 0.7em) */
-            color: inherit;
-            font-family: inherit;
-            font-size: 15px;
-            line-height: 1.2;
-            text-transform: none;
-            text-decoration: none;
-        }
-        .hl-item.is-current,
-        .hl-item.is-leaving { visibility: visible; }
-        .hl-item.is-leaving { pointer-events: none; animation: hlLeave 0.28s ease both; }
-        .hl-item:hover { color: inherit; text-decoration: none; }
-        /* on the words: an inline-block never inherits its parent's underline */
-        .hl-item:hover .hl-title .w {
-            text-decoration: underline;
-            text-decoration-color: var(--hl-accent);
-            text-underline-offset: 4px;
-        }
-
-        .hl-tag {
-            align-self: center;
-            flex: 0 0 auto;
-            padding: 4px 9px;
-            border-radius: 999px;
-            border: 1px solid color-mix(in srgb, var(--hl-accent) 55%, transparent);
-            background: color-mix(in srgb, var(--hl-accent) 15%, transparent);
-            color: var(--hl-accent);
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            line-height: 1;
-            text-transform: uppercase;
-        }
-        .hl-title { font-weight: 700; letter-spacing: 0.01em; }
-        .hl-sub { opacity: 0.72; font-size: 0.88em; }
-
-        /* The roll-in. Only after the first change (.hl-ready): the highlight
-           showing on arrival is simply there, so opening the tab is still. */
-        .hl-item .w { display: inline-block; white-space: pre; }
-        .hl-ready .hl-item.is-current .w {
-            animation: hlRise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-            animation-delay: calc(90ms + var(--i, 0) * 40ms);
-        }
-        .hl-ready .hl-item.is-current .hl-tag { animation: hlTag 0.4s ease 40ms both; }
-
-        @keyframes hlRise {
-            from { opacity: 0; transform: translateY(0.75em); filter: blur(4px); }
-            to   { opacity: 1; transform: none; filter: none; }
-        }
-        @keyframes hlLeave {
-            to { opacity: 0; transform: translateY(-0.6em); filter: blur(3px); }
-        }
-        @keyframes hlTag {
-            from { opacity: 0; transform: scale(0.85); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        /* Rail: one short bar per highlight. Past ones stay lit, the current
-           one fills in its category colour, later ones are dim. Each bar is a
-           button with a 24px hit area around a 3px line. */
-        .hl-rail {
-            flex: 0 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .hl-seg {
-            appearance: none;
-            display: flex;
-            align-items: center;
-            width: 26px;
-            height: 24px;
-            margin: 0;
-            padding: 0;
-            border: 0;
-            background: none;
-            cursor: pointer;
-        }
-        .hl-seg-track {
-            position: relative;
-            display: block;
-            width: 100%;
-            height: 3px;
-            border-radius: 3px;
-            overflow: hidden;
-            background: rgba(252, 239, 212, 0.2);
-            transition: background-color 0.2s ease;
-        }
-        .hl-seg:hover .hl-seg-track { background: rgba(252, 239, 212, 0.38); }
-        .hl-fill {
-            position: absolute;
-            inset: 0;
-            background: var(--hl-accent);
-            transform: scaleX(0);
-            transform-origin: left center;
-        }
-        .hl-seg.is-done .hl-fill { transform: scaleX(1); background: rgba(252, 239, 212, 0.55); }
-        .hl-seg:focus-visible { outline: 2px solid #fcefd4; outline-offset: 2px; border-radius: 4px; }
-
         @media (max-width: 800px) {
             body {
                 width: 100%;
                 max-width: 100vw;
                 padding-right: 16px;
-                padding-bottom: 82px;
+                padding-bottom: 40px;
                 padding-left: 16px;
                 font-size: 16px;
                 line-height: 1.55;
@@ -723,6 +590,8 @@
                 font-size: 1rem;
                 line-height: 1.4;
             }
+            .role-line + .role-line { margin-top: 0.35em; }
+            .role-org { display: block; }
             p.bio-intro {
                 margin-bottom: 1.15em;
                 font-size: 1rem;
@@ -732,32 +601,10 @@
             .bio-links-wrap {
                 margin-top: 1rem;
                 justify-content: center;
+                /* The desktop 1.275rem is sized for a card that fit() scales
+                   down; on a phone nothing scales it, so it came out at 20px. */
+                font-size: 0.9rem;
             }
-            .highlight-marquee { gap: 12px; }
-            .hl-item { font-size: 13px; gap: 10px; }
-            /* A long title fades out at the edge instead of being cut mid-letter. */
-            .hl-stage {
-                -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 22px), transparent);
-                mask-image: linear-gradient(90deg, #000 calc(100% - 22px), transparent);
-            }
-            .hl-rail { gap: 4px; }
-            .hl-seg { width: 14px; }
-        }
-        @media (max-width: 560px) {
-            .hl-sub { display: none; }
-            /* The rail becomes a segmented line along the strip's top edge so
-               the title gets the full width. At this size it is an indicator
-               only; the strip still advances on its own. */
-            .hl-rail {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                gap: 3px;
-                pointer-events: none;
-            }
-            .hl-seg { flex: 1 1 0; width: auto; height: 2px; }
-            .hl-seg-track { height: 2px; border-radius: 0; }
         }
 
         @media (max-width: 380px) {
@@ -810,13 +657,14 @@
                         <div>
                             <span class="home-title">Alex Gaffen</span>
                             <span class="home-role">
-                                AI Research Engineering @ Adaptron Inc, ML Research @ McMaster ICE Lab X Adastra Inc
+                                <span class="role-line">AI Research Engineering <span class="role-org">@ Adaptron Inc</span></span>
+                                <span class="role-line">ML Research <span class="role-org">@ McMaster ICE Lab X Adastra Inc</span></span>
                             </span>
                         </div>
                         <p class="bio-intro">
 Hey! I'm a <strong>4th year CS</strong> student at <strong>McMaster</strong>. I am obsessed with engineering problems that don't have clean answers in the fields and intersections of <strong>medical AI</strong>, <strong>robotics</strong>, and <strong>systems security</strong>. I thrive on understanding how things work deeply, optimizing them with creative solutions, and figuring out how they break.
 
-I currently research <strong>biomedical ML algorithms and interpretable AI models</strong>. I'm always looking to connect with people passionate about these areas and beyond. Aside from work, I enjoy playing soccer, reading novels, playing violin in the McMaster Symphony Orchestra, and exploring new music genres.
+I currently research <strong>biomedical ML algorithms and interpretable AI models</strong>. I'm always looking to connect with people passionate about these areas and beyond. Aside from work, I enjoy playing soccer, reading novels, playing violin in the McMaster Symphony Orchestra, and exploring new music genres. A couple of projects I loved building were <a class="bio-inline-link" href="https://github.com/alexgaffen/investor-practice-website" target="_blank" rel="noopener noreferrer">Mock Market</a>, a full-stack investing practice site, and <a class="bio-inline-link" href="https://github.com/alexgaffen/GhostShell" target="_blank" rel="noopener noreferrer">Ghost Shell</a>, an autonomous AI honeypot agent.
                         </p>
 
                         <p class="bio-links-wrap">
@@ -848,44 +696,6 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
 
 
 
-    <!-- ====================================================
-         HIGHLIGHTS STRIP -- one highlight at a time; the script at
-         the end of the page rolls them and builds the rail.
-         ==================================================== -->
-    <aside class="highlight-marquee" aria-label="Career highlights">
-        <div class="hl-stage">
-            <a class="hl-item m-work is-current" href="resume.html#workexperience">
-                <span class="hl-tag">Co-op</span>
-                <span class="hl-title">AI &amp; Robotics Research Engineer</span>
-                <span class="hl-sub">Adaptron Inc · 8 months</span>
-            </a>
-            <a class="hl-item m-bio" href="resume.html#workexperience">
-                <span class="hl-tag">Research</span>
-                <span class="hl-title">Biomedical ML Research Engineer</span>
-                <span class="hl-sub">McMaster Dept. of Medicine · 4 months</span>
-            </a>
-            <a class="hl-item m-free" href="resume.html#workexperience">
-                <span class="hl-tag">Freelance</span>
-                <span class="hl-title">Frontend Developer</span>
-                <span class="hl-sub">Bonbon Tech · 12 weeks</span>
-            </a>
-            <a class="hl-item m-proj" href="resume.html#projects">
-                <span class="hl-tag">Project</span>
-                <span class="hl-title">Mock Market</span>
-                <span class="hl-sub">Full-stack trading sim</span>
-            </a>
-            <a class="hl-item m-proj" href="resume.html#projects">
-                <span class="hl-tag">Project</span>
-                <span class="hl-title">Ghost Shell</span>
-                <span class="hl-sub">Stealth reverse shell</span>
-            </a>
-            <a class="hl-item m-proj" href="resume.html#projects">
-                <span class="hl-tag">Project</span>
-                <span class="hl-title">Networked Battle Game</span>
-                <span class="hl-sub">C++ multiplayer engine</span>
-            </a>
-        </div>
-    </aside>
 
     <script src="site-console.js" defer></script>
     <script src="global_fx.js"></script>
@@ -897,145 +707,49 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
         var wrapper = document.getElementById('main-wrapper');
         var box = document.querySelector('.glistening-box');
         if (!wrapper || !box) return;
-        // Tallest the text box may render, in CSS px: about 5.1" on a 27" 1440p
-        // monitor (or 4K at 150% scaling), about 4.4" on a 14" MacBook Pro. The
+        // Tallest the text box may render. A CSS pixel's physical size depends
+        // on the screen: on a standard-density desktop monitor (27" 1080p, or
+        // 1440p at 125%) it is ~0.3mm, on a high-density laptop panel ~0.2mm.
+        // devicePixelRatio tracks that, so the ceiling does too: 400px at
+        // ratio <= 1.25 (about 4.6-4.9" on those monitors), 560px at ratio >= 2
+        // (about 4.4" on a 14" MacBook Pro), interpolated in between. The
         // photo scales by the same factor, so the composition keeps its shape.
-        var MAX_BOX_H = 560;
+        function maxBoxHeight() {
+            var t = Math.min(1, Math.max(0, ((window.devicePixelRatio || 1) - 1.25) / 0.75));
+            return 400 + t * 160;
+        }
         function fit() {
             wrapper.style.zoom = '';
             if (window.innerWidth < 800) return;
-            var marquee = document.querySelector('.highlight-marquee');
-            var topPad = 84;
-            var bottomPad = (marquee ? marquee.offsetHeight : 78) + 10;
-            var avail = window.innerHeight - topPad - bottomPad;
+            var avail = window.innerHeight - 84 - 56;
+            var cap = maxBoxHeight();
             // zoom leaves the %-based widths alone, so the text re-wraps wider
             // as it shrinks and one division undershoots; measure the rendered
             // result and correct until it lands.
             var z = 1;
-            for (var k = 0; k < 4; k++) {
-                var s = MAX_BOX_H / box.getBoundingClientRect().height;
+            for (var k = 0; k < 5; k++) {
+                var s = cap / box.getBoundingClientRect().height;
                 if (avail > 200) s = Math.min(s, avail / wrapper.getBoundingClientRect().height);
-                var nz = Math.min(1, Math.max(0.55, z * s));
+                var nz = Math.min(1, Math.max(0.45, z * s));
                 if (Math.abs(nz - z) < 0.005) break;
                 z = nz;
                 wrapper.style.zoom = z === 1 ? '' : String(z);
             }
         }
-        // Fit synchronously, right now. This script is at the end of <body>, so
-        // the wrapper and the marquee already exist and can be measured -- doing
-        // it here means the zoom is in place before the first paint.
-        //
-        // This used to run only at +60ms and +700ms (plus 'load'). The page
-        // therefore painted at full size and then visibly shrank and re-centred
-        // a beat later -- roughly a 30px jump -- every single time you opened
-        // the HOME tab, which is what read as the page wobbling on arrival.
-        // 'load' is kept as a safety net for anything that settles late; it
-        // recomputes the same value and re-setting an identical zoom paints
-        // nothing, so it is invisible in the normal case.
+        // Fit synchronously, before the first paint (this script is at the end
+        // of <body>, so everything it measures exists). Running it later made
+        // the card visibly shrink a beat after the HOME tab opened. 'load' is a
+        // safety net for anything that settles late; re-setting an identical
+        // zoom paints nothing.
         fit();
         window.addEventListener('resize', fit);
         window.addEventListener('load', fit);
-    })();
-
-    // Highlights strip: show one highlight, hold it, roll in the next.
-    (function () {
-        var strip = document.querySelector('.highlight-marquee');
-        if (!strip) return;
-        var items = Array.prototype.slice.call(strip.querySelectorAll('.hl-item'));
-        if (items.length < 2) return;
-        var DWELL = 5000;   // ms each highlight stays up
-        var LEAVE = 300;    // a touch longer than the hlLeave animation
-
-        // Split the text into words so they can rise in one after another.
-        items.forEach(function (item) {
-            var n = 0;
-            item.querySelectorAll('.hl-title, .hl-sub').forEach(function (el) {
-                var words = el.textContent.trim().split(/\s+/);
-                el.textContent = '';
-                words.forEach(function (word, k) {
-                    var w = document.createElement('span');
-                    w.className = 'w';
-                    w.style.setProperty('--i', n++);
-                    w.textContent = word + (k < words.length - 1 ? ' ' : '');
-                    el.appendChild(w);
-                });
-            });
-        });
-
-        var rail = document.createElement('div');
-        rail.className = 'hl-rail';
-        rail.setAttribute('role', 'group');
-        rail.setAttribute('aria-label', 'Choose a highlight');
-        var segs = items.map(function (item, i) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'hl-seg ' + (item.className.match(/\bm-\w+/) || [''])[0];
-            b.setAttribute('aria-label', 'Highlight ' + (i + 1) + ' of ' + items.length + ': ' +
-                item.querySelector('.hl-title').textContent);
-            b.innerHTML = '<span class="hl-seg-track"><span class="hl-fill"></span></span>';
-            b.addEventListener('click', function () { show(i); });
-            rail.appendChild(b);
-            return b;
-        });
-        strip.appendChild(rail);
-
-        var current = 0;
-        var clock = null;       // the current bar's fill; when it finishes, advance
-        var hovered = false;
-        var focused = false;
-
-        function sync() {
-            if (!clock) return;
-            if (hovered || focused || document.hidden) clock.pause();
-            else clock.play();
-        }
-
-        function mark() {
-            segs.forEach(function (s, k) {
-                s.classList.toggle('is-done', k < current);
-                s.setAttribute('aria-current', k === current ? 'true' : 'false');
-            });
-        }
-
-        function run() {
-            if (clock) clock.cancel();
-            clock = segs[current].querySelector('.hl-fill').animate(
-                [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }],
-                { duration: DWELL, easing: 'linear', fill: 'forwards' });
-            clock.onfinish = function () { show((current + 1) % items.length); };
-            sync();
-        }
-
-        function show(i) {
-            if (i === current) return;
-            var prev = items[current];
-            prev.classList.remove('is-current');
-            prev.classList.add('is-leaving');
-            setTimeout(function () { prev.classList.remove('is-leaving'); }, LEAVE);
-
-            strip.classList.add('hl-ready');
-            current = i;
-            items[i].classList.remove('is-leaving');
-            items[i].classList.add('is-current');
-            mark();
-            run();
-        }
-
-        strip.addEventListener('pointerenter', function () { hovered = true; sync(); });
-        strip.addEventListener('pointerleave', function () { hovered = false; sync(); });
-        strip.addEventListener('focusin', function () { focused = true; sync(); });
-        strip.addEventListener('focusout', function (e) {
-            if (!strip.contains(e.relatedTarget)) { focused = false; sync(); }
-        });
-        document.addEventListener('visibilitychange', sync);
-
-        mark();
-        // A prerendered HOME tab starts its clock when it is actually opened.
-        if (document.prerendering) {
-            document.addEventListener('prerenderingchange', run, { once: true });
-        } else {
-            run();
-        }
+        // Dragging the window to a screen of a different density doesn't
+        // always fire resize, so watch the ratio itself.
+        (function watchDensity() {
+            window.matchMedia('(resolution: ' + window.devicePixelRatio + 'dppx)')
+                .addEventListener('change', function () { fit(); watchDensity(); }, { once: true });
+        })();
     })();
     </script>
 </body>
