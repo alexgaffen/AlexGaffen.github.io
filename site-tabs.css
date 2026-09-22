@@ -200,97 +200,9 @@ html:not(.dark-mode) .site-tab.is-active::after {
     gap: 10px;
 }
 
-.nav-socials {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .site-tabs-controls,
 .site-tabs-controls * {
     box-sizing: border-box;
-}
-
-.nav-social-link {
-    width: var(--nav-control-size);
-    height: var(--nav-control-size);
-    flex: 0 0 auto;
-    font-family: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 1px solid rgba(168, 85, 247, 0.65);
-    background: rgba(12, 12, 20, 0.92);
-    text-decoration: none;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(76, 29, 149, 0.9);
-    font-size: 1.18rem;
-    transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-.nav-social-github {
-    color: #ffffff;
-    background: #050505;
-    border-color: rgba(255, 255, 255, 0.78);
-}
-
-.nav-social-linkedin {
-    color: #0a66c2;
-    border-color: rgba(10, 102, 194, 0.7);
-}
-
-.nav-social-thm {
-    color: #88cc14;
-    border-color: rgba(136, 204, 20, 0.7);
-}
-
-.nav-social-github:hover {
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 0 18px rgba(255, 255, 255, 0.24), inset 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.nav-social-linkedin:hover {
-    color: #57a8ff;
-    border-color: rgba(87, 168, 255, 0.85);
-    box-shadow: 0 0 18px rgba(10, 102, 194, 0.38), inset 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.nav-social-thm:hover {
-    color: #a6ff1a;
-    border-color: rgba(166, 255, 26, 0.85);
-    box-shadow: 0 0 18px rgba(136, 204, 20, 0.34), inset 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.nav-social-link:hover {
-    transform: translateY(-2px);
-    text-decoration: none;
-}
-
-/* Sits on a dark shell in BOTH themes, so it stays light — but as a soft
-   gradient hairline rather than the old hard, glowing white bar. */
-.nav-controls-divider {
-    width: 1px;
-    height: 22px;
-    margin: 0 4px;
-    background: linear-gradient(180deg,
-        transparent,
-        rgba(255, 255, 255, 0.42) 25%,
-        rgba(255, 255, 255, 0.42) 75%,
-        transparent);
-    box-shadow: none;
-}
-
-[data-theme="light"] .nav-controls-divider,
-html:not(.dark-mode) .nav-controls-divider {
-    background: linear-gradient(180deg,
-        transparent,
-        rgba(255, 214, 107, 0.6) 25%,
-        rgba(255, 214, 107, 0.6) 75%,
-        transparent);
 }
 
 .site-tabs-btn {
@@ -314,31 +226,8 @@ html:not(.dark-mode) .nav-controls-divider {
         gap: 6px;
     }
 
-    .nav-socials {
-        gap: 5px;
-    }
-
-    .nav-social-link {
-        font-size: 1rem;
-    }
-
     .site-tab {
         transition: none;
-    }
-
-    .site-tab[data-mobile-label] {
-        font-size: 0;
-        width: 34px;
-        min-width: 34px;
-        padding-left: 0;
-        padding-right: 0;
-        line-height: 1;
-    }
-
-    .site-tab[data-mobile-label]::before {
-        content: attr(data-mobile-label);
-        font-size: 1.15rem;
-        line-height: 1;
     }
 
     .site-tab:not(.is-active):hover {
@@ -458,19 +347,13 @@ body.resume-page .content {
 
     .site-tab {
         min-height: 32px;
-        padding: 0 0.45rem;
-        font-size: clamp(0.32rem, 1.6vw, 0.45rem);
+        /* Full tab names now render on mobile: removing the nav's social
+           icons freed enough width that they no longer need to collapse to
+           a single emoji glyph (data-mobile-label is unused now, kept in
+           the markup as a harmless fallback). */
+        padding: 0 0.55rem;
+        font-size: clamp(0.4rem, 2.4vw, 0.56rem);
     }
-
-    /* Icon-only tabs are ~34px wide, so the indicator needs a fixed short rule
-       rather than the desktop calc() which would collapse to a few pixels. */
-    .site-tab[data-mobile-label]::after,
-    .site-tab[data-mobile-label]:hover::after,
-    .site-tab[data-mobile-label].is-active::after {
-        width: 16px;
-        bottom: 4px;
-    }
-    .site-tab[data-mobile-label]:not(.is-active)::after { width: 0; }
 
     .site-tabs-btn {
         font-size: 0.8rem;
@@ -505,18 +388,9 @@ body.resume-page .content {
         gap: 4px;
     }
 
-    .nav-socials {
-        gap: 3px;
-    }
-
-    .nav-social-thm,
-    .nav-controls-divider {
-        display: none;
-    }
-
-    .site-tab[data-mobile-label] {
-        width: 32px;
-        min-width: 32px;
+    .site-tab {
+        padding: 0 0.4rem;
+        font-size: clamp(0.36rem, 2.6vw, 0.5rem);
     }
 }
 
@@ -669,12 +543,99 @@ body.has-site-tabs::after {
 /* =================================================############ */
 /* Every themed property runs on one clock. Giving text a shorter duration than
    its background made the copy land first and read as a second, trailing
-   animation; matched durations make the whole page turn over at once. */
+   animation; matched durations make the whole page turn over at once.
+
+   Registering the custom properties below (via @property) is what actually
+   makes text keep pace with its background, not just this rule. A plain
+   custom property flips value instantly -- it never interpolates -- so an
+   element with its own `color: var(--text)` transitions cleanly, but any
+   element that only INHERITS that color (almost all text: h1/p/span/li with
+   no color of their own) has no target value to transition toward; each one
+   ends up re-deriving its own transition from momentary snapshots of the
+   parent's still-changing inherited value, which independently verified
+   produces a visible dip -- the child's colour briefly regresses partway
+   through before catching back up. That reads exactly as "the text changes
+   a beat after the background." Registering a custom property as an
+   animatable <color> makes the *variable itself* interpolate as one value
+   that every element reads in lockstep, so inherited text needs no
+   transition of its own and the dip disappears -- confirmed empirically by
+   sampling computed color every frame through a real toggle, with and
+   without the registration. Each name below must be registered in exactly
+   one place site-wide (a duplicate @property block for the same name makes
+   both invalid), which is why every page's theme tokens are declared here
+   rather than in each page's own stylesheet. */
+@property --bg-color { syntax: '<color>'; inherits: true; initial-value: #fcefd4; }
+@property --text-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
+@property --link-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
+@property --link-hover { syntax: '<color>'; inherits: true; initial-value: #d62020; }
+@property --border-color { syntax: '<color>'; inherits: true; initial-value: #d1cdc2; }
+@property --canvas { syntax: '<color>'; inherits: true; initial-value: #000000; }
+@property --surface { syntax: '<color>'; inherits: true; initial-value: #0e0f12; }
+@property --surface-2 { syntax: '<color>'; inherits: true; initial-value: #15161a; }
+@property --surface-3 { syntax: '<color>'; inherits: true; initial-value: #1c1e23; }
+@property --line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.1); }
+@property --line-strong { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.18); }
+@property --text { syntax: '<color>'; inherits: true; initial-value: #f0f1f4; }
+@property --text-2 { syntax: '<color>'; inherits: true; initial-value: #a8acb6; }
+@property --text-3 { syntax: '<color>'; inherits: true; initial-value: #74787f; }
+@property --accent { syntax: '<color>'; inherits: true; initial-value: #eceef3; }
+@property --accent-ink { syntax: '<color>'; inherits: true; initial-value: #0a0b0d; }
+@property --accent-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.09); }
+@property --accent-line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.26); }
+@property --n-bg { syntax: '<color>'; inherits: true; initial-value: #000000; }
+@property --n-surface { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.03); }
+@property --n-text { syntax: '<color>'; inherits: true; initial-value: #f0f1f4; }
+@property --n-text-2 { syntax: '<color>'; inherits: true; initial-value: #b3b7c0; }
+@property --n-text-3 { syntax: '<color>'; inherits: true; initial-value: #7c818b; }
+@property --n-line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.14); }
+@property --n-line-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.07); }
+@property --n-accent { syntax: '<color>'; inherits: true; initial-value: #ff9e7a; }
+
 html.theme-transitioning,
 html.theme-transitioning *,
 html.theme-transitioning *::before,
 html.theme-transitioning *::after {
-    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, fill 0.2s ease !important;
+    /* No `color` or `fill` here on purpose. Both are inherited properties,
+       and now that the variables above interpolate on their own, giving
+       every element its OWN color transition on top of that is not just
+       redundant -- it's actively harmful. Each element would be chasing an
+       ancestor's colour that is ALSO mid-transition, and every level of the
+       inheritance chain restarts that chase from its own last snapshot;
+       three or four levels deep this measurably produces a colour that
+       overshoots and visibly dips before settling, not just a lag. Verified
+       by sampling every animation frame through a real toggle: with `color`
+       in this list, nested text (e.g. a page title several levels under
+       body) would reach its final shade, then drop back partway and
+       re-approach it a second time. Dropping `color`/`fill` here and
+       relying purely on the interpolating custom properties fixed it --
+       every element now reads an already-smooth value on every frame, with
+       nothing left for it to chase. background-color/background/
+       border-color/box-shadow are NOT inherited, so they never had this
+       problem and stay in the list. */
+    transition:
+        background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+        background 0.2s ease,
+        --bg-color 0.2s ease, --text-color 0.2s ease, --link-color 0.2s ease,
+        --link-hover 0.2s ease, --border-color 0.2s ease,
+        --canvas 0.2s ease, --surface 0.2s ease, --surface-2 0.2s ease, --surface-3 0.2s ease,
+        --line 0.2s ease, --line-strong 0.2s ease,
+        --text 0.2s ease, --text-2 0.2s ease, --text-3 0.2s ease,
+        --accent 0.2s ease, --accent-ink 0.2s ease, --accent-soft 0.2s ease, --accent-line 0.2s ease,
+        --n-bg 0.2s ease, --n-surface 0.2s ease,
+        --n-text 0.2s ease, --n-text-2 0.2s ease, --n-text-3 0.2s ease,
+        --n-line 0.2s ease, --n-line-soft 0.2s ease, --n-accent 0.2s ease
+        !important;
+}
+
+/* `color` and `fill` still need to transition SOMEWHERE, or they'd snap
+   instantly the moment their source variable changes -- they just need to
+   do it exactly once per inheritance chain, at the element that actually
+   declares `color: var(...)`, rather than again at every descendant. That's
+   body on every page: each one sets its own `color: var(--text)` /
+   `var(--n-text)` / `var(--text-color)`, and virtually all page text
+   inherits from it. */
+body {
+    transition: color 0.2s ease, fill 0.2s ease !important;
 }
 
 .theme-switch {

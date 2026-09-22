@@ -572,15 +572,60 @@
         /* ============================================================
            HIGHLIGHT MARQUEE BAR — bottom-fixed advertisement-style strip
            ============================================================ */
+        :root {
+            --home-footer-h: 34px;
+        }
         body {
-            padding-bottom: 78px; /* room for the marquee */
+            padding-bottom: calc(78px + var(--home-footer-h)); /* room for the marquee + footer */
+        }
+
+        /* Slim text footer, pinned under the marquee at the very bottom of
+           the page -- the home page is a fixed single-viewport layout with
+           no scrollable tail, so "the bottom of the page" has to be another
+           fixed strip rather than trailing content. */
+        .home-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1200;
+            height: var(--home-footer-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            background: rgba(8, 6, 14, 0.97);
+            border-top: 1px solid rgba(168, 85, 247, 0.35);
+        }
+        [data-theme="light"] .home-footer,
+        html:not(.dark-mode) .home-footer {
+            background: rgba(13, 19, 43, 0.98);
+            border-top-color: rgba(255, 214, 107, 0.4);
+        }
+        .home-footer a {
+            color: #cdc4e8;
+            text-decoration: none;
+            padding: 2px 2px;
+            transition: color 0.18s ease;
+        }
+        .home-footer a:hover,
+        .home-footer a:focus-visible {
+            color: #fff;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .home-footer .footer-sep {
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .highlight-marquee {
             position: fixed;
             left: 0;
             right: 0;
-            bottom: 0;
+            bottom: var(--home-footer-h);
             z-index: 1200;
             padding: 12px 0 6px;
             background:
@@ -782,11 +827,14 @@
         }
 
         @media (max-width: 800px) {
+            :root {
+                --home-footer-h: 30px;
+            }
             body {
                 width: 100%;
                 max-width: 100vw;
                 padding-right: 16px;
-                padding-bottom: 82px;
+                padding-bottom: calc(82px + var(--home-footer-h));
                 padding-left: 16px;
                 font-size: 16px;
                 line-height: 1.55;
@@ -1050,6 +1098,12 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
         </div>
     </aside>
 
+    <footer class="home-footer">
+        <a href="https://github.com/alexgaffen" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href="https://www.linkedin.com/in/alexgaffen/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </footer>
+
     <script src="site-console.js" defer></script>
     <script src="global_fx.js"></script>
     <script>
@@ -1062,8 +1116,9 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
             if (window.innerWidth < 800) { wrapper.style.zoom = ''; return; }
             wrapper.style.zoom = '';
             var marquee = document.querySelector('.highlight-marquee');
+            var footerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--home-footer-h')) || 34;
             var topPad = 84;
-            var bottomPad = (marquee ? marquee.offsetHeight : 78) + 10;
+            var bottomPad = (marquee ? marquee.offsetHeight : 78) + footerH + 10;
             var avail = window.innerHeight - topPad - bottomPad;
             var h = wrapper.scrollHeight;
             if (h > avail && avail > 200) {
