@@ -264,6 +264,16 @@
             box-shadow: 0 8px 22px -8px rgba(168, 85, 247, 0.6);
         }
         .filter-btn.active .count { border-color: rgba(255,255,255,0.4); opacity: 0.85; }
+        /* Light mode: the site's orange (home card border, top bar, terminal)
+           instead of purple. Near-black text rather than white -- white on
+           #f97316 is only 2.8:1 contrast, dark ink is 6.6:1. */
+        html:not(.dark-mode) .filter-btn:hover { border-color: #f97316; }
+        html:not(.dark-mode) .filter-btn.active {
+            background: #f97316;
+            color: #1a1206;
+            box-shadow: 0 8px 22px -8px rgba(249, 115, 22, 0.6);
+        }
+        html:not(.dark-mode) .filter-btn.active .count { border-color: rgba(26, 18, 6, 0.35); }
 
         /* ===== Masonry grid ===== */
         .photo-grid {
