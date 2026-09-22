@@ -779,11 +779,11 @@ main.content > hr { display: none; }
    14. PAGE CHROME  (progress bar, mobile nav)
    -------------------------------------------------------------------------- */
 /* placement lives in site-tabs.css (.scroll-progress); colour is themed here.
-   Same cyan/violet/teal sweep the other pages use, so the read-progress bar
-   looks identical everywhere on the site. */
+   Plain violet, same as the read-progress bar on every other page -- no
+   gradient sweep, just one consistent colour site-wide. */
 .scroll-progress {
-    background: linear-gradient(90deg, #22d3ee, #a78bfa, #14b8a6);
-    box-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+    background: #a78bfa;
+    box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
 }
 
 .mobile-bottom-btn {
