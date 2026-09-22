@@ -398,42 +398,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })();
 
-/* The element that actually scrolls: a pinned inner panel where the page opts
-   into one, otherwise the document itself. */
-function getSiteScroller() {
-    return document.querySelector('.inner-scroll') || document.scrollingElement || document.documentElement;
-}
-window.getSiteScroller = getSiteScroller;
-
-function updateSiteScrollProgress() {
-    if (document.body.classList.contains('resume-page')) return;
-
-    var el = getSiteScroller();
-    var height = el.scrollHeight - el.clientHeight;
-    var scrolled = height > 0 ? (el.scrollTop / height) * 100 : 0;
-    var activeTab = document.querySelector('.site-tab.is-active');
-    if (activeTab) activeTab.style.setProperty('--tab-scroll-progress', scrolled + '%');
-    var fullBar = document.getElementById('site-full-progress');
-    if (fullBar) fullBar.style.width = scrolled + '%';
-}
-
-window.updateSiteScrollProgress = updateSiteScrollProgress;
-window.addEventListener('resize', updateSiteScrollProgress);
-document.addEventListener('DOMContentLoaded', function () {
-    var el = getSiteScroller();
-    (el === document.scrollingElement || el === document.documentElement ? window : el)
-        .addEventListener('scroll', updateSiteScrollProgress, { passive: true });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.body.classList.contains('resume-page')) return;
-
-    if (!document.getElementById('site-full-progress')) {
-        let bar = document.createElement('div');
-        bar.id = 'site-full-progress';
-        document.body.appendChild(bar);
-    }
-
-    updateSiteScrollProgress();
-});
+/* The read-progress bar that used to sit under the tab bar (#site-full-progress
+   here, .scroll-progress on resume) has been removed, along with the scroll and
+   resize listeners that drove it and the --tab-scroll-progress variable it set,
+   which no stylesheet ever read. */
 

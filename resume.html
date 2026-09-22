@@ -587,7 +587,6 @@
 </footer>
 </main>
 </div>
-<div class="scroll-progress" id="scrollProgress"></div>
 <div aria-hidden="true" class="card-hover-hint" id="cardHoverHint"></div>
 <!-- Mobile Bottom Buttons (appear after scrolling past sidebar, mobile only) -->
 <div class="mobile-bottom-btns" id="mobileBottomBtns">
@@ -851,9 +850,6 @@
             history.replaceState(null, '', window.location.pathname + window.location.search);
         }
 
-        // Scroll progress bar (the desktop back-to-top arrow was removed: the
-        // pinned panel scrolls with the wheel, so it earned nothing).
-        const scrollProgress = document.getElementById('scrollProgress');
         const mobileBottomBtns = document.getElementById('mobileBottomBtns');
         const mobileBottomUp = document.getElementById('mobileBottomUp');
         const mobileBottomNav = document.getElementById('mobileBottomNav');
@@ -867,9 +863,6 @@
 
         SCROLLER.addEventListener('scroll', () => {
             const scrollTop = scrollTopOf();
-            const docHeight = SCROLLER.scrollHeight - SCROLLER.clientHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            scrollProgress.style.width = scrollPercent + '%';
 
             lastScrollY = scrollTop;
 

@@ -721,7 +721,6 @@
             });
             state.visible = PHOTOS.filter(function (p) { return key === "all" || p.loc === key; });
             grid.classList.remove("switching");
-            if (window.updateSiteScrollProgress) window.updateSiteScrollProgress();
         }, 230);
     }
 

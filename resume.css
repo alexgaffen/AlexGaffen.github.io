@@ -791,16 +791,8 @@ main.content > hr { display: none; }
 .contact-status.is-error { color: #f87171; }
 
 /* --------------------------------------------------------------------------
-   14. PAGE CHROME  (progress bar, mobile nav)
+   14. PAGE CHROME  (mobile nav)
    -------------------------------------------------------------------------- */
-/* placement lives in site-tabs.css (.scroll-progress); colour is themed here.
-   Plain violet, same as the read-progress bar on every other page -- no
-   gradient sweep, just one consistent colour site-wide. */
-.scroll-progress {
-    background: #a78bfa;
-    box-shadow: 0 0 12px rgba(167, 139, 250, 0.45);
-}
-
 .mobile-bottom-btn {
     display: inline-flex;
     align-items: center;
@@ -914,7 +906,7 @@ main.content > hr { display: none; }
 
 @media print {
     .about-theme-fx, .cursor-glow, .hero-bg, .hero-terminal,
-    .scroll-progress, .mobile-bottom-btns,
+    .mobile-bottom-btns,
     .mobile-nav-panel, .mobile-nav-overlay, .card-hover-hint,
     .site-tabs, #contact { display: none !important; }
     body.resume-page { background: #fff; color: #000; }
