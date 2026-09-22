@@ -55,7 +55,7 @@
       "name": "Alex Gaffen",
       "url": "https://alexgaffen.com/",
       "image": "https://alexgaffen.com/assets/frontheadshot.jpg",
-      "jobTitle": "Software Developer · AI & Cybersecurity Researcher",
+      "jobTitle": "AI Research Engineer @ Adaptron Inc · ML Research @ McMaster ICE Lab x Adastra Inc",
       "description": "Honours Computer Science student at McMaster University focused on AI, low-level systems, and security.",
       "alumniOf": { "@type": "CollegeOrUniversity", "name": "McMaster University" },
       "address": { "@type": "PostalAddress", "addressLocality": "Hamilton", "addressRegion": "ON", "addressCountry": "CA" },
@@ -506,6 +506,23 @@
             padding: 2.25em 2.5em;
         }
 
+        /* Light mode: warm orange/yellow ring instead of purple/blue, matching
+           the top/bottom bars and the terminal. Dark mode keeps the original
+           purple/blue -- only light mode is getting the repaint. Both values
+           here are fixed (no theme variable baked into the gradient itself),
+           so switching between them on toggle is a plain, safe value change. */
+        [data-theme="light"] .glistening-box,
+        html:not(.dark-mode) .glistening-box {
+            background: linear-gradient(135deg, #f97316, #facc15, #f97316, #facc15);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.22);
+        }
+        [data-theme="light"] .headshot-card,
+        html:not(.dark-mode) .headshot-card {
+            background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
+                        linear-gradient(135deg, #f97316, #facc15, #f97316, #facc15) border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 0 25px rgba(249, 115, 22, 0.3);
+        }
+
         /* The card's copy reads as prose, so it uses Inter -- the free
            substitute Anthropic's own docs point to for Claude.ai's interface
            face (Styrene B, a licensed commercial font, isn't available as a
@@ -602,8 +619,8 @@
         }
         [data-theme="light"] .home-footer,
         html:not(.dark-mode) .home-footer {
-            background: rgba(13, 19, 43, 0.98);
-            border-top-color: rgba(255, 214, 107, 0.4);
+            background: rgba(56, 24, 6, 0.98);
+            border-top-color: rgba(255, 214, 107, 0.45);
         }
         .home-footer a {
             color: #cdc4e8;
@@ -619,6 +636,10 @@
         }
         .home-footer .footer-sep {
             color: rgba(255, 255, 255, 0.3);
+        }
+        [data-theme="light"] .home-footer a,
+        html:not(.dark-mode) .home-footer a {
+            color: #f0d3ae;
         }
 
         .highlight-marquee {
@@ -666,21 +687,22 @@
 
         /* ---- Light mode -------------------------------------------------
            The page is warm beige, so a near-black strip looked like a hole in
-           it. Match the top bar's deep navy instead: the page ends up framed
-           by the same surface top and bottom, and the item accent colours stay
-           legible because they are still sitting on a dark ground. */
+           it. Match the top bar's deep burnt-orange instead: the page ends up
+           framed by the same warm surface top and bottom, and the item accent
+           colours stay legible because they are still sitting on a dark
+           ground. */
         [data-theme="light"] .highlight-marquee,
         html:not(.dark-mode) .highlight-marquee {
             background:
                 linear-gradient(90deg,
-                    rgba(16, 25, 58, 0.98) 0%,
-                    rgba(24, 36, 79, 0.98) 25%,
-                    rgba(21, 32, 71, 0.98) 50%,
-                    rgba(24, 36, 79, 0.98) 75%,
-                    rgba(16, 25, 58, 0.98) 100%);
+                    rgba(48, 20, 5, 0.98) 0%,
+                    rgba(72, 32, 9, 0.98) 25%,
+                    rgba(64, 27, 8, 0.98) 50%,
+                    rgba(72, 32, 9, 0.98) 75%,
+                    rgba(48, 20, 5, 0.98) 100%);
             border-top: 1px solid rgba(255, 214, 107, 0.45);
             box-shadow:
-                0 -8px 28px rgba(21, 32, 71, 0.28),
+                0 -8px 28px rgba(64, 27, 8, 0.28),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
@@ -689,7 +711,7 @@
             background: linear-gradient(90deg,
                 transparent,
                 #ffd66b,
-                #7dd3fc,
+                #fb923c,
                 #ffd66b,
                 transparent);
             background-size: 200% 100%;
@@ -949,7 +971,7 @@
                         <div>
                             <span class="home-title">Alex Gaffen</span>
                             <span class="home-role">
-                                Software Developer & Researcher
+                                AI Research Engineering @ Adaptron Inc, ML Research @ McMaster ICE Lab X Adastra Inc
                             </span>
                         </div>
                         <p class="bio-intro">
