@@ -361,8 +361,7 @@
             run: function () {
                 print([
                     kv("github     ", link("https://github.com/alexgaffen", "github.com/alexgaffen", true)),
-                    kv("linkedin   ", link("https://www.linkedin.com/in/alexgaffen/", "linkedin.com/in/alexgaffen", true)),
-                    kv("tryhackme  ", link("https://tryhackme.com/p/alexgaffen", "tryhackme.com/p/alexgaffen", true))
+                    kv("linkedin   ", link("https://www.linkedin.com/in/alexgaffen/", "linkedin.com/in/alexgaffen", true))
                 ]);
             }
         },
