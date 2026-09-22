@@ -39,6 +39,17 @@ html.dark-mode {
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Kept in the accessibility tree and for SEO, just not painted -- the page
+   reads fine from the list (or the note body) alone. */
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
 body.notes-page {
     margin: 0;
     padding: 0;
