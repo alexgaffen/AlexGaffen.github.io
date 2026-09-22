@@ -512,31 +512,27 @@ body.has-site-tabs::after {
 }
 
 /* =================================================############ */
-/* SYNCHRONIZED DARK/LIGHT THEME SWITCH & TRANSITIONS */
+/* DARK/LIGHT THEME SWITCH */
 /* =================================================############ */
-/* Every themed property runs on one clock. Giving text a shorter duration than
-   its background made the copy land first and read as a second, trailing
-   animation; matched durations make the whole page turn over at once.
+/* The switch is one View Transition (see toggleTheme in site-tabs.js): the
+   browser snapshots the page, the theme flips instantly underneath with every
+   CSS transition switched off, and the old snapshot crossfades into the new
+   page as a single composited layer. Every pixel changes on the same clock,
+   whatever the element and however deep it sits.
 
-   Registering the custom properties below (via @property) is what actually
-   makes text keep pace with its background, not just this rule. A plain
-   custom property flips value instantly -- it never interpolates -- so an
-   element with its own `color: var(--text)` transitions cleanly, but any
-   element that only INHERITS that color (almost all text: h1/p/span/li with
-   no color of their own) has no target value to transition toward; each one
-   ends up re-deriving its own transition from momentary snapshots of the
-   parent's still-changing inherited value, which independently verified
-   produces a visible dip -- the child's colour briefly regresses partway
-   through before catching back up. That reads exactly as "the text changes
-   a beat after the background." Registering a custom property as an
-   animatable <color> makes the *variable itself* interpolate as one value
-   that every element reads in lockstep, so inherited text needs no
-   transition of its own and the dip disappears -- confirmed empirically by
-   sampling computed color every frame through a real toggle, with and
-   without the registration. Each name below must be registered in exactly
-   one place site-wide (a duplicate @property block for the same name makes
-   both invalid), which is why every page's theme tokens are declared here
-   rather than in each page's own stylesheet. */
+   It used to be per-element CSS transitions on every themed property. The
+   colour tokens are inherited, so giving each element its own transition on
+   them made every nesting level restart a transition chasing its parent's
+   still-moving value: deep elements finished late (the home card's fill and
+   the photo filter pills settled 0.8-1.2s after the click, against 0.2s for
+   the page). Elements with literal per-theme colours or their own transitions
+   drifted out of step the same way.
+
+   The registrations below no longer need to interpolate. They are kept
+   because registering a token changes how an unset or invalid value resolves
+   (to the initial-value, not to nothing), and pages may depend on that. Each
+   name must be registered in exactly one place site-wide -- a duplicate
+   @property block for the same name makes both invalid. */
 @property --bg-color { syntax: '<color>'; inherits: true; initial-value: #fcefd4; }
 @property --text-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
 @property --link-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
@@ -564,52 +560,24 @@ body.has-site-tabs::after {
 @property --n-line-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.07); }
 @property --n-accent { syntax: '<color>'; inherits: true; initial-value: #ff9e7a; }
 
-html.theme-transitioning,
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
-    /* No `color` or `fill` here on purpose. Both are inherited properties,
-       and now that the variables above interpolate on their own, giving
-       every element its OWN color transition on top of that is not just
-       redundant -- it's actively harmful. Each element would be chasing an
-       ancestor's colour that is ALSO mid-transition, and every level of the
-       inheritance chain restarts that chase from its own last snapshot;
-       three or four levels deep this measurably produces a colour that
-       overshoots and visibly dips before settling, not just a lag. Verified
-       by sampling every animation frame through a real toggle: with `color`
-       in this list, nested text (e.g. a page title several levels under
-       body) would reach its final shade, then drop back partway and
-       re-approach it a second time. Dropping `color`/`fill` here and
-       relying purely on the interpolating custom properties fixed it --
-       every element now reads an already-smooth value on every frame, with
-       nothing left for it to chase. background-color/background/
-       border-color/box-shadow are NOT inherited, so they never had this
-       problem and stay in the list. */
-    transition:
-        background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
-        background 0.2s ease,
-        --bg-color 0.2s ease, --text-color 0.2s ease, --link-color 0.2s ease,
-        --link-hover 0.2s ease, --border-color 0.2s ease,
-        --canvas 0.2s ease, --surface 0.2s ease, --surface-2 0.2s ease, --surface-3 0.2s ease,
-        --line 0.2s ease, --line-strong 0.2s ease,
-        --text 0.2s ease, --text-2 0.2s ease, --text-3 0.2s ease,
-        --accent 0.2s ease, --accent-ink 0.2s ease, --accent-soft 0.2s ease, --accent-line 0.2s ease,
-        --n-bg 0.2s ease, --n-surface 0.2s ease,
-        --n-text 0.2s ease, --n-text-2 0.2s ease, --n-text-3 0.2s ease,
-        --n-line 0.2s ease, --n-line-soft 0.2s ease, --n-accent 0.2s ease
-        !important;
+/* While the theme flips, nothing may run a transition of its own -- the
+   crossfade is the only animation. The theme button is the exception: its
+   moon/sun swap is its own little animation, so it is lifted out of the page
+   snapshot (view-transition-name) and shown live on top of the crossfade. */
+html.theme-switching *:not(.theme-switch *),
+html.theme-switching *:not(.theme-switch *)::before,
+html.theme-switching *:not(.theme-switch *)::after {
+    transition: none !important;
 }
+html.theme-switching .theme-switch { view-transition-name: theme-switch; }
 
-/* `color` and `fill` still need to transition SOMEWHERE, or they'd snap
-   instantly the moment their source variable changes -- they just need to
-   do it exactly once per inheritance chain, at the element that actually
-   declares `color: var(...)`, rather than again at every descendant. That's
-   body on every page: each one sets its own `color: var(--text)` /
-   `var(--n-text)` / `var(--text-color)`, and virtually all page text
-   inherits from it. */
-body {
-    transition: color 0.2s ease, fill 0.2s ease !important;
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.2s;
+    animation-timing-function: ease;
 }
+::view-transition-old(theme-switch) { display: none; }
+::view-transition-new(theme-switch) { animation: none; }
 
 .theme-switch {
     -webkit-appearance: none;
