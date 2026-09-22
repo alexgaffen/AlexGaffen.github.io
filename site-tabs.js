@@ -62,11 +62,29 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTheme();
     }
 
+    // One crossfade for the whole page (see "DARK/LIGHT THEME SWITCH" in
+    // site-tabs.css). theme-switching turns every CSS transition off, so the new
+    // theme is fully resolved the instant it applies and nothing can lag behind
+    // the crossfade. Without View Transition support, or with reduced motion,
+    // the switch is simply instant.
     function toggleTheme() {
         const html = document.documentElement;
-        html.classList.add("theme-transitioning");
-        setThemeState(!isDarkMode);
-        setTimeout(() => html.classList.remove("theme-transitioning"), 700);
+        // Both inside the callback: a click during a running switch skips it,
+        // and the skipped switch's cleanup must not strip the class from this one.
+        const flip = () => {
+            html.classList.add("theme-switching");
+            setThemeState(!isDarkMode);
+            void html.offsetWidth; // resolve styles now, while transitions are off
+        };
+        const done = () => html.classList.remove("theme-switching");
+
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (!document.startViewTransition || reduce) {
+            flip();
+            requestAnimationFrame(done);
+            return;
+        }
+        document.startViewTransition(flip).finished.finally(done);
     }
 
     function initWorldCanvas() {
