@@ -1058,25 +1058,30 @@ body.ag-spin { animation: agSpin 1.2s cubic-bezier(0.34, 1.3, 0.64, 1) both; }
 
 /* ---------------------------------------------------------------------------
    LIGHT MODE: warm orange/yellow framing, replacing the purple/cyan accent
-   used everywhere else. Scoped entirely to [data-theme="light"] -- dark mode
-   keeps its original purple, cyan and terminal green untouched. Covers the
-   terminal (FAB + window + ASCII banner) so it reads as part of the same
-   palette as the nav bars and the home page's card border, rather than a
-   purple accent left stranded in an otherwise warm page.
+   used everywhere else, AND a beige terminal body instead of black. Scoped
+   entirely to [data-theme="light"] -- dark mode keeps its original black
+   terminal with purple/cyan/green untouched. The terminal used to keep its
+   black background and light text in both themes (only the border/glow
+   accent changed), which read as a dark hole stranded in an otherwise warm,
+   beige page; this flips the console's own background and text to match the
+   same --bg-color beige the rest of light mode uses, the way a light editor
+   theme would.
    --------------------------------------------------------------------------- */
 [data-theme="light"] #ag-console-fab {
     border-color: rgba(249, 115, 22, 0.65);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px -8px rgba(154, 52, 18, 0.9);
+    background: rgba(252, 239, 212, 0.95);
+    color: #047857;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), 0 4px 14px -8px rgba(154, 52, 18, 0.5);
 }
 [data-theme="light"] #ag-console-fab:hover,
 [data-theme="light"] #ag-console-fab.in-nav:hover {
-    box-shadow: 0 6px 18px -6px rgba(249, 115, 22, 0.8);
+    box-shadow: 0 6px 18px -6px rgba(249, 115, 22, 0.6);
 }
 [data-theme="light"] #ag-console-fab:not(.in-nav) {
-    box-shadow: 0 8px 28px -8px rgba(249, 115, 22, 0.55);
+    box-shadow: 0 8px 28px -8px rgba(249, 115, 22, 0.4);
 }
 [data-theme="light"] #ag-console-fab:not(.in-nav):hover {
-    box-shadow: 0 12px 34px -8px rgba(249, 115, 22, 0.8);
+    box-shadow: 0 12px 34px -8px rgba(249, 115, 22, 0.6);
 }
 @keyframes agFabPulseLight {
     0%, 100% { box-shadow: 0 8px 28px -8px rgba(249, 115, 22, 0.55); }
@@ -1085,18 +1090,45 @@ body.ag-spin { animation: agSpin 1.2s cubic-bezier(0.34, 1.3, 0.64, 1) both; }
 [data-theme="light"] #ag-console-fab:not(.in-nav) { animation-name: agFabPulseLight; }
 
 [data-theme="light"] #ag-console .ag-console-inner {
+    background: rgba(252, 239, 212, 0.98);
     border-color: rgba(249, 115, 22, 0.55);
     box-shadow:
-        0 24px 64px -12px rgba(0, 0, 0, 0.75),
-        0 0 42px rgba(249, 115, 22, 0.28);
+        0 24px 64px -12px rgba(60, 40, 10, 0.35),
+        0 0 42px rgba(249, 115, 22, 0.22);
 }
-[data-theme="light"] .ag-console-bar { border-bottom-color: rgba(249, 115, 22, 0.3); }
-[data-theme="light"] .ag-console-body { scrollbar-color: rgba(249, 115, 22, 0.5) transparent; }
+[data-theme="light"] .ag-console-bar {
+    background: rgba(0, 0, 0, 0.035);
+    border-bottom-color: rgba(249, 115, 22, 0.3);
+}
+[data-theme="light"] .ag-console-title { color: rgba(40, 30, 12, 0.7); }
+[data-theme="light"] .ag-console-close { color: rgba(40, 30, 12, 0.55); }
+[data-theme="light"] .ag-console-close:hover {
+    color: #1a1206;
+    background: rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .ag-console-body {
+    color: #2a2010;
+    scrollbar-color: rgba(249, 115, 22, 0.5) transparent;
+}
+[data-theme="light"] .ag-line a { color: #0e7490; }
+[data-theme="light"] .ag-line a:hover { color: #0c5c73; }
+[data-theme="light"] .ag-echo { color: #1a1206; }
+[data-theme="light"] .ag-prompt-echo,
+[data-theme="light"] .ag-cmd,
+[data-theme="light"] .ag-ok,
+[data-theme="light"] .ag-prompt {
+    color: #047857;
+}
 [data-theme="light"] .ag-key { color: #ea580c; }
+[data-theme="light"] .ag-err { color: #dc2626; }
+[data-theme="light"] .ag-dim { color: rgba(60, 48, 30, 0.6); }
+[data-theme="light"] .ag-dir { color: #1d4ed8; }
+[data-theme="light"] .ag-bright { color: #1a1206; }
 [data-theme="light"] .ag-ascii { color: #f97316; }
 [data-theme="light"] .ag-swatch { background: #f97316; }
 [data-theme="light"] .ag-console-inputrow { border-top-color: rgba(249, 115, 22, 0.25); }
-[data-theme="light"] .ag-console-input { caret-color: #f97316; }
+[data-theme="light"] .ag-console-input { color: #1a1206; caret-color: #f97316; }
+[data-theme="light"] .ag-console-input::placeholder { color: rgba(60, 48, 30, 0.4); }
 [data-theme="light"] .console-hint { border-color: rgba(249, 115, 22, 0.55); }
 [data-theme="light"] .console-hint kbd {
     background: rgba(249, 115, 22, 0.18);

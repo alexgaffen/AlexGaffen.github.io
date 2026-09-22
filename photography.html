@@ -131,13 +131,14 @@
         }
 
         /* ===== Aurora background (city-themed) ===== */
-        .aurora {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
+        /* Hidden: the page now uses a plain flat background-color (set on
+           body above), matching the flat treatment on home and resume,
+           instead of these animated blurred colour blobs. The blob markup
+           and keyframes stay in place -- display:none is a one-line,
+           fully-reversible way to turn this off without touching the rest
+           of the page's per-city theming (theme-sf/theme-banff still swap
+           --blob1/2/3, they just aren't painted anywhere any more). */
+        .aurora { display: none; }
         .aurora .blob {
             position: absolute;
             border-radius: 50%;
