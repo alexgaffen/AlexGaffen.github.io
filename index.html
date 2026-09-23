@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Resource hints: open the TLS connections to the asset CDNs while the
-         HTML is still parsing, so the stylesheets below do not pay for a cold
-         handshake before they can start downloading. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonts are self-hosted (@font-face in site-tabs.css); these start the
+         ones this page shows first before any stylesheet has been parsed. -->
+    <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Alex Gaffen - Honours Computer Science student at McMaster University. Building highly optimized systems, artificial intelligence, and interactive web experiences.">
     <meta name="keywords" content="Alex Gaffen, Gaffen, McMaster, Computer Science, Software Engineer, Resume, Projects, Developer Portfolio, AI, Systems, Hamilton">
@@ -25,8 +25,8 @@
     <link rel="canonical" href="https://alexgaffen.com/">
     <meta name="theme-color" content="#0d0d0d">
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml">
-    <link href="assets/favicon.png" rel="icon" type="image/png" sizes="any">
-    <link href="assets/favicon.png" rel="apple-touch-icon">
+    <link href="assets/favicon-180.png" rel="icon" type="image/png" sizes="any">
+    <link href="assets/favicon-180.png" rel="apple-touch-icon">
     <link href="site.webmanifest" rel="manifest">
     <script>
         /* Privacy-friendly analytics. Held back while the browser is pre-rendering
@@ -64,7 +64,6 @@
       ]
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=optional" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4; /* Nice warm beige */
@@ -102,6 +101,9 @@
            collapse to 0 when content is taller than the viewport, keeping the
            top reachable and scrollable on short monitors. */
         #main-wrapper { margin: auto; }
+        /* Shown by the fit script right after the card's markup, once it has
+           its final size (see the comment there). */
+        #main-wrapper:not(.is-fit) { visibility: hidden; }
 
         /* Desktop: keep the landing card fully visible; scroll only if it can't fit */
         @media (min-width: 801px) and (min-height: 620px) {
@@ -618,8 +620,10 @@
             .home-title { font-size: clamp(2rem, 10.5vw, 2.35rem); }
         }
 </style>
+    <noscript><style>#main-wrapper { visibility: visible !important; }</style></noscript>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
+    <script src="global_fx.js"></script>
 </head>
 <body class="has-site-tabs index-page">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -675,30 +679,16 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                 </div>
         </div>
     </div>
-
-
-
-
-
-    
-<style>
-    /* A slightly stronger glow specifically for dark/hacker mode -- the box's
-       own border-color and default box-shadow (set on .glistening-box above)
-       already handle the violet vs. orange split between themes. */
-    body.hacker-mode .glistening-box {
-        box-shadow: 0 0 22px rgba(138, 43, 226, 0.22) !important;
-    }
-</style>
-
-
-
-
-    <script src="site-console.js" defer></script>
-    <script src="global_fx.js"></script>
     <script>
     // Size the landing card on desktop: shrink it (photo, text and all, as one
     // unit) so it fits the viewport without scrolling, and never let it grow
     // past a fixed ceiling however big the monitor is.
+    //
+    // This runs straight after the card's markup, before anything that could
+    // let the browser paint in between (an external script, a pause waiting on
+    // the network). At the end of <body> it sat behind global_fx.js, and while
+    // that file was fetched the card could paint at full size and then snap
+    // down to its fitted size.
     (function () {
         var wrapper = document.getElementById('main-wrapper');
         var box = document.querySelector('.glistening-box');
@@ -732,12 +722,28 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
                 wrapper.style.zoom = z === 1 ? '' : String(z);
             }
         }
-        // Fit synchronously, before the first paint (this script is at the end
-        // of <body>, so everything it measures exists). Running it later made
-        // the card visibly shrink a beat after the HOME tab opened. 'load' is a
-        // safety net for anything that settles late; re-setting an identical
-        // zoom paints nothing.
+        function show() {
+            fit();
+            wrapper.classList.add('is-fit');
+        }
+        // The card is hidden (CSS) until it has been fitted in the fonts it is
+        // set in. Forcing layout here pulls a cached font in straight away, so
+        // on any return visit it is shown in the very first frame. Only on a
+        // cold cache does it wait for the preloaded files -- at most 1.5s --
+        // because a font landing after the fit would re-wrap the text and
+        // resize the card in front of you.
+        var faces = ['400 1em Inter', '700 1em Inter', '400 1em "Space Mono"'];
         fit();
+        void wrapper.offsetHeight;
+        if (faces.every(function (f) { return document.fonts.check(f); })) {
+            show();
+        } else {
+            Promise.race([
+                Promise.all(faces.map(function (f) { return document.fonts.load(f); })),
+                new Promise(function (r) { setTimeout(r, 1500); })
+            ]).then(show, show);
+        }
+        document.fonts.ready.then(fit);
         window.addEventListener('resize', fit);
         window.addEventListener('load', fit);
         // Dragging the window to a screen of a different density doesn't
@@ -748,5 +754,24 @@ I currently research <strong>biomedical ML algorithms and interpretable AI model
         })();
     })();
     </script>
+
+
+
+
+
+    
+<style>
+    /* A slightly stronger glow specifically for dark/hacker mode -- the box's
+       own border-color and default box-shadow (set on .glistening-box above)
+       already handle the violet vs. orange split between themes. */
+    body.hacker-mode .glistening-box {
+        box-shadow: 0 0 22px rgba(138, 43, 226, 0.22) !important;
+    }
+</style>
+
+
+
+
+    <script src="site-console.js" defer></script>
 </body>
 </html>
