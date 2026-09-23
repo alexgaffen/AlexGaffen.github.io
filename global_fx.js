@@ -40,11 +40,14 @@ console.log(`%c
     // effect just behaves as it did before.
     var SEEN_KEY = "img-revealed";
     var seen;
-    try {
-        seen = new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));
-    } catch (e) {
-        seen = new Set();
+    function loadSeen() {
+        try {
+            seen = new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));
+        } catch (e) {
+            seen = new Set();
+        }
     }
+    loadSeen();
 
     function remember(img) {
         // Record both: at arm time an unloaded image has no currentSrc, while a
@@ -75,10 +78,20 @@ console.log(`%c
         function reveal() {
             if (settled) return;
             settled = true;
-            remember(img);
             // Two frames so the blurred state paints before the transition starts.
             requestAnimationFrame(function () {
-                requestAnimationFrame(function () { img.classList.add("is-revealed"); });
+                requestAnimationFrame(function () {
+                    img.classList.add("is-revealed");
+                    // Recorded here, once the reveal is actually on screen, not
+                    // when the image loads. The tabs are prerendered in the
+                    // background, where images finish loading unseen and where
+                    // sessionStorage writes are thrown away when the page is
+                    // shown -- so a record made at load time never stuck, and
+                    // a prerendered PHOTOS tab blurred its photos in again on
+                    // every visit. Animation frames only run once a page is
+                    // visible, so this runs after the page is really shown.
+                    remember(img);
+                });
             });
         }
 
@@ -97,6 +110,19 @@ console.log(`%c
     }
 
     armAll(document.documentElement);
+
+    // A prerendered page armed its images against the record as it stood when
+    // the prerender started. When it is actually shown, re-read the record:
+    // anything seen since then goes straight to sharp.
+    if (document.prerendering) {
+        document.addEventListener("prerenderingchange", function () {
+            loadSeen();
+            var imgs = document.querySelectorAll("img.img-reveal:not(.is-revealed)");
+            for (var i = 0; i < imgs.length; i++) {
+                if (alreadySeen(imgs[i])) imgs[i].classList.remove("img-reveal");
+            }
+        }, { once: true });
+    }
 
     new MutationObserver(function (records) {
         records.forEach(function (rec) {

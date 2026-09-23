@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Resource hints: open the TLS connections to the asset CDNs while the
-         HTML is still parsing, so the stylesheets below do not pay for a cold
-         handshake before they can start downloading. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonts are self-hosted (@font-face in site-tabs.css); these start the
+         ones this page shows first before any stylesheet has been parsed. -->
+    <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Alex Gaffen - Amateur DSLR and Mobile Photography. High-quality street, landscape, and macro shots from San Francisco and Banff.">
     <meta name="keywords" content="Alex Gaffen Photography, McMaster DSLR, Street Photography, Landscape Photography, Travel DSLR, Hamilton Photography">
@@ -24,8 +24,8 @@
     <link rel="canonical" href="https://alexgaffen.com/photography.html">
     <meta name="theme-color" content="#0d0d0d">
     <link href="assets/favicon.svg" rel="icon" type="image/svg+xml">
-    <link href="assets/favicon.png" rel="icon" type="image/png" sizes="any">
-    <link href="assets/favicon.png" rel="apple-touch-icon">
+    <link href="assets/favicon-180.png" rel="icon" type="image/png" sizes="any">
+    <link href="assets/favicon-180.png" rel="apple-touch-icon">
     <link href="site.webmanifest" rel="manifest">
     <script>
         /* Privacy-friendly analytics. Held back while the browser is pre-rendering
@@ -55,7 +55,6 @@
       "author": { "@type": "Person", "name": "Alex Gaffen", "url": "https://alexgaffen.com/" }
     }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Press+Start+2P&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=optional" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fcefd4;
@@ -544,6 +543,7 @@
     </style>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
+    <script src="global_fx.js"></script>
 </head>
 <body class="has-site-tabs photo-page theme-all has-inner-scroll">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -864,6 +864,5 @@
 })();
 </script>
 <script src="site-console.js" defer></script>
-<script src="global_fx.js"></script>
 </body>
 </html>

@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Resource hints: open the TLS connections to the asset CDNs while the
-         HTML is still parsing, so the stylesheets below do not pay for a cold
-         handshake before they can start downloading. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonts are self-hosted (@font-face in site-tabs.css); these start the
+         ones this page shows first before any stylesheet has been parsed. -->
+    <link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/press-start-2p-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alex Gaffen</title>
-    <link href="assets/favicon.png" rel="icon" type="image/png"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&family=Space+Mono&display=optional" rel="stylesheet">
+    <link href="assets/favicon-180.png" rel="icon" type="image/png"/>
     <style>
         :root { --bg-color: #fcefd4; --text-color: #0f0f0f; }
         body, html {

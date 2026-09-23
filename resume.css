@@ -678,7 +678,11 @@ main.content > hr { display: none; }
 .project-preview-gallery { display: flex; flex-wrap: wrap; gap: var(--s-3); }
 .project-preview-gallery:empty { display: none; }
 .project-demo { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
-.demo-video { width: 100%; height: auto; display: block; }
+/* The box takes the video's own shape (aspect-ratio set on each <video>) from
+   the start, rather than the poster's until playback begins -- the two differ
+   slightly, so the card used to jump when the video started. cover lets the
+   poster fill that box without letterbox bars. */
+.demo-video { width: 100%; height: auto; display: block; object-fit: cover; }
 
 /* --------------------------------------------------------------------------
    11. SKILLS SECTION
