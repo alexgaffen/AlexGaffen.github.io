@@ -330,10 +330,6 @@ html:not(.dark-mode) .site-tab.is-active::after {
    rule cancels the shared decorative ::after wash used by the other pages —
    so home paints one flat colour and never repaints.
    --------------------------------------------------------------------------- */
-body.index-page {
-    padding-top: 76px !important;
-}
-
 body.index-page.has-site-tabs::after {
     content: none;
 }
