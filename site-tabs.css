@@ -126,10 +126,17 @@ html:not(.dark-mode) .site-tab.is-active::after {
     color: var(--site-tab-fg);
     text-decoration: none;
     text-align: center;
-    font-family: 'Press Start 2P', monospace;
-    font-size: clamp(0.5rem, 0.8vw, 0.68rem);
+    /* Matches the home page card copy (.box-inner-content) instead of the
+       pixel-font tab bar that used to be the one place on the site still in
+       a different typeface from everything else. Sized up from the old
+       clamp(0.5rem, 0.8vw, 0.68rem): that range was tuned for Press Start
+       2P's wide, chunky glyphs, and Inter at the same size reads as small
+       and thin by comparison. */
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.72rem, 0.95vw, 0.82rem);
     line-height: 1;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
     white-space: nowrap;
     position: relative;
