@@ -3,11 +3,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<!-- Resource hints: open the TLS connections to the asset CDNs while the
-     HTML is still parsing, so the stylesheets below do not pay for a cold
-     handshake before they can start downloading. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts are self-hosted (@font-face in site-tabs.css); these start the
+     ones this page shows first before any stylesheet has been parsed. -->
+<link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/syne-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -46,9 +48,9 @@
         }
     })();
 </script>
-<link href="assets/favicon.png" rel="icon" type="image/png"/>
+<link href="assets/favicon-180.png" rel="icon" type="image/png"/>
 <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
-<link href="assets/favicon.png" rel="apple-touch-icon"/>
+<link href="assets/favicon-180.png" rel="apple-touch-icon"/>
 <link href="site.webmanifest" rel="manifest"/>
 <script type="application/ld+json">
 {
@@ -72,9 +74,9 @@
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"
       onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css"></noscript>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Inter:wght@400;500;600;700&amp;family=Press+Start+2P&amp;family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;500;600;700;800&amp;display=optional" rel="stylesheet"/>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
+    <script src="global_fx.js"></script>
 </head>
 <body class="has-site-tabs resume-page has-inner-scroll">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -230,7 +232,7 @@
 <div class="project-preview-gallery single-preview-gallery">
 </div>
 <div class="project-demo">
-<video autoplay muted loop playsinline class="demo-video" poster="assets/aifibrosis.png">
+<video muted loop playsinline preload="none" class="demo-video" width="2016" height="1028" style="aspect-ratio: 2016 / 1028" poster="assets/demos/aifibrosis-poster.webp">
 <source src="assets/demos/aifibrosis-demo.mp4" type="video/mp4">
 </video>
 </div>
@@ -326,7 +328,7 @@
 <div class="project-preview-gallery">
 </div>
 <div class="project-demo">
-<video autoplay muted loop playsinline class="demo-video" poster="assets/mock-market-home.png">
+<video muted loop playsinline preload="none" class="demo-video" width="2880" height="1532" style="aspect-ratio: 2880 / 1532" poster="assets/demos/mock-market-poster.webp">
 <source src="assets/demos/mock-market-demo.mp4" type="video/mp4">
 </video>
 </div>
@@ -1633,7 +1635,36 @@
     });
 })();
 </script>
+<script>
+// Project demo videos (7.6 MB between them) load and play only when they are
+// near the screen on a page someone is actually looking at. They used to
+// autoplay, which meant downloading both on every visit -- and, because the
+// other tabs prerender this page in the background, on every visit to ANY tab,
+// competing with that page's own loading. Off screen they pause.
+(function () {
+    var vids = [].slice.call(document.querySelectorAll('video.demo-video'));
+    if (!vids.length || !('IntersectionObserver' in window)) {
+        vids.forEach(function (v) { v.autoplay = true; v.preload = 'auto'; v.load(); });
+        return;
+    }
+    function start() {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                var v = e.target;
+                if (e.isIntersecting) {
+                    var p = v.play();
+                    if (p && p.catch) p.catch(function () {});
+                } else if (!v.paused) {
+                    v.pause();
+                }
+            });
+        }, { rootMargin: '300px 0px' });
+        vids.forEach(function (v) { io.observe(v); });
+    }
+    if (document.prerendering) document.addEventListener('prerenderingchange', start, { once: true });
+    else start();
+})();
+</script>
 <script src="site-console.js" defer></script>
-<script src="global_fx.js"></script>
 </body>
 </html>
