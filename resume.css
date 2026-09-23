@@ -200,14 +200,14 @@ main.content {
 main.content { position: relative; z-index: 1; }
 
 /* --------------------------------------------------------------------------
-   4. SECTION REVEAL
+   4. SECTION REVEAL -- removed
+   Every section (class "hidden") used to start at opacity 0, 18px low, and
+   fade up when it scrolled into view. Education sits on the first screen, so
+   opening the RESUME tab always showed it fading and sliding in -- the flicker
+   on switching to this tab. The sections are now simply there; the class and
+   the script that adds .show are left in place and just no longer gate
+   visibility.
    -------------------------------------------------------------------------- */
-.hidden {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-}
-.hidden.show { opacity: 1; transform: none; }
 
 /* --------------------------------------------------------------------------
    5. HERO
@@ -900,8 +900,6 @@ main.content > hr { display: none; }
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
-    .hidden { opacity: 1; transform: none; }
-    .job-item { opacity: 1; transform: none; }
 }
 
 @media print {
@@ -910,7 +908,6 @@ main.content > hr { display: none; }
     .mobile-nav-panel, .mobile-nav-overlay, .card-hover-hint,
     .site-tabs, #contact { display: none !important; }
     body.resume-page { background: #fff; color: #000; }
-    .hidden, .job-item { opacity: 1 !important; transform: none !important; }
     .tl-card { break-inside: avoid; border-color: #ccc; box-shadow: none; }
     section { break-inside: avoid-page; }
 }
