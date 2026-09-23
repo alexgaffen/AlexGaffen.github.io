@@ -86,10 +86,11 @@
         <a href="notes.html" class="site-tab " data-mobile-label="✏️">NOTES</a>
     </div>
     <div class="site-tabs-controls">
+        <button id="ag-console-fab" class="in-nav" type="button" title="Open terminal  ( ` )" aria-label="Open interactive terminal"><span aria-hidden="true">&gt;_</span></button>
         <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
             <span class="theme-switch-track">
-                <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
-                <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
+                <svg class="ts-icon ts-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                <svg class="ts-icon ts-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false" stroke-width="2.2" stroke-linecap="round"><circle stroke="none" cx="12" cy="12" r="4.6"/><path fill="none" d="M12 1.8v2.4M12 19.8v2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M1.8 12h2.4M19.8 12h2.4M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></svg>
                 <span class="theme-switch-thumb"></span>
             </span>
         </button>
@@ -111,7 +112,7 @@
     </div>
     <div class="hero-grid">
         <div class="hero-left">
-            <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · <span id="cvVersion">v2026.08</span></span>
+            <span class="hero-eyebrow"><span class="pulse"></span>CURRICULUM VITAE · <span id="cvVersion">v2026.08</span><script>(function(d){document.getElementById('cvVersion').textContent='v'+d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')})(new Date())</script></span>
             <h1 class="hero-name">Alex <span class="accent">Gaffen</span></h1>
             <div class="hero-status">
                 <span class="chip"><i class="fas fa-location-dot"></i> Hamilton, ON</span>
@@ -614,14 +615,6 @@
 </div>
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <script>
-        // Stamp the CV version with the current year/month so it never goes stale
-        (function stampCvVersion() {
-            const el = document.getElementById('cvVersion');
-            if (!el) return;
-            const now = new Date();
-            el.textContent = 'v' + now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0');
-        })();
-
         // The page scrolls an inner panel pinned under the tab bar, not the
         // document, so every scroll read/write below goes through SCROLLER.
         const SCROLLER = document.querySelector('.inner-scroll') || document.scrollingElement;
@@ -740,36 +733,6 @@
 
         if (trajectoryNodes.length) {
             setTrajectoryNode(document.querySelector('.trajectory-node.is-active') || trajectoryNodes[0]);
-        }
-
-        // Modern dark/light theme toggle (dark = aurora, light = light)
-        const htmlEl = document.documentElement;
-        const cvThemeToggle = document.getElementById('cv-theme-toggle');
-
-        function applyCvTheme(mode) {
-            if (mode === 'light') {
-                htmlEl.setAttribute('data-theme', 'light');
-            } else {
-                mode = 'dark';
-                htmlEl.setAttribute('data-theme', 'aurora');
-            }
-            if (cvThemeToggle) {
-                cvThemeToggle.setAttribute('aria-checked', mode === 'dark' ? 'true' : 'false');
-                cvThemeToggle.dataset.mode = mode;
-            }
-            localStorage.setItem('cv-theme', mode);
-        }
-
-        const storedCvTheme = localStorage.getItem('cv-theme') === 'light' ? 'light' : 'dark';
-        applyCvTheme(storedCvTheme);
-
-        if (cvThemeToggle) {
-            cvThemeToggle.addEventListener('click', () => {
-                htmlEl.classList.add('theme-transitioning');
-                const next = cvThemeToggle.dataset.mode === 'dark' ? 'light' : 'dark';
-                applyCvTheme(next);
-                setTimeout(() => htmlEl.classList.remove('theme-transitioning'), 700);
-            });
         }
 
         // Keyboard shortcuts: ArrowUp scrolls to top (desktop), Escape returns home

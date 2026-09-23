@@ -188,7 +188,9 @@ html:not(.dark-mode) .site-tab.is-active::after {
     color: var(--site-tab-active-fg);
     border-color: var(--site-tab-active-border);
     pointer-events: none;
-    font-weight: bold;
+    /* Same weight as the other tabs. It used to go bold (700 vs 600), which
+       made the active tab's text heavier and ~0.2px wider, so on every switch
+       one tab thickened, another thinned, and the tabs after them shifted. */
 }
 
 .site-tab.is-active::after {
@@ -578,13 +580,33 @@ html.theme-switching *:not(.theme-switch *)::after {
 }
 html.theme-switching .theme-switch { view-transition-name: theme-switch; }
 
-::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
     animation-duration: 0.2s;
     animation-timing-function: ease;
 }
 ::view-transition-old(theme-switch) { display: none; }
 ::view-transition-new(theme-switch) { animation: none; }
+
+/* TAB SWITCHES. Each tab is its own page, so a switch replaces the whole
+   document. Chromium browsers usually have the next page already rendered in
+   the background (speculation rules in site-tabs.js), but Safari and Firefox
+   don't prerender, and without it the swap is a hard cut. This makes it one
+   View Transition in every browser that supports them: the old page stays up
+   until the new one is ready, then the page content crossfades in 0.2s while
+   the tab bar holds perfectly still -- its old image is dropped and the new
+   one shown at once, so the only change on the bar is which tab is lit.
+   Browsers without support, and reduced motion, keep the plain cut. The
+   hold-still rules are skipped during a theme switch, where the bar has to
+   crossfade along with everything else. */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
+}
+.site-tabs { view-transition-name: site-tabs; }
+html:not(.theme-switching)::view-transition-group(site-tabs),
+html:not(.theme-switching)::view-transition-new(site-tabs) { animation: none; }
+html:not(.theme-switching)::view-transition-old(site-tabs) { display: none; }
 
 .theme-switch {
     -webkit-appearance: none;
@@ -625,8 +647,13 @@ html.theme-switching .theme-switch { view-transition-name: theme-switch; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.95rem;
-    text-shadow: 0 0 8px currentColor;
+    /* inline SVG, so the icon is there in the first frame (it was a Font
+       Awesome glyph, which arrived with an asynchronously loaded stylesheet) */
+    width: 0.95rem;
+    height: 0.95rem;
+    fill: currentColor;
+    stroke: currentColor;
+    filter: drop-shadow(0 0 3px currentColor);
     transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 /* Default = dark mode: moon shown, sun tucked away */
@@ -641,14 +668,20 @@ html.theme-switching .theme-switch { view-transition-name: theme-switch; }
     border-color: #a78bfa;
     box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.35);
 }
-/* Light mode appearance: sun shown, moon tucked away */
-.theme-switch[data-mode="light"] .theme-switch-track {
+/* Light mode appearance: sun shown, moon tucked away. Keyed on the html
+   class, which site-tabs.js sets in <head> before the button is even parsed.
+   It used to be keyed on data-mode, which is only set once the page finishes
+   parsing: in light mode every page load painted the dark button first and
+   then animated it over (circle fading navy to beige, moon shrinking out, sun
+   springing in with an overshoot), which read as the tab bar resizing on
+   every tab switch. */
+html:not(.dark-mode) .theme-switch .theme-switch-track {
     background: radial-gradient(circle at 50% 38%, #fff5d6 0%, #fde0a3 100%);
     border: 1.5px solid rgba(217, 119, 6, 0.85);
     box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 4px 14px -8px rgba(217, 119, 6, 0.8);
 }
-.theme-switch[data-mode="light"] .ts-moon { opacity: 0; transform: translate(-50%, -50%) rotate(-90deg) scale(0.4); }
-.theme-switch[data-mode="light"] .ts-sun  { opacity: 1; color: #d97706; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+html:not(.dark-mode) .theme-switch .ts-moon { opacity: 0; transform: translate(-50%, -50%) rotate(-90deg) scale(0.4); }
+html:not(.dark-mode) .theme-switch .ts-sun  { opacity: 1; color: #d97706; transform: translate(-50%, -50%) rotate(0deg) scale(1); }
 
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {

@@ -7,7 +7,6 @@
          handshake before they can start downloading. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Alex Gaffen - Honours Computer Science student at McMaster University. Building highly optimized systems, artificial intelligence, and interactive web experiences.">
     <meta name="keywords" content="Alex Gaffen, Gaffen, McMaster, Computer Science, Software Engineer, Resume, Projects, Developer Portfolio, AI, Systems, Hamilton">
@@ -619,10 +618,6 @@
             .home-title { font-size: clamp(2rem, 10.5vw, 2.35rem); }
         }
 </style>
-    <!-- Font Awesome: loaded non-blocking so it never delays first paint. -->
-    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <link href="site-tabs.css" rel="stylesheet">
     <script src="site-tabs.js"></script>
 </head>
@@ -636,10 +631,11 @@
         <a href="notes.html" class="site-tab " data-mobile-label="✏️">NOTES</a>
     </div>
     <div class="site-tabs-controls">
+        <button id="ag-console-fab" class="in-nav" type="button" title="Open terminal  ( ` )" aria-label="Open interactive terminal"><span aria-hidden="true">&gt;_</span></button>
         <button id="site-theme-btn" class="theme-switch" type="button" role="switch" aria-checked="true" aria-label="Toggle light and dark theme" title="Toggle theme">
             <span class="theme-switch-track">
-                <i class="fas fa-moon ts-icon ts-moon" aria-hidden="true"></i>
-                <i class="fas fa-sun ts-icon ts-sun" aria-hidden="true"></i>
+                <svg class="ts-icon ts-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                <svg class="ts-icon ts-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false" stroke-width="2.2" stroke-linecap="round"><circle stroke="none" cx="12" cy="12" r="4.6"/><path fill="none" d="M12 1.8v2.4M12 19.8v2.4M4.8 4.8l1.7 1.7M17.5 17.5l1.7 1.7M1.8 12h2.4M19.8 12h2.4M4.8 19.2l1.7-1.7M17.5 6.5l1.7-1.7"/></svg>
                 <span class="theme-switch-thumb"></span>
             </span>
         </button>
