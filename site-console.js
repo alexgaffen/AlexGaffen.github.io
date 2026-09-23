@@ -26,22 +26,27 @@
         '</div>';
     document.body.appendChild(wrap);
 
-    var fab = document.createElement("button");
-    fab.id = "ag-console-fab";
-    fab.type = "button";
-    fab.title = "Open terminal  ( ` )";
-    fab.setAttribute("aria-label", "Open interactive terminal");
-    fab.innerHTML = '<span aria-hidden="true">&gt;_</span>';
-    // Prefer placing the launcher inside the site-tabs controls, to the left
-    // of the light/dark toggle. Fall back to a floating button otherwise.
-    var navControls = document.querySelector(".site-tabs-controls");
-    var themeBtn = document.getElementById("site-theme-btn");
-    if (navControls) {
-        fab.classList.add("in-nav");
-        if (themeBtn) navControls.insertBefore(fab, themeBtn);
-        else navControls.insertBefore(fab, navControls.firstChild);
-    } else {
-        document.body.appendChild(fab);
+    // Pages with the tab bar ship the launcher in their markup, so it is there
+    // in the first frame instead of popping in once this deferred script runs.
+    var fab = document.getElementById("ag-console-fab");
+    if (!fab) {
+        fab = document.createElement("button");
+        fab.id = "ag-console-fab";
+        fab.type = "button";
+        fab.title = "Open terminal  ( ` )";
+        fab.setAttribute("aria-label", "Open interactive terminal");
+        fab.innerHTML = '<span aria-hidden="true">&gt;_</span>';
+        // Inside the site-tabs controls, left of the light/dark toggle, where
+        // there is one; a floating button otherwise.
+        var navControls = document.querySelector(".site-tabs-controls");
+        var themeBtn = document.getElementById("site-theme-btn");
+        if (navControls) {
+            fab.classList.add("in-nav");
+            if (themeBtn) navControls.insertBefore(fab, themeBtn);
+            else navControls.insertBefore(fab, navControls.firstChild);
+        } else {
+            document.body.appendChild(fab);
+        }
     }
 
     var body = wrap.querySelector(".ag-console-body");
