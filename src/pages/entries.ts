@@ -5,6 +5,9 @@
 export const pageEntries = {
   index: 'src/entries/index.ts',
   game: 'src/entries/game.ts',
+  photography: 'src/entries/photography.ts',
+  resume: 'src/entries/resume.ts',
+  blog: 'src/entries/blog.ts',
   notes: 'src/entries/notes.ts',
   'note-defending-llms': 'src/entries/note-defending-llms.ts',
 } as const;
