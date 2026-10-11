@@ -1,3 +1,5 @@
+import { useAssets } from './AssetsContext.tsx';
+
 /**
  * The tab bar. Rendered into every page's static HTML; the only script it
  * needs (theme toggle, prerender hints, terminal launcher) lives in
@@ -60,7 +62,7 @@ const switchBtn =
   'theme-switch group m-0 mx-[2px] inline-flex flex-none cursor-pointer appearance-none items-center justify-center border-none bg-transparent p-0 text-[16px] leading-[0] focus-visible:outline-none';
 
 const switchTrack = [
-  'relative box-border inline-flex h-(--nav-control-size) w-(--nav-control-size) items-center justify-center overflow-hidden rounded-full',
+  'theme-switch-track relative box-border inline-flex h-(--nav-control-size) w-(--nav-control-size) items-center justify-center overflow-hidden rounded-full',
   'border-[1.5px] border-[rgba(192,132,252,0.7)] bg-[radial-gradient(circle_at_50%_38%,#2b2566_0%,#1b1840_100%)]',
   'shadow-[inset_0_1px_2px_rgba(0,0,0,0.4),0_4px_14px_-8px_rgba(76,29,149,0.9)]',
   'transition-[background,border-color,box-shadow,transform] duration-[350ms,350ms,350ms,200ms] ease-[ease]',
@@ -76,8 +78,8 @@ const switchTrack = [
 // button first and animates it over.
 const iconBase =
   'absolute top-1/2 left-1/2 box-border inline-flex h-[0.95rem] w-[0.95rem] items-center justify-center fill-current stroke-current [filter:drop-shadow(0_0_3px_currentColor)] [transition:opacity_0.3s_ease,transform_0.45s_cubic-bezier(0.34,1.56,0.64,1)]';
-const moon = `${iconBase} text-[#c4b5fd] opacity-100 [transform:translate(-50%,-50%)_rotate(0deg)_scale(1)] light:opacity-0 light:[transform:translate(-50%,-50%)_rotate(-90deg)_scale(0.4)]`;
-const sun = `${iconBase} text-[#fbbf24] opacity-0 [transform:translate(-50%,-50%)_rotate(90deg)_scale(0.4)] light:text-[#d97706] light:opacity-100 light:[transform:translate(-50%,-50%)_rotate(0deg)_scale(1)]`;
+const moon = `ts-icon ts-moon ${iconBase} text-[#c4b5fd] opacity-100 [transform:translate(-50%,-50%)_rotate(0deg)_scale(1)] light:opacity-0 light:[transform:translate(-50%,-50%)_rotate(-90deg)_scale(0.4)]`;
+const sun = `ts-icon ts-sun ${iconBase} text-[#fbbf24] opacity-0 [transform:translate(-50%,-50%)_rotate(90deg)_scale(0.4)] light:text-[#d97706] light:opacity-100 light:[transform:translate(-50%,-50%)_rotate(0deg)_scale(1)]`;
 
 /* ------------------------------ launcher (>_) ------------------------------ */
 
@@ -121,6 +123,7 @@ interface Props {
 }
 
 export function TabBar({ active, blog = false, terminal = true }: Props) {
+  const chunks = useAssets()?.consoleChunks.join(' ');
   const tabs = blog ? [...TABS, BLOG_TAB] : TABS;
   return (
     <nav className={bar} aria-label="Primary">
@@ -138,7 +141,14 @@ export function TabBar({ active, blog = false, terminal = true }: Props) {
       </div>
       <div className={controls}>
         {terminal && (
-          <button id="ag-console-fab" className={fab} type="button" title="Open terminal  ( ` )" aria-label="Open interactive terminal">
+          <button
+            id="ag-console-fab"
+            className={fab}
+            type="button"
+            title="Open terminal  ( ` )"
+            aria-label="Open interactive terminal"
+            data-chunks={chunks}
+          >
             <span aria-hidden="true">&gt;_</span>
           </button>
         )}

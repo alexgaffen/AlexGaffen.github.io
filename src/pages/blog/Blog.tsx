@@ -94,7 +94,7 @@ function Reader({ id, onClose }: { id: string; onClose: () => void }) {
             </div>
           </div>
           <button
-            className="flex size-10 flex-none cursor-pointer items-center justify-center rounded-[12px] border border-(--border-color) bg-transparent text-[1.2rem] text-(--text-color)"
+            className="flex size-10 flex-none cursor-pointer items-center justify-center rounded-[12px] border border-(--border-color) bg-transparent text-[1.2rem] text-(--text-color) focus-visible:rounded-[4px]"
             type="button"
             aria-label="Close article"
             onClick={onClose}
@@ -288,7 +288,7 @@ export function Blog() {
               {FILTERS.map((f) => (
                 <button
                   key={f.tag}
-                  className={`cursor-pointer rounded-full border border-(--border-color) px-[10px] py-1 ${pixel} text-[0.5em] uppercase [transition:all_0.2s] ${
+                  className={`cursor-pointer rounded-full border border-(--border-color) px-[10px] py-1 ${pixel} text-[0.5em] uppercase [transition:all_0.2s] focus-visible:rounded-[4px] ${
                     filter === f.tag
                       ? 'bg-(--tag-active) text-(--bg-color)'
                       : 'bg-(--tag-bg) text-(--text-color) hover:bg-(--tag-active) hover:text-(--bg-color)'
@@ -326,7 +326,7 @@ export function Blog() {
                 {SHORTCUTS.map((s) => (
                   <button
                     key={s.tag}
-                    className={`cursor-pointer rounded-full border border-(--border-color) bg-transparent px-[10px] py-[5px] ${pixel} text-[clamp(0.38em,0.8vw,0.46em)] text-(--text-color) uppercase [transition:background_0.18s,color_0.18s] hover:bg-(--text-color) hover:text-(--bg-color)`}
+                    className={`cursor-pointer rounded-full border border-(--border-color) bg-transparent px-[10px] py-[5px] ${pixel} text-[clamp(0.38em,0.8vw,0.46em)] text-(--text-color) uppercase [transition:background_0.18s,color_0.18s] hover:bg-(--text-color) hover:text-(--bg-color) focus-visible:rounded-[4px]`}
                     type="button"
                     onClick={() => setFilter(s.tag)}
                   >

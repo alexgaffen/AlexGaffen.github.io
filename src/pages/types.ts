@@ -69,4 +69,6 @@ export interface PageAssets {
   preload: string[];
   /** Pre-paint inline script (theme, blur-up, analytics gate). */
   early: string;
+  /** The terminal's chunks (URLs), downloaded when idle so opening it is instant. */
+  consoleChunks: string[];
 }

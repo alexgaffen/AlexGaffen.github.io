@@ -1,55 +1,64 @@
-# Alex Gaffen - Personal Portfolio
+# Alex Gaffen — personal site
 
-This repository contains the source code for my personal portfolio website, hosted at [alexgaffen.com](http://alexgaffen.com). This site showcases my education, technical skills, work experience, and projects as a Computer Science student at McMaster University.
+Source for [alexgaffen.com](https://alexgaffen.com): **React + TypeScript + Tailwind CSS**, prerendered to plain static HTML and hosted on GitHub Pages.
 
-## 🚀 Live Demo
-Visit the live site: **[alexgaffen.com](http://alexgaffen.com)**
+Every page is rendered to HTML at build time, so the content is on screen in the first frame with no JavaScript. Scripts then add behaviour: React only where there is real state (the terminal, photo gallery and lightbox, résumé widgets, blog reader), plain TypeScript everywhere else.
 
-## 📋 Features
-- **Responsive Sidebar Layout:** A fixed sidebar navigation that adapts to different screen sizes, shrinking vertically on shorter screens and collapsing into a mobile-friendly view on narrower devices.
-- **Scroll Reveal Animations:** Sections smoothly fade in and slide up as you scroll down the page using the Intersection Observer API.
-- **Dynamic Skill Badges:** Interactive skill chips with custom hover effects that change color based on the specific technology branding (e.g., Python turns blue, Git turns orange-red).
-- **Embedded Integrations:** Integration with TryHackMe public profile badges.
-- **Downloadable Resume:** Direct link to download the PDF resume from the sidebar.
+## Commands
 
-## 🛠️ Technologies Used
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Fonts:** [Google Fonts](https://fonts.google.com/) (Oswald for headers, Open Sans for body text)
-- **Icons:** [Font Awesome 6](https://fontawesome.com/)
-- **Hosting:** GitHub Pages
-
-## 📂 Project Structure
-```text
-├── assets/              # Images, icons, and PDF resume
-│   ├── profile.jpg
-│   ├── mcmaster.png
-│   ├── canadaflag.png
-│   ├── cyberclublogo.jpg
-│   └── ...
-├── index.html           # Main HTML structure and content
-├── style.css            # Custom styling, variables, and animations
-└── CNAME                # Custom domain configuration
+```bash
+npm install
+npm run dev        # dev server: every page, live-reloading (same prerender as production)
+npm run build      # type-check, bundle, prerender -> dist/
+npm run preview    # serve dist/ locally
+npm run typecheck
+npm run icons      # re-subset the icon fonts after using a new fa-* / devicon-* class (needs Python + fonttools)
 ```
 
-## 🔧 Local Development
-To view this project locally on your machine:
+Needs Node 22.18 or newer.
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/AlexGaffen/AlexGaffen.github.io.git](https://github.com/AlexGaffen/AlexGaffen.github.io.git)
-    ```
+## How it is put together
 
-2. **Navigate to the project directory:**
-   ```bash
-   cd AlexGaffen.github.io
-   ```
+```
+public/                  copied to the site root as-is
+  assets/, photography/  images, video, self-hosted fonts (URLs are stable)
+  CNAME, robots.txt, sitemap.xml, site.webmanifest
+src/
+  pages/                 one file per page: its <head> metadata + body (React)
+    index.tsx  resume.tsx  photography.tsx  notes.tsx  note-defending-llms.tsx  game.tsx  blog.tsx
+    resume/  photography/  blog/    the content and components of the bigger pages
+  components/            TabBar, Document (the <html> shell), Island, shared class bundles
+  console/               the AG-OS terminal (React; loaded only when used)
+  client/                browser TypeScript: theme, prerender hints, blur-up, home fitter, game ...
+  entries/               one tiny client entry per page
+  styles/site.css        Tailwind setup, design tokens, fonts, theme-switch transitions
+scripts/build.ts         client bundle -> server bundle -> prerender every page
+.github/workflows/       build + deploy to Pages
+```
 
-3. **Open `index.html`** in your preferred web browser.
+**Common edits**
 
-## 📬 Contact
-- **LinkedIn:** [alexgaffen](https://www.linkedin.com/in/alexgaffen)
-- **GitHub:** [alexgaffen](https://github.com/alexgaffen)
-- **Email:** alexgaffen@gmail.com
+- *Résumé entries*: `src/pages/resume/data.ts`.
+- *Photos*: drop files in `public/photography/` (thumb + mid + full) and add a line to `src/pages/photography/data.ts`.
+- *Published notes*: add to `NOTES` in `src/pages/notes.tsx`.
+- *Terminal commands*: `src/console/commands.tsx`.
+- *A new page*: add `src/pages/<name>.tsx`, register it in `src/pages/index.ts` and `src/pages/entries.ts`, and add `src/entries/<name>.ts`.
 
----
-&copy; 2026 Alex Gaffen
+## Design notes
+
+- **Icons.** The résumé's Font Awesome and devicon icons are subset to just the glyphs used and self-hosted (`scripts/subset-icons.py` -> `src/styles/icons.css`), so the page makes no third-party requests: a few KB instead of a ~1.3 MB icon-font download.
+- **Tailwind v4, no preflight.** The site was built without a CSS reset, so the browser defaults are kept; Tailwind supplies utilities only. Colours that flip with the theme are CSS variables set once per theme.
+- **Theme.** `html.dark-mode` is dark, anything else is light. A tiny inline script sets it before first paint; the switch is a View Transition.
+- **Instant tab switches.** Every page prefetches and prerenders the other tabs (speculation rules), so a click swaps to a page that is already built.
+- **Islands.** Interactive parts are rendered into the HTML at build time, then hydrated on their own (`components/Island.tsx`, `client/hydrate.tsx`); everything around them ships no JavaScript.
+- **Breakpoints.** The `le-*` variants are the inclusive `max-width` queries the site has always used (Tailwind's own `max-*` are exclusive, which would shift the layout at exactly that width).
+
+## Deploying
+
+Pushes to `main` build and publish through `.github/workflows/deploy.yml`. In the repository's **Settings → Pages**, the source must be **GitHub Actions**.
+
+## Contact
+
+[LinkedIn](https://www.linkedin.com/in/alexgaffen) · [GitHub](https://github.com/alexgaffen) · alexgaffen@gmail.com
+
+© 2026 Alex Gaffen

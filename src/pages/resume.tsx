@@ -21,16 +21,14 @@ export const resume: PageDef = {
     'syne-latin-wght-normal.woff2',
     'space-mono-latin-400-normal.woff2',
     'space-mono-latin-700-normal.woff2',
+    // the icons (subsets of Font Awesome and devicon, self-hosted)
+    'fa-solid-subset.woff2',
+    'devicon-subset.woff2',
   ],
   htmlClassName: 'resume-root [-webkit-text-size-adjust:100%]',
   bodyClassName: bodyClass,
   analytics: true,
   reveal: true,
-  // Icon fonts load without blocking first paint.
-  externalStyles: [
-    { href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', preconnect: 'https://cdnjs.cloudflare.com' },
-    { href: 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/devicon.min.css', preconnect: 'https://cdn.jsdelivr.net' },
-  ],
   head: {
     fullIcons: true,
     description:

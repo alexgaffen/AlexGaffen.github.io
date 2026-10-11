@@ -15,7 +15,7 @@ export const innerScroll = [
   'light:[--inner-sb:rgba(20,18,12,0.28)] light:[--inner-sb-hover:rgba(20,18,12,0.45)]',
   '[scrollbar-width:thin] [scrollbar-color:var(--inner-sb)_transparent]',
   '[&::-webkit-scrollbar]:block [&::-webkit-scrollbar]:w-[10px] [&::-webkit-scrollbar-track]:bg-transparent',
-  '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-[3px] [&::-webkit-scrollbar-thumb]:[&::-webkit-scrollbar-thumb]:border-transparent',
+  '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-[3px] [&::-webkit-scrollbar-thumb]:border-transparent',
   '[&::-webkit-scrollbar-thumb]:bg-(--inner-sb) [&::-webkit-scrollbar-thumb]:bg-clip-content',
   '[&::-webkit-scrollbar-thumb:hover]:bg-(--inner-sb-hover)',
 ].join(' ');

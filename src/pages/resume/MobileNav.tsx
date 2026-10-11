@@ -19,7 +19,7 @@ const SHOW_AFTER = 320;
 
 // Written out in full: Tailwind only generates classes it can read verbatim.
 const btn =
-  'inline-flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-surface-2 text-ink-2 [box-shadow:var(--shadow-md)] [transition:transform_0.2s_cubic-bezier(0.22,1,0.36,1),color_0.2s_ease,border-color_0.2s_ease] hover:border-accent-line hover:text-accent hover:[transform:translateY(-2px)]';
+  'inline-flex size-11 cursor-pointer items-center justify-center rounded-full border border-line bg-surface-2 text-ink-2 [box-shadow:var(--shadow-md)] [transition:transform_0.2s_cubic-bezier(0.22,1,0.36,1),color_0.2s_ease,border-color_0.2s_ease] hover:border-accent-line hover:text-accent hover:[transform:translateY(-2px)] focus-visible:rounded-[4px]';
 
 const scroller = (): HTMLElement => document.querySelector<HTMLElement>('.inner-scroll') ?? (document.scrollingElement as HTMLElement);
 
@@ -77,7 +77,7 @@ export function MobileNav() {
       >
         <button
           aria-label="Close navigation"
-          className="absolute top-4 right-4 size-[38px] cursor-pointer rounded-full border border-line bg-surface-2 text-ink-2"
+          className="absolute top-4 right-4 size-[38px] cursor-pointer rounded-full border border-line bg-surface-2 text-ink-2 focus-visible:rounded-[4px]"
           id="mobileNavClose"
           title="Close navigation"
           onClick={() => setOpen(false)}

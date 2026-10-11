@@ -77,17 +77,32 @@ export function initLauncher(): void {
     }
   });
 
-  // Warm it when the user shows intent; otherwise once the page is idle.
+  // Mount it as soon as the user shows intent (hover/focus), so a click is instant.
   fab?.addEventListener('pointerenter', () => void load(), { once: true });
   fab?.addEventListener('focus', () => void load(), { once: true });
-  const warm = () => {
+
+  // Meanwhile, once the page is idle, download (but do not run) the terminal's
+  // files, so the first open never waits on the network. None of it executes
+  // until someone reaches for the terminal.
+  const prefetch = () => {
     // A prerendered tab must not spend bandwidth until it is actually shown.
-    if (document.prerendering) return document.addEventListener('prerenderingchange', warm, { once: true });
-    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1500));
-    idle(() => void load(), { timeout: 5000 });
+    if (document.prerendering) return document.addEventListener('prerenderingchange', prefetch, { once: true });
+    if (navigator.connection?.saveData) return;
+    // Let the page's own images and lazy content finish first.
+    const idle = (cb: () => void) => window.setTimeout(() => (window.requestIdleCallback ?? window.setTimeout)(cb), 2000);
+    idle(
+      () => {
+        for (const href of fab?.dataset.chunks?.split(' ') ?? []) {
+          const link = document.createElement('link');
+          link.rel = 'modulepreload';
+          link.href = href;
+          document.head.appendChild(link);
+        }
+      },
+    );
   };
-  if (document.readyState === 'complete') warm();
-  else window.addEventListener('load', warm, { once: true });
+  if (document.readyState === 'complete') prefetch();
+  else window.addEventListener('load', prefetch, { once: true });
 
   let k = 0;
   document.addEventListener('keydown', (e) => {

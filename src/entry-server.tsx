@@ -5,11 +5,10 @@ import { pages } from './pages/index.ts';
 import type { PageAssets } from './pages/types.ts';
 
 /** Render one page to a complete HTML string. */
-export function renderPage(file: string, assets: PageAssets | { dev: true }): string {
+export function renderPage(file: string, assets: PageAssets, dev = false): string {
   const page = pages[file];
   if (!page) throw new Error(`Unknown page: ${file}`);
-  const dev = 'dev' in assets;
-  const html = renderToStaticMarkup(<Document page={page} assets={dev ? null : assets} dev={dev} />);
+  const html = renderToStaticMarkup(<Document page={page} assets={assets} dev={dev} />);
   return '<!DOCTYPE html>' + html.replaceAll(` ${DEFER_MARK}=""`, ` ${DEFER_ONLOAD}`);
 }
 

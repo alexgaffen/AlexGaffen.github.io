@@ -1,4 +1,5 @@
 import type { PageAssets, PageDef } from '../pages/types.ts';
+import { AssetsContext } from './AssetsContext.tsx';
 
 const FONT_TYPE = 'font/woff2';
 
@@ -24,7 +25,7 @@ function DeferredStyle({ href }: { href: string }) {
 
 interface Props {
   page: PageDef;
-  assets: PageAssets | null;
+  assets: PageAssets;
   dev?: boolean;
 }
 
@@ -80,11 +81,11 @@ export function Document({ page, assets, dev }: Props) {
             <link href="/site.webmanifest" rel="manifest" />
           </>
         )}
-        {assets && <script dangerouslySetInnerHTML={{ __html: assets.early }} />}
+        <script dangerouslySetInnerHTML={{ __html: assets.early }} />
         {head.jsonLd && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(head.jsonLd, null, 2) }} />
         )}
-        {assets?.css.map((href) => <link key={href} rel="stylesheet" href={href} />)}
+        {assets.css.map((href) => <link key={href} rel="stylesheet" href={href} />)}
         {page.externalStyles?.map((s) => <DeferredStyle key={s.href} href={s.href} />)}
         {page.noscriptCss && (
           <noscript>
@@ -97,16 +98,16 @@ export function Document({ page, assets, dev }: Props) {
             <script type="module" src={`/src/entries/${page.file}.ts`} />
           </>
         ) : (
-          assets && (
-            <>
-              {assets.preload.map((href) => <link key={href} rel="modulepreload" href={href} />)}
-              <script type="module" src={assets.js} />
-            </>
-          )
+          <>
+            {assets.preload.map((href) => <link key={href} rel="modulepreload" href={href} />)}
+            <script type="module" src={assets.js} />
+          </>
         )}
       </head>
       <body className={page.bodyClassName}>
-        <page.Body />
+        <AssetsContext.Provider value={assets}>
+          <page.Body />
+        </AssetsContext.Provider>
       </body>
     </html>
   );

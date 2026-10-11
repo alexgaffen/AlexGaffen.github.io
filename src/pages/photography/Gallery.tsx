@@ -295,7 +295,8 @@ function Lightbox({
                 onJump(i);
               }}
             >
-              <img className="block h-full w-full object-cover" src={p.thumb} alt="" loading="lazy" decoding="async" />
+              {/* The same files as the grid cards, which have already blurred up: no second reveal. */}
+              <img className="block h-full w-full object-cover" src={p.thumb} alt="" loading="lazy" decoding="async" data-no-reveal="" />
             </button>
           ))}
         </div>

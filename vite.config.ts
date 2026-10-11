@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { buildInline } from './scripts/inline.ts';
 import { pageEntries } from './src/pages/entries.ts';
 
 /**
@@ -8,6 +9,12 @@ import { pageEntries } from './src/pages/entries.ts';
  * build uses, so what you see while editing is what ships.
  */
 function devPages(): Plugin {
+  // Compiled once per variant; the pre-paint scripts are inlined exactly as in production.
+  const cache = new Map<string, Promise<string>>();
+  const inline = (key: string, entry: string, define?: Record<string, string>) => {
+    if (!cache.has(key)) cache.set(key, buildInline(entry, define));
+    return cache.get(key)!;
+  };
   return {
     name: 'dev-pages',
     apply: 'serve',
@@ -18,7 +25,16 @@ function devPages(): Plugin {
         if (!(file in pageEntries)) return next();
         try {
           const mod = (await server.ssrLoadModule('/src/entry-server.tsx')) as typeof import('./src/entry-server.tsx');
-          const html = await server.transformIndexHtml(url, mod.renderPage(file, { dev: true }));
+          mod.setInlineScripts({ fit: await inline('fit', 'src/client/fit.ts') });
+          const f = mod.pageFlags[file]!;
+          const early = await inline(`early:${f.reveal}:${f.analytics}`, 'src/client/early.ts', {
+            __REVEAL__: String(f.reveal),
+            __ANALYTICS__: String(f.analytics),
+          });
+          const html = await server.transformIndexHtml(
+            url,
+            mod.renderPage(file, { css: [], js: '', preload: [], early, consoleChunks: [] }, true),
+          );
           res.setHeader('Content-Type', 'text/html; charset=utf-8');
           res.end(html);
         } catch (e) {

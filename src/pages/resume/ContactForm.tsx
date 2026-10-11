@@ -60,7 +60,7 @@ export function ContactForm() {
         <textarea className={`${field} min-h-[120px] [resize:vertical]`} id="contact-message" name="message" placeholder="Your message..." required rows={5} />
       </div>
       <button
-        className="inline-flex cursor-pointer items-center gap-[0.6em] rounded-full border-none bg-accent px-[1.6em] py-[0.8em] text-[0.9rem] font-bold text-accent-ink [font-family:inherit] [transition:transform_0.2s_cubic-bezier(0.22,1,0.36,1),filter_0.2s_ease] enabled:hover:[filter:brightness(1.08)] enabled:hover:[transform:translateY(-2px)] disabled:cursor-progress disabled:opacity-60"
+        className="inline-flex cursor-pointer items-center gap-[0.6em] rounded-full border-none bg-accent px-[1.6em] py-[0.8em] text-[0.9rem] font-bold text-accent-ink [font-family:inherit] [transition:transform_0.2s_cubic-bezier(0.22,1,0.36,1),filter_0.2s_ease] enabled:hover:[filter:brightness(1.08)] enabled:hover:[transform:translateY(-2px)] disabled:cursor-progress disabled:opacity-60 focus-visible:rounded-[4px]"
         type="submit"
         disabled={sending}
       >

@@ -27,7 +27,20 @@ interface ManifestChunk {
 type Manifest = Record<string, ManifestChunk>;
 
 /** Everything a page's entry pulls in, resolved to URLs. */
-function assetsFor(manifest: Manifest, entryKey: string, early: string): PageAssets {
+/** The terminal is a lazy chunk; these are every file it needs, so they can be fetched ahead of use. */
+function consoleChunksOf(manifest: Manifest): string[] {
+  const files = new Set<string>();
+  const walk = (key: string) => {
+    const c = manifest[key];
+    if (!c || files.has(`/${c.file}`)) return;
+    files.add(`/${c.file}`);
+    c.imports?.forEach(walk);
+  };
+  walk('src/console/index.tsx');
+  return [...files];
+}
+
+function assetsFor(manifest: Manifest, entryKey: string, early: string, consoleChunks: string[]): PageAssets {
   const css = new Set<string>();
   const preload = new Set<string>();
   const seen = new Set<string>();
@@ -41,7 +54,10 @@ function assetsFor(manifest: Manifest, entryKey: string, early: string): PageAss
     c.imports?.forEach((i) => walk(i, false));
   };
   walk(entryKey, true);
-  return { css: [...css], js: `/${manifest[entryKey]!.file}`, preload: [...preload], early };
+  const js = `/${manifest[entryKey]!.file}`;
+  // Anything the page itself already loads isn't worth prefetching.
+  const own = new Set([js, ...preload]);
+  return { css: [...css], js, preload: [...preload], early, consoleChunks: consoleChunks.filter((f) => !own.has(f)) };
 }
 
 async function main() {
@@ -85,7 +101,7 @@ async function main() {
 
   for (const [file, entry] of Object.entries(pageEntries)) {
     const f = pageFlags[file]!;
-    const assets = assetsFor(manifest, entry, await earlyFor(f.reveal, f.analytics));
+    const assets = assetsFor(manifest, entry, await earlyFor(f.reveal, f.analytics), consoleChunksOf(manifest));
     const html = renderPage(file, assets);
     const out = join(dist, `${file}.html`);
     mkdirSync(dirname(out), { recursive: true });

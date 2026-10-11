@@ -1,4 +1,5 @@
 import '../styles/site.css';
+import '../styles/icons.css';
 import { hydrateIsland } from '../client/hydrate.tsx';
 import { initResume } from '../client/resume.ts';
 import { initShell } from '../client/shell.ts';
