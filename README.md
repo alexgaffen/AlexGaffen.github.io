@@ -53,6 +53,26 @@ scripts/build.ts         client bundle -> server bundle -> prerender every page
 - **Islands.** Interactive parts are rendered into the HTML at build time, then hydrated on their own (`components/Island.tsx`, `client/hydrate.tsx`); everything around them ships no JavaScript.
 - **Breakpoints.** The `le-*` variants are the inclusive `max-width` queries the site has always used (Tailwind's own `max-*` are exclusive, which would shift the layout at exactly that width).
 
+## Bundle size: the React runtime
+
+Pages with islands (résumé, photos, blog) load React to hydrate them: about 70 KB gzipped. Home, notes and the game run no framework at load; the terminal's files download in the background but only run when it is used.
+
+If that cost matters, the whole site can run on Preact's React-compatible runtime (~7 KB) with no source changes -- the pages are still rendered to HTML by React at build time, and only the browser bundle is swapped:
+
+```bash
+npm i -D preact
+```
+
+```ts
+// vite.config.ts: wrap the config as defineConfig(({ isSsrBuild }) => ({ ... })) and add
+resolve: isSsrBuild ? {} : { alias: {
+  react: 'preact/compat', 'react-dom/client': 'preact/compat/client',
+  'react-dom': 'preact/compat', 'react/jsx-runtime': 'preact/jsx-runtime',
+} },
+```
+
+This was tried against the same visual and behavioural comparisons as the React build and matched.
+
 ## Deploying
 
 Pushes to `main` build and publish through `.github/workflows/deploy.yml`. In the repository's **Settings → Pages**, the source must be **GitHub Actions**.
