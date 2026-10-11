@@ -1,0 +1,419 @@
+/* ---------------------------------------------------------------------------
+   Tailwind v4, assembled by hand so it adds nothing the old site didn't have:
+   theme + utilities only. No preflight -- the site never used a CSS reset and
+   its look depends on the browser defaults it is built on.
+   --------------------------------------------------------------------------- */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* The site's themes are classes on <html>, set before first paint by the early
+   script: html.dark-mode is dark, anything else is light. */
+@custom-variant dark (&:where(.dark-mode, .dark-mode *));
+@custom-variant light (html:not(.dark-mode) &);
+
+/* Hover is plain :hover, as on the old site, not Tailwind's "only on devices that
+   can hover" -- so a tapped control on a phone keeps its hover look the same way. */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (&:is(:where(.group):hover *));
+
+/* Tailwind's max-* variants are exclusive (width < N); this site's media queries
+   are inclusive (max-width: N), so a window exactly N wide must get the narrow
+   layout. These are the inclusive equivalents. Keep them in DESCENDING order:
+   later variants win, so the narrowest breakpoint has to come last. */
+@custom-variant le-1500 (@media (max-width: 1500px));
+@custom-variant le-1100 (@media (max-width: 1100px));
+@custom-variant le-1000 (@media (max-width: 1000px));
+@custom-variant le-980 (@media (max-width: 980px));
+@custom-variant le-900 (@media (max-width: 900px));
+@custom-variant le-800 (@media (max-width: 800px));
+@custom-variant le-760 (@media (max-width: 760px));
+@custom-variant le-640 (@media (max-width: 640px));
+@custom-variant le-560 (@media (max-width: 560px));
+@custom-variant le-400 (@media (max-width: 400px));
+@custom-variant le-380 (@media (max-width: 380px));
+@custom-variant le-350 (@media (max-width: 350px));
+/* Laptop widths: 900px up to and including 1500px. */
+@custom-variant laptop (@media (min-width: 900px) and (max-width: 1500px));
+
+@theme {
+  --font-inter: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-dm: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-syne: 'Syne', 'DM Sans', system-ui, sans-serif;
+  --font-mono-site: 'Space Mono', 'Courier New', Courier, monospace;
+  --font-n-mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-resume-mono: 'Space Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  --font-term: 'Space Mono', 'Cascadia Code', Consolas, monospace;
+  --font-pixel: 'Press Start 2P', monospace;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-ag-snowfall: agSnowfall 8s linear infinite;
+  --animate-ag-line-in: agLineIn 0.16s ease both;
+  --animate-ag-fab-pulse: agFabPulse 3.2s ease-in-out infinite;
+  --animate-ag-fab-pulse-light: agFabPulseLight 3.2s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.8s ease-out;
+  --animate-pulse-dot: pulse 2s ease-in-out infinite;
+  --animate-caret: caret 1.05s steps(1) infinite;
+  --animate-lb-zoom: lbZoom 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-ag-spin: agSpin 1.2s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+
+  @keyframes agSnowfall {
+    from { background-position: 0 -120px, 44px -180px, 20px -90px; }
+    to { background-position: 30px 760px, -26px 920px, 58px 680px; }
+  }
+  @keyframes agLineIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes agFabPulse {
+    0%, 100% { box-shadow: 0 8px 28px -8px rgba(168, 85, 247, 0.55); }
+    50% { box-shadow: 0 8px 34px -6px rgba(34, 211, 238, 0.6); }
+  }
+  @keyframes agFabPulseLight {
+    0%, 100% { box-shadow: 0 8px 28px -8px rgba(249, 115, 22, 0.55); }
+    50% { box-shadow: 0 8px 34px -6px rgba(250, 204, 21, 0.6); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  @keyframes caret {
+    50% { opacity: 0; }
+  }
+  @keyframes lbZoom {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes agSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    45% { transform: rotate(360deg) scale(0.96); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+}
+
+/* The résumé's palette: custom properties set per theme below, exposed as
+   colours so components can say bg-surface / text-ink-2 / border-line. `inline`
+   keeps them as var(--token), so they follow the theme. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--text);
+  --color-ink-2: var(--text-2);
+  --color-ink-3: var(--text-3);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+}
+
+/* ---------------------------------------------------------------------------
+   FONTS -- self-hosted (public/assets/fonts, SIL OFL 1.1, licences alongside).
+   Served from this origin they share its connection and cache, and each page
+   preloads the ones it shows first. font-display: block, not optional: with
+   optional a font that missed its ~100ms window was skipped for that page's
+   whole life, so a page loaded cold could stay in the fallback face while the
+   tabs prerendered a moment later (font cached by then) came up in Inter and
+   the text changed typeface on every switch. With block every page renders
+   the real font. The latin subset matches what Google served for this content.
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url(/assets/fonts/inter-latin-wght-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: block;
+  src: url(/assets/fonts/dm-sans-latin-opsz-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: block;
+  src: url(/assets/fonts/syne-latin-wght-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(/assets/fonts/space-mono-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url(/assets/fonts/space-mono-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: block;
+  src: url(/assets/fonts/space-mono-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(/assets/fonts/press-start-2p-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------------------------------------------------------------------------
+   DESIGN TOKENS
+   Colours that flip with the theme are custom properties set once per theme
+   here; components read them. Tokens that belong to one page live on that
+   page's <body> (see the page components).
+   --------------------------------------------------------------------------- */
+@layer base {
+  body.has-site-tabs {
+    --site-tabs-top: 0;
+    --site-tabs-shell-height: 52px;
+    --site-tabs-gap: 6px;
+    --site-tabs-pad-x: clamp(8px, 1.4vw, 16px);
+    /* The page behind is true black, so the bar is deliberately LIGHTER and
+       cooler than it -- that separation is what makes it read as a distinct
+       surface instead of blending into the background. */
+    --site-tabs-shell-bg: rgba(34, 40, 56, 0.95);
+    --site-tabs-shell-border: rgba(255, 255, 255, 0.16);
+    --site-tab-bg: transparent;
+    --site-tab-border: transparent;
+    --site-tab-fg: rgba(233, 236, 245, 0.62);
+    --site-tab-fg-hover: #f4f6fb;
+    --site-tab-hover-bg: rgba(255, 255, 255, 0.07);
+    --site-tab-accent: #7dd3fc;
+    --site-tab-active-bg: rgba(255, 255, 255, 0.11);
+    --site-tab-active-fg: #ffffff;
+    --site-tab-active-border: transparent;
+    --site-world-link-alpha: 0.48;
+    --site-world-glow-alpha: 0.32;
+    --site-world-node-alpha: 1;
+    --site-world-spark-alpha: 0.9;
+    --site-world-near-line-width: 2.4;
+    --site-world-far-line-width: 1.4;
+    --site-world-canvas-opacity: 1;
+    --site-world-overlay-opacity: 1;
+  }
+
+  @media (max-width: 760px) {
+    body.has-site-tabs {
+      --site-tabs-shell-height: 52px;
+      --site-tabs-gap: 2px;
+    }
+  }
+
+  html.dark-mode body.has-site-tabs {
+    --site-world-link-alpha: 0.3;
+    --site-world-glow-alpha: 0.22;
+    --site-world-node-alpha: 0.96;
+    --site-world-spark-alpha: 0.7;
+    --site-world-near-line-width: 1.8;
+    --site-world-far-line-width: 1.1;
+    --site-world-canvas-opacity: 0.94;
+    --site-world-overlay-opacity: 0.97;
+  }
+
+  /* Light theme. The page behind is warm beige (#fcefd4); a pale bar vanished
+     into it, so the bar goes a deep burnt-orange instead -- the same warm
+     family as the home page's card border and the terminal. Tab text stays
+     light in both themes, which keeps one set of tab styles correct. */
+  html:not(.dark-mode) body.has-site-tabs {
+    --site-tabs-shell-bg: rgba(64, 27, 8, 0.97);
+    --site-tabs-shell-border: rgba(31, 12, 3, 0.9);
+    --site-tab-accent: #ffd66b;
+    --site-tab-active-bg: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Notes: a reading surface. Prose in Inter, metadata in mono, one accent. */
+  body.notes-page {
+    --n-bg: #fcefd4;
+    --n-surface: rgba(255, 255, 255, 0.5);
+    --n-text: #17150f;
+    --n-text-2: #4a4535;
+    --n-text-3: #837c66;
+    --n-line: rgba(28, 24, 14, 0.14);
+    --n-line-soft: rgba(28, 24, 14, 0.08);
+    --n-accent: #a3391f;
+  }
+  html.dark-mode body.notes-page {
+    --n-bg: #000000;
+    --n-surface: rgba(255, 255, 255, 0.03);
+    --n-text: #f0f1f4;
+    --n-text-2: #b3b7c0;
+    --n-text-3: #7c818b;
+    --n-line: rgba(255, 255, 255, 0.14);
+    --n-line-soft: rgba(255, 255, 255, 0.07);
+    --n-accent: #ff9e7a;
+  }
+
+  /* Resume: dark is the default, light the beige canvas shared with home and photos.
+     Off-white rather than a coloured accent: on true black it reads cleaner. */
+  body.resume-page {
+    --canvas: #000000;
+    --surface: #0e0f12;
+    --surface-2: #15161a;
+    --surface-3: #1c1e23;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --text: #f0f1f4;
+    --text-2: #a8acb6;
+    --text-3: #74787f;
+    --accent: #eceef3;
+    --accent-ink: #0a0b0d;
+    --accent-soft: rgba(255, 255, 255, 0.09);
+    --accent-line: rgba(255, 255, 255, 0.26);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 32px -18px rgba(0, 0, 0, 0.9);
+    --shadow-lg: 0 28px 60px -34px rgba(0, 0, 0, 0.95);
+  }
+  html:not(.dark-mode) body.resume-page {
+    --canvas: #fcefd4;
+    --surface: #ffffff;
+    --surface-2: #f6f2ea;
+    --surface-3: #efe9de;
+    --line: rgba(28, 24, 16, 0.12);
+    --line-strong: rgba(28, 24, 16, 0.22);
+    --text: #14161b;
+    --text-2: #4e5663;
+    --text-3: #79818f;
+    --accent: #16181d;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(22, 24, 29, 0.07);
+    --accent-line: rgba(22, 24, 29, 0.26);
+    --shadow-sm: 0 1px 2px rgba(40, 30, 10, 0.06);
+    --shadow-md: 0 12px 30px -20px rgba(40, 30, 10, 0.35);
+    --shadow-lg: 0 26px 56px -34px rgba(40, 30, 10, 0.4);
+  }
+  /* form controls and the viewport follow the theme too */
+  html.resume-root { color-scheme: dark; }
+  html.resume-root:not(.dark-mode) { color-scheme: light; }
+
+  /* Global scrollbar hiding; pages that scroll a panel opt back in. */
+  ::-webkit-scrollbar { display: none; }
+  html, body { -ms-overflow-style: none; scrollbar-width: none; overflow-x: hidden; }
+
+  :focus-visible {
+    outline: 3px solid #a855f7;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Blur-up image reveal (armed by the early script, once per image per session).
+   --------------------------------------------------------------------------- */
+img.img-reveal { filter: blur(18px); opacity: 0.35; }
+img.img-reveal.is-revealed {
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.6s ease,
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   DARK/LIGHT THEME SWITCH
+   The switch is one View Transition (see theme.ts): the browser snapshots the
+   page, the theme flips instantly underneath with every CSS transition
+   switched off, and the old snapshot crossfades into the new page as a single
+   composited layer. Every pixel changes on the same clock, whatever the
+   element and however deep it sits.
+
+   The registrations below no longer need to interpolate. They are kept
+   because registering a token changes how an unset or invalid value resolves
+   (to the initial-value, not to nothing), and pages may depend on that. Each
+   name must be registered in exactly one place site-wide -- a duplicate
+   @property block for the same name makes both invalid.
+   --------------------------------------------------------------------------- */
+@property --bg-color { syntax: '<color>'; inherits: true; initial-value: #fcefd4; }
+@property --text-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
+@property --link-color { syntax: '<color>'; inherits: true; initial-value: #0f0f0f; }
+@property --link-hover { syntax: '<color>'; inherits: true; initial-value: #d62020; }
+@property --border-color { syntax: '<color>'; inherits: true; initial-value: #d1cdc2; }
+@property --canvas { syntax: '<color>'; inherits: true; initial-value: #000000; }
+@property --surface { syntax: '<color>'; inherits: true; initial-value: #0e0f12; }
+@property --surface-2 { syntax: '<color>'; inherits: true; initial-value: #15161a; }
+@property --surface-3 { syntax: '<color>'; inherits: true; initial-value: #1c1e23; }
+@property --line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.1); }
+@property --line-strong { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.18); }
+@property --text { syntax: '<color>'; inherits: true; initial-value: #f0f1f4; }
+@property --text-2 { syntax: '<color>'; inherits: true; initial-value: #a8acb6; }
+@property --text-3 { syntax: '<color>'; inherits: true; initial-value: #74787f; }
+@property --accent { syntax: '<color>'; inherits: true; initial-value: #eceef3; }
+@property --accent-ink { syntax: '<color>'; inherits: true; initial-value: #0a0b0d; }
+@property --accent-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.09); }
+@property --accent-line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.26); }
+@property --n-bg { syntax: '<color>'; inherits: true; initial-value: #000000; }
+@property --n-surface { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.03); }
+@property --n-text { syntax: '<color>'; inherits: true; initial-value: #f0f1f4; }
+@property --n-text-2 { syntax: '<color>'; inherits: true; initial-value: #b3b7c0; }
+@property --n-text-3 { syntax: '<color>'; inherits: true; initial-value: #7c818b; }
+@property --n-line { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.14); }
+@property --n-line-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.07); }
+@property --n-accent { syntax: '<color>'; inherits: true; initial-value: #ff9e7a; }
+
+/* While the theme flips, nothing may run a transition of its own -- the
+   crossfade is the only animation. The theme button is the exception: its
+   moon/sun swap is its own little animation, so it is lifted out of the page
+   snapshot (view-transition-name) and shown live on top of the crossfade. */
+html.theme-switching *:not(.theme-switch *),
+html.theme-switching *:not(.theme-switch *)::before,
+html.theme-switching *:not(.theme-switch *)::after {
+  transition: none !important;
+}
+html.theme-switching .theme-switch { view-transition-name: theme-switch; }
+
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.2s;
+  animation-timing-function: ease;
+}
+::view-transition-old(theme-switch) { display: none; }
+::view-transition-new(theme-switch) { animation: none; }
+
+/* TAB SWITCHES have no transition: the new page replaces the old one in a
+   single frame. A cross-document View Transition would double-expose the old
+   and new page (leaving HOME, the card and headshot ghosted over the next
+   page for the length of the fade, which read as a flicker). The tabs are
+   prerendered (speculation rules, see speculation.ts), so an instant swap is
+   what "already loaded" should look like. */
+
+@media print {
+  .site-tabs, .skip-link { display: none !important; }
+}
