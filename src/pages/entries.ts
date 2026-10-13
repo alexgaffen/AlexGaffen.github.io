@@ -9,7 +9,6 @@ export const pageEntries = {
   resume: 'src/entries/resume.ts',
   blog: 'src/entries/blog.ts',
   notes: 'src/entries/notes.ts',
-  'note-defending-llms': 'src/entries/note-defending-llms.ts',
 } as const;
 
 export type PageFile = keyof typeof pageEntries;

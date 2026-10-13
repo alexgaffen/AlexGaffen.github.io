@@ -25,7 +25,7 @@ public/                  copied to the site root as-is
   CNAME, robots.txt, sitemap.xml, site.webmanifest
 src/
   pages/                 one file per page: its <head> metadata + body (React)
-    index.tsx  resume.tsx  photography.tsx  notes.tsx  note-defending-llms.tsx  game.tsx  blog.tsx
+    index.tsx  resume.tsx  photography.tsx  notes.tsx  game.tsx  blog.tsx
     resume/  photography/  blog/    the content and components of the bigger pages
   components/            TabBar, Document (the <html> shell), Island, shared class bundles
   console/               the AG-OS terminal (React; loaded only when used)
