@@ -1,11 +1,7 @@
 import { NotesShell, notesBody } from '../components/NotesShell.tsx';
 import type { PageDef } from './types.ts';
 
-/**
- * Published notes, newest first. note-defending-llms.html is unlisted for now:
- * unpublished from this index and the sitemap, and noindex'd on the page
- * itself. The page still builds -- it just isn't linked from anywhere.
- */
+/** Published notes, newest first. */
 interface NoteEntry {
   href: string;
   title: string;

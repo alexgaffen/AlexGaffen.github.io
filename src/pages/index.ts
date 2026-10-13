@@ -1,7 +1,6 @@
 import { blog } from './blog.tsx';
 import { game } from './game.tsx';
 import { index } from './index.tsx';
-import { noteDefendingLlms } from './note-defending-llms.tsx';
 import { photography } from './photography.tsx';
 import { resume } from './resume.tsx';
 import { notes } from './notes.tsx';
@@ -15,5 +14,4 @@ export const pages: Record<string, PageDef> = {
   [resume.file]: resume,
   [blog.file]: blog,
   [notes.file]: notes,
-  [noteDefendingLlms.file]: noteDefendingLlms,
 };
