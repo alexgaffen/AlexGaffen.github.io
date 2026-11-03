@@ -355,8 +355,12 @@ function Body() {
           <HeroName />
           <div id="hero-meta">
             <p className="hero-role">
-              <strong>Computer Science</strong> at McMaster University. <strong>AI Research Engineer</strong> at Adaptron,
-              building interpretable cognitive architectures for robot control.
+              <span className="role-line">
+                <strong>Computer Science Student</strong> at McMaster University
+              </span>
+              <span className="role-line">
+                <strong>AI Research Engineer</strong> at Adaptron Inc
+              </span>
             </p>
           </div>
         </section>
