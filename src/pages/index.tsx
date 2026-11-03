@@ -215,22 +215,14 @@ function JobMark({ mark }: { mark: Mark }) {
   );
 }
 
-/** Name split into letters so each can rise in on its own beat. */
+/** Name on two lines, each line rising in as a whole word so kerning and the "ff"
+    ligature stay intact. */
 function HeroName() {
-  let i = 0;
   return (
-    <h1 className="hero-name" aria-label="Alex Gaffen">
-      {'Alex Gaffen'.split(' ').map((word, w) => (
-        <span key={w} className="word" aria-hidden="true">
-          {[...word].map((c) => (
-            <span key={i} className="ch" style={{ ['--i' as string]: i++ }}>
-              {c}
-            </span>
-          ))}
-        </span>
-      ))}
-      <span className="stop" aria-hidden="true">
-        .
+    <h1 className="hero-name">
+      <span className="word">Alex</span>
+      <span className="word">
+        Gaffen<span className="stop">.</span>
       </span>
     </h1>
   );
