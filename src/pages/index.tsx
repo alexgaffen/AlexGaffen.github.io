@@ -2,7 +2,7 @@ import { SECTIONS } from './resume/data.ts';
 import { FILTERS, PHOTOS } from './photography/data.ts';
 import type { PageDef } from './types.ts';
 
-/* The landing page: one scrolling portfolio. An intro plot, a drawing-sheet hero (revision
+/* The landing page: one scrolling portfolio. A drawing-sheet hero (revision
    table = career history, title block, a live network diagram), then Experience, Projects,
    About, Honours, Coursework, Skills, Photography and Contact.
    Styles: styles/portfolio.css. Behaviour: client/portfolio.ts. */
@@ -140,7 +140,7 @@ const LABELS = ['INPUT', 'FEATURES', 'LATENT', 'OUTPUT'];
 function Diagram() {
   return (
     <figure className="dwg" aria-hidden="true">
-      <svg viewBox="0 0 560 400" className="intro-svg">
+      <svg viewBox="0 0 560 400" preserveAspectRatio="xMidYMid meet">
         {EDGES.map((d, i) => (
           <path key={i} className="band" d={d} style={{ ['--b' as string]: i % 24 }} />
         ))}
@@ -281,33 +281,13 @@ function PatchGrid() {
   );
 }
 
-// Inline, before first paint: the intro plays once per session (never with reduced motion).
-const INTRO_GATE = `try{var d=document.documentElement;if(!sessionStorage.getItem('ag-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('intro-on');sessionStorage.setItem('ag-intro','1')}}catch(e){}`;
-const INTRO_COUNT = `(function(){var el=document.getElementById('introCount');if(!el||!document.documentElement.classList.contains('intro-on'))return;var t0=performance.now();function f(t){var p=Math.min(1,(t-t0)/1350);el.textContent=String(Math.round((1-Math.pow(1-p,3))*100)).padStart(3,'0');if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f)})()`;
-
 function Body() {
   const first = PHOTOS[0];
   return (
     <>
-      <script dangerouslySetInnerHTML={{ __html: INTRO_GATE }} />
-      <div className="intro" aria-hidden="true">
-        <div className="intro-top">
-          <span>Alex Gaffen — Portfolio</span>
-          <span>Sheet 1 / 1 · Rev C</span>
-        </div>
-        <div className="intro-mid">
-          <span className="intro-line">Plotting drawing</span>
-          <span className="intro-line">Scale 1:1 · Units mm</span>
-          <span className="intro-line">McMaster University · Hamilton, ON</span>
-        </div>
-        <div className="intro-count">
-          <span id="introCount">000</span>
-          <span className="stop">%</span>
-        </div>
-        <div className="intro-bar" />
+      <div className="sb" id="sb" aria-hidden="true">
+        <span className="sb-thumb" />
       </div>
-      <script dangerouslySetInnerHTML={{ __html: INTRO_COUNT }} />
-
       <a className="skip" href="#main">
         Skip to content
       </a>
@@ -372,7 +352,7 @@ function Body() {
 
         <div className="status-band" aria-hidden="true">
           <div className="status-band-inner">
-            {[...BAND, ...BAND, ...BAND, ...BAND].map((t, i) => (
+            {[...BAND, ...BAND].map((t, i) => (
               <span key={i} className="status-band-item">
                 {t}
               </span>
