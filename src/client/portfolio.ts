@@ -53,7 +53,8 @@ function countUp(el: HTMLElement): void {
   const target = Number(el.dataset.count);
   const start = performance.now();
   const step = (t: number) => {
-    const p = Math.min(1, (t - start) / 1400);
+    // rAF's timestamp can predate `start` on the first frame; never count below zero.
+    const p = Math.min(1, Math.max(0, (t - start) / 1400));
     el.textContent = Math.round(target * (1 - Math.pow(1 - p, 4))).toLocaleString('en-CA');
     if (p < 1) requestAnimationFrame(step);
   };
