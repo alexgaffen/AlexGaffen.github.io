@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Alex Gaffen logo">
-  <rect width="64" height="64" rx="14" fill="#435030"/>
-  <text x="32" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="32" font-weight="700" fill="#e7feb6" text-anchor="middle">AG</text>
+  <defs>
+    <linearGradient id="ag-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#ag-grad)"/>
+  <text x="32" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="32" font-weight="700" fill="#ffffff" text-anchor="middle">AG</text>
 </svg>

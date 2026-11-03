@@ -67,7 +67,7 @@ html.portfolio-root::-webkit-scrollbar-thumb {
   border-radius: 999px;
 }
 html.portfolio-root::-webkit-scrollbar-thumb:hover {
-  background: #566840;
+  background: #f97316;
 }
 @supports not selector(::-webkit-scrollbar) {
   html.portfolio-root {
@@ -126,14 +126,13 @@ body.portfolio {
   --bg: #080808;
   --surface: #111111;
   --border: #242424;
-  /* PointClickCare's palette: olive everywhere; the pale lime appears only as text on
-     olive fills (--on-fill), the one place it reads well. */
-  --accent: #435030;
-  --accent-hi: #566840;
-  --accent-rgb: 67, 80, 48;
-  --fill: #435030;
-  --fill-hi: #566840;
-  --on-fill: #e7feb6;
+  --accent: #f97316;
+  --accent-hi: #fb923c;
+  --accent-rgb: 249, 115, 22;
+  /* Solid fills (band, buttons, current revision row) use the accent with dark text. */
+  --fill: #f97316;
+  --fill-hi: #fb923c;
+  --on-fill: #1c0a00;
   --text: #edecea;
   --muted: #888880;
   --faint: #6a6a64;
@@ -1333,11 +1332,11 @@ body.portfolio {
   text-transform: uppercase;
   color: var(--muted);
 }
-/* The $13,800 and "1 selected" glow: a lit-up tint of the olive, so they read on black. */
+/* The $13,800 and "1 selected" glow in the accent. */
 .honour-amount:not(.small),
 .honour-stats div:last-child b {
-  color: #9dbb6c;
-  text-shadow: 0 0 14px rgba(157, 187, 108, 0.55), 0 0 40px rgba(122, 150, 80, 0.45);
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(var(--accent-rgb), 0.55), 0 0 40px rgba(var(--accent-rgb), 0.35);
 }
 
 /* ── Coursework: grades floating on a drafting grid, drifting with the cursor ── */
