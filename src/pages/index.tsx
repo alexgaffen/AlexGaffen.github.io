@@ -18,7 +18,12 @@ const NAV = [
   ['#photos', 'Photos'],
 ] as const;
 
-const BAND = ['Alex Gaffen', 'AI Research Engineer', 'Adaptron Inc', 'Medical AI', 'Robotics', 'McMaster University'];
+const BAND = [
+  'Adaptron Inc — AI Research Engineer',
+  'McMaster Dept. of Medicine — Biomedical ML Research Engineer',
+  'Bonbon Technologies — Front End Developer Intern',
+  'McMaster University — Honours Computer Science Co-op',
+];
 
 type Mark = { img: string } | { mono: string } | { violin: true };
 
@@ -77,16 +82,16 @@ const EXPERIENCE: Job[] = [
 ];
 
 const REVS = [
-  ['C', 'Adaptron Inc', 'May 2026'],
-  ['B', 'Dept. of Medicine', 'Jan 2026'],
-  ['A', 'Bonbon Technologies', 'May 2024'],
+  ['A', 'Bonbon — Front End Dev Intern', '2024-05'],
+  ['B', 'Dept. of Medicine — ML Research Eng.', '2026-01'],
+  ['C', 'Adaptron — AI Research Engineer', '2026-05'],
 ] as const;
 
 const TITLE_BLOCK = [
   ['Drawn', 'A. Gaffen', ''],
-  ['Role', 'AI Research Eng.', ''],
+  ['Role', 'AI Researcher', ''],
   ['School', 'McMaster', 'hide-sm'],
-  ['Year', '4th · CS Co-op', 'hide-sm'],
+  ['Year', '4th · CS', 'hide-sm'],
   ['Part', 'Portfolio', 'span2'],
   ['Rev', 'C', 'rev-cell'],
   ['Sheet', '1 / 1', ''],
@@ -335,7 +340,7 @@ function Body() {
             </thead>
             <tbody>
               {REVS.map(([r, d, t], i) => (
-                <tr key={r} className={i === 0 ? 'current' : undefined} style={{ ['--r' as string]: i }}>
+                <tr key={r} className={i === REVS.length - 1 ? 'current' : undefined} style={{ ['--r' as string]: i }}>
                   <td>{r}</td>
                   <td data-scramble="">{d}</td>
                   <td data-scramble="">{t}</td>

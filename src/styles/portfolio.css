@@ -307,6 +307,10 @@ body.portfolio {
 /* ── Hero: drawing sheet ── */
 #hero {
   --line: #434342;
+  /* Title-block width; the name is sized below so it always ends before the block. */
+  --tbw: min(500px, 40vw);
+  /* "Alex Gaffen." is 3.95em wide: stop it 24px short of the title block. */
+  --name-fs: clamp(64px, min(13.5vw, calc((100vw - 150px - var(--tbw)) / 3.95)), 200px);
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -321,7 +325,7 @@ body.portfolio {
   font-family: var(--serif);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(88px, 13.5vw, 200px);
+  font-size: var(--name-fs);
   line-height: 0.88;
   letter-spacing: -0.035em;
   display: block;
@@ -365,7 +369,7 @@ body.portfolio {
 #hero-meta {
   position: relative;
   z-index: 3;
-  max-width: calc(100% - min(500px, 40%) - 56px);
+  max-width: calc(100% - var(--tbw) - 56px);
   opacity: 0;
   transform: translateY(24px);
   animation: rise 0.9s var(--ease-out) calc(var(--t0) + 0.7s) forwards;
@@ -492,7 +496,7 @@ body.portfolio {
   top: 236px;
   right: 64px;
   /* Clear the name and blurb under it: the name's line box scales with the viewport. */
-  bottom: calc(148px + min(13.5vw, 200px) * 0.88);
+  bottom: calc(148px + var(--name-fs) * 0.88);
   width: min(62%, 980px);
 }
 .dwg svg {
@@ -579,7 +583,7 @@ body.portfolio {
   z-index: 3;
   right: 39px;
   bottom: 39px;
-  width: min(500px, 40%);
+  width: var(--tbw);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
@@ -624,18 +628,26 @@ body.portfolio {
 }
 
 @media (max-width: 1200px) {
+  #hero {
+    --tbw: min(500px, 46vw);
+  }
   .rev {
     width: min(420px, 46%);
   }
-  .tb {
-    width: min(500px, 46%);
-  }
   #hero-meta {
-    max-width: calc(100% - min(500px, 46%) - 56px);
+    max-width: calc(100% - var(--tbw) - 56px);
   }
   .rev td:nth-child(3),
   .rev th:nth-child(3) {
     display: none;
+  }
+  /* Narrower columns: tighten so values like "AI Researcher" never get cut off. */
+  .tb > div {
+    padding: 6px 8px 7px;
+  }
+  .tb b {
+    font-size: 10px;
+    letter-spacing: 0.04em;
   }
 }
 @media (max-width: 900px) {
