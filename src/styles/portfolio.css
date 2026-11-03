@@ -36,7 +36,7 @@
   src: url(/assets/fonts/dm-mono-latin-500-normal.woff2) format('woff2');
 }
 
-/* --t0: how long the intro holds the hero back; every hero animation starts after it. */
+/* --t0: offset every hero entrance animation starts from. */
 html.portfolio-root {
   --t0: 0s;
   scroll-behavior: smooth;
@@ -46,11 +46,68 @@ html.portfolio-root {
   -ms-overflow-style: auto;
   color-scheme: dark;
 }
+/* A real, always-visible scrollbar (also on macOS, whose default is to hide it). */
 html.portfolio-root::-webkit-scrollbar {
   display: block;
+  width: 12px;
 }
-html.portfolio-root.intro-on {
-  --t0: 1.75s;
+html.portfolio-root::-webkit-scrollbar-track {
+  background: #0c0c0c;
+  border-left: 1px solid #1c1c1c;
+}
+html.portfolio-root::-webkit-scrollbar-thumb {
+  background: #333331;
+  border: 3px solid #0c0c0c;
+  border-radius: 999px;
+}
+html.portfolio-root::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+@supports not selector(::-webkit-scrollbar) {
+  html.portfolio-root {
+    scrollbar-color: #333331 #0c0c0c;
+  }
+}
+
+/* Phones draw no scrollbar of their own, so the page adds one (script-driven, draggable). */
+.sb {
+  display: none;
+}
+@media (hover: none) and (pointer: coarse) {
+  .sb {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 14px;
+    z-index: 150;
+    touch-action: none;
+  }
+  .sb::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 3px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .sb-thumb {
+    position: absolute;
+    right: 2px;
+    width: 4px;
+    min-height: 32px;
+    height: var(--h, 60px);
+    transform: translateY(var(--y, 0));
+    border-radius: 999px;
+    background: rgba(237, 236, 234, 0.4);
+    transition: background 0.2s, width 0.2s;
+  }
+  .sb.drag .sb-thumb {
+    width: 6px;
+    background: var(--accent);
+  }
 }
 
 body.portfolio {
@@ -133,94 +190,6 @@ body.portfolio {
   opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
-}
-
-/* ── Intro: plots the sheet, counts to 100, then lifts away (once per session) ── */
-.intro {
-  display: none;
-}
-.intro-on .intro {
-  position: fixed;
-  inset: 0;
-  z-index: 500;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 32px 48px 44px;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
-    var(--bg);
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 11px;
-  color: var(--muted);
-  animation: intro-out 0.9s cubic-bezier(0.76, 0, 0.24, 1) 1.55s forwards;
-}
-.intro-top {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 14px;
-}
-.intro-mid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: auto;
-  margin-bottom: 18px;
-}
-.intro-line {
-  opacity: 0;
-  animation: intro-type 0.35s steps(1) forwards;
-}
-.intro-line:nth-child(1) {
-  animation-delay: 0.15s;
-}
-.intro-line:nth-child(2) {
-  animation-delay: 0.45s;
-}
-.intro-line:nth-child(3) {
-  animation-delay: 0.75s;
-}
-.intro-line::before {
-  content: '> ';
-  color: var(--accent);
-}
-.intro-count {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(120px, 22vw, 320px);
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-  color: var(--text);
-  text-transform: none;
-}
-.intro-bar {
-  height: 1px;
-  margin-top: 28px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: intro-bar 1.35s cubic-bezier(0.33, 1, 0.68, 1) forwards;
-  box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.8);
-}
-@keyframes intro-type {
-  to {
-    opacity: 1;
-  }
-}
-@keyframes intro-bar {
-  to {
-    transform: scaleX(1);
-  }
-}
-@keyframes intro-out {
-  to {
-    clip-path: inset(0 0 100% 0);
-    visibility: hidden;
-  }
 }
 
 /* ── Nav ── */
@@ -309,8 +278,7 @@ body.portfolio {
   --line: #434342;
   /* Title-block width; the name is sized below so it always ends before the block. */
   --tbw: min(500px, 40vw);
-  /* "Alex Gaffen." is 3.95em wide: stop it 24px short of the title block. */
-  --name-fs: clamp(64px, min(13.5vw, calc((100vw - 150px - var(--tbw)) / 3.95)), 200px);
+  --name-fs: clamp(88px, 13.5vw, 200px);
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -334,11 +302,11 @@ body.portfolio {
   z-index: 3;
 }
 .hero-name .word {
-  display: inline-block;
+  display: block;
   white-space: nowrap;
 }
-.hero-name .word + .word {
-  margin-left: 0.22em;
+.hero-name .word:nth-child(2) {
+  display: inline-block;
 }
 .hero-name .ch {
   display: inline-block;
@@ -495,9 +463,10 @@ body.portfolio {
   z-index: 2;
   top: 236px;
   right: 64px;
-  /* Clear the name and blurb under it: the name's line box scales with the viewport. */
-  bottom: calc(148px + var(--name-fs) * 0.88);
-  width: min(62%, 980px);
+  /* Down to just above the title block, and right of the name: the drawing sits beside
+     "Gaffen." (2.45em wide) rather than above it, so it gets the full height. */
+  bottom: 150px;
+  width: min(62%, 980px, calc(100% - 168px - var(--name-fs) * 2.45));
 }
 .dwg svg {
   width: 100%;
@@ -660,12 +629,6 @@ body.portfolio {
   .nav-link {
     display: none;
   }
-  .intro-on .intro {
-    padding: 24px 20px 32px;
-  }
-  .intro-top span:last-child {
-    display: none;
-  }
   #hero {
     justify-content: flex-start;
     gap: 20px;
@@ -728,7 +691,8 @@ body.portfolio {
 .status-band-inner {
   display: flex;
   width: max-content;
-  animation: marquee 28s linear infinite;
+  /* Duration set by the script so it moves at 81px/s, the speed of liamboone.ca's band. */
+  animation: marquee var(--band-dur, 28s) linear infinite;
 }
 .status-band-item {
   font-family: var(--mono);
@@ -2118,6 +2082,46 @@ body.portfolio {
     flex-direction: column;
     align-items: center;
     gap: 12px;
+  }
+}
+
+/* ── Phones held sideways: name and blurb left, the drawing right, title block below,
+   so the whole sheet fits one short screen. ── */
+@media (max-width: 900px) and (orientation: landscape) {
+  #hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-areas:
+      'name dwg'
+      'meta dwg'
+      'tb tb';
+    grid-template-rows: 1fr auto auto;
+    column-gap: 24px;
+    row-gap: 14px;
+    padding: 84px 32px 30px;
+  }
+  .hero-name {
+    grid-area: name;
+    align-self: end;
+    font-size: clamp(48px, 9vw, 84px);
+  }
+  #hero-meta {
+    grid-area: meta;
+  }
+  .hero-role {
+    font-size: 15px;
+  }
+  .dwg {
+    grid-area: dwg;
+    align-self: center;
+    width: 100%;
+    max-width: none;
+    max-height: calc(100svh - 210px);
+    margin: 0;
+  }
+  .tb {
+    grid-area: tb;
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

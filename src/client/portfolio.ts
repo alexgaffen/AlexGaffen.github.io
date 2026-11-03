@@ -173,7 +173,55 @@ function initPhotos(): void {
   );
 }
 
+/** The status band scrolls half its width per loop; pace it at a fixed px/s. */
+function paceBand(): void {
+  const band = document.querySelector<HTMLElement>('.status-band-inner');
+  if (band) band.style.setProperty('--band-dur', `${band.scrollWidth / 2 / 81}s`);
+}
+
+/** Phones draw no scrollbar, so a fixed track + thumb mirrors the page and can be dragged. */
+function initMobileScrollbar(): void {
+  const sb = document.getElementById('sb');
+  const thumb = sb?.querySelector<HTMLElement>('.sb-thumb');
+  if (!sb || !thumb || getComputedStyle(sb).display === 'none') return;
+  const doc = document.documentElement;
+  const sync = () => {
+    const vh = innerHeight;
+    const max = doc.scrollHeight - vh;
+    const h = Math.max(32, (vh / doc.scrollHeight) * vh);
+    thumb.style.setProperty('--h', `${h}px`);
+    thumb.style.setProperty('--y', `${max > 0 ? (scrollY / max) * (vh - h) : 0}px`);
+  };
+  let frame = 0;
+  const queue = () => {
+    if (!frame) frame = requestAnimationFrame(() => ((frame = 0), sync()));
+  };
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  sync();
+  // Dragging anywhere on the track jumps there and follows the finger.
+  const to = (y: number) => {
+    const h = thumb.offsetHeight;
+    const p = Math.min(1, Math.max(0, (y - h / 2) / (innerHeight - h)));
+    scrollTo({ top: p * (doc.scrollHeight - innerHeight), behavior: 'instant' as ScrollBehavior });
+  };
+  sb.addEventListener('pointerdown', (e) => {
+    sb.setPointerCapture(e.pointerId);
+    sb.classList.add('drag');
+    to(e.clientY);
+  });
+  sb.addEventListener('pointermove', (e) => {
+    if (sb.hasPointerCapture(e.pointerId)) to(e.clientY);
+  });
+  const end = () => sb.classList.remove('drag');
+  sb.addEventListener('pointerup', end);
+  sb.addEventListener('pointercancel', end);
+}
+
 export function initPortfolio(): void {
+  paceBand();
+  document.fonts?.ready.then(paceBand);
+  initMobileScrollbar();
   const sheet = document.getElementById('sheet');
   if (sheet) {
     buildZones(sheet);
