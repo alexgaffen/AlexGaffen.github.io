@@ -66,7 +66,7 @@ html.portfolio-root::-webkit-scrollbar-thumb {
   border-radius: 999px;
 }
 html.portfolio-root::-webkit-scrollbar-thumb:hover {
-  background: #22c55e;
+  background: #f97316;
 }
 @supports not selector(::-webkit-scrollbar) {
   html.portfolio-root {
@@ -125,10 +125,10 @@ body.portfolio {
   --bg: #080808;
   --surface: #111111;
   --border: #242424;
-  --accent: #22c55e;
-  --accent-hi: #4ade80;
-  --accent-rgb: 34, 197, 94;
-  --on-accent: #04170b;
+  --accent: #f97316;
+  --accent-hi: #fb923c;
+  --accent-rgb: 249, 115, 22;
+  --on-accent: #1c0a00;
   --text: #edecea;
   --muted: #888880;
   --faint: #6a6a64;
@@ -798,7 +798,7 @@ body.portfolio {
 .exp-item:first-child {
   border-top: 1px solid var(--border);
 }
-/* A green rule sweeps along the bottom edge on hover. */
+/* An accent rule sweeps along the bottom edge on hover. */
 .exp-item::after {
   content: '';
   position: absolute;
