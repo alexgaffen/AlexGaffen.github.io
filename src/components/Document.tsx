@@ -73,10 +73,12 @@ export function Document({ page, assets, dev }: Props) {
         {head.robots && <meta name="robots" content={head.robots} />}
         {head.canonical && <link rel="canonical" href={head.canonical} />}
         {head.themeColor && <meta name="theme-color" content={head.themeColor} />}
-        <link href="/assets/favicon-180.png" rel="icon" type="image/png" sizes={head.fullIcons ? 'any' : undefined} />
+        {/* One icon, the orange AG: SVG for browsers that take it, the same design as .ico
+            for the rest, and a PNG for the iOS home screen. */}
+        <link href="/favicon.ico" rel="icon" sizes="32x32" />
+        <link href="/assets/favicon.svg" rel="icon" type="image/svg+xml" />
         {head.fullIcons && (
           <>
-            <link href="/assets/favicon.svg" rel="icon" type="image/svg+xml" />
             <link href="/assets/favicon-180.png" rel="apple-touch-icon" />
             <link href="/site.webmanifest" rel="manifest" />
           </>
