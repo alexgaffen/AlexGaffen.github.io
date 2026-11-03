@@ -173,12 +173,6 @@ function initPhotos(): void {
   );
 }
 
-/** The status band scrolls half its width per loop; pace it at a fixed px/s. */
-function paceBand(): void {
-  const band = document.querySelector<HTMLElement>('.status-band-inner');
-  if (band) band.style.setProperty('--band-dur', `${band.scrollWidth / 2 / 81}s`);
-}
-
 /** Phones draw no scrollbar, so a fixed track + thumb mirrors the page and can be dragged. */
 function initMobileScrollbar(): void {
   const sb = document.getElementById('sb');
@@ -219,8 +213,6 @@ function initMobileScrollbar(): void {
 }
 
 export function initPortfolio(): void {
-  paceBand();
-  document.fonts?.ready.then(paceBand);
   initMobileScrollbar();
   const sheet = document.getElementById('sheet');
   if (sheet) {
