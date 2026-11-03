@@ -1,4 +1,5 @@
 import '../styles/site.css';
-import { initShell } from '../client/shell.ts';
+import '../styles/portfolio.css';
+import { initPortfolio } from '../client/portfolio.ts';
 
-initShell();
+initPortfolio();

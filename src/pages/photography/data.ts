@@ -28,7 +28,6 @@ export const PHOTOS: readonly Photo[] = [
   { id: 'gondolaeast', thumb: '/photography/thumbs/banffgondolaeast.webp', mid: '/photography/DSLR/banffgondolaeast.webp', full: '/photography/DSLR/banffgondolaeast.JPG', w: 900, h: 599, title: 'Banff Gondola East', loc: 'banff', city: 'Banff' },
   { id: 'gondolasun', thumb: '/photography/thumbs/banffgondolasunisset.webp', mid: '/photography/DSLR/banffgondolasunisset.webp', full: '/photography/DSLR/banffgondolasunisset.JPG', w: 900, h: 599, title: 'Banff Gondola Sunset', loc: 'banff', city: 'Banff' },
   { id: 'fairmont', thumb: '/photography/thumbs/fairmontbanff.webp', mid: '/photography/DSLR/fairmontbanff.webp', full: '/photography/DSLR/fairmontbanff.JPG', w: 900, h: 599, title: 'Fairmont Banff Springs', loc: 'banff', city: 'Banff' },
-  { id: 'goldenhour', thumb: '/photography/thumbs/goldenhourmountain.webp', mid: '/photography/DSLR/goldenhourmountain.webp', full: '/photography/DSLR/goldenhourmountain.JPG', w: 900, h: 599, title: 'Golden Hour Mountain', loc: 'banff', city: 'Banff' },
   { id: 'leftmntn', thumb: '/photography/thumbs/leftmntnlakelouise.webp', mid: '/photography/DSLR/leftmntnlakelouise.webp', full: '/photography/DSLR/leftmntnlakelouise.JPG', w: 900, h: 599, title: 'Left Mountain, Lake Louise', loc: 'banff', city: 'Banff' },
   { id: 'ongondola', thumb: '/photography/thumbs/ongondola.webp', mid: '/photography/DSLR/ongondola.webp', full: '/photography/DSLR/ongondola.jpg', w: 900, h: 564, title: 'On Gondola View', loc: 'banff', city: 'Banff' },
 ];
