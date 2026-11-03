@@ -47,9 +47,10 @@ html.portfolio-root {
   -ms-overflow-style: auto;
   color-scheme: dark;
   /* iOS Safari "autosizes" text in some wide blocks (the status band's long items),
-     so some came out bigger than others. Keep every size exactly as written. */
+     so some came out bigger than others. Only the -webkit- form works on iOS, and the
+     minifier drops it when the standard form sits beside it, so the standard one lives
+     on body below. */
   -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
 /* A real, always-visible scrollbar (also on macOS, whose default is to hide it). */
 html.portfolio-root::-webkit-scrollbar {
@@ -145,6 +146,7 @@ body.portfolio {
   color: var(--text);
   font-family: 'DM Sans', system-ui, sans-serif;
   line-height: 1.7;
+  text-size-adjust: 100%;
   scrollbar-width: auto;
   -ms-overflow-style: auto;
   /* clip, not hidden: hidden would turn body into its own scroller with a second bar. */
