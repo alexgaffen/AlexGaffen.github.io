@@ -1,6 +1,20 @@
 /* Home page: single-page portfolio (dark drawing-sheet design). Scoped to body.portfolio. */
 
 @font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url(/assets/fonts/dm-sans-latin-opsz-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(/assets/fonts/syne-latin-wght-normal.woff2) format('woff2');
+}
+@font-face {
   font-family: 'Instrument Serif';
   font-style: italic;
   font-weight: 400;
@@ -27,6 +41,13 @@ html.portfolio-root {
   --t0: 0s;
   scroll-behavior: smooth;
   background: #080808;
+  /* site.css hides scrollbars everywhere; this page uses the browser's normal one. */
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
+  color-scheme: dark;
+}
+html.portfolio-root::-webkit-scrollbar {
+  display: block;
 }
 html.portfolio-root.intro-on {
   --t0: 1.75s;
@@ -52,7 +73,10 @@ body.portfolio {
   color: var(--text);
   font-family: 'DM Sans', system-ui, sans-serif;
   line-height: 1.7;
-  overflow-x: hidden;
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
+  /* clip, not hidden: hidden would turn body into its own scroller with a second bar. */
+  overflow-x: clip;
 }
 .portfolio *,
 .portfolio *::before,
@@ -351,6 +375,9 @@ body.portfolio {
   color: var(--muted);
   font-weight: 300;
   line-height: 1.5;
+}
+.role-line {
+  display: block;
 }
 .hero-role strong {
   color: var(--text);
