@@ -1331,8 +1331,11 @@ body.portfolio {
   text-transform: uppercase;
   color: var(--muted);
 }
+/* The $13,800 and "1 selected" glow: a lit-up tint of the olive, so they read on black. */
+.honour-amount:not(.small),
 .honour-stats div:last-child b {
-  color: var(--accent);
+  color: #9dbb6c;
+  text-shadow: 0 0 14px rgba(157, 187, 108, 0.55), 0 0 40px rgba(122, 150, 80, 0.45);
 }
 
 /* ── Coursework: grades floating on a drafting grid, drifting with the cursor ── */
@@ -1401,9 +1404,9 @@ body.portfolio {
   text-align: center;
 }
 .g-aplus .grade-mark {
-  color: var(--accent);
+  color: #fff;
   font-size: 46px;
-  text-shadow: 0 0 24px rgba(var(--accent-rgb), 0.45);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
 }
 .g-aplus .grade-float {
   border-color: rgba(var(--accent-rgb), 0.35);
@@ -1685,7 +1688,7 @@ body.portfolio {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: #fff;
 }
 .ph-count {
   position: absolute;
