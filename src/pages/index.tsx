@@ -345,9 +345,9 @@ function Body() {
         <div className="status-band" aria-hidden="true">
           <div className="status-band-inner">
             {[...BAND, ...BAND].map((t, i) => (
-              <span key={i} className="status-band-item">
+              <div key={i} className="status-band-item">
                 {t}
-              </span>
+              </div>
             ))}
           </div>
         </div>

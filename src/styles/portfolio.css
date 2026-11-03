@@ -66,7 +66,7 @@ html.portfolio-root::-webkit-scrollbar-thumb {
   border-radius: 999px;
 }
 html.portfolio-root::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: #566840;
 }
 @supports not selector(::-webkit-scrollbar) {
   html.portfolio-root {
@@ -125,10 +125,14 @@ body.portfolio {
   --bg: #080808;
   --surface: #111111;
   --border: #242424;
-  --accent: #f97316;
-  --accent-hi: #fb923c;
-  --accent-rgb: 249, 115, 22;
-  --on-accent: #1c0a00;
+  /* PointClickCare's palette: lime for ink and lines on the dark page, olive for fills
+     (with lime text on them), as their own brand pairs them. */
+  --accent: #e7feb6;
+  --accent-hi: #f4ffdc;
+  --accent-rgb: 231, 254, 182;
+  --fill: #435030;
+  --fill-hi: #566840;
+  --on-fill: #e7feb6;
   --text: #edecea;
   --muted: #888880;
   --faint: #6a6a64;
@@ -164,8 +168,8 @@ body.portfolio {
   color: inherit;
 }
 .portfolio ::selection {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .portfolio section {
   position: relative;
@@ -175,8 +179,8 @@ body.portfolio {
   left: 8px;
   top: -60px;
   z-index: 200;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--fill);
+  color: var(--on-fill);
   padding: 8px 14px;
 }
 .portfolio .skip:focus {
@@ -272,14 +276,14 @@ body.portfolio {
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--on-accent);
-  background: var(--accent);
+  color: var(--on-fill);
+  background: var(--fill);
   padding: 8px 20px;
   border-radius: 2px;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 .nav-cta:hover {
-  background: var(--accent-hi);
+  background: var(--fill-hi);
   transform: translateY(-1px);
   box-shadow: 0 6px 24px -6px rgba(var(--accent-rgb), 0.6);
 }
@@ -449,8 +453,8 @@ body.portfolio {
   color: var(--text);
 }
 .rev tr.current td:first-child {
-  color: var(--on-accent);
-  background: var(--accent);
+  color: var(--on-fill);
+  background: var(--fill);
 }
 
 /* The drawing: a small network, scanned in, then signals run through it. */
@@ -676,27 +680,20 @@ body.portfolio {
   }
 }
 
-/* ── Status band ── */
+/* ── Status band: liamboone.ca's band as-is (same type, spacing, separator and speed) ── */
 .status-band {
   position: relative;
   z-index: 1;
-  background: var(--accent);
+  background: var(--fill);
   overflow: hidden;
   padding: 14px 0;
 }
-/* Very wide single-line runs are exactly what phone text autosizers (iOS Safari, Chrome's
-   font boosting) enlarge, item by item. Opt both moving strips out explicitly. */
-.status-band-inner,
-.marquee-track {
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-  max-height: 100000px;
-}
 .status-band-inner {
   display: flex;
+  gap: 0;
+  /* 25.5s over half this track (two copies of the roles) is liamboone.ca's ~81px/s. */
+  animation: marquee 25.5s linear infinite;
   width: max-content;
-  /* Duration set by the script so it moves at 81px/s, the speed of liamboone.ca's band. */
-  animation: marquee var(--band-dur, 28s) linear infinite;
 }
 .status-band-item {
   font-family: var(--mono);
@@ -704,7 +701,7 @@ body.portfolio {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--on-accent);
+  color: var(--on-fill);
   padding: 0 48px;
   white-space: nowrap;
   display: flex;
@@ -712,14 +709,9 @@ body.portfolio {
   gap: 16px;
 }
 .status-band-item::after {
-  /* Drawn, not a glyph: DM Mono has no ◆, so phones fell back to fonts of other sizes. */
-  content: '';
-  width: 5px;
-  height: 5px;
-  flex: none;
-  background: currentColor;
-  transform: rotate(45deg);
-  opacity: 0.45;
+  content: '◆';
+  font-size: 8px;
+  opacity: 0.4;
 }
 @keyframes marquee {
   to {
@@ -1562,9 +1554,9 @@ body.portfolio {
   border-color: var(--faint);
 }
 .ph-filter[aria-pressed='true'] {
-  color: var(--on-accent);
-  background: var(--accent);
-  border-color: var(--accent);
+  color: var(--on-fill);
+  background: var(--fill);
+  border-color: var(--fill);
 }
 .ph-stage {
   position: relative;
@@ -1661,9 +1653,9 @@ body.portfolio {
   right: 28px;
 }
 .ph-arrow:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
+  background: var(--fill);
+  border-color: var(--fill-hi);
+  color: var(--on-fill);
 }
 .ph-arrow.prev:hover {
   transform: translateX(-3px);
@@ -1898,8 +1890,8 @@ body.portfolio {
   transition: background 0.2s, color 0.2s;
 }
 .copy-btn:hover {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .foot {
   margin-top: 120px;
@@ -2088,17 +2080,6 @@ body.portfolio {
   .foot {
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-  }
-}
-
-@media (max-width: 900px) {
-  .status-band {
-    padding: 10px 0;
-  }
-  .status-band-item {
-    font-size: 10px;
-    padding: 0 22px;
     gap: 12px;
   }
 }
