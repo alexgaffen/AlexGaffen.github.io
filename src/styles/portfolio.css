@@ -125,11 +125,11 @@ body.portfolio {
   --bg: #080808;
   --surface: #111111;
   --border: #242424;
-  /* PointClickCare's palette: lime for ink and lines on the dark page, olive for fills
-     (with lime text on them), as their own brand pairs them. */
-  --accent: #e7feb6;
-  --accent-hi: #f4ffdc;
-  --accent-rgb: 231, 254, 182;
+  /* PointClickCare's palette: olive everywhere; the pale lime appears only as text on
+     olive fills (--on-fill), the one place it reads well. */
+  --accent: #435030;
+  --accent-hi: #566840;
+  --accent-rgb: 67, 80, 48;
   --fill: #435030;
   --fill-hi: #566840;
   --on-fill: #e7feb6;
