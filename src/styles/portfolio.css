@@ -46,6 +46,10 @@ html.portfolio-root {
   scrollbar-width: auto;
   -ms-overflow-style: auto;
   color-scheme: dark;
+  /* iOS Safari "autosizes" text in some wide blocks (the status band's long items),
+     so some came out bigger than others. Keep every size exactly as written. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 /* A real, always-visible scrollbar (also on macOS, whose default is to hide it). */
 html.portfolio-root::-webkit-scrollbar {
