@@ -1113,6 +1113,9 @@ main:not(.cs) .section-label::before {
 .reveal-on .contact-card.reveal:nth-child(3) {
   transition-delay: 0.12s;
 }
+.reveal-on .contact-card.reveal:nth-child(4) {
+  transition-delay: 0.18s;
+}
 .reveal-on .project-card.reveal:nth-child(2) {
   transition-delay: 0.1s;
 }
@@ -2256,20 +2259,49 @@ main:not(.cs) .section-label::before {
   transform: translate(4px, -4px);
   color: var(--accent);
 }
-.contact-card.primary {
+/* Each card is tinted in its service's colour: email the site orange, LinkedIn its
+   blue, GitHub purple, X a white glow. --tint is the glow and border, --tint-fg
+   the icon and hover colour (lifted where the brand colour is too dark on black). */
+.contact-card.tint {
   background:
-    radial-gradient(120% 160% at 0% 0%, rgba(var(--accent-rgb), 0.14) 0%, transparent 55%),
-    radial-gradient(90% 140% at 100% 100%, rgba(var(--accent-rgb), 0.08) 0%, transparent 60%),
+    radial-gradient(120% 160% at 0% 0%, rgba(var(--tint), calc(0.14 * var(--tint-k, 1))) 0%, transparent 55%),
+    radial-gradient(90% 140% at 100% 100%, rgba(var(--tint), calc(0.08 * var(--tint-k, 1))) 0%, transparent 60%),
     var(--surface);
-  border-color: rgba(var(--accent-rgb), 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 48px -28px rgba(var(--accent-rgb), 0.45);
+  border-color: rgba(var(--tint), 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 48px -28px rgba(var(--tint), 0.45);
 }
-.contact-card.primary:hover {
-  border-color: rgba(var(--accent-rgb), 0.55);
+.contact-card.tint:hover {
+  border-color: rgba(var(--tint), 0.55);
 }
-.contact-card.primary .contact-icon {
-  color: var(--accent);
-  border-color: rgba(var(--accent-rgb), 0.35);
+.contact-card.tint .contact-icon,
+.contact-card.tint:hover .contact-icon {
+  color: var(--tint-fg);
+  border-color: rgba(var(--tint), 0.35);
+}
+.contact-card.tint:hover .contact-card-arrow {
+  color: var(--tint-fg);
+}
+.t-mail {
+  --tint: var(--accent-rgb);
+  --tint-fg: var(--accent);
+}
+.t-linkedin {
+  --tint: 10, 102, 194; /* #0a66c2 */
+  --tint-fg: #4b9cf0;
+  --tint-k: 1.4;
+}
+.t-github {
+  --tint: 137, 87, 229; /* #8957e5 */
+  --tint-fg: #a371f7;
+  --tint-k: 1.2;
+}
+.t-x {
+  --tint: 255, 255, 255;
+  --tint-fg: #fff;
+  --tint-k: 0.55;
+}
+.t-x .contact-icon {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.55));
 }
 .copy-btn {
   position: relative;
