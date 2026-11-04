@@ -1111,7 +1111,7 @@ body.portfolio {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  gap: 8px;
 }
 .project-card {
   position: relative;
@@ -1119,6 +1119,45 @@ body.portfolio {
   aspect-ratio: 4 / 5;
   background: var(--surface);
   display: block;
+}
+/* Each card is its own little drawing sheet: an inset frame with accent corner marks,
+   so neighbouring screenshots read as separate pieces. The frame warms on hover. */
+.project-card::before,
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  z-index: 4;
+  pointer-events: none;
+}
+.project-card::before {
+  border: 1px solid rgba(237, 236, 234, 0.14);
+  transition: border-color 0.35s, inset 0.5s var(--ease-out);
+}
+.project-card::after {
+  --c: var(--accent);
+  --l: 16px;
+  background:
+    linear-gradient(var(--c), var(--c)) top left / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) top left / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) top right / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) top right / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) bottom left / 1px var(--l),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--l) 1px,
+    linear-gradient(var(--c), var(--c)) bottom right / 1px var(--l);
+  background-repeat: no-repeat;
+  transition: inset 0.5s var(--ease-out);
+}
+.project-card:hover::before,
+.project-card:focus-visible::before {
+  border-color: rgba(var(--accent-rgb), 0.45);
+}
+.project-card:hover::before,
+.project-card:hover::after,
+.project-card:focus-visible::before,
+.project-card:focus-visible::after {
+  inset: 8px;
 }
 .project-card-bg {
   position: absolute;
@@ -1219,8 +1258,9 @@ body.portfolio {
 /* Rally: a flag that pings like a live map pin, and a link chip. */
 .rally-ping {
   position: absolute;
-  top: 18px;
-  left: 22px;
+  /* Inside the card's corner marks. */
+  top: 26px;
+  left: 26px;
   z-index: 3;
   width: 40px;
   height: 40px;
