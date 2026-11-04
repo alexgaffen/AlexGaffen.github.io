@@ -208,8 +208,9 @@ export function initPortfolio(): void {
 
   if (!reduced) {
     const base = t0() * 1000;
-    document.querySelectorAll<HTMLElement>('.rev [data-scramble]').forEach((el, i) => scramble(el, base + 1900 + i * 70));
-    document.querySelectorAll<HTMLElement>('.tb [data-scramble]').forEach((el, i) => scramble(el, base + 1300 + i * 60));
+    // In step with the CSS: deploy rows print from 3.45s (two cells a row), node fields from 5.25s.
+    document.querySelectorAll<HTMLElement>('.rev [data-scramble]').forEach((el, i) => scramble(el, base + 3450 + (i >> 1) * 120));
+    document.querySelectorAll<HTMLElement>('.tb [data-scramble]').forEach((el, i) => scramble(el, base + 5250 + i * 70));
   }
 
   const nav = document.getElementById('nav');
