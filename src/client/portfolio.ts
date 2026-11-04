@@ -1,38 +1,27 @@
-/** Home page behaviour: sheet zones, scramble-in text, scroll reveals,
+/** Home page behaviour: the console clock, scramble-in text, scroll reveals,
  *  count-ups, grade parallax, the photo viewer and email copy. */
 
-const LETTERS = 'ABCDEFGH';
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/·-';
 const root = document.documentElement;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Seconds the intro holds the hero back (0 when the intro is skipped). */
 const t0 = () => parseFloat(getComputedStyle(root).getPropertyValue('--t0')) || 0;
 
-/** Zone letters and ticks on the hero's drawing-sheet border, rebuilt on resize. */
-function buildZones(sheet: HTMLElement): void {
-  sheet.querySelectorAll('.zone,.zone-tick').forEach((n) => n.remove());
-  const { width: w, height: h } = sheet.getBoundingClientRect();
-  const cols = w < 700 ? 4 : 8;
-  const rows = h < 600 ? 4 : 6;
-  const add = (cls: string, css: Partial<CSSStyleDeclaration>, text = '') => {
-    const el = document.createElement('div');
-    el.className = cls;
-    el.textContent = text;
-    Object.assign(el.style, css);
-    sheet.appendChild(el);
-  };
-  for (let i = 0; i < cols; i++) {
-    const x = ((i + 0.5) / cols) * w;
-    add('zone', { left: `${x}px`, top: '7px' }, String(i + 1));
-    add('zone', { left: `${x}px`, top: `${h - 7}px` }, String(i + 1));
-    if (i) add('zone-tick', { left: `${(i / cols) * w}px`, top: '0', width: '1px', height: '14px' });
-  }
-  for (let i = 0; i < rows; i++) {
-    const y = ((i + 0.5) / rows) * h;
-    add('zone', { left: '7px', top: `${y}px` }, LETTERS[i]);
-    add('zone', { left: `${w - 7}px`, top: `${y}px` }, LETTERS[i]);
-    if (i) add('zone-tick', { left: '0', top: `${(i / rows) * h}px`, width: '14px', height: '1px' });
-  }
+/** The console bar's clock: local time in Hamilton, ticking every second. */
+function initClock(): void {
+  const el = document.getElementById('clock');
+  if (!el) return;
+  const fmt = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Toronto',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZoneName: 'short',
+  });
+  const tick = () => (el.textContent = fmt.format(new Date()));
+  tick();
+  setInterval(tick, 1000);
 }
 
 /** Plotter-style text: random glyphs settle into the real text left to right. */
@@ -215,15 +204,7 @@ function initMobileScrollbar(): void {
 
 export function initPortfolio(): void {
   initMobileScrollbar();
-  const sheet = document.getElementById('sheet');
-  if (sheet) {
-    buildZones(sheet);
-    let t = 0;
-    addEventListener('resize', () => {
-      clearTimeout(t);
-      t = window.setTimeout(() => buildZones(sheet), 150);
-    });
-  }
+  initClock();
 
   if (!reduced) {
     const base = t0() * 1000;

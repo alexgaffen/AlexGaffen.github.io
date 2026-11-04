@@ -137,7 +137,7 @@ function Body() {
               <h1 className="cs-title">
                 <span className="word">Mock</span>
                 <span className="word">
-                  Market<span className="stop">.</span>
+                  Market<span className="cursor" aria-hidden="true" />
                 </span>
               </h1>
             </div>
@@ -348,7 +348,7 @@ export const mockMarket: PageDef = {
   file: 'mock-market',
   title: 'Mock Market | Alex Gaffen',
   viewport: 'width=device-width, initial-scale=1.0',
-  fonts: ['instrument-serif-latin-400-italic.woff2', 'dm-sans-latin-opsz-normal.woff2'],
+  fonts: ['space-grotesk-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'],
   htmlClassName: 'portfolio-root',
   bodyClassName: 'portfolio',
   analytics: true,
