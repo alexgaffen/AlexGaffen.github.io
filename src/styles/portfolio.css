@@ -315,7 +315,7 @@ body.portfolio {
   --line: #434342;
   /* Node-card width; the name is sized below so it always ends before the card. */
   --tbw: min(calc(var(--ui) * 44), 40vw);
-  --name-fs: clamp(72px, 9.5vw, 150px);
+  --name-fs: clamp(80px, 11vw, 170px);
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -346,28 +346,6 @@ body.portfolio {
 }
 .hero-name .word + .word {
   animation-delay: calc(var(--t0) + 0.4s);
-}
-/* The name sits in curly braces, set like a code block: "{ Alex" then an indented
-   "Gaffen }". The braces are lighter and orange so the name still leads. */
-.brace {
-  /* Smaller than the name and lifted, so the brace spans the letters, not the descender. */
-  font-size: 0.8em;
-  vertical-align: 0.07em;
-  font-weight: 300;
-  color: var(--accent);
-  letter-spacing: 0;
-  text-shadow: 0 0 28px rgba(var(--accent-rgb), 0.35);
-}
-.brace.open {
-  margin-right: 0.12em;
-}
-.brace.close {
-  margin-left: 0.14em;
-}
-/* The second line starts under the first word, past the opening brace. */
-.hero-name .word + .word,
-.cs-title .word + .word {
-  padding-left: 0.43em;
 }
 @keyframes cursor-blink {
   50% {
@@ -489,30 +467,29 @@ body.portfolio {
   margin: 0;
   white-space: nowrap;
 }
-.boot .ps {
+.boot .out {
+  color: var(--faint);
+  opacity: 0;
+  animation: dwg-fade 0.01s calc(var(--t0) + var(--at) + var(--n) * 40ms + 0.2s) forwards;
+}
+/* A typed command: the prompt shows at --at, then the command types out at 40ms a key. */
+.cmd-line {
+  color: var(--text);
+  white-space: nowrap;
+  /* Typed width is counted in ch, so no extra tracking. */
+  letter-spacing: 0;
+  opacity: 0;
+  animation: dwg-fade 0.01s calc(var(--t0) + var(--at) - 0.15s) forwards;
+}
+.cmd-line .ps {
   color: var(--accent);
 }
-.boot .cmd {
-  color: var(--text);
-}
-.boot .typed {
+.typed {
   display: inline-block;
   vertical-align: bottom;
   overflow: hidden;
   width: 0;
-  animation: boot-type calc(var(--n) * 45ms) steps(var(--n)) calc(var(--t0) + 2.4s + var(--l) * 1.5s) forwards;
-}
-.boot .out,
-.boot .cmd {
-  opacity: 0;
-  animation: dwg-fade 0.01s calc(var(--t0) + 2.3s + var(--l, 0) * 1.5s) forwards;
-}
-.boot .out {
-  color: var(--faint);
-  animation-delay: calc(var(--t0) + 3.4s + var(--l) * 1.5s);
-}
-.boot .idle {
-  animation-delay: calc(var(--t0) + 5.4s);
+  animation: boot-type calc(var(--n) * 40ms) steps(var(--n)) calc(var(--t0) + var(--at)) forwards;
 }
 .boot .caret {
   display: inline-block;
@@ -544,21 +521,17 @@ body.portfolio {
   font-family: var(--mono);
   font-size: var(--ui);
   letter-spacing: 0.06em;
-  opacity: 0;
-  animation: dwg-fade 0.6s ease calc(var(--t0) + 1.8s) forwards;
 }
 .rev caption {
   caption-side: top;
   text-align: left;
   padding: 0 0 0.7em 0.9em;
-  font-size: max(11.5px, calc(var(--ui) * 0.95));
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
+  font-size: var(--ui);
 }
+/* Rows print one after another once "git log --deploys" has typed (2.6s + 17 keys). */
 .rev tr {
   opacity: 0;
-  animation: dwg-fade 0.4s ease calc(var(--t0) + 1.9s + var(--r, 0) * 0.08s) forwards;
+  animation: dwg-fade 0.01s calc(var(--t0) + 3.45s + var(--r, 0) * 0.12s) forwards;
 }
 .rev thead tr {
   --r: -1;
@@ -619,9 +592,10 @@ body.portfolio {
   z-index: 2;
   top: calc(110px + var(--ui) * 19.5);
   right: 64px;
-  bottom: calc(76px + var(--ui) * 7.6);
-  /* "Gaffen }" ends 3.87em in from the 64px gutter. */
-  left: calc(112px + var(--name-fs) * 3.87);
+  /* Clears the node card, command row included. */
+  bottom: calc(76px + var(--ui) * 10.6);
+  /* "Gaffen." ends 3.06 in from the 64px gutter. */
+  left: calc(112px + var(--name-fs) * 3.06);
   container-type: size;
 }
 /* Absolute so its % height resolves against the box even when the box is only
@@ -815,18 +789,24 @@ body.portfolio {
   font-family: var(--mono);
   text-transform: uppercase;
   opacity: 0;
-  animation: dwg-fade 0.6s ease calc(var(--t0) + 1.1s) forwards;
+  animation: dwg-fade 0.3s ease calc(var(--t0) + 3.75s) forwards;
 }
 .tb > div {
   background: var(--bg);
   padding: 0.55em 0.9em 0.6em;
   min-width: 0;
 }
-.tb > div > * {
+.tb > div:not(.tb-cmd) > * {
   opacity: 0;
-  animation: dwg-fade 0.4s ease calc(var(--t0) + 1.3s + var(--i, 0) * 0.06s) forwards;
+  animation: dwg-fade 0.01s calc(var(--t0) + 5.25s + var(--i, 0) * 0.07s) forwards;
 }
-.tb span {
+.tb > .tb-cmd {
+  grid-column: 1 / -1;
+  text-transform: none;
+  font-size: var(--ui);
+  background: #0d0d0d;
+}
+.tb > div:not(.tb-cmd) > span {
   display: block;
   font-size: max(11px, calc(var(--ui) * 0.88));
   letter-spacing: 0.12em;
@@ -882,7 +862,7 @@ body.portfolio {
   /* The name has the bottom-left to itself here, so it can grow and fill it; it still
      ends well short of the title block. */
   #hero {
-    --name-fs: clamp(80px, 10.5vw, 170px);
+    --name-fs: clamp(80px, 13vw, 200px);
   }
   .dwg {
     position: relative;

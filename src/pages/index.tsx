@@ -89,11 +89,24 @@ const DEPLOYS = [
   ['c4b28e9', 'adaptron/ai-research-eng', '2026-05'],
 ] as const;
 
-/* A short shell session typed out in the console's top-left corner. */
+/* The hero loads like a terminal session. Each command types out at its own time (s),
+   then its output prints: the corner session, the deploy table and the node card take
+   turns, while the figure scans in on its own. */
 const BOOT = [
-  ['ssh alexgaffen.com', 'connected · hamilton, on'],
-  ['cat focus.txt', 'ml systems · devops · reliability'],
+  ['ssh alexgaffen.com', 'connected · hamilton, on', 1.6],
+  ['cat focus.txt', 'ml systems · devops · reliability', 5.7],
 ] as const;
+const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
+const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
+
+/** A prompt whose command types itself out at `at` seconds. */
+function Typed({ cmd, at }: { cmd: string; at: number }) {
+  return (
+    <span className="cmd-line" style={{ ['--n' as string]: cmd.length, ['--at' as string]: `${at}s` }}>
+      <span className="ps">~ $</span> <span className="typed">{cmd}</span>
+    </span>
+  );
+}
 
 /* Node card (bottom right): who's running this. */
 const NODE = [
@@ -289,21 +302,13 @@ function JobMark({ mark }: { mark: Mark }) {
   );
 }
 
-/** Name on two lines in curly braces, each line rising in as a whole word. */
+/** Name on two lines, each line rising in as a whole word. */
 function HeroName() {
   return (
     <h1 className="hero-name">
+      <span className="word">Alex</span>
       <span className="word">
-        <span className="brace open" aria-hidden="true">
-          {'{'}
-        </span>
-        Alex
-      </span>
-      <span className="word">
-        Gaffen
-        <span className="brace close" aria-hidden="true">
-          {'}'}
-        </span>
+        Gaffen<span className="stop">.</span>
       </span>
     </h1>
   );
@@ -401,20 +406,22 @@ function Body() {
             </div>
           </div>
           <div className="boot" aria-hidden="true">
-            {BOOT.map(([cmd, out], i) => (
-              <div key={cmd} style={{ ['--l' as string]: i }}>
-                <p className="cmd">
-                  <span className="ps">~ $</span> <span className="typed" style={{ ['--n' as string]: cmd.length }}>{cmd}</span>
+            {BOOT.map(([cmd, out, at]) => (
+              <div key={cmd} style={{ ['--n' as string]: cmd.length, ['--at' as string]: `${at}s` }}>
+                <p>
+                  <Typed cmd={cmd} at={at} />
                 </p>
                 <p className="out">{out}</p>
               </div>
             ))}
-            <p className="cmd idle">
+            <p className="cmd-line" style={{ ['--at' as string]: '6.5s' }}>
               <span className="ps">~ $</span> <span className="caret" />
             </p>
           </div>
           <table className="rev">
-            <caption>Deploys</caption>
+            <caption>
+              <Typed cmd={DEPLOYS_CMD[0]} at={DEPLOYS_CMD[1]} />
+            </caption>
             <thead>
               <tr>
                 <th aria-label="Status" />
@@ -438,6 +445,9 @@ function Body() {
           </table>
           <Diagram />
           <div className="tb">
+            <div className="tb-cmd">
+              <Typed cmd={NODE_CMD[0]} at={NODE_CMD[1]} />
+            </div>
             {NODE.map(([k, v, c], i) => (
               <div key={k} className={c || undefined} style={{ ['--i' as string]: i }}>
                 <span>{k}</span>
