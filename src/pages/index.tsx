@@ -787,7 +787,7 @@ function Body() {
             <p className="section-label">Contact</p>
             <div className="contact-grid">
               <h2 className="contact-headline reveal">
-                Want to build something together<span className="stop">?</span>
+                Let’s build<span className="stop">.</span>
               </h2>
               <div className="contact-stack">
                 <div className="contact-card primary reveal">
