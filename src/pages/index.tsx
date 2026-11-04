@@ -90,13 +90,8 @@ const DEPLOYS = [
   ['c4b28e9', 'adaptron/ai-research-eng', '2026-05'],
 ] as const;
 
-/* The hero loads like a terminal session. Each command types out at its own time (s),
-   then its output prints: the corner session, the deploy table and the node card take
-   turns, while the figure scans in on its own. */
-const BOOT = [
-  ['ssh alexgaffen.com', 'connected · hamilton, on', 1.6],
-  ['cat focus.txt', 'ml systems · devops · reliability', 5.7],
-] as const;
+/* The hero loads like a terminal session: the deploy table and the node card each
+   type their command (at s) and print, while the figure scans in on its own. */
 const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
 const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
 
@@ -312,10 +307,7 @@ function JobMark({ mark }: { mark: Mark }) {
 function HeroName() {
   return (
     <h1 className="hero-name">
-      <span className="word">Alex</span>
-      <span className="word">
-        Gaffen<span className="stop">.</span>
-      </span>
+      <span className="word">Alex Gaffen</span>
     </h1>
   );
 }
@@ -406,6 +398,8 @@ function Body() {
       <main id="main">
         <section id="hero">
           <div className="sheet" id="sheet" aria-hidden="true">
+            <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" />
+            <span className="sheet-scrim" />
             <div className="con-bar">
               <span className="con-path">
                 alexgaffen.com <span>/ portfolio</span>
@@ -415,19 +409,6 @@ function Body() {
                 <b id="clock">--:--:-- EST</b>
               </span>
             </div>
-          </div>
-          <div className="boot" aria-hidden="true">
-            {BOOT.map(([cmd, out, at]) => (
-              <div key={cmd} style={{ ['--n' as string]: cmd.length, ['--at' as string]: `${at}s` }}>
-                <p>
-                  <Typed cmd={cmd} at={at} />
-                </p>
-                <p className="out">{out}</p>
-              </div>
-            ))}
-            <p className="cmd-line" style={{ ['--at' as string]: '6.5s' }}>
-              <span className="ps">~ $</span> <span className="caret" />
-            </p>
           </div>
           <table className="rev">
             <caption>
@@ -470,10 +451,10 @@ function Body() {
           <div id="hero-meta">
             <p className="hero-role">
               <span className="role-line">
-                <strong>Computer Science Student</strong> <span className="role-at">at McMaster University</span>
+                <strong>CS</strong> <span className="role-at">@ McMaster University</span>
               </span>
               <span className="role-line">
-                <strong>AI Research Engineer</strong> <span className="role-at">at Adaptron Inc</span>
+                <strong>AI Research Engineer</strong> <span className="role-at">@ Adaptron Inc</span>
               </span>
             </p>
           </div>
@@ -890,7 +871,7 @@ export const index: PageDef = {
       description: 'Honours Computer Science student at McMaster University focused on AI, robotics and systems security.',
       alumniOf: { '@type': 'CollegeOrUniversity', name: 'McMaster University' },
       address: { '@type': 'PostalAddress', addressLocality: 'Hamilton', addressRegion: 'ON', addressCountry: 'CA' },
-      sameAs: [GITHUB, LINKEDIN],
+      sameAs: [GITHUB, LINKEDIN, X],
     },
   },
   Body,
