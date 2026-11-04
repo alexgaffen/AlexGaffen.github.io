@@ -389,7 +389,7 @@
 
 /* ── Repo link + footer ── */
 .cs-end {
-  padding-bottom: 60px;
+  padding-bottom: 120px;
 }
 .cs-repo {
   display: flex;
@@ -428,8 +428,116 @@
   transform: translate(4px, -4px);
   color: var(--accent);
 }
-.cs-end .foot {
-  margin-top: 64px;
+
+/* ── Closing band: "More work to explore." and a pill back to the portfolio whose
+   border has a light running round it ── */
+.cs-more {
+  border-top: 1px solid var(--border);
+}
+.cs-more-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 96px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+.cs-more-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(44px, 5vw, 72px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.cs-more-title span {
+  color: var(--accent);
+}
+@property --cta-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.cs-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 60px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  /* Dark fill, then a bright arc sweeping round the border, over a faint static ring. */
+  background:
+    linear-gradient(#0d0d0d, #0d0d0d) padding-box,
+    conic-gradient(
+        from var(--cta-angle),
+        transparent 0 62%,
+        rgba(var(--accent-rgb), 0.35) 74%,
+        var(--accent-hi) 86%,
+        rgba(var(--accent-rgb), 0.35) 94%,
+        transparent
+      )
+      border-box,
+    linear-gradient(#2c2c2a, #2c2c2a) border-box;
+  box-shadow: 0 0 32px -12px rgba(var(--accent-rgb), 0.45);
+  animation: cta-spin 3.2s linear infinite;
+  transition: box-shadow 0.3s, translate 0.2s;
+}
+/* A warm glow rises from the bottom edge on hover. */
+.cs-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(70% 120% at 50% 130%, rgba(var(--accent-rgb), 0.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.cs-cta:hover {
+  box-shadow: 0 0 44px -10px rgba(var(--accent-rgb), 0.7);
+}
+.cs-cta:hover::before {
+  opacity: 1;
+}
+.cs-cta:active {
+  translate: 0 1px;
+}
+.cs-cta .arrow {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cs-cta:hover .arrow {
+  transform: translateX(-4px);
+}
+@keyframes cta-spin {
+  to {
+    --cta-angle: 360deg;
+  }
+}
+.cs-foot {
+  border-top: 1px solid var(--border);
+  padding: 24px 48px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cs-foot a {
+  transition: color 0.2s;
+}
+.cs-foot a:hover {
+  color: var(--accent);
 }
 
 @media (max-width: 900px) {
@@ -483,8 +591,19 @@
     padding: 20px;
     gap: 14px;
   }
-  .cs-end .foot {
-    margin-top: 48px;
+  .cs-end {
+    padding-bottom: 80px;
+  }
+  .cs-more-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 64px 24px;
+  }
+  .cs-cta {
+    padding: 18px 40px;
+  }
+  .cs-foot {
+    padding: 20px 24px;
   }
 }
 
