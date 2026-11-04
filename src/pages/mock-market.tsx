@@ -135,9 +135,17 @@ function Body() {
             <div>
               <p className="cs-eyebrow">Personal project · 2025</p>
               <h1 className="cs-title">
-                <span className="word">Mock</span>
                 <span className="word">
-                  Market<span className="cursor" aria-hidden="true" />
+                  <span className="brace open" aria-hidden="true">
+                    {'{'}
+                  </span>
+                  Mock
+                </span>
+                <span className="word">
+                  Market
+                  <span className="brace close" aria-hidden="true">
+                    {'}'}
+                  </span>
                 </span>
               </h1>
             </div>
