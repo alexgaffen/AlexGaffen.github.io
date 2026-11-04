@@ -706,6 +706,27 @@ body.portfolio {
     letter-spacing: 0.04em;
   }
 }
+/* Portrait desktops (vertical monitors, big tablets): the name only fills the bottom of
+   the sheet, so the drawing spans the full width above it, from just under the revision
+   table down to the name, instead of squeezing into a tall column beside it. */
+@media (min-width: 901px) and (orientation: portrait) {
+  /* The name has the bottom-left to itself here, so it can grow and fill it; it still
+     ends well short of the title block. */
+  #hero {
+    --name-fs: clamp(88px, 18vw, 260px);
+  }
+  .dwg {
+    position: relative;
+    inset: auto;
+    flex: 1 0 auto;
+    min-height: 360px;
+    /* 128px hero padding + 124px clears the revision table, as in landscape. */
+    margin: 124px 0 56px;
+  }
+  .dwg > svg {
+    height: min(100%, 120cqw);
+  }
+}
 @media (max-width: 900px) {
   .portfolio nav {
     padding: 16px 20px;
