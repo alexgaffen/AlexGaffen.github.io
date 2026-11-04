@@ -451,10 +451,10 @@ function Body() {
           <div id="hero-meta">
             <p className="hero-role">
               <span className="role-line">
-                <strong>CS</strong> <span className="role-at">@ McMaster</span>
+                <strong>CS</strong> <span className="role-at">@ McMaster University</span>
               </span>
               <span className="role-line">
-                <strong>AI Research Engineer</strong> <span className="role-at">@ Adaptron</span>
+                <strong>AI Research Engineer</strong> <span className="role-at">@ Adaptron Inc</span>
               </span>
             </p>
           </div>
