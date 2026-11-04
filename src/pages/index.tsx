@@ -289,13 +289,21 @@ function JobMark({ mark }: { mark: Mark }) {
   );
 }
 
-/** Name on two lines, each line rising in as a whole word, ending on a blinking cursor. */
+/** Name on two lines in curly braces, each line rising in as a whole word. */
 function HeroName() {
   return (
     <h1 className="hero-name">
-      <span className="word">Alex</span>
       <span className="word">
-        Gaffen<span className="cursor" aria-hidden="true" />
+        <span className="brace open" aria-hidden="true">
+          {'{'}
+        </span>
+        Alex
+      </span>
+      <span className="word">
+        Gaffen
+        <span className="brace close" aria-hidden="true">
+          {'}'}
+        </span>
       </span>
     </h1>
   );
@@ -441,11 +449,9 @@ function Body() {
           <div id="hero-meta">
             <p className="hero-role">
               <span className="role-line">
-                <span className="role-key">edu</span>
                 <strong>Computer Science Student</strong> at McMaster University
               </span>
               <span className="role-line">
-                <span className="role-key">now</span>
                 <strong>AI Research Engineer</strong> at Adaptron Inc
               </span>
             </p>

@@ -134,6 +134,11 @@ body.portfolio {
   --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
   --display: 'Space Grotesk', 'Inter', sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* --k scales the small console text and the boxes around it (bar, deploy table, node
+     card, figure labels, nav, band) with the screen: bigger on large and portrait
+     monitors, never below ~11.5px on laptops. */
+  --k: 1.1;
+  --ui: calc(10.5px * var(--k));
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -144,6 +149,27 @@ body.portfolio {
   -ms-overflow-style: auto;
   /* clip, not hidden: hidden would turn body into its own scroller with a second bar. */
   overflow-x: clip;
+}
+/* Screen steps for --k (declared on body.portfolio above). */
+@media (min-width: 1680px) and (min-height: 900px) {
+  body.portfolio {
+    --k: 1.22;
+  }
+}
+@media (min-width: 2200px) and (min-height: 1150px) {
+  body.portfolio {
+    --k: 1.4;
+  }
+}
+@media (min-width: 901px) and (orientation: portrait) {
+  body.portfolio {
+    --k: 1.3;
+  }
+}
+@media (min-width: 901px) and (orientation: portrait) and (min-height: 2200px) {
+  body.portfolio {
+    --k: 1.5;
+  }
 }
 .portfolio *,
 .portfolio *::before,
@@ -240,7 +266,7 @@ body.portfolio {
 }
 .nav-link {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: max(12.5px, calc(var(--ui) * 1.08));
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -267,13 +293,13 @@ body.portfolio {
 }
 .nav-cta {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: max(12.5px, calc(var(--ui) * 1.08));
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--on-fill);
   background: var(--fill);
-  padding: 8px 20px;
+  padding: 0.7em 1.6em;
   border-radius: 2px;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
@@ -288,8 +314,8 @@ body.portfolio {
 #hero {
   --line: #434342;
   /* Node-card width; the name is sized below so it always ends before the card. */
-  --tbw: min(500px, 40vw);
-  --name-fs: clamp(80px, 11.5vw, 176px);
+  --tbw: min(calc(var(--ui) * 44), 40vw);
+  --name-fs: clamp(72px, 9.5vw, 150px);
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -321,15 +347,27 @@ body.portfolio {
 .hero-name .word + .word {
   animation-delay: calc(var(--t0) + 0.4s);
 }
-/* A block cursor in place of a full stop, blinking like a waiting prompt. */
-.cursor {
-  display: inline-block;
-  width: 0.09em;
-  height: 0.74em;
-  margin-left: 0.06em;
-  background: var(--accent);
-  box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.45);
-  animation: cursor-blink 1.06s steps(1) calc(var(--t0) + 1.5s) infinite;
+/* The name sits in curly braces, set like a code block: "{ Alex" then an indented
+   "Gaffen }". The braces are lighter and orange so the name still leads. */
+.brace {
+  /* Smaller than the name and lifted, so the brace spans the letters, not the descender. */
+  font-size: 0.8em;
+  vertical-align: 0.07em;
+  font-weight: 300;
+  color: var(--accent);
+  letter-spacing: 0;
+  text-shadow: 0 0 28px rgba(var(--accent-rgb), 0.35);
+}
+.brace.open {
+  margin-right: 0.12em;
+}
+.brace.close {
+  margin-left: 0.14em;
+}
+/* The second line starts under the first word, past the opening brace. */
+.hero-name .word + .word,
+.cs-title .word + .word {
+  padding-left: 0.43em;
 }
 @keyframes cursor-blink {
   50% {
@@ -345,27 +383,13 @@ body.portfolio {
   animation: rise 0.9s var(--ease-out) calc(var(--t0) + 0.7s) forwards;
 }
 .hero-role {
-  font-size: clamp(16px, 1.4vw, 22px);
+  font-size: clamp(16px, calc(var(--ui) * 1.6), 25px);
   color: var(--muted);
   font-weight: 300;
   line-height: 1.5;
 }
 .role-line {
   display: block;
-  /* Hanging indent so a wrapped line lines up after its tag, not under it. */
-  padding-left: 2.6em;
-  text-indent: -2.6em;
-}
-.role-key {
-  display: inline-block;
-  width: 4.2em;
-  text-indent: 0;
-  font-family: var(--mono);
-  font-size: 0.62em;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-  vertical-align: 0.15em;
 }
 .hero-role strong {
   color: var(--text);
@@ -407,8 +431,8 @@ body.portfolio {
 .con-bar {
   position: absolute;
   inset: 0 0 auto;
-  height: 34px;
-  padding: 0 16px;
+  height: calc(var(--ui) * 3.2);
+  padding: 0 calc(var(--ui) * 1.5);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -416,7 +440,7 @@ body.portfolio {
   border-bottom: 1px solid rgba(237, 236, 234, 0.1);
   background: rgba(8, 8, 8, 0.85);
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--ui);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--faint);
@@ -454,10 +478,10 @@ body.portfolio {
 .boot {
   position: absolute;
   z-index: 3;
-  top: 150px;
+  top: calc(84px + var(--ui) * 5.6);
   left: 64px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: calc(var(--ui) * 1.12);
   line-height: 1.75;
   color: var(--muted);
 }
@@ -513,12 +537,12 @@ body.portfolio {
 .rev {
   position: absolute;
   z-index: 3;
-  top: 134px;
+  top: calc(84px + var(--ui) * 4.8);
   right: 40px;
-  width: min(500px, 42%);
+  width: min(calc(var(--ui) * 46), 44%);
   border-collapse: collapse;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--ui);
   letter-spacing: 0.06em;
   opacity: 0;
   animation: dwg-fade 0.6s ease calc(var(--t0) + 1.8s) forwards;
@@ -526,8 +550,8 @@ body.portfolio {
 .rev caption {
   caption-side: top;
   text-align: left;
-  padding: 0 0 8px 10px;
-  font-size: 10px;
+  padding: 0 0 0.7em 0.9em;
+  font-size: max(11.5px, calc(var(--ui) * 0.95));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--faint);
@@ -542,7 +566,7 @@ body.portfolio {
 .rev th,
 .rev td {
   border-bottom: 1px solid var(--line);
-  padding: 7px 10px;
+  padding: 0.62em 0.9em;
   text-align: left;
   font-weight: 400;
   white-space: nowrap;
@@ -550,7 +574,7 @@ body.portfolio {
 }
 .rev th {
   border-top: 1px solid var(--line);
-  font-size: 9.5px;
+  font-size: max(11.5px, calc(var(--ui) * 0.92));
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--faint);
@@ -563,7 +587,7 @@ body.portfolio {
 }
 .rev td:first-child,
 .rev th:first-child {
-  width: 30px;
+  width: 2.6em;
   text-align: center;
 }
 .rev .dot {
@@ -593,11 +617,11 @@ body.portfolio {
 .dwg {
   position: absolute;
   z-index: 2;
-  top: 316px;
+  top: calc(110px + var(--ui) * 19.5);
   right: 64px;
-  bottom: 150px;
-  /* "Gaffen" and its cursor end 2.96em in from the 64px gutter. */
-  left: calc(112px + var(--name-fs) * 2.96);
+  bottom: calc(76px + var(--ui) * 7.6);
+  /* "Gaffen }" ends 3.87em in from the 64px gutter. */
+  left: calc(112px + var(--name-fs) * 3.87);
   container-type: size;
 }
 /* Absolute so its % height resolves against the box even when the box is only
@@ -615,8 +639,17 @@ body.portfolio {
 }
 .dwg text {
   font-family: var(--mono);
+  font-size: max(11px, calc(var(--ui) * 0.9));
   fill: var(--muted);
   letter-spacing: 0.08em;
+}
+/* Stage chips and pods are drawn at a fixed size, so they scale as a whole. */
+.dwg .stage text {
+  font-size: 10px;
+}
+.dwg .stage,
+.dwg .pod {
+  transform: scale(var(--k));
 }
 .dwg .t-label {
   fill: var(--faint);
@@ -737,14 +770,14 @@ body.portfolio {
 /* Narrow figure: smaller stage chips without names, no column labels. */
 @container (max-width: 640px) {
   .dwg .stage {
-    transform: scale(0.62);
+    transform: scale(calc(var(--k) * 0.62));
   }
   .dwg .stage text,
   .dwg .col-label {
     display: none;
   }
   .dwg .pod {
-    transform: scale(0.75);
+    transform: scale(calc(var(--k) * 0.75));
   }
 }
 @keyframes dwg-scan {
@@ -769,8 +802,10 @@ body.portfolio {
   right: 40px;
   bottom: 40px;
   width: var(--tbw);
+  font-size: var(--ui);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Columns follow their content, so values like "AI Researcher" never get cut off. */
+  grid-template-columns: repeat(4, auto);
   gap: 1px;
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -784,7 +819,7 @@ body.portfolio {
 }
 .tb > div {
   background: var(--bg);
-  padding: 6px 10px 7px;
+  padding: 0.55em 0.9em 0.6em;
   min-width: 0;
 }
 .tb > div > * {
@@ -793,7 +828,7 @@ body.portfolio {
 }
 .tb span {
   display: block;
-  font-size: 8.5px;
+  font-size: max(11px, calc(var(--ui) * 0.88));
   letter-spacing: 0.12em;
   color: var(--faint);
   line-height: 1.4;
@@ -801,8 +836,8 @@ body.portfolio {
 .tb b {
   display: block;
   font-weight: 400;
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: max(12px, calc(var(--ui) * 1.08));
+  letter-spacing: 0.02em;
   line-height: 1.5;
   white-space: nowrap;
   overflow: hidden;
@@ -820,10 +855,10 @@ body.portfolio {
 
 @media (max-width: 1200px) {
   #hero {
-    --tbw: min(500px, 46vw);
+    --tbw: min(calc(var(--ui) * 44), 47vw);
   }
   .rev {
-    width: min(420px, 46%);
+    width: min(calc(var(--ui) * 40), 48%);
   }
   #hero-meta {
     max-width: calc(100% - var(--tbw) - 56px);
@@ -834,10 +869,9 @@ body.portfolio {
   }
   /* Narrower columns: tighten so values like "AI Researcher" never get cut off. */
   .tb > div {
-    padding: 6px 8px 7px;
+    padding: 0.55em 0.7em 0.6em;
   }
   .tb b {
-    font-size: 10px;
     letter-spacing: 0.04em;
   }
 }
@@ -848,15 +882,15 @@ body.portfolio {
   /* The name has the bottom-left to itself here, so it can grow and fill it; it still
      ends well short of the title block. */
   #hero {
-    --name-fs: clamp(80px, 15vw, 230px);
+    --name-fs: clamp(80px, 10.5vw, 170px);
   }
   .dwg {
     position: relative;
     inset: auto;
     flex: 1 0 auto;
     min-height: 360px;
-    /* 128px hero padding + 188px clears the deploy table, as in landscape. */
-    margin: 188px 0 56px;
+    /* Clears the deploy table, as in landscape (its top less the 128px hero padding). */
+    margin: calc(var(--ui) * 19.5 - 18px) 0 56px;
   }
   .dwg > svg {
     height: min(100%, 120cqw);
@@ -881,9 +915,9 @@ body.portfolio {
     inset: 72px 10px 10px;
   }
   .con-bar {
-    height: 30px;
+    height: 32px;
     padding: 0 12px;
-    font-size: 9.5px;
+    font-size: 11.5px;
   }
   .exp-item::before {
     display: none;
@@ -922,12 +956,11 @@ body.portfolio {
   }
 }
 
-/* ── Log tail: each role as a line in a deploy log, scrolling past under the hero ── */
+/* ── The orange band: each role as a line in a deploy log, scrolling past under the hero ── */
 .status-band {
   position: relative;
   z-index: 1;
-  background: #0d0d0d;
-  border-block: 1px solid var(--border);
+  background: var(--fill);
   overflow: hidden;
   padding: 13px 0;
 }
@@ -939,9 +972,9 @@ body.portfolio {
 }
 .status-band-item {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: max(12.5px, calc(var(--ui) * 1.12));
   letter-spacing: 0.02em;
-  color: var(--muted);
+  color: var(--on-fill);
   padding: 0 28px;
   white-space: nowrap;
   display: flex;
@@ -951,28 +984,27 @@ body.portfolio {
 .status-band-item::after {
   content: '';
   width: 1px;
-  height: 14px;
+  height: 1em;
   margin-left: 28px;
-  background: var(--border);
+  background: rgba(28, 10, 0, 0.3);
 }
 .log-time {
-  color: var(--faint);
+  opacity: 0.65;
 }
 .log-state {
-  font-size: 10.5px;
+  font-size: 0.85em;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 2px 8px;
+  padding: 1px 8px;
   border-radius: 2px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(28, 10, 0, 0.35);
 }
 .log-state.running {
-  color: var(--accent);
-  border-color: rgba(var(--accent-rgb), 0.4);
-  background: rgba(var(--accent-rgb), 0.08);
+  color: var(--fill);
+  background: var(--on-fill);
+  border-color: var(--on-fill);
 }
 .log-svc {
-  color: var(--text);
   font-weight: 700;
 }
 @keyframes marquee {
@@ -987,7 +1019,7 @@ body.portfolio {
 }
 .section-label {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: max(12.5px, var(--ui));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #c8c7c0;
@@ -1141,7 +1173,7 @@ main:not(.cs) .section-label::before {
 }
 .exp-company-sub {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #aaa9a2;
@@ -1196,7 +1228,7 @@ main:not(.cs) .section-label::before {
 .exp-badge {
   align-self: flex-end;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 4px 10px;
@@ -1391,7 +1423,7 @@ main:not(.cs) .section-label::before {
 }
 .project-tag {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
@@ -1427,7 +1459,7 @@ main:not(.cs) .section-label::before {
   right: 24px;
   z-index: 3;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   color: rgba(237, 236, 234, 0.75);
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
@@ -1620,7 +1652,7 @@ main:not(.cs) .section-label::before {
 }
 .honour-org {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #aaa9a2;
@@ -1657,7 +1689,7 @@ main:not(.cs) .section-label::before {
 }
 .honour-stats span {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1753,7 +1785,7 @@ main:not(.cs) .section-label::before {
 }
 .grade-code {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1796,7 +1828,7 @@ main:not(.cs) .section-label::before {
 }
 .skill-type {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1812,7 +1844,7 @@ main:not(.cs) .section-label::before {
 }
 .skill-used-label {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1825,7 +1857,7 @@ main:not(.cs) .section-label::before {
 }
 .skill-used-list li {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 24px;
@@ -1867,7 +1899,7 @@ main:not(.cs) .section-label::before {
 }
 .ph-filter {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 9px 14px;
@@ -1880,7 +1912,7 @@ main:not(.cs) .section-label::before {
 }
 .ph-filter sup {
   margin-left: 4px;
-  font-size: 9px;
+  font-size: 11.5px;
   opacity: 0.7;
 }
 .ph-filter:hover {
@@ -2016,7 +2048,7 @@ main:not(.cs) .section-label::before {
 }
 .ph-city {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #fff;
@@ -2165,7 +2197,7 @@ main:not(.cs) .section-label::before {
 }
 .contact-card-label {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #aaa9a2;
@@ -2211,7 +2243,7 @@ main:not(.cs) .section-label::before {
   z-index: 1;
   flex-shrink: 0;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: rgba(8, 8, 8, 0.5);
@@ -2233,7 +2265,7 @@ main:not(.cs) .section-label::before {
   display: flex;
   justify-content: space-between;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -2242,6 +2274,13 @@ main:not(.cs) .section-label::before {
   color: var(--accent);
 }
 
+/* One column but a wide screen (tablets, zoomed-in monitors): a landscape card instead of a
+   tall 4:5 one, so each project isn't a full screen tall. */
+@media (min-width: 560px) and (max-width: 900px) {
+  .project-card {
+    aspect-ratio: 16 / 10;
+  }
+}
 @media (max-width: 900px) {
   .section-wrap {
     padding: 80px 20px;
@@ -2459,7 +2498,7 @@ main:not(.cs) .section-label::before {
 }
 @media (max-width: 480px) {
   .tb b {
-    font-size: 10px;
+    font-size: 11.5px;
   }
   .honour-amount {
     font-size: clamp(60px, 19vw, 84px);
@@ -2492,7 +2531,7 @@ main:not(.cs) .section-label::before {
   }
   .skill-used-list li {
     white-space: nowrap;
-    font-size: 9px;
+    font-size: 11.5px;
     letter-spacing: 0.04em;
     padding: 0 6px;
   }
@@ -2534,7 +2573,7 @@ main:not(.cs) .section-label::before {
   }
   .copy-btn {
     padding: 7px 10px;
-    font-size: 10px;
+    font-size: 11.5px;
   }
 }
 @media (max-width: 360px) {
