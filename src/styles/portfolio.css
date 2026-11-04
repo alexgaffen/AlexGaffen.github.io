@@ -2318,7 +2318,7 @@ main:not(.cs) .section-label::before {
     margin: 0 auto;
   }
   .honours {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .honour,
   .honour.feature {
@@ -2345,7 +2345,7 @@ main:not(.cs) .section-label::before {
     font-size: 13px;
   }
   .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .skill-cell {
     padding: 24px 18px;
@@ -2377,7 +2377,7 @@ main:not(.cs) .section-label::before {
     height: 56px;
   }
   .contact-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 40px;
   }
   .foot {
@@ -2388,15 +2388,15 @@ main:not(.cs) .section-label::before {
 /* ── Contact: side by side only once the email fits beside its copy button ── */
 @media (max-width: 1200px) {
   .contact-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 48px;
   }
   .contact-stack {
     max-width: 560px;
   }
-  /* "something" is ~4.4em wide: fill a phone's column, up to 104px on wide screens. */
+  /* "something" is ~4.87em wide in Space Grotesk: fill a phone's column, up to 104px on wide screens. */
   .contact-headline {
-    font-size: min(calc((100vw - 48px) / 4.6), 104px);
+    font-size: min(calc((100vw - 48px) / 5), 104px);
   }
 }
 
@@ -2532,11 +2532,14 @@ main:not(.cs) .section-label::before {
   .skill-cell {
     padding: 28px 20px;
   }
+  /* One line where it fits; a chip wider than its cell ("Dept. of Medicine" on a
+     small phone) wraps instead of pushing the page wider than the screen. */
   .skill-used-list li {
-    white-space: nowrap;
+    max-width: 100%;
     font-size: 11.5px;
     letter-spacing: 0.04em;
-    padding: 0 6px;
+    line-height: 16px;
+    padding: 4px 6px;
   }
   .ph-filter {
     padding: 8px 11px;
@@ -2579,9 +2582,23 @@ main:not(.cs) .section-label::before {
     font-size: 11.5px;
   }
 }
+/* The three honour stats only just fit a small phone's column on one row. */
+@media (max-width: 400px) {
+  .honour-stats {
+    gap: 14px;
+  }
+  .honour-stats span {
+    letter-spacing: 0.04em;
+  }
+}
 @media (max-width: 360px) {
   .skill-name {
     font-size: 13px;
+  }
+  /* Too narrow for one row: "1 selected" drops beneath the other two. */
+  .honour-stats {
+    flex-wrap: wrap;
+    row-gap: 16px;
   }
   .skill-cell {
     padding: 24px 14px;
