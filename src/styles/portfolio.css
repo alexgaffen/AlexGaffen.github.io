@@ -315,7 +315,9 @@ body.portfolio {
   --line: #434342;
   /* Node-card width; the name is sized below so it always ends before the card. */
   --tbw: min(calc(var(--ui) * 44), 40vw);
-  --name-fs: clamp(80px, 11vw, 170px);
+  /* Up to 170px, or more on big tall screens (1440p, ultrawide) so it holds its own
+     beside the figure. */
+  --name-fs: clamp(80px, 11vw, max(170px, 16vh));
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -355,19 +357,38 @@ body.portfolio {
 #hero-meta {
   position: relative;
   z-index: 3;
+  /* Clear of the name by ~a quarter of its size (baseline to cap height). */
+  margin-top: calc(var(--name-fs) * 0.11);
   max-width: calc(100% - var(--tbw) - 56px);
   opacity: 0;
   transform: translateY(24px);
   animation: rise 0.9s var(--ease-out) calc(var(--t0) + 0.7s) forwards;
 }
 .hero-role {
-  font-size: clamp(15px, calc(var(--ui) * 1.45), 22px);
+  /* Keeps pace with the name on big screens, where --ui alone leaves it small. */
+  font-size: clamp(15px, max(calc(var(--ui) * 1.45), calc(var(--name-fs) * 0.105)), 26px);
+  container-type: inline-size;
   color: var(--muted);
   font-weight: 300;
   line-height: 1.5;
 }
 .role-line {
   display: block;
+}
+/* Never break inside a title or a place. */
+.hero-role strong,
+.role-at {
+  white-space: nowrap;
+}
+/* Too narrow for "Computer Science Student at McMaster University" (~23.7em): both
+   roles stack as title / "at place", a little apart, so they still read as a pair. */
+@container (max-width: 23.9em) {
+  .role-at {
+    display: block;
+  }
+  .role-line + .role-line {
+    margin-top: 0.45em;
+  }
 }
 .hero-role strong {
   color: var(--text);
@@ -762,6 +783,12 @@ body.portfolio {
   .dwg .col-label {
     display: none;
   }
+  /* The bottom ~16% of the figure is the hidden labels' band: draw it that much
+     taller from the top, so the drawing sits evenly in its box instead of over a gap. */
+  .dwg > svg {
+    margin: 0;
+    height: calc(min(100%, 90cqw) * 1.19);
+  }
   .dwg .pod {
     transform: scale(calc(var(--k) * 0.75));
   }
@@ -897,7 +924,7 @@ body.portfolio {
     height: min(100%, 120cqw);
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
   .portfolio nav {
     padding: 16px 20px;
   }
@@ -2281,12 +2308,12 @@ main:not(.cs) .section-label::before {
 
 /* One column but a wide screen (tablets, zoomed-in monitors): a landscape card instead of a
    tall 4:5 one, so each project isn't a full screen tall. */
-@media (min-width: 560px) and (max-width: 900px) {
+@media (min-width: 560px) and (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
   .project-card {
     aspect-ratio: 16 / 10;
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
   .section-wrap {
     padding: 80px 20px;
   }
@@ -2403,14 +2430,22 @@ main:not(.cs) .section-label::before {
 }
 
 /* ── Tablet / phone ── */
-@media (max-width: 900px) {
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
   #hero {
     padding: 136px 28px 28px;
     gap: 28px;
   }
+  #hero {
+    --name-fs: clamp(56px, 15vw, 84px);
+  }
+  /* Set as tight as on desktop, with the roles close under it: the 28px gap is for
+     the figure and node card below, not the name's own subtitle. */
   .hero-name {
-    font-size: clamp(56px, 15vw, 84px);
-    line-height: 1.08;
+    font-size: var(--name-fs);
+    line-height: 0.95;
+  }
+  #hero-meta {
+    margin-top: -16px;
   }
   .tb {
     margin: 0;
@@ -2459,7 +2494,8 @@ main:not(.cs) .section-label::before {
 
 /* ── Phones held sideways: name and blurb left, the drawing right, title block below,
    so the whole sheet fits one short screen. ── */
-@media (max-width: 900px) and (orientation: landscape) {
+/* (Also big phones wider than 900px: a 932x430 iPhone Pro Max would get the desktop sheet.) */
+@media (max-width: 900px) and (orientation: landscape), (orientation: landscape) and (max-height: 500px) {
   #hero {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
@@ -2479,6 +2515,7 @@ main:not(.cs) .section-label::before {
   }
   #hero-meta {
     grid-area: meta;
+    margin-top: 0;
   }
   .hero-role {
     font-size: 15px;
@@ -2491,6 +2528,10 @@ main:not(.cs) .section-label::before {
   .tb {
     grid-area: tb;
     grid-template-columns: repeat(4, 1fr);
+  }
+  /* Four columns: all seven cells fill it as on desktop (hiding two left a hole). */
+  .tb .hide-sm {
+    display: block;
   }
 }
 

@@ -7,7 +7,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Seconds the intro holds the hero back (0 when the intro is skipped). */
 const t0 = () => parseFloat(getComputedStyle(root).getPropertyValue('--t0')) || 0;
 
-/** The console bar's clock: local time in Hamilton, ticking every second. */
+/** The console bar's clock: Eastern time (EST/EDT), ticking every second. */
 function initClock(): void {
   const el = document.getElementById('clock');
   if (!el) return;

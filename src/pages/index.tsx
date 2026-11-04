@@ -406,7 +406,7 @@ function Body() {
               </span>
               <span className="con-ok">All systems operational</span>
               <span className="con-clock">
-                Hamilton <b id="clock">--:--:--</b>
+                <b id="clock">--:--:-- EST</b>
               </span>
             </div>
           </div>
@@ -464,10 +464,10 @@ function Body() {
           <div id="hero-meta">
             <p className="hero-role">
               <span className="role-line">
-                <strong>Computer Science Student</strong> at McMaster University
+                <strong>Computer Science Student</strong> <span className="role-at">at McMaster University</span>
               </span>
               <span className="role-line">
-                <strong>AI Research Engineer</strong> at Adaptron Inc
+                <strong>AI Research Engineer</strong> <span className="role-at">at Adaptron Inc</span>
               </span>
             </p>
           </div>
