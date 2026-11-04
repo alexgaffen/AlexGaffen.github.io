@@ -321,12 +321,25 @@ function Body() {
             </span>
             <span className="contact-card-arrow">↗</span>
           </a>
-          <footer className="foot">
-            <a href="/#projects">← Back to portfolio</a>
-            <span>© 2026 Alex Gaffen</span>
-          </footer>
+        </section>
+
+        <section className="cs-more">
+          <div className="cs-more-inner">
+            <p className="cs-more-title reveal">
+              More work
+              <br />
+              <span>to explore.</span>
+            </p>
+            <a className="cs-cta reveal" href="/#projects">
+              <span className="arrow">←</span> Back to Portfolio
+            </a>
+          </div>
         </section>
       </main>
+      <footer className="cs-foot">
+        <span>© 2026 Alex Gaffen</span>
+        <a href="/">Back to home ↑</a>
+      </footer>
     </>
   );
 }
