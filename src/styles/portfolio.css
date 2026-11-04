@@ -731,10 +731,12 @@ body.portfolio {
 }
 .dwg .dim text {
   fill: var(--text);
-  /* Knocks the dimension line out behind the label. */
+}
+/* Knocks the dimension line out behind the label (drawn first, under it). */
+.dwg .dim .knock {
+  fill: var(--bg);
   stroke: var(--bg);
   stroke-width: 8px;
-  paint-order: stroke;
 }
 .dwg .pulse {
   fill: var(--accent);

@@ -250,6 +250,11 @@ function Diagram() {
             <line x1={pct(a)} x2={pct(b)} y1="12" y2="12" />
             <line x1={pct(a)} x2={pct(a)} y1="7" y2="17" />
             <line x1={pct(b)} x2={pct(b)} y1="7" y2="17" />
+            {/* A separate dark copy underneath knocks the line out. Outlining the label
+                itself let WebKit paint each letter's outline over its neighbour. */}
+            <text className="knock" x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
+              {name}
+            </text>
             <text x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
               {name}
             </text>
