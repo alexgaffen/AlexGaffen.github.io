@@ -1228,10 +1228,11 @@ main:not(.cs) .section-label::before {
 .exp-role li::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0.75em;
-  width: 8px;
-  height: 1px;
+  left: 2px;
+  top: calc(0.85em - 3.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
   background: var(--accent);
 }
 .exp-meta {
@@ -2310,7 +2311,7 @@ main:not(.cs) .section-label::before {
   color: var(--on-fill);
 }
 .foot {
-  margin-top: 120px;
+  margin-top: 64px;
   padding-top: 24px;
   border-top: 1px solid var(--border);
   display: flex;
@@ -2429,7 +2430,7 @@ main:not(.cs) .section-label::before {
     gap: 40px;
   }
   .foot {
-    margin-top: 72px;
+    margin-top: 40px;
   }
 }
 
@@ -2505,10 +2506,10 @@ main:not(.cs) .section-label::before {
   .contact-wrap {
     padding: 80px 24px 48px;
   }
+  /* Same as desktop: © left, back to top right (wrapping only if a screen is too narrow). */
   .foot {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 8px 16px;
   }
 }
 
@@ -2658,6 +2659,10 @@ main:not(.cs) .section-label::before {
 @media (max-width: 360px) {
   .skill-name {
     font-size: 13px;
+  }
+  .foot {
+    font-size: 11px;
+    letter-spacing: 0.04em;
   }
   /* Too narrow for one row: "1 selected" drops beneath the other two. */
   .honour-stats {
