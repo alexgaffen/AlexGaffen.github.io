@@ -873,7 +873,15 @@ body.portfolio {
   /* The name has the bottom-left to itself here, so it can grow and fill it; it still
      ends well short of the title block. */
   #hero {
-    --name-fs: clamp(80px, 13vw, 200px);
+    --name-fs: clamp(80px, 11.5vw, 190px);
+    /* A narrower node card here, so it keeps clear of the name beside it. */
+    --tbw: min(calc(var(--ui) * 40), max(42vw, 460px));
+  }
+  #hero-meta {
+    max-width: calc(100% - var(--tbw) - 24px);
+  }
+  .hero-role {
+    font-size: calc(var(--ui) * 1.32);
   }
   .dwg {
     position: relative;
@@ -969,7 +977,7 @@ body.portfolio {
   font-family: var(--mono);
   font-size: max(12.5px, calc(var(--ui) * 1.12));
   letter-spacing: 0.02em;
-  color: var(--on-fill);
+  color: #fff;
   padding: 0 28px;
   white-space: nowrap;
   display: flex;
@@ -981,10 +989,10 @@ body.portfolio {
   width: 1px;
   height: 1em;
   margin-left: 28px;
-  background: rgba(28, 10, 0, 0.3);
+  background: rgba(255, 255, 255, 0.4);
 }
 .log-time {
-  opacity: 0.65;
+  opacity: 0.8;
 }
 .log-state {
   font-size: 0.85em;
@@ -992,12 +1000,12 @@ body.portfolio {
   text-transform: uppercase;
   padding: 1px 8px;
   border-radius: 2px;
-  border: 1px solid rgba(28, 10, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 .log-state.running {
   color: var(--fill);
-  background: var(--on-fill);
-  border-color: var(--on-fill);
+  background: #fff;
+  border-color: #fff;
 }
 .log-svc {
   font-weight: 700;
