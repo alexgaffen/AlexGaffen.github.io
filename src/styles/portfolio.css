@@ -2154,9 +2154,10 @@ main:not(.cs) .section-label::before {
 .contact-headline {
   font-family: var(--display);
   font-weight: 700;
-  font-size: clamp(48px, 7vw, 104px);
+  font-size: clamp(40px, 4.6vw, 72px);
   line-height: 0.95;
   letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 .contact-stack {
   display: flex;
@@ -2423,9 +2424,9 @@ main:not(.cs) .section-label::before {
   .contact-stack {
     max-width: 560px;
   }
-  /* "something" is ~4.87em wide in Space Grotesk: fill a phone's column, up to 104px on wide screens. */
+  /* "Let’s build." is ~5.3em wide: about two-thirds of a phone's column. */
   .contact-headline {
-    font-size: min(calc((100vw - 48px) / 5), 104px);
+    font-size: clamp(40px, 12vw, 64px);
   }
 }
 
