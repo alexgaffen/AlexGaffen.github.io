@@ -9,7 +9,7 @@ import type { PageDef } from './types.ts';
 
 const EMAIL = 'alexgaffen@gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/alexgaffen/';
-const GITHUB = 'https://github.com/alexgaffen';
+export const GITHUB = 'https://github.com/alexgaffen';
 
 const NAV = [
   ['#experience', 'Experience'],
@@ -116,59 +116,124 @@ const COURSES = (SECTIONS.find((s) => s.id === 'education')?.items[0].courses ??
   .map(([, grade, code, name]) => ({ grade, code, name }))
   .sort((a, b) => GRADE_ORDER[a.grade] - GRADE_ORDER[b.grade]);
 
-/* ── Hero network diagram: layers of nodes, every edge between neighbouring layers,
-   and signal pulses that run input -> output along fixed routes. ── */
+/* ── Hero figure: a model's forward pass feeding a deploy pipeline (train -> ship -> run).
+   Positions are percentages rather than a viewBox, so the figure stretches to fill
+   whatever box the hero leaves it; nested <svg x y> anchor the fixed-size marks
+   (stage boxes, pods). Signal pulses run input -> output -> build -> test -> deploy -> pod. ── */
 const LAYERS = [4, 6, 6, 3];
-const LX = [70, 210, 350, 490];
-const nodeY = (n: number, i: number) => 40 + ((i + 0.5) * 300) / n;
-const EDGES: string[] = [];
+const LX = [3, 15.5, 28, 40.5];
+const STAGES = [
+  ['BUILD', 53.5],
+  ['TEST', 65.5],
+  ['DEPLOY', 77.5],
+] as const;
+const PODS = 4;
+const POD_X = 94;
+const PIPE_Y = 48;
+const nodeY = (n: number, i: number) => 11 + ((i + 0.5) * 74) / n;
+const pct = (v: number) => `${+v.toFixed(2)}%`;
+type Pt = [number, number];
+const EDGES: [Pt, Pt][] = [];
 LAYERS.slice(0, -1).forEach((n, l) => {
   for (let a = 0; a < n; a++)
-    for (let b = 0; b < LAYERS[l + 1]; b++)
-      EDGES.push(`M${LX[l]} ${nodeY(n, a).toFixed(1)}L${LX[l + 1]} ${nodeY(LAYERS[l + 1], b).toFixed(1)}`);
+    for (let b = 0; b < LAYERS[l + 1]; b++) EDGES.push([[LX[l], nodeY(n, a)], [LX[l + 1], nodeY(LAYERS[l + 1], b)]]);
 });
-const ROUTES = [
-  [0, 1, 2, 0],
-  [3, 4, 3, 2],
-  [1, 3, 5, 1],
-  [2, 0, 1, 1],
-  [0, 5, 4, 2],
-  [3, 2, 0, 0],
-].map((r) => 'M' + r.map((n, l) => `${LX[l]} ${nodeY(LAYERS[l], n).toFixed(1)}`).join('L'));
+for (let a = 0; a < LAYERS[3]; a++) EDGES.push([[LX[3], nodeY(LAYERS[3], a)], [STAGES[0][1], PIPE_Y]]);
+for (let p = 0; p < PODS; p++) EDGES.push([[STAGES[2][1], PIPE_Y], [POD_X, nodeY(PODS, p)]]);
+const ROUTES: Pt[][] = [
+  [0, 1, 2, 0, 1],
+  [3, 4, 3, 2, 3],
+  [1, 3, 5, 1, 0],
+  [2, 0, 1, 1, 2],
+  [0, 5, 4, 2, 3],
+  [3, 2, 0, 0, 1],
+].map((r) => [
+  ...r.slice(0, 4).map((n, l): Pt => [LX[l], nodeY(LAYERS[l], n)]),
+  ...STAGES.map(([, x]): Pt => [x, PIPE_Y]),
+  [POD_X, nodeY(PODS, r[4])],
+]);
 const LABELS = ['INPUT', 'FEATURES', 'LATENT', 'OUTPUT'];
+const GROUPS = [
+  ['MODEL', LX[0], LX[3]],
+  ['CI / CD', STAGES[0][1], STAGES[2][1]],
+  ['PROD', POD_X - 4.5, POD_X + 4.5],
+] as const;
+const late = (d: string) => ({ ['--d' as string]: d });
 
 function Diagram() {
   return (
     <figure className="dwg" aria-hidden="true">
-      <svg viewBox="0 0 560 400" preserveAspectRatio="xMidYMid meet">
-        {EDGES.map((d, i) => (
-          <path key={i} className="band" d={d} style={{ ['--b' as string]: i % 24 }} />
+      <svg>
+        {EDGES.map(([[x1, y1], [x2, y2]], i) => (
+          <line key={i} className="band" x1={pct(x1)} y1={pct(y1)} x2={pct(x2)} y2={pct(y2)} style={{ ['--b' as string]: i % 24 }} />
         ))}
-        {ROUTES.map((d, i) => (
-          <circle key={`p${i}`} className="pulse" r="3.2" opacity="0">
-            {/* Hidden until it starts moving, so it never sits at the origin. */}
-            <set attributeName="opacity" to="1" begin={`${3.4 + i * 0.55}s`} />
-            <animateMotion dur={`${2.4 + (i % 3) * 0.5}s`} begin={`${3.4 + i * 0.55}s`} repeatCount="indefinite" path={d} />
-          </circle>
-        ))}
+        <line className="pipe late" x1={pct(STAGES[0][1])} x2={pct(STAGES[2][1])} y1={pct(PIPE_Y)} y2={pct(PIPE_Y)} style={late('1.6s')} />
+        {ROUTES.map((r, i) => {
+          const begin = `${3.4 + i * 0.85}s`;
+          const dur = `${5 + (i % 3) * 0.6}s`;
+          return (
+            <circle key={`p${i}`} className="pulse" r="3.2" opacity="0" cx={pct(r[0][0])} cy={pct(r[0][1])}>
+              {/* Hidden until it starts moving, so it never sits at the origin. */}
+              <set attributeName="opacity" to="1" begin={begin} />
+              <animate attributeName="cx" values={r.map((p) => pct(p[0])).join(';')} dur={dur} begin={begin} repeatCount="indefinite" />
+              <animate attributeName="cy" values={r.map((p) => pct(p[1])).join(';')} dur={dur} begin={begin} repeatCount="indefinite" />
+            </circle>
+          );
+        })}
         {LAYERS.map((n, l) =>
           Array.from({ length: n }, (_, i) => (
-            <circle key={`${l}-${i}`} className="node late" cx={LX[l]} cy={nodeY(n, i)} r="6" style={{ ['--d' as string]: `${1.2 + l * 0.18}s` }} />
+            <circle key={`${l}-${i}`} className="node late" cx={pct(LX[l])} cy={pct(nodeY(n, i))} r="6" style={late(`${1.2 + l * 0.18}s`)} />
           )),
         )}
+        {STAGES.map(([name, x], i) => (
+          <svg key={name} x={pct(x)} y={pct(PIPE_Y)} overflow="visible">
+            <g className="stage late" style={{ ...late(`${1.9 + i * 0.12}s`), ['--s' as string]: i }}>
+              <rect x="-30" y="-13" width="60" height="26" rx="2" />
+              <circle className="led" cx="-21" cy="0" r="2.2" />
+              <text x="5" y="3.5" textAnchor="middle" fontSize="9">
+                {name}
+              </text>
+            </g>
+          </svg>
+        ))}
+        {Array.from({ length: PODS }, (_, p) => (
+          <svg key={`pod${p}`} x={pct(POD_X)} y={pct(nodeY(PODS, p))} overflow="visible">
+            <g className="pod late" style={{ ...late(`${2.3 + p * 0.1}s`), ['--p' as string]: p }}>
+              <rect x="-15" y="-10" width="30" height="20" rx="2" />
+              <circle className="led" cx="9" cy="-4" r="2" />
+              <path d="M-9 1H3M-9 5H0" />
+            </g>
+          </svg>
+        ))}
         {LX.map((x, l) => (
-          <g key={l} className="late" style={{ ['--d' as string]: '2.2s' }}>
-            <path className="g-dim" d={`M${x} 352V366`} />
-            <text className="t-label" x={x} y="382" textAnchor="middle" fontSize="9">
-              {LABELS[l]}
+          <g key={l} className="col-label late" style={late('2.2s')}>
+            <line className="g-dim" x1={pct(x)} x2={pct(x)} y1={pct(91)} y2={pct(94)} />
+            <svg x={pct(x)} y="100%" overflow="visible">
+              <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
+                {LABELS[l]}
+              </text>
+            </svg>
+          </g>
+        ))}
+        <g className="col-label late" style={late('2.2s')}>
+          <line className="g-dim" x1={pct(POD_X)} x2={pct(POD_X)} y1={pct(91)} y2={pct(94)} />
+          <svg x={pct(POD_X)} y="100%" overflow="visible">
+            <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
+              REPLICAS ×{PODS}
+            </text>
+          </svg>
+        </g>
+        {GROUPS.map(([name, a, b]) => (
+          <g key={name} className="dim late" style={late('2s')}>
+            <line x1={pct(a)} x2={pct(b)} y1="12" y2="12" />
+            <line x1={pct(a)} x2={pct(a)} y1="7" y2="17" />
+            <line x1={pct(b)} x2={pct(b)} y1="7" y2="17" />
+            <text x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
+              {name}
             </text>
           </g>
         ))}
-        <path className="g-centre late" d="M20 20H540" style={{ ['--d' as string]: '2s' }} />
-        <text className="t-dim late" x="540" y="14" textAnchor="end" fontSize="9" style={{ ['--d' as string]: '2s' }}>
-          FIG. 1 — 4·6·6·3
-        </text>
-        <path className="scan" d="M0 0V400" />
+        <line className="scan" x1="0" x2="0" y1="0" y2="100%" />
       </svg>
     </figure>
   );
@@ -228,7 +293,28 @@ function HeroName() {
   );
 }
 
-const ICONS = {
+/** Top bar. `base` is '/' on other pages, so the section links lead back home. */
+export function SiteNav({ base = '' }: { base?: string }) {
+  return (
+    <nav id="nav">
+      <a className="nav-logo" href={`${base}#hero`} aria-label="Alex Gaffen, home">
+        AG
+      </a>
+      <div className="nav-links">
+        {NAV.map(([href, label]) => (
+          <a key={href} className="nav-link" href={base + href}>
+            {label}
+          </a>
+        ))}
+        <a className="nav-cta" href={`${base}#contact`}>
+          Say hello
+        </a>
+      </div>
+    </nav>
+  );
+}
+
+export const ICONS = {
   mail: (
     <svg viewBox="0 0 512 512" aria-hidden="true">
       <path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z" />
@@ -283,21 +369,7 @@ function Body() {
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <nav id="nav">
-        <a className="nav-logo" href="#hero" aria-label="Alex Gaffen, top of page">
-          AG
-        </a>
-        <div className="nav-links">
-          {NAV.map(([href, label]) => (
-            <a key={href} className="nav-link" href={href}>
-              {label}
-            </a>
-          ))}
-          <a className="nav-cta" href="#contact">
-            Say hello
-          </a>
-        </div>
-      </nav>
+      <SiteNav />
 
       <main id="main">
         <section id="hero">
@@ -411,7 +483,7 @@ function Body() {
             <h2 className="section-title reveal">Selected Work</h2>
           </div>
           <div className="projects-grid">
-            <a className="project-card reveal" href="https://github.com/alexgaffen/investor-practice-website" target="_blank" rel="noopener noreferrer">
+            <a className="project-card reveal" href="/mock-market">
               <img className="project-card-bg" src="/assets/demos/mock-market-poster.webp" alt="" loading="lazy" />
               <div className="project-card-overlay" />
               <div className="project-card-color" />
@@ -422,6 +494,9 @@ function Body() {
                 <p className="project-desc">
                   Full-stack investing practice site: Google auth, live stock data, and a C++ analysis service for trading signals.
                 </p>
+                <span className="card-link">
+                  Read the build <span className="arrow">→</span>
+                </span>
               </div>
             </a>
 
@@ -439,7 +514,7 @@ function Body() {
                 <p className="project-desc">
                   Pickup games, study sessions and jam nights near you, on one map. Show up for something, leave with a crew.
                 </p>
-                <span className="rally-link">
+                <span className="card-link">
                   rallynow.ca <span className="arrow">↗</span>
                 </span>
               </div>
