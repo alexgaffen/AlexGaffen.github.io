@@ -1,40 +1,35 @@
-/* Home page: single-page portfolio (dark drawing-sheet design). Scoped to body.portfolio. */
+/* Home page: single-page portfolio (dark ops-console design). Scoped to body.portfolio. */
 
+/* Type: Space Grotesk for display (name, headings, figures), Space Mono for labels and
+   data, Inter for reading. All self-hosted. */
 @font-face {
-  font-family: 'DM Sans';
+  font-family: 'Space Grotesk';
   font-style: normal;
-  font-weight: 100 1000;
-  font-display: swap;
-  src: url(/assets/fonts/dm-sans-latin-opsz-normal.woff2) format('woff2');
-}
-@font-face {
-  font-family: 'Syne';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url(/assets/fonts/syne-latin-wght-normal.woff2) format('woff2');
-}
-@font-face {
-  font-family: 'Instrument Serif';
-  font-style: italic;
-  font-weight: 400;
-  /* Preloaded; block so the name never flashes in a fallback serif first. */
+  font-weight: 300 700;
+  /* Preloaded; block so the name never flashes in a fallback face first. */
   font-display: block;
-  src: url(/assets/fonts/instrument-serif-latin-400-italic.woff2) format('woff2');
+  src: url(/assets/fonts/space-grotesk-latin-wght-normal.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'DM Mono';
+  font-family: 'Space Mono';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/assets/fonts/dm-mono-latin-400-normal.woff2) format('woff2');
+  src: url(/assets/fonts/space-mono-latin-400-normal.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'DM Mono';
+  font-family: 'Space Mono';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   font-display: swap;
-  src: url(/assets/fonts/dm-mono-latin-500-normal.woff2) format('woff2');
+  src: url(/assets/fonts/space-mono-latin-700-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/assets/fonts/inter-latin-wght-normal.woff2) format('woff2');
 }
 
 /* --t0: offset every hero entrance animation starts from. */
@@ -136,14 +131,13 @@ body.portfolio {
   --text: #edecea;
   --muted: #888880;
   --faint: #6a6a64;
-  --mono: 'DM Mono', ui-monospace, Menlo, Consolas, monospace;
-  --serif: 'Instrument Serif', Georgia, serif;
-  --display: 'Syne', 'DM Sans', sans-serif;
+  --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
+  --display: 'Space Grotesk', 'Inter', sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.7;
   text-size-adjust: 100%;
   scrollbar-width: auto;
@@ -289,12 +283,13 @@ body.portfolio {
   box-shadow: 0 6px 24px -6px rgba(var(--accent-rgb), 0.6);
 }
 
-/* ── Hero: drawing sheet ── */
+/* ── Hero: an ops console. A framed window with a status bar, the deploy history (career),
+   a node card (who's running this) and the model -> CI/CD -> prod figure. ── */
 #hero {
   --line: #434342;
-  /* Title-block width; the name is sized below so it always ends before the block. */
+  /* Node-card width; the name is sized below so it always ends before the card. */
   --tbw: min(500px, 40vw);
-  --name-fs: clamp(88px, 13.5vw, 200px);
+  --name-fs: clamp(80px, 11.5vw, 176px);
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -306,12 +301,11 @@ body.portfolio {
   z-index: 1;
 }
 .hero-name {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: var(--name-fs);
-  line-height: 0.88;
-  letter-spacing: -0.035em;
+  line-height: 0.9;
+  letter-spacing: -0.055em;
   display: block;
   margin-top: auto;
   position: relative;
@@ -327,13 +321,20 @@ body.portfolio {
 .hero-name .word + .word {
   animation-delay: calc(var(--t0) + 0.4s);
 }
-/* Italic side bearings differ: the "A" overhangs its box by 0.078em and the "G" starts
-   0.047em inside it. Shift both so the two lines' ink starts at the same edge as the blurb. */
-.hero-name .word:first-child {
-  margin-left: 0.078em;
+/* A block cursor in place of a full stop, blinking like a waiting prompt. */
+.cursor {
+  display: inline-block;
+  width: 0.09em;
+  height: 0.74em;
+  margin-left: 0.06em;
+  background: var(--accent);
+  box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.45);
+  animation: cursor-blink 1.06s steps(1) calc(var(--t0) + 1.5s) infinite;
 }
-.hero-name .word:nth-child(2) {
-  margin-left: -0.047em;
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
 }
 #hero-meta {
   position: relative;
@@ -351,6 +352,20 @@ body.portfolio {
 }
 .role-line {
   display: block;
+  /* Hanging indent so a wrapped line lines up after its tag, not under it. */
+  padding-left: 2.6em;
+  text-indent: -2.6em;
+}
+.role-key {
+  display: inline-block;
+  width: 4.2em;
+  text-indent: 0;
+  font-family: var(--mono);
+  font-size: 0.62em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  vertical-align: 0.15em;
 }
 .hero-role strong {
   color: var(--text);
@@ -368,61 +383,154 @@ body.portfolio {
   }
 }
 
-/* Sheet frame draws itself: across the top, then down. */
+/* Console frame draws itself: across the top, then down. A status bar runs along the
+   top; a faint dot grid fills the window. */
 .sheet {
   position: absolute;
   inset: 84px 24px 24px;
-  border: 1px solid rgba(237, 236, 234, 0.12);
+  border: 1px solid rgba(237, 236, 234, 0.14);
+  border-radius: 6px;
+  background: radial-gradient(rgba(237, 236, 234, 0.07) 1px, transparent 1.2px) 0 0 / 24px 24px;
   pointer-events: none;
   z-index: 1;
-  clip-path: inset(0 100% 100% 0);
+  clip-path: inset(0 100% 100% 0 round 6px);
   animation: sheet-draw 1.3s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--t0) + 0.05s) forwards;
-}
-.sheet::before {
-  content: '';
-  position: absolute;
-  inset: 14px;
-  border: 1px solid var(--line);
 }
 @keyframes sheet-draw {
   45% {
-    clip-path: inset(0 0 calc(100% - 15px) 0);
+    clip-path: inset(0 0 calc(100% - 35px) 0 round 6px);
   }
   100% {
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0 round 6px);
   }
 }
-.zone {
+.con-bar {
   position: absolute;
+  inset: 0 0 auto;
+  height: 34px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid rgba(237, 236, 234, 0.1);
+  background: rgba(8, 8, 8, 0.85);
   font-family: var(--mono);
-  font-size: 9px;
-  line-height: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--faint);
-  text-align: center;
-  width: 14px;
-  height: 14px;
-  transform: translate(-50%, -50%);
+  white-space: nowrap;
 }
-.zone-tick {
-  position: absolute;
-  background: rgba(237, 236, 234, 0.22);
+.con-path {
+  color: var(--text);
+}
+.con-path span {
+  color: var(--faint);
+}
+.con-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+.con-ok::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
+  animation: blink 1.6s ease-in-out infinite;
+}
+.con-clock b {
+  font-weight: 400;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Revision table = career history */
+/* Shell session in the top-left corner: each command types itself, then its output
+   appears; it ends on a blinking caret. Only where there's room above the name. */
+.boot {
+  position: absolute;
+  z-index: 3;
+  top: 150px;
+  left: 64px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.boot p {
+  margin: 0;
+  white-space: nowrap;
+}
+.boot .ps {
+  color: var(--accent);
+}
+.boot .cmd {
+  color: var(--text);
+}
+.boot .typed {
+  display: inline-block;
+  vertical-align: bottom;
+  overflow: hidden;
+  width: 0;
+  animation: boot-type calc(var(--n) * 45ms) steps(var(--n)) calc(var(--t0) + 2.4s + var(--l) * 1.5s) forwards;
+}
+.boot .out,
+.boot .cmd {
+  opacity: 0;
+  animation: dwg-fade 0.01s calc(var(--t0) + 2.3s + var(--l, 0) * 1.5s) forwards;
+}
+.boot .out {
+  color: var(--faint);
+  animation-delay: calc(var(--t0) + 3.4s + var(--l) * 1.5s);
+}
+.boot .idle {
+  animation-delay: calc(var(--t0) + 5.4s);
+}
+.boot .caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  vertical-align: -0.2em;
+  background: var(--accent);
+  animation: cursor-blink 1.06s steps(1) infinite;
+}
+@keyframes boot-type {
+  to {
+    width: calc(var(--n) * 1ch + 1ch);
+  }
+}
+@media (max-width: 900px), (max-height: 720px), (orientation: portrait) {
+  .boot {
+    display: none;
+  }
+}
+
+/* Deploy history = career history; the newest deploy is live. */
 .rev {
   position: absolute;
   z-index: 3;
-  top: 99px;
-  right: 39px;
-  width: min(470px, 40%);
-  background: var(--bg);
+  top: 134px;
+  right: 40px;
+  width: min(500px, 42%);
   border-collapse: collapse;
   font-family: var(--mono);
   font-size: 10.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   opacity: 0;
   animation: dwg-fade 0.6s ease calc(var(--t0) + 1.8s) forwards;
+}
+.rev caption {
+  caption-side: top;
+  text-align: left;
+  padding: 0 0 8px 10px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 .rev tr {
   opacity: 0;
@@ -433,42 +541,63 @@ body.portfolio {
 }
 .rev th,
 .rev td {
-  border: 1px solid var(--line);
-  padding: 6px 10px;
+  border-bottom: 1px solid var(--line);
+  padding: 7px 10px;
   text-align: left;
   font-weight: 400;
   white-space: nowrap;
+  background: var(--bg);
 }
 .rev th {
+  border-top: 1px solid var(--line);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--faint);
 }
 .rev td {
   color: var(--muted);
 }
+.rev td:nth-child(2) {
+  color: var(--faint);
+}
 .rev td:first-child,
 .rev th:first-child {
-  width: 44px;
+  width: 30px;
   text-align: center;
+}
+.rev .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
 }
 .rev tr.current td {
   color: var(--text);
+  background: rgba(var(--accent-rgb), 0.08);
 }
-.rev tr.current td:first-child {
-  color: var(--on-fill);
-  background: var(--fill);
+.rev tr.current td:nth-child(2) {
+  color: var(--accent);
+}
+.rev tr.current .dot {
+  border: 0;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
+  animation: blink 1.6s ease-in-out infinite;
 }
 
 /* The drawing: model -> pipeline -> prod, scanned in, then signals run through it.
-   It fills the whole box right of the name ("Gaffen." is 2.45em wide), between the
-   revision table and the title block; the figure stretches to any aspect. */
+   It fills the whole box right of the name, between the deploy table and the node
+   card; the figure stretches to any aspect. */
 .dwg {
   position: absolute;
   z-index: 2;
-  top: 252px;
+  top: 316px;
   right: 64px;
   bottom: 150px;
-  /* "Gaffen." ink ends 2.26em in from the 64px gutter. */
-  left: calc(112px + var(--name-fs) * 2.26);
+  /* "Gaffen" and its cursor end 2.96em in from the 64px gutter. */
+  left: calc(112px + var(--name-fs) * 2.96);
   container-type: size;
 }
 /* Absolute so its % height resolves against the box even when the box is only
@@ -633,18 +762,21 @@ body.portfolio {
   }
 }
 
-/* Title block */
+/* Node card: a small inspector panel for the person running this. */
 .tb {
   position: absolute;
   z-index: 3;
-  right: 39px;
-  bottom: 39px;
+  right: 40px;
+  bottom: 40px;
   width: var(--tbw);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
   background: var(--line);
+  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.9);
   font-family: var(--mono);
   text-transform: uppercase;
   opacity: 0;
@@ -679,8 +811,11 @@ body.portfolio {
 .tb .span2 {
   grid-column: span 2;
 }
-.tb .rev-cell b {
+.tb .ok-cell b {
   color: var(--accent);
+}
+.tb .ok-cell b::before {
+  content: '● ';
 }
 
 @media (max-width: 1200px) {
@@ -693,8 +828,8 @@ body.portfolio {
   #hero-meta {
     max-width: calc(100% - var(--tbw) - 56px);
   }
-  .rev td:nth-child(3),
-  .rev th:nth-child(3) {
+  .rev td:nth-child(2),
+  .rev th:nth-child(2) {
     display: none;
   }
   /* Narrower columns: tighten so values like "AI Researcher" never get cut off. */
@@ -713,15 +848,15 @@ body.portfolio {
   /* The name has the bottom-left to itself here, so it can grow and fill it; it still
      ends well short of the title block. */
   #hero {
-    --name-fs: clamp(88px, 18vw, 260px);
+    --name-fs: clamp(80px, 15vw, 230px);
   }
   .dwg {
     position: relative;
     inset: auto;
     flex: 1 0 auto;
     min-height: 360px;
-    /* 128px hero padding + 124px clears the revision table, as in landscape. */
-    margin: 124px 0 56px;
+    /* 128px hero padding + 188px clears the deploy table, as in landscape. */
+    margin: 188px 0 56px;
   }
   .dwg > svg {
     height: min(100%, 120cqw);
@@ -745,14 +880,13 @@ body.portfolio {
   .sheet {
     inset: 72px 10px 10px;
   }
-  .sheet::before {
-    inset: 10px;
+  .con-bar {
+    height: 30px;
+    padding: 0 12px;
+    font-size: 9.5px;
   }
-  .zone {
-    font-size: 8px;
-    width: 10px;
-    height: 10px;
-    line-height: 10px;
+  .exp-item::before {
+    display: none;
   }
   .rev {
     display: none;
@@ -788,38 +922,58 @@ body.portfolio {
   }
 }
 
-/* ── Status band ── */
+/* ── Log tail: each role as a line in a deploy log, scrolling past under the hero ── */
 .status-band {
   position: relative;
   z-index: 1;
-  background: var(--fill);
+  background: #0d0d0d;
+  border-block: 1px solid var(--border);
   overflow: hidden;
-  padding: 14px 0;
+  padding: 13px 0;
 }
 .status-band-inner {
   display: flex;
   gap: 0;
-  /* 25.5s over half this track (two copies of the roles) is ~81px/s. */
-  animation: marquee 25.5s linear infinite;
+  animation: marquee 36s linear infinite;
   width: max-content;
 }
 .status-band-item {
   font-family: var(--mono);
   font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--on-fill);
-  padding: 0 48px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  padding: 0 28px;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 .status-band-item::after {
-  content: '◆';
-  font-size: 8px;
-  opacity: 0.4;
+  content: '';
+  width: 1px;
+  height: 14px;
+  margin-left: 28px;
+  background: var(--border);
+}
+.log-time {
+  color: var(--faint);
+}
+.log-state {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+.log-state.running {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: rgba(var(--accent-rgb), 0.08);
+}
+.log-svc {
+  color: var(--text);
+  font-weight: 700;
 }
 @keyframes marquee {
   to {
@@ -843,11 +997,15 @@ body.portfolio {
   gap: 16px;
 }
 .section-label::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0.6;
+  content: '//';
+  color: var(--accent);
+}
+main:not(.cs) {
+  counter-reset: sec;
+}
+main:not(.cs) .section-label::before {
+  counter-increment: sec;
+  content: counter(sec, decimal-leading-zero) ' //';
 }
 .section-title {
   font-family: var(--display);
@@ -911,6 +1069,24 @@ body.portfolio {
 .exp-item:first-child {
   border-top: 1px solid var(--border);
 }
+/* A rail through every logo, like commits on a branch. */
+.exp-item::before {
+  content: '';
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: -1px;
+  width: 1px;
+  background: var(--line, #434342);
+}
+.exp-item:first-child::before {
+  top: 64px;
+  background: linear-gradient(var(--accent), var(--line, #434342) 60%);
+}
+.exp-item:last-child::before {
+  bottom: auto;
+  height: 64px;
+}
 /* An accent rule sweeps along the bottom edge on hover. */
 .exp-item::after {
   content: '';
@@ -942,15 +1118,16 @@ body.portfolio {
   border-radius: 8px;
   border: 1px solid var(--border);
   padding: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: #121212;
+  position: relative;
   transition: border-color 0.25s;
 }
 .exp-item:hover .exp-mark {
   border-color: rgba(var(--accent-rgb), 0.4);
 }
 .exp-mark.mono {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: 30px;
   line-height: 1;
   color: var(--text);
@@ -1343,8 +1520,8 @@ body.portfolio {
   display: flex;
 }
 .marquee-text {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(48px, 6vw, 88px);
   letter-spacing: -0.03em;
   color: transparent;
@@ -1426,8 +1603,8 @@ body.portfolio {
     var(--bg);
 }
 .honour-amount {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(72px, 9vw, 140px);
   line-height: 0.9;
   letter-spacing: -0.04em;
@@ -1549,8 +1726,8 @@ body.portfolio {
   }
 }
 .grade-mark {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: 34px;
   line-height: 1;
   color: var(--text);
@@ -1831,8 +2008,8 @@ body.portfolio {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
 }
 .ph-title {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(26px, 3vw, 44px);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -1911,9 +2088,8 @@ body.portfolio {
   align-items: start;
 }
 .contact-headline {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(48px, 7vw, 104px);
   line-height: 0.95;
   letter-spacing: -0.03em;
@@ -2185,7 +2361,7 @@ body.portfolio {
 /* ── Tablet / phone ── */
 @media (max-width: 900px) {
   #hero {
-    padding: 100px 28px 28px;
+    padding: 124px 28px 28px;
     gap: 28px;
   }
   .hero-name {
@@ -2250,7 +2426,7 @@ body.portfolio {
     grid-template-rows: 1fr auto auto;
     column-gap: 24px;
     row-gap: 14px;
-    padding: 84px 32px 30px;
+    padding: 116px 32px 30px;
   }
   .hero-name {
     grid-area: name;
@@ -2275,6 +2451,12 @@ body.portfolio {
 }
 
 /* ── Phones ── */
+@media (max-width: 600px) {
+  .con-ok,
+  .con-path span {
+    display: none;
+  }
+}
 @media (max-width: 480px) {
   .tb b {
     font-size: 10px;

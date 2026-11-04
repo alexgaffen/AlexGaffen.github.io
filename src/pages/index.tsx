@@ -18,12 +18,13 @@ const NAV = [
   ['#photos', 'Photos'],
 ] as const;
 
+/* Log tail under the hero: one line per role, newest first. */
 const BAND = [
-  'Adaptron Inc — AI Research Engineer',
-  'McMaster Dept. of Medicine — Biomedical ML Research Engineer',
-  'Bonbon Technologies — Front End Developer Intern',
-  'McMaster University — Honours Computer Science Co-op',
-];
+  ['2026-05', 'adaptron', 'AI Research Engineer', 'running'],
+  ['2026-01', 'mcmaster-medicine', 'Biomedical ML Research Engineer', 'shipped'],
+  ['2024-05', 'bonbon', 'Front End Developer Intern', 'shipped'],
+  ['2022-09', 'mcmaster', 'Honours Computer Science Co-op', 'running'],
+] as const;
 
 type Mark = { img: string } | { mono: string } | { violin: true };
 
@@ -44,7 +45,7 @@ const EXPERIENCE: Job[] = [
     role: 'AI Research Engineer · 8-month co-op',
     date: 'May 2026 – Present',
     badge: 'Current',
-    mark: { mono: 'Ad' },
+    mark: { img: '/assets/logos/adaptron.png' },
     bullets: [
       'Researching and developing an interpretable cognitive architecture in Python for autonomous robot control, world models, and combining supervised and unsupervised learning.',
       'Building modular, tested components in a Git-based, multi-contributor codebase through code reviews and planning.',
@@ -68,7 +69,7 @@ const EXPERIENCE: Job[] = [
     where: 'Los Angeles, CA · Remote',
     role: 'Front End Developer Intern',
     date: 'May 2024 – Jul 2024',
-    mark: { mono: 'Bb' },
+    mark: { img: '/assets/logos/bonbon.png' },
     bullets: ['Collaborated with a cross-functional team to build and deploy web components in Svelte, reporting to the CTO.'],
   },
   {
@@ -81,20 +82,28 @@ const EXPERIENCE: Job[] = [
   },
 ];
 
-const REVS = [
-  ['A', 'Bonbon — Front End Dev Intern', '2024-05'],
-  ['B', 'Dept. of Medicine — ML Research Eng.', '2026-01'],
-  ['C', 'Adaptron — AI Research Engineer', '2026-05'],
+/* Deploy history = career history, oldest first; the last one is live. */
+const DEPLOYS = [
+  ['3f9a1c2', 'bonbon/front-end-intern', '2024-05'],
+  ['a71e0d4', 'medicine/ml-research-eng', '2026-01'],
+  ['c4b28e9', 'adaptron/ai-research-eng', '2026-05'],
 ] as const;
 
-const TITLE_BLOCK = [
-  ['Drawn', 'A. Gaffen', ''],
+/* A short shell session typed out in the console's top-left corner. */
+const BOOT = [
+  ['ssh alexgaffen.com', 'connected · hamilton, on'],
+  ['cat focus.txt', 'ml systems · devops · reliability'],
+] as const;
+
+/* Node card (bottom right): who's running this. */
+const NODE = [
+  ['Node', 'a.gaffen', ''],
   ['Role', 'AI Researcher', ''],
   ['School', 'McMaster', 'hide-sm'],
   ['Year', '4th · CS', 'hide-sm'],
-  ['Part', 'Portfolio', 'span2'],
-  ['Rev', 'C', 'rev-cell'],
-  ['Sheet', '1 / 1', ''],
+  ['Region', 'Hamilton, ON', 'span2'],
+  ['Status', 'Healthy', 'ok-cell'],
+  ['Shell', 'zsh', ''],
 ];
 
 const SKILLS = [
@@ -280,14 +289,13 @@ function JobMark({ mark }: { mark: Mark }) {
   );
 }
 
-/** Name on two lines, each line rising in as a whole word so kerning and the "ff"
-    ligature stay intact. */
+/** Name on two lines, each line rising in as a whole word, ending on a blinking cursor. */
 function HeroName() {
   return (
     <h1 className="hero-name">
       <span className="word">Alex</span>
       <span className="word">
-        Gaffen<span className="stop">.</span>
+        Gaffen<span className="cursor" aria-hidden="true" />
       </span>
     </h1>
   );
@@ -307,7 +315,7 @@ export function SiteNav({ base = '' }: { base?: string }) {
           </a>
         ))}
         <a className="nav-cta" href={`${base}#contact`}>
-          Say hello
+          Get in touch
         </a>
       </div>
     </nav>
@@ -373,19 +381,47 @@ function Body() {
 
       <main id="main">
         <section id="hero">
-          <div className="sheet" id="sheet" aria-hidden="true" />
+          <div className="sheet" id="sheet" aria-hidden="true">
+            <div className="con-bar">
+              <span className="con-path">
+                alexgaffen.com <span>/ portfolio</span>
+              </span>
+              <span className="con-ok">All systems operational</span>
+              <span className="con-clock">
+                Hamilton <b id="clock">--:--:--</b>
+              </span>
+            </div>
+          </div>
+          <div className="boot" aria-hidden="true">
+            {BOOT.map(([cmd, out], i) => (
+              <div key={cmd} style={{ ['--l' as string]: i }}>
+                <p className="cmd">
+                  <span className="ps">~ $</span> <span className="typed" style={{ ['--n' as string]: cmd.length }}>{cmd}</span>
+                </p>
+                <p className="out">{out}</p>
+              </div>
+            ))}
+            <p className="cmd idle">
+              <span className="ps">~ $</span> <span className="caret" />
+            </p>
+          </div>
           <table className="rev">
+            <caption>Deploys</caption>
             <thead>
               <tr>
-                <th>Rev</th>
-                <th>Description</th>
+                <th aria-label="Status" />
+                <th>Commit</th>
+                <th>Deployment</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
-              {REVS.map(([r, d, t], i) => (
-                <tr key={r} className={i === REVS.length - 1 ? 'current' : undefined} style={{ ['--r' as string]: i }}>
-                  <td>{r}</td>
+              {DEPLOYS.map(([h, d, t], i) => (
+                <tr key={h} className={i === DEPLOYS.length - 1 ? 'current' : undefined} style={{ ['--r' as string]: i }}>
+                  <td>
+                    <span className="dot" />
+                  </td>
+                  <td>{h}</td>
                   <td data-scramble="">{d}</td>
                   <td data-scramble="">{t}</td>
                 </tr>
@@ -394,7 +430,7 @@ function Body() {
           </table>
           <Diagram />
           <div className="tb">
-            {TITLE_BLOCK.map(([k, v, c], i) => (
+            {NODE.map(([k, v, c], i) => (
               <div key={k} className={c || undefined} style={{ ['--i' as string]: i }}>
                 <span>{k}</span>
                 <b data-scramble="">{v}</b>
@@ -405,9 +441,11 @@ function Body() {
           <div id="hero-meta">
             <p className="hero-role">
               <span className="role-line">
+                <span className="role-key">edu</span>
                 <strong>Computer Science Student</strong> at McMaster University
               </span>
               <span className="role-line">
+                <span className="role-key">now</span>
                 <strong>AI Research Engineer</strong> at Adaptron Inc
               </span>
             </p>
@@ -416,9 +454,12 @@ function Body() {
 
         <div className="status-band" aria-hidden="true">
           <div className="status-band-inner">
-            {[...BAND, ...BAND].map((t, i) => (
+            {[...BAND, ...BAND].map(([date, svc, role, state], i) => (
               <div key={i} className="status-band-item">
-                {t}
+                <span className="log-time">{date}</span>
+                <span className={`log-state ${state}`}>{state === 'running' ? '● running' : '✓ shipped'}</span>
+                <span className="log-svc">{svc}</span>
+                {role}
               </div>
             ))}
           </div>
@@ -777,7 +818,7 @@ export const index: PageDef = {
   file: 'index',
   title: 'Alex Gaffen | Computer Science & AI Portfolio',
   viewport: 'width=device-width, initial-scale=1.0',
-  fonts: ['instrument-serif-latin-400-italic.woff2', 'dm-sans-latin-opsz-normal.woff2'],
+  fonts: ['space-grotesk-latin-wght-normal.woff2', 'inter-latin-wght-normal.woff2'],
   htmlClassName: 'portfolio-root',
   bodyClassName: 'portfolio',
   analytics: true,

@@ -55,15 +55,11 @@
   margin-bottom: 20px;
 }
 .cs-eyebrow::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--accent);
+  content: '//';
 }
 .cs-title {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(72px, 11vw, 168px);
   line-height: 0.9;
   letter-spacing: -0.035em;
@@ -444,8 +440,8 @@
   gap: 40px;
 }
 .cs-more-title {
-  font-family: var(--serif);
-  font-style: italic;
+  font-family: var(--display);
+  font-weight: 700;
   font-size: clamp(44px, 5vw, 72px);
   line-height: 0.95;
   letter-spacing: -0.03em;
