@@ -630,7 +630,9 @@ function Body() {
                 </div>
                 <div className="honour-body">
                   <div className="honour-org">Polytechnique Montréal · 2026</div>
-                  <h3 className="honour-title">Undergraduate Summer Internship Award</h3>
+                  <h3 className="honour-title">
+                    Undergraduate Summer Internship Award <span className="honour-note">(Offer)</span>
+                  </h3>
                   <p className="honour-desc">To research AI in cybersecurity under Prof. N. Boulahia-Cuppens.</p>
                   <div className="honour-stats">
                     <div>

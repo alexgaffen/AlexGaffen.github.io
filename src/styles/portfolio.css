@@ -1687,6 +1687,11 @@ main:not(.cs) .section-label::before {
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
+.honour-note {
+  color: var(--muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
 .honour-desc {
   margin-top: 10px;
   color: var(--muted);
