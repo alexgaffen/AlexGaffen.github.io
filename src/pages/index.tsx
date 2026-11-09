@@ -126,6 +126,93 @@ const SKILLS = [
   ['Git & Code Review', 'Collaboration', ['Adaptron', 'Bonbon']],
 ] as const;
 
+/* Certifications. While an exam is booked, `status` is 'in-progress'; once passed, set
+   'earned' with the date and the Microsoft Learn share link, which turns on the full
+   badge, the shine and the verify button. */
+interface Cert {
+  code: string;
+  name: string;
+  status: 'in-progress' | 'earned';
+  earned?: string;
+  verifyUrl?: string;
+  blurb: string;
+  /** Exam skill areas with their published weighting (%). */
+  domains: readonly (readonly [string, number, number])[];
+}
+const CERTS: readonly Cert[] = [
+  {
+    code: 'AZ-900',
+    name: 'Azure Fundamentals',
+    status: 'in-progress',
+    blurb:
+      'Core cloud concepts and how Azure delivers them: compute, networking, storage and identity, plus the pricing, governance and compliance tooling that keeps a deployment in check.',
+    domains: [
+      ['Cloud concepts', 25, 30],
+      ['Azure architecture & services', 35, 40],
+      ['Azure management & governance', 30, 35],
+    ],
+  },
+];
+
+/** Microsoft's four-square mark, used as the issuer's logo. */
+function MsLogo() {
+  return (
+    <svg className="ms-logo" viewBox="0 0 23 23" aria-hidden="true">
+      <rect x="1" y="1" width="10" height="10" fill="#f25022" />
+      <rect x="12" y="1" width="10" height="10" fill="#7fba00" />
+      <rect x="1" y="12" width="10" height="10" fill="#00a4ef" />
+      <rect x="12" y="12" width="10" height="10" fill="#ffb900" />
+    </svg>
+  );
+}
+
+/** The badge: a faceted hexagon in Azure blues with a cloud mark and a Fundamentals ribbon. */
+function CertBadge({ code }: { code: string }) {
+  return (
+    <div className="cert-badge" aria-hidden="true">
+      <svg viewBox="0 0 200 224">
+        <defs>
+          <linearGradient id="cb-face" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#4cc2ff" />
+            <stop offset="0.5" stopColor="#0f78d4" />
+            <stop offset="1" stopColor="#0a3f8f" />
+          </linearGradient>
+          <linearGradient id="cb-rim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#e8f4ff" />
+            <stop offset="0.45" stopColor="#8fb6d9" />
+            <stop offset="1" stopColor="#4d6a86" />
+          </linearGradient>
+          <linearGradient id="cb-band" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#0b2f66" />
+            <stop offset="0.5" stopColor="#123f85" />
+            <stop offset="1" stopColor="#0b2f66" />
+          </linearGradient>
+        </defs>
+        <path className="cb-rim" d="M100 4 189 55v114l-89 51-89-51V55Z" fill="url(#cb-rim)" />
+        <path d="M100 16 178 61v102l-78 45-78-45V61Z" fill="url(#cb-face)" />
+        <path d="M100 16 178 61 100 106 22 61Z" fill="#fff" opacity="0.1" />
+        <path d="M100 30 166 68v88l-66 38-66-38V68Z" fill="none" stroke="#fff" strokeOpacity="0.28" strokeWidth="1.2" />
+        <text x="100" y="74" textAnchor="middle" className="cb-top">
+          MICROSOFT CERTIFIED
+        </text>
+        <path
+          d="M79 121a15 15 0 0 1 2.6-29.7A20 20 0 0 1 120 96a12.5 12.5 0 0 1 1 25Z"
+          fill="#fff"
+          fillOpacity="0.95"
+        />
+        <text x="100" y="140" textAnchor="middle" className="cb-code">
+          {code}
+        </text>
+        <path d="M4 150h192l-10 13 10 13H4l10-13Z" fill="url(#cb-band)" stroke="#9cc8ef" strokeOpacity="0.55" />
+        <text x="100" y="167.5" textAnchor="middle" className="cb-ribbon">
+          FUNDAMENTALS
+        </text>
+      </svg>
+      <span className="cert-shine" />
+    </div>
+  );
+}
+
 // Every A-range grade from the résumé's coursework list, best first.
 const GRADE_ORDER: Record<string, number> = { 'A+': 0, A: 1, 'A-': 2 };
 const COURSES = (SECTIONS.find((s) => s.id === 'education')?.items[0].courses ?? [])
@@ -713,6 +800,57 @@ function Body() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section id="certifications">
+          <div className="section-wrap">
+            <p className="section-label">Certifications</p>
+            {CERTS.map((c) => {
+              const top = Math.max(...c.domains.map(([, , hi]) => hi));
+              return (
+                <article key={c.code} className="cert reveal" data-status={c.status}>
+                  <CertBadge code={c.code} />
+                  <div className="cert-body">
+                    <div className="cert-issuer">
+                      <MsLogo />
+                      <span>Microsoft Certified</span>
+                    </div>
+                    <h3 className="cert-name">{c.name}</h3>
+                    <div className="cert-meta">
+                      <span className="cert-code">{c.code}</span>
+                      {c.status === 'earned' ? (
+                        <span className="cert-state earned">✓ Earned {c.earned}</span>
+                      ) : (
+                        <span className="cert-state">In progress</span>
+                      )}
+                      <span className="cert-tier">Fundamentals · no expiry</span>
+                    </div>
+                    <p className="cert-blurb">{c.blurb}</p>
+                    <p className="cert-sub">Exam weighting</p>
+                    <ul className="cert-domains">
+                      {c.domains.map(([label, lo, hi]) => (
+                        <li key={label} style={{ ['--w' as string]: `${(((lo + hi) / 2) / top) * 100}%` }}>
+                          <span className="cd-label">{label}</span>
+                          <span className="cd-pct">
+                            {lo}–{hi}%
+                          </span>
+                          <span className="cd-bar" />
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="cert-foot">
+                      <span>Pass mark 700 / 1000</span>
+                      {c.status === 'earned' && c.verifyUrl && (
+                        <a className="cert-verify" href={c.verifyUrl} target="_blank" rel="noopener noreferrer">
+                          Verify on Microsoft Learn ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
 

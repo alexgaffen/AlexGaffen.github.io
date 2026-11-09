@@ -1072,6 +1072,7 @@ main:not(.cs) .section-label::before {
 #honours,
 #coursework,
 #skills,
+#certifications,
 #photos,
 #contact {
   border-top: 1px solid var(--border);
@@ -2134,6 +2135,307 @@ main:not(.cs) .section-label::before {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
   transform: translateY(-2px);
+}
+
+/* ── Certifications: a credential card. While the exam is booked the badge is muted and
+   the card says "In progress"; once earned, the badge takes its full colour, a light
+   sweeps across it and a holographic edge runs round the card. ── */
+@property --cert-a {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.cert {
+  --az: 15, 120, 212;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 52px;
+  align-items: center;
+  max-width: 1080px;
+  padding: 44px 48px;
+  border: 1px solid rgba(var(--az), 0.38);
+  border-radius: 4px;
+  background:
+    radial-gradient(80% 140% at 0% 0%, rgba(var(--az), 0.18) 0%, transparent 55%),
+    radial-gradient(70% 120% at 100% 100%, rgba(var(--az), 0.08) 0%, transparent 60%),
+    var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 36px 70px -44px rgba(var(--az), 0.6);
+}
+.cert[data-status='earned']::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--cert-a),
+    transparent 0 58%,
+    rgba(76, 194, 255, 0.9) 68%,
+    #fff 71%,
+    rgba(255, 200, 120, 0.85) 74%,
+    transparent 84%
+  );
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: cert-orbit 7s linear infinite;
+}
+@keyframes cert-orbit {
+  to {
+    --cert-a: 360deg;
+  }
+}
+.cert-badge {
+  position: relative;
+  width: 200px;
+  aspect-ratio: 200 / 224;
+  filter: drop-shadow(0 18px 32px rgba(var(--az), 0.5));
+}
+.cert-badge svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.cb-top {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  fill: rgba(255, 255, 255, 0.92);
+}
+.cb-code {
+  font-family: var(--display);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  fill: #fff;
+}
+.cb-ribbon {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  fill: #eaf5ff;
+}
+/* A band of light crossing the badge face every few seconds. */
+.cert-shine {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 1.8%, 94.5% 24.6%, 94.5% 75.4%, 50% 98.2%, 5.5% 75.4%, 5.5% 24.6%);
+  background: linear-gradient(
+      105deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.6) 48%,
+      rgba(255, 255, 255, 0.15) 54%,
+      transparent 62%
+    )
+    150% 0 / 260% 100% no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: cert-sweep 5.5s ease-in-out 1.2s infinite;
+}
+@keyframes cert-sweep {
+  0% {
+    background-position: 150% 0;
+  }
+  45%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+.cert[data-status='in-progress'] .cert-badge svg {
+  filter: grayscale(0.7) brightness(0.72);
+}
+.cert[data-status='in-progress'] .cert-badge {
+  filter: none;
+  opacity: 0.9;
+}
+.cert[data-status='in-progress'] .cert-shine {
+  display: none;
+}
+.cert-issuer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8c7c0;
+}
+.ms-logo {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.cert-name {
+  margin-top: 14px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #f4f3f0;
+}
+.cert-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.cert-code,
+.cert-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 2px;
+  line-height: 1.4;
+}
+.cert-code {
+  color: #a9d6ff;
+  border: 1px solid rgba(var(--az), 0.55);
+  background: rgba(var(--az), 0.14);
+}
+.cert-state {
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.4);
+}
+.cert-state:not(.earned)::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.9);
+  animation: blink 1.6s ease-in-out infinite;
+}
+.cert-state.earned {
+  color: #7fe3ad;
+  border-color: rgba(127, 227, 173, 0.4);
+}
+.cert-tier {
+  color: var(--muted);
+}
+.cert-blurb {
+  margin-top: 18px;
+  max-width: 60ch;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: #b9b8b1;
+}
+.cert-sub {
+  margin-top: 26px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.cert-domains {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  max-width: 620px;
+}
+.cert-domains li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  row-gap: 7px;
+  align-items: baseline;
+}
+.cd-label {
+  font-size: 14.5px;
+  color: #dcdbd4;
+}
+.cd-pct {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #a9d6ff;
+}
+.cd-bar {
+  grid-column: 1 / -1;
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+}
+.cd-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w);
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0f78d4, #4cc2ff);
+  box-shadow: 0 0 12px rgba(76, 194, 255, 0.6);
+  transform-origin: left;
+}
+.reveal-on .cert.reveal .cd-bar::after {
+  transform: scaleX(0);
+  transition: transform 1.1s var(--ease-out) 0.35s;
+}
+.reveal-on .cert.reveal.in .cd-bar::after {
+  transform: none;
+}
+.cert-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-top: 24px;
+  max-width: 620px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.cert-verify {
+  color: #a9d6ff;
+  border-bottom: 1px solid rgba(169, 214, 255, 0.4);
+}
+.cert-verify:hover {
+  color: #fff;
+}
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
+  .cert {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 32px;
+    padding: 32px 28px;
+  }
+  .cert-badge {
+    width: 150px;
+  }
+}
+@media (max-width: 640px) {
+  .cert {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    padding: 28px 22px;
+  }
+  .cert-badge {
+    width: 132px;
+  }
+  .cert-blurb {
+    font-size: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cert-shine,
+  .cert[data-status='earned']::before {
+    animation: none;
+  }
 }
 
 /* ── Contact ── */
