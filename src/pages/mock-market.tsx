@@ -126,7 +126,7 @@ function Body() {
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <SiteNav base="/" crumb="mock-market" />
+      <SiteNav base="/" />
 
       <main id="main" className="cs">
         <header className="cs-hero">

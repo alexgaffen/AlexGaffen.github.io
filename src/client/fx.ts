@@ -1,5 +1,4 @@
-/** Site-wide polish, shared by every page: the nav's section tracking and progress
- *  line, the phone section menu, pointer spotlights, card tilt, the hero's depth,
+/** Site-wide polish, shared by every page: the nav's current-section mark, pointer spotlights, card tilt, the hero's depth,
  *  the experience rail, marquees that lean into the scroll, and pausing whatever is
  *  off screen. All of it is progressive: no pointer, reduced motion or an older
  *  browser just means a plainer page. */
@@ -29,44 +28,23 @@ function initScroll(): void {
   run();
 }
 
-/** Nav: solid once scrolled, a reading-progress line, the link of the section in view
- *  marked current, and that section's name beside the logo. */
+/** Nav: solid once scrolled, and the link of the section in view marked current. */
 function initNav(): void {
   const nav = document.getElementById('nav');
   if (!nav) return;
-  const crumb = document.getElementById('navCrumb');
-  const fixedCrumb = !!crumb?.textContent;
   const sections = [...document.querySelectorAll<HTMLElement>('main > section[id]')];
-  const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-link, .nav-menu a')];
-  // The phone section menu closes once you've picked somewhere to go.
-  const menu = document.getElementById('navMenu');
-  menu?.addEventListener('click', (e) => {
-    if ((e.target as Element).closest('a')) menu.hidePopover?.();
-  });
+  const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-link')];
   let current = '';
   readers.push((y) => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    nav.style.setProperty('--progress', (max > 0 ? clamp(y / max, 0, 1) : 0).toFixed(4));
     nav.classList.toggle('scrolled', y > 24);
     if (!sections.length) return;
-    // The section under a line 40% down the screen (the last one, once at the very bottom).
+    // The section under a line 40% down the screen.
     const line = innerHeight * 0.4;
     let id = sections[0]!.id;
     for (const s of sections) if (s.getBoundingClientRect().top <= line) id = s.id;
-    if (max > 0 && y >= max - 2) id = sections[sections.length - 1]!.id;
     if (id === current) return;
     current = id;
-    for (const l of links) {
-      const on = l.hash === `#${id}`;
-      l.classList.toggle('active', on);
-      if (on) l.setAttribute('aria-current', 'true');
-      else l.removeAttribute('aria-current');
-    }
-    if (crumb && !fixedCrumb) {
-      const show = id !== 'hero';
-      if (show) crumb.textContent = id;
-      crumb.classList.toggle('on', show);
-    }
+    for (const l of links) l.classList.toggle('active', l.hash === `#${id}`);
   });
 }
 

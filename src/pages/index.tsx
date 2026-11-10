@@ -19,17 +19,6 @@ const NAV = [
   ['#photos', 'Photos'],
 ] as const;
 
-/* Phones have no room for those links: a menu button opens every section instead. */
-const SECTION_MENU = [
-  ['#experience', 'Experience'],
-  ['#projects', 'Projects'],
-  ['#about', 'About'],
-  ['#honours', 'Honours & Awards'],
-  ['#coursework', 'Coursework'],
-  ['#skills', 'Skills'],
-  ['#photos', 'Photography'],
-  ['#contact', 'Contact'],
-] as const;
 
 /* Log tail under the hero: one line per role, newest first. */
 const BAND = [
@@ -42,8 +31,6 @@ const BAND = [
 type Mark = { img: string } | { mono: string } | { violin: true };
 
 interface Job {
-  /** Anchor, so the skills section can link to the entry. */
-  id: string;
   company: string;
   where: string;
   role: string;
@@ -55,7 +42,6 @@ interface Job {
 
 const EXPERIENCE: Job[] = [
   {
-    id: 'exp-adaptron',
     company: 'Adaptron Inc',
     where: 'Ottawa, ON',
     role: 'AI Research Engineer · 8-month co-op',
@@ -69,7 +55,6 @@ const EXPERIENCE: Job[] = [
     ],
   },
   {
-    id: 'exp-medicine',
     company: 'McMaster Department of Medicine',
     where: 'Hamilton, ON',
     role: 'Biomedical ML Research Engineer',
@@ -82,7 +67,6 @@ const EXPERIENCE: Job[] = [
     ],
   },
   {
-    id: 'exp-bonbon',
     company: 'Bonbon Technologies',
     where: 'Los Angeles, CA · Remote',
     role: 'Front End Developer Intern',
@@ -91,7 +75,6 @@ const EXPERIENCE: Job[] = [
     bullets: ['Collaborated with a cross-functional team to build and deploy web components in Svelte, reporting to the CTO.'],
   },
   {
-    id: 'exp-orchestra',
     company: 'McMaster Symphony Orchestra',
     where: 'Hamilton, ON',
     role: 'Violinist',
@@ -106,9 +89,6 @@ const HERO_PHOTO = {
   avif: '/photography/DSLR/hero-sunset-1280.avif 1280w, /photography/DSLR/hero-sunset-2560.avif 2560w',
   webp: '/photography/DSLR/hero-sunset-1280.webp 1280w, /photography/DSLR/banffgondolasunisset.webp 2560w',
 };
-
-/* Stamped by scripts/build.ts: the commit and day this copy of the site was built from. */
-const BUILD = { sha: process.env.BUILD_SHA ?? 'dev', date: process.env.BUILD_DATE ?? '' };
 
 /* Deploy history = career history, oldest first; the last one is live. */
 const DEPLOYS = [
@@ -253,15 +233,6 @@ function CertBadge({ code }: { code: string }) {
     </div>
   );
 }
-
-/** Where each "used at" chip leads. */
-const USED_AT: Record<string, string> = {
-  Adaptron: '#exp-adaptron',
-  'Dept. of Medicine': '#exp-medicine',
-  Bonbon: '#exp-bonbon',
-  'Mock Market': '/mock-market',
-  Coursework: '#coursework',
-};
 
 // Every A-range grade from the résumé's coursework list, best first.
 const GRADE_ORDER: Record<string, number> = { 'A+': 0, A: 1, 'A-': 2 };
@@ -449,43 +420,23 @@ function HeroName() {
   );
 }
 
-/** Top bar. `base` is '/' on other pages, so the section links lead back home; `crumb`
- *  is the page's name there (on the home page it follows the section in view). */
-export function SiteNav({ base = '', crumb = '' }: { base?: string; crumb?: string }) {
+/** Top bar. `base` is '/' on other pages, so the section links lead back home. */
+export function SiteNav({ base = '' }: { base?: string }) {
   return (
     <nav id="nav">
-      <div className="nav-id">
-        <a className="nav-logo" href={`${base}#hero`} aria-label="Alex Gaffen, home">
-          AG
-        </a>
-        <span className={`nav-crumb${crumb ? ' on' : ''}`} id="navCrumb" aria-hidden="true">
-          {crumb}
-        </span>
-      </div>
+      <a className="nav-logo" href={`${base}#hero`} aria-label="Alex Gaffen, home">
+        AG
+      </a>
       <div className="nav-links">
         {NAV.map(([href, label]) => (
           <a key={href} className="nav-link" href={base + href}>
             {label}
           </a>
         ))}
-        <button type="button" className="nav-menu-btn" popoverTarget="navMenu" aria-label="Sections">
-          <span />
-          <span />
-        </button>
         <a className="nav-cta" href={`${base}#contact`}>
           Get in touch
         </a>
       </div>
-      {/* A native popover: opens, closes on a tap outside or Esc, and traps nothing, with no script. */}
-      <div className="nav-menu" id="navMenu" popover="auto" aria-label="Sections">
-        {SECTION_MENU.map(([href, label], i) => (
-          <a key={href} href={base + href} style={{ ['--i' as string]: i }}>
-            <span className="nm-num">{String(i + 1).padStart(2, '0')}</span>
-            {label}
-          </a>
-        ))}
-      </div>
-      <span className="nav-progress" aria-hidden="true" />
     </nav>
   );
 }
@@ -643,7 +594,7 @@ function Body() {
             <div className="exp-list" id="expList">
               <span className="exp-progress" aria-hidden="true" />
               {EXPERIENCE.map((e) => (
-                <article key={e.id} id={e.id} className="exp-item reveal">
+                <article key={e.company} className="exp-item reveal">
                   <div className="exp-company-col">
                     <JobMark mark={e.mark} />
                     <div>
@@ -665,7 +616,7 @@ function Body() {
                   </div>
                 </article>
               ))}
-              <article id="exp-mcmaster" className="exp-item reveal">
+              <article className="exp-item reveal">
                 <div className="exp-company-col">
                   <img className="exp-mark" src="/assets/mcmaster.png" alt="" width="72" height="72" loading="lazy" />
                   <div>
@@ -741,8 +692,9 @@ function Body() {
                 <div className="project-title">Liver Fibrosis Staging</div>
                 <p className="project-desc">
                   Patch-based imaging pipeline that quantifies and stages liver fibrosis, with a human-in-the-loop editor for
-                  pathologists. Manuscript in preparation.
+                  pathologists.
                 </p>
+                <span className="card-link">Manuscript in preparation</span>
               </div>
             </div>
           </div>
@@ -784,7 +736,8 @@ function Body() {
 
         <section id="honours">
           <div className="section-wrap">
-            <p className="section-label">Honours &amp; Awards</p>
+            <p className="section-label">Honours</p>
+            <Title>Honours & Awards</Title>
             <div className="honours">
               <article className="honour feature reveal">
                 <div className="honour-amount">
@@ -858,7 +811,8 @@ function Body() {
 
         <section id="skills">
           <div className="section-wrap">
-            <p className="section-label">Technical Skills</p>
+            <p className="section-label">Skills</p>
+            <Title>Technical Skills</Title>
             <div className="skills-grid reveal">
               {SKILLS.map(([name, type, used]) => (
                 <div key={name} className="skill-cell">
@@ -868,9 +822,7 @@ function Body() {
                     <div className="skill-used-label">Used at</div>
                     <ul className="skill-used-list">
                       {used.map((u) => (
-                        <li key={u}>
-                          <a href={USED_AT[u]}>{u}</a>
-                        </li>
+                        <li key={u}>{u}</li>
                       ))}
                     </ul>
                   </div>
@@ -936,7 +888,10 @@ function Body() {
         <section id="photos">
           <div className="section-wrap">
             <div className="ph-head">
-              <p className="section-label">Photography</p>
+              <div>
+                <p className="section-label">Photos</p>
+                <Title>Photography</Title>
+              </div>
               <div className="ph-filters" role="group" aria-label="Filter photos by place">
                 {FILTERS.map((f, i) => (
                   <button key={f.key} type="button" className="ph-filter" data-filter={f.key} aria-pressed={i === 0}>
@@ -1042,10 +997,6 @@ function Body() {
             </div>
             <footer className="foot">
               <span>© 2026 Alex Gaffen</span>
-              <span className="foot-build">
-                build {BUILD.sha}
-                {BUILD.date && ` · ${BUILD.date}`}
-              </span>
               <a href="#hero">Back to top ↑</a>
             </footer>
           </div>
