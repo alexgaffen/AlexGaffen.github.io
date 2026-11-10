@@ -28,8 +28,6 @@ export interface PageHead {
   themeColor?: string;
   /** schema.org JSON-LD, serialised as-is. */
   jsonLd?: Record<string, unknown>;
-  /** The page's first big image, fetched before the stylesheet arrives. */
-  preloadImage?: { type: string; srcSet: string; sizes: string };
   /** Manifest + icons (every page but the two minimal ones). */
   fullIcons: boolean;
 }
