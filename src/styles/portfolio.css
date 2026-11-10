@@ -1910,13 +1910,14 @@ main:not(.cs) .section-label::before {
 /* ── Photos: in-page viewer ── */
 .ph-head {
   display: flex;
-  align-items: center;
+  /* Label and title on the left; the filters sit level with the title. */
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px 24px;
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
-.ph-head .section-label {
+.ph-head .section-title {
   margin-bottom: 0;
 }
 .ph-filters {
@@ -2698,5 +2699,32 @@ main:not(.cs) .section-label::before {
   }
   .dwg .pulse {
     display: none;
+  }
+}
+
+/* Phones: the marks line up as a list instead of drifting chips. */
+@media (max-width: 600px) {
+  .grades {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px;
+  }
+  .grade-chip {
+    transform: none;
+  }
+  .grade-float,
+  .g-aplus .grade-float {
+    padding: 11px 14px 11px 8px;
+    gap: 8px;
+    animation: none;
+  }
+  .grade-mark,
+  .g-aplus .grade-mark {
+    flex: none;
+    width: 1.9em;
+    min-width: 0;
+    font-size: 26px;
   }
 }
