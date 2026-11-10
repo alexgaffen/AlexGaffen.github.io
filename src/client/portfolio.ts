@@ -213,6 +213,11 @@ export function initPortfolio(): void {
     document.querySelectorAll<HTMLElement>('.tb [data-scramble]').forEach((el, i) => scramble(el, base + 5250 + i * 70));
   }
 
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav?.classList.toggle('scrolled', scrollY > 24);
+  onScroll();
+  addEventListener('scroll', onScroll, { passive: true });
+
   initReveals();
   initGrades();
   initPhotos();
