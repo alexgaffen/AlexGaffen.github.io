@@ -3022,31 +3022,6 @@ main:not(.cs) .section-label::before {
   transform: scaleX(1);
 }
 
-/* ── Section titles: each word rises out of its own line ── */
-.section-title.split .w {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  /* Room for descenders inside the clip. */
-  padding-bottom: 0.14em;
-  margin-bottom: -0.14em;
-}
-.section-title.split .w > span {
-  display: inline-block;
-}
-.reveal-on .section-title.split.reveal {
-  opacity: 1;
-  filter: none;
-  transform: none;
-}
-.reveal-on .section-title.split .w > span {
-  transform: translateY(112%);
-  transition: transform 0.95s var(--ease-out) calc(var(--i) * 80ms);
-}
-.reveal-on .section-title.split.in .w > span {
-  transform: none;
-}
-
 /* ── Experience: the rail fills as you read; linked entries flash on arrival ── */
 .exp-list {
   position: relative;

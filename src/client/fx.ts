@@ -1,6 +1,6 @@
-/** Site-wide polish, shared by every page: the nav's current-section mark, pointer spotlights, card tilt, the hero's depth,
- *  the experience rail, marquees that lean into the scroll, and pausing whatever is
- *  off screen. All of it is progressive: no pointer, reduced motion or an older
+/** Site-wide polish, shared by every page: the nav's current-section mark, pointer
+ *  spotlights, card tilt, the hero's depth, the experience rail, and pausing whatever
+ *  is off screen. All of it is progressive: no pointer, reduced motion or an older
  *  browser just means a plainer page. */
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -8,15 +8,12 @@ const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 /** One scroll listener for the whole page; each feature adds a reader. */
-const readers: ((y: number, dy: number) => void)[] = [];
+const readers: ((y: number) => void)[] = [];
 function initScroll(): void {
   let frame = 0;
-  let last = scrollY;
   const run = () => {
     frame = 0;
-    const y = scrollY;
-    for (const r of readers) r(y, y - last);
-    last = y;
+    for (const r of readers) r(scrollY);
   };
   const queue = () => {
     if (!frame) frame = requestAnimationFrame(run);
@@ -140,33 +137,6 @@ function initExperienceRail(): void {
   });
 }
 
-/** Marquees pick up speed with the scroll and run backwards when you scroll up, then settle. */
-function initMarquees(): void {
-  if (reduced) return;
-  const tracks = [...document.querySelectorAll<HTMLElement>('.status-band-inner, .marquee-track')];
-  if (!tracks.length || !tracks[0]!.getAnimations) return;
-  let rate = 1;
-  let target = 1;
-  let frame = 0;
-  let idle = 0;
-  const step = () => {
-    frame = 0;
-    rate += (target - rate) * 0.12;
-    // With no scroll for a few frames, ease back to the resting pace.
-    if (++idle > 4) target = 1;
-    const settled = Math.abs(rate - 1) < 0.01 && target === 1;
-    if (settled) rate = 1;
-    for (const t of tracks) for (const a of t.getAnimations()) a.updatePlaybackRate(rate);
-    if (!settled) frame = requestAnimationFrame(step);
-  };
-  readers.push((_, dy) => {
-    if (!dy) return;
-    idle = 0;
-    target = clamp(1 + dy / 9, -5, 6);
-    if (!frame) frame = requestAnimationFrame(step);
-  });
-}
-
 /** Whatever animates forever is paused while it's off screen. */
 function initOffscreenPause(): void {
   if (!('IntersectionObserver' in window)) return;
@@ -186,7 +156,6 @@ function initOffscreenPause(): void {
 export function initFx(): void {
   initNav();
   initExperienceRail();
-  initMarquees();
   initScroll();
   initSpotlight();
   initHeroDepth();

@@ -102,18 +102,9 @@ const DEPLOYS = [
 const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
 const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
 
-/** A section title whose words rise into place one after another. */
+/** A section title; it un-blurs into place as it scrolls into view. */
 function Title({ children }: { children: string }) {
-  return (
-    <h2 className="section-title reveal split" aria-label={children}>
-      {children.split(' ').flatMap((w, i) => [
-        i ? ' ' : '',
-        <span key={i} className="w" aria-hidden="true">
-          <span style={{ ['--i' as string]: i }}>{w}</span>
-        </span>,
-      ])}
-    </h2>
-  );
+  return <h2 className="section-title reveal">{children}</h2>;
 }
 
 /** A prompt whose command types itself out at `at` seconds. */
