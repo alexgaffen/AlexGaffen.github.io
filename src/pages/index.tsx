@@ -623,6 +623,7 @@ function Body() {
         <section id="honours">
           <div className="section-wrap">
             <p className="section-label">Honours &amp; Awards</p>
+            <h2 className="section-title reveal">Recognition</h2>
             <div className="honours">
               <article className="honour feature reveal">
                 <div className="honour-amount">
@@ -697,6 +698,7 @@ function Body() {
         <section id="skills">
           <div className="section-wrap">
             <p className="section-label">Technical Skills</p>
+            <h2 className="section-title reveal">Toolkit</h2>
             <div className="skills-grid reveal">
               {SKILLS.map(([name, type, used]) => (
                 <div key={name} className="skill-cell">
@@ -719,7 +721,10 @@ function Body() {
         <section id="photos">
           <div className="section-wrap">
             <div className="ph-head">
-              <p className="section-label">Photography</p>
+              <div>
+                <p className="section-label">Photography</p>
+                <h2 className="section-title reveal">Through My Lens</h2>
+              </div>
               <div className="ph-filters" role="group" aria-label="Filter photos by place">
                 {FILTERS.map((f, i) => (
                   <button key={f.key} type="button" className="ph-filter" data-filter={f.key} aria-pressed={i === 0}>
