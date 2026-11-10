@@ -19,6 +19,7 @@ const NAV = [
   ['#photos', 'Photos'],
 ] as const;
 
+
 /* Log tail under the hero: one line per role, newest first. */
 const BAND = [
   ['2026-05', 'adaptron', 'AI Research Engineer', 'running'],
@@ -83,6 +84,12 @@ const EXPERIENCE: Job[] = [
   },
 ];
 
+/* The hero's sunset, small for phones and full size for desktops; preloaded in <head>. */
+const HERO_PHOTO = {
+  avif: '/photography/DSLR/hero-sunset-1280.avif 1280w, /photography/DSLR/hero-sunset-2560.avif 2560w',
+  webp: '/photography/DSLR/hero-sunset-1280.webp 1280w, /photography/DSLR/banffgondolasunisset.webp 2560w',
+};
+
 /* Deploy history = career history, oldest first; the last one is live. */
 const DEPLOYS = [
   ['3f9a1c2', 'bonbon/front-end-intern', '2024-05'],
@@ -94,6 +101,11 @@ const DEPLOYS = [
    type their command (at s) and print, while the figure scans in on its own. */
 const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
 const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
+
+/** A section title; it un-blurs into place as it scrolls into view. */
+function Title({ children }: { children: string }) {
+  return <h2 className="section-title reveal">{children}</h2>;
+}
 
 /** A prompt whose command types itself out at `at` seconds. */
 function Typed({ cmd, at }: { cmd: string; at: number }) {
@@ -125,6 +137,93 @@ const SKILLS = [
   ['Docker', 'Containers', ['Mock Market']],
   ['Git & Code Review', 'Collaboration', ['Adaptron', 'Bonbon']],
 ] as const;
+
+/* Certifications. The section only appears once one is 'earned': set that with the date
+   and the Microsoft Learn share link. An 'in-progress' entry beside an earned one shows
+   with a muted badge. */
+interface Cert {
+  code: string;
+  name: string;
+  status: 'in-progress' | 'earned';
+  earned?: string;
+  verifyUrl?: string;
+  blurb: string;
+  /** Exam skill areas with their published weighting (%). */
+  domains: readonly (readonly [string, number, number])[];
+}
+const CERTS: readonly Cert[] = [
+  {
+    code: 'AZ-900',
+    name: 'Azure Fundamentals',
+    status: 'in-progress',
+    blurb:
+      'Core cloud concepts and how Azure delivers them: compute, networking, storage and identity, plus the pricing, governance and compliance tooling that keeps a deployment in check.',
+    domains: [
+      ['Cloud concepts', 25, 30],
+      ['Azure architecture & services', 35, 40],
+      ['Azure management & governance', 30, 35],
+    ],
+  },
+];
+
+/** Microsoft's four-square mark, used as the issuer's logo. */
+function MsLogo() {
+  return (
+    <svg className="ms-logo" viewBox="0 0 23 23" aria-hidden="true">
+      <rect x="1" y="1" width="10" height="10" fill="#f25022" />
+      <rect x="12" y="1" width="10" height="10" fill="#7fba00" />
+      <rect x="1" y="12" width="10" height="10" fill="#00a4ef" />
+      <rect x="12" y="12" width="10" height="10" fill="#ffb900" />
+    </svg>
+  );
+}
+
+/** The badge: a faceted hexagon in Azure blues with a cloud mark and a Fundamentals ribbon. */
+function CertBadge({ code }: { code: string }) {
+  return (
+    <div className="cert-badge" aria-hidden="true">
+      <svg viewBox="0 0 200 224">
+        <defs>
+          <linearGradient id="cb-face" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#4cc2ff" />
+            <stop offset="0.5" stopColor="#0f78d4" />
+            <stop offset="1" stopColor="#0a3f8f" />
+          </linearGradient>
+          <linearGradient id="cb-rim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#e8f4ff" />
+            <stop offset="0.45" stopColor="#8fb6d9" />
+            <stop offset="1" stopColor="#4d6a86" />
+          </linearGradient>
+          <linearGradient id="cb-band" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#0b2f66" />
+            <stop offset="0.5" stopColor="#123f85" />
+            <stop offset="1" stopColor="#0b2f66" />
+          </linearGradient>
+        </defs>
+        <path className="cb-rim" d="M100 4 189 55v114l-89 51-89-51V55Z" fill="url(#cb-rim)" />
+        <path d="M100 16 178 61v102l-78 45-78-45V61Z" fill="url(#cb-face)" />
+        <path d="M100 16 178 61 100 106 22 61Z" fill="#fff" opacity="0.1" />
+        <path d="M100 30 166 68v88l-66 38-66-38V68Z" fill="none" stroke="#fff" strokeOpacity="0.28" strokeWidth="1.2" />
+        <text x="100" y="74" textAnchor="middle" className="cb-top">
+          MICROSOFT CERTIFIED
+        </text>
+        <path
+          d="M79 121a15 15 0 0 1 2.6-29.7A20 20 0 0 1 120 96a12.5 12.5 0 0 1 1 25Z"
+          fill="#fff"
+          fillOpacity="0.95"
+        />
+        <text x="100" y="140" textAnchor="middle" className="cb-code">
+          {code}
+        </text>
+        <path d="M4 150h192l-10 13 10 13H4l10-13Z" fill="url(#cb-band)" stroke="#9cc8ef" strokeOpacity="0.55" />
+        <text x="100" y="167.5" textAnchor="middle" className="cb-ribbon">
+          FUNDAMENTALS
+        </text>
+      </svg>
+      <span className="cert-shine" />
+    </div>
+  );
+}
 
 // Every A-range grade from the résumé's coursework list, best first.
 const GRADE_ORDER: Record<string, number> = { 'A+': 0, A: 1, 'A-': 2 };
@@ -398,7 +497,11 @@ function Body() {
       <main id="main">
         <section id="hero">
           <div className="sheet" id="sheet" aria-hidden="true">
-            <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" />
+            <picture>
+              <source type="image/avif" srcSet={HERO_PHOTO.avif} sizes="100vw" />
+              <source type="image/webp" srcSet={HERO_PHOTO.webp} sizes="100vw" />
+              <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" fetchPriority="high" decoding="async" />
+            </picture>
             <span className="sheet-scrim" />
             <div className="con-bar">
               <span className="con-path">
@@ -477,9 +580,10 @@ function Body() {
           <div className="section-wrap">
             <div className="exp-header">
               <p className="section-label">Experience</p>
-              <h2 className="section-title reveal">Work &amp; Education</h2>
+              <Title>Work & Education</Title>
             </div>
-            <div className="exp-list">
+            <div className="exp-list" id="expList">
+              <span className="exp-progress" aria-hidden="true" />
               {EXPERIENCE.map((e) => (
                 <article key={e.company} className="exp-item reveal">
                   <div className="exp-company-col">
@@ -529,7 +633,7 @@ function Body() {
         <section id="projects">
           <div className="section-wrap">
             <p className="section-label">Projects</p>
-            <h2 className="section-title reveal">Selected Work</h2>
+            <Title>Selected Work</Title>
           </div>
           <div className="projects-grid">
             <a className="project-card reveal" href="/mock-market">
@@ -579,8 +683,9 @@ function Body() {
                 <div className="project-title">Liver Fibrosis Staging</div>
                 <p className="project-desc">
                   Patch-based imaging pipeline that quantifies and stages liver fibrosis, with a human-in-the-loop editor for
-                  pathologists. Manuscript in preparation.
+                  pathologists.
                 </p>
+                <span className="card-link">Manuscript in preparation</span>
               </div>
             </div>
           </div>
@@ -622,7 +727,8 @@ function Body() {
 
         <section id="honours">
           <div className="section-wrap">
-            <p className="section-label">Honours &amp; Awards</p>
+            <p className="section-label">Honours</p>
+            <Title>Honours & Awards</Title>
             <div className="honours">
               <article className="honour feature reveal">
                 <div className="honour-amount">
@@ -673,7 +779,7 @@ function Body() {
         <section id="coursework">
           <div className="section-wrap">
             <p className="section-label">Coursework</p>
-            <h2 className="section-title reveal">Top Marks</h2>
+            <Title>Top Marks</Title>
             <div className="grades" id="grades">
               {COURSES.map((c, i) => (
                 <div
@@ -696,7 +802,8 @@ function Body() {
 
         <section id="skills">
           <div className="section-wrap">
-            <p className="section-label">Technical Skills</p>
+            <p className="section-label">Skills</p>
+            <Title>Technical Skills</Title>
             <div className="skills-grid reveal">
               {SKILLS.map(([name, type, used]) => (
                 <div key={name} className="skill-cell">
@@ -716,10 +823,66 @@ function Body() {
           </div>
         </section>
 
+        {CERTS.some((c) => c.status === 'earned') && (
+        <section id="certifications">
+          <div className="section-wrap">
+            <p className="section-label">Certifications</p>
+            {CERTS.map((c) => {
+              const top = Math.max(...c.domains.map(([, , hi]) => hi));
+              return (
+                <article key={c.code} className="cert reveal" data-status={c.status}>
+                  <CertBadge code={c.code} />
+                  <div className="cert-body">
+                    <div className="cert-issuer">
+                      <MsLogo />
+                      <span>Microsoft Certified</span>
+                    </div>
+                    <h3 className="cert-name">{c.name}</h3>
+                    <div className="cert-meta">
+                      <span className="cert-code">{c.code}</span>
+                      {c.status === 'earned' ? (
+                        <span className="cert-state earned">✓ Earned {c.earned}</span>
+                      ) : (
+                        <span className="cert-state">In progress</span>
+                      )}
+                      <span className="cert-tier">Fundamentals · no expiry</span>
+                    </div>
+                    <p className="cert-blurb">{c.blurb}</p>
+                    <p className="cert-sub">Exam weighting</p>
+                    <ul className="cert-domains">
+                      {c.domains.map(([label, lo, hi]) => (
+                        <li key={label} style={{ ['--w' as string]: `${(((lo + hi) / 2) / top) * 100}%` }}>
+                          <span className="cd-label">{label}</span>
+                          <span className="cd-pct">
+                            {lo}–{hi}%
+                          </span>
+                          <span className="cd-bar" />
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="cert-foot">
+                      <span>Pass mark 700 / 1000</span>
+                      {c.status === 'earned' && c.verifyUrl && (
+                        <a className="cert-verify" href={c.verifyUrl} target="_blank" rel="noopener noreferrer">
+                          Verify on Microsoft Learn ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+        )}
+
         <section id="photos">
           <div className="section-wrap">
             <div className="ph-head">
-              <p className="section-label">Photography</p>
+              <div>
+                <p className="section-label">Photos</p>
+                <Title>Photography</Title>
+              </div>
               <div className="ph-filters" role="group" aria-label="Filter photos by place">
                 {FILTERS.map((f, i) => (
                   <button key={f.key} type="button" className="ph-filter" data-filter={f.key} aria-pressed={i === 0}>
@@ -863,6 +1026,7 @@ export const index: PageDef = {
     },
     canonical: 'https://alexgaffen.com/',
     themeColor: '#080808',
+    preloadImage: { type: 'image/avif', srcSet: HERO_PHOTO.avif, sizes: '100vw' },
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Person',

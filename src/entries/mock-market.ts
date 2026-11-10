@@ -2,5 +2,7 @@
 import '../styles/portfolio.css';
 import '../styles/project.css';
 import { initPortfolio } from '../client/portfolio.ts';
+import { initFx } from '../client/fx.ts';
 
 initPortfolio();
+initFx();
