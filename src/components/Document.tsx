@@ -46,6 +46,16 @@ export function Document({ page, assets, dev }: Props) {
         {page.externalStyles?.map((s) =>
           s.preconnect ? <link key={s.preconnect} rel="preconnect" href={s.preconnect} crossOrigin="" /> : null,
         )}
+        {head.preloadImage && (
+          <link
+            rel="preload"
+            as="image"
+            type={head.preloadImage.type}
+            imageSrcSet={head.preloadImage.srcSet}
+            imageSizes={head.preloadImage.sizes}
+            fetchPriority="high"
+          />
+        )}
         <meta name="viewport" content={page.viewport} />
         {head.description && <meta name="description" content={head.description} />}
         {head.keywords && <meta name="keywords" content={head.keywords} />}

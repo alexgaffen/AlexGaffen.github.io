@@ -19,6 +19,18 @@ const NAV = [
   ['#photos', 'Photos'],
 ] as const;
 
+/* Phones have no room for those links: a menu button opens every section instead. */
+const SECTION_MENU = [
+  ['#experience', 'Experience'],
+  ['#projects', 'Projects'],
+  ['#about', 'About'],
+  ['#honours', 'Honours & Awards'],
+  ['#coursework', 'Coursework'],
+  ['#skills', 'Skills'],
+  ['#photos', 'Photography'],
+  ['#contact', 'Contact'],
+] as const;
+
 /* Log tail under the hero: one line per role, newest first. */
 const BAND = [
   ['2026-05', 'adaptron', 'AI Research Engineer', 'running'],
@@ -30,6 +42,8 @@ const BAND = [
 type Mark = { img: string } | { mono: string } | { violin: true };
 
 interface Job {
+  /** Anchor, so the skills section can link to the entry. */
+  id: string;
   company: string;
   where: string;
   role: string;
@@ -41,6 +55,7 @@ interface Job {
 
 const EXPERIENCE: Job[] = [
   {
+    id: 'exp-adaptron',
     company: 'Adaptron Inc',
     where: 'Ottawa, ON',
     role: 'AI Research Engineer · 8-month co-op',
@@ -54,6 +69,7 @@ const EXPERIENCE: Job[] = [
     ],
   },
   {
+    id: 'exp-medicine',
     company: 'McMaster Department of Medicine',
     where: 'Hamilton, ON',
     role: 'Biomedical ML Research Engineer',
@@ -66,6 +82,7 @@ const EXPERIENCE: Job[] = [
     ],
   },
   {
+    id: 'exp-bonbon',
     company: 'Bonbon Technologies',
     where: 'Los Angeles, CA · Remote',
     role: 'Front End Developer Intern',
@@ -74,6 +91,7 @@ const EXPERIENCE: Job[] = [
     bullets: ['Collaborated with a cross-functional team to build and deploy web components in Svelte, reporting to the CTO.'],
   },
   {
+    id: 'exp-orchestra',
     company: 'McMaster Symphony Orchestra',
     where: 'Hamilton, ON',
     role: 'Violinist',
@@ -82,6 +100,15 @@ const EXPERIENCE: Job[] = [
     bullets: ['Four-year member with Level 10 RCM Violin; mentor to students at OrKidstra.'],
   },
 ];
+
+/* The hero's sunset, small for phones and full size for desktops; preloaded in <head>. */
+const HERO_PHOTO = {
+  avif: '/photography/DSLR/hero-sunset-1280.avif 1280w, /photography/DSLR/hero-sunset-2560.avif 2560w',
+  webp: '/photography/DSLR/hero-sunset-1280.webp 1280w, /photography/DSLR/banffgondolasunisset.webp 2560w',
+};
+
+/* Stamped by scripts/build.ts: the commit and day this copy of the site was built from. */
+const BUILD = { sha: process.env.BUILD_SHA ?? 'dev', date: process.env.BUILD_DATE ?? '' };
 
 /* Deploy history = career history, oldest first; the last one is live. */
 const DEPLOYS = [
@@ -94,6 +121,20 @@ const DEPLOYS = [
    type their command (at s) and print, while the figure scans in on its own. */
 const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
 const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
+
+/** A section title whose words rise into place one after another. */
+function Title({ children }: { children: string }) {
+  return (
+    <h2 className="section-title reveal split" aria-label={children}>
+      {children.split(' ').flatMap((w, i) => [
+        i ? ' ' : '',
+        <span key={i} className="w" aria-hidden="true">
+          <span style={{ ['--i' as string]: i }}>{w}</span>
+        </span>,
+      ])}
+    </h2>
+  );
+}
 
 /** A prompt whose command types itself out at `at` seconds. */
 function Typed({ cmd, at }: { cmd: string; at: number }) {
@@ -126,9 +167,9 @@ const SKILLS = [
   ['Git & Code Review', 'Collaboration', ['Adaptron', 'Bonbon']],
 ] as const;
 
-/* Certifications. While an exam is booked, `status` is 'in-progress'; once passed, set
-   'earned' with the date and the Microsoft Learn share link, which turns on the full
-   badge, the shine and the verify button. */
+/* Certifications. The section only appears once one is 'earned': set that with the date
+   and the Microsoft Learn share link. An 'in-progress' entry beside an earned one shows
+   with a muted badge. */
 interface Cert {
   code: string;
   name: string;
@@ -212,6 +253,15 @@ function CertBadge({ code }: { code: string }) {
     </div>
   );
 }
+
+/** Where each "used at" chip leads. */
+const USED_AT: Record<string, string> = {
+  Adaptron: '#exp-adaptron',
+  'Dept. of Medicine': '#exp-medicine',
+  Bonbon: '#exp-bonbon',
+  'Mock Market': '/mock-market',
+  Coursework: '#coursework',
+};
 
 // Every A-range grade from the résumé's coursework list, best first.
 const GRADE_ORDER: Record<string, number> = { 'A+': 0, A: 1, 'A-': 2 };
@@ -399,23 +449,43 @@ function HeroName() {
   );
 }
 
-/** Top bar. `base` is '/' on other pages, so the section links lead back home. */
-export function SiteNav({ base = '' }: { base?: string }) {
+/** Top bar. `base` is '/' on other pages, so the section links lead back home; `crumb`
+ *  is the page's name there (on the home page it follows the section in view). */
+export function SiteNav({ base = '', crumb = '' }: { base?: string; crumb?: string }) {
   return (
     <nav id="nav">
-      <a className="nav-logo" href={`${base}#hero`} aria-label="Alex Gaffen, home">
-        AG
-      </a>
+      <div className="nav-id">
+        <a className="nav-logo" href={`${base}#hero`} aria-label="Alex Gaffen, home">
+          AG
+        </a>
+        <span className={`nav-crumb${crumb ? ' on' : ''}`} id="navCrumb" aria-hidden="true">
+          {crumb}
+        </span>
+      </div>
       <div className="nav-links">
         {NAV.map(([href, label]) => (
           <a key={href} className="nav-link" href={base + href}>
             {label}
           </a>
         ))}
+        <button type="button" className="nav-menu-btn" popoverTarget="navMenu" aria-label="Sections">
+          <span />
+          <span />
+        </button>
         <a className="nav-cta" href={`${base}#contact`}>
           Get in touch
         </a>
       </div>
+      {/* A native popover: opens, closes on a tap outside or Esc, and traps nothing, with no script. */}
+      <div className="nav-menu" id="navMenu" popover="auto" aria-label="Sections">
+        {SECTION_MENU.map(([href, label], i) => (
+          <a key={href} href={base + href} style={{ ['--i' as string]: i }}>
+            <span className="nm-num">{String(i + 1).padStart(2, '0')}</span>
+            {label}
+          </a>
+        ))}
+      </div>
+      <span className="nav-progress" aria-hidden="true" />
     </nav>
   );
 }
@@ -485,7 +555,11 @@ function Body() {
       <main id="main">
         <section id="hero">
           <div className="sheet" id="sheet" aria-hidden="true">
-            <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" />
+            <picture>
+              <source type="image/avif" srcSet={HERO_PHOTO.avif} sizes="100vw" />
+              <source type="image/webp" srcSet={HERO_PHOTO.webp} sizes="100vw" />
+              <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" fetchPriority="high" decoding="async" />
+            </picture>
             <span className="sheet-scrim" />
             <div className="con-bar">
               <span className="con-path">
@@ -564,11 +638,12 @@ function Body() {
           <div className="section-wrap">
             <div className="exp-header">
               <p className="section-label">Experience</p>
-              <h2 className="section-title reveal">Work &amp; Education</h2>
+              <Title>Work & Education</Title>
             </div>
-            <div className="exp-list">
+            <div className="exp-list" id="expList">
+              <span className="exp-progress" aria-hidden="true" />
               {EXPERIENCE.map((e) => (
-                <article key={e.company} className="exp-item reveal">
+                <article key={e.id} id={e.id} className="exp-item reveal">
                   <div className="exp-company-col">
                     <JobMark mark={e.mark} />
                     <div>
@@ -590,7 +665,7 @@ function Body() {
                   </div>
                 </article>
               ))}
-              <article className="exp-item reveal">
+              <article id="exp-mcmaster" className="exp-item reveal">
                 <div className="exp-company-col">
                   <img className="exp-mark" src="/assets/mcmaster.png" alt="" width="72" height="72" loading="lazy" />
                   <div>
@@ -616,7 +691,7 @@ function Body() {
         <section id="projects">
           <div className="section-wrap">
             <p className="section-label">Projects</p>
-            <h2 className="section-title reveal">Selected Work</h2>
+            <Title>Selected Work</Title>
           </div>
           <div className="projects-grid">
             <a className="project-card reveal" href="/mock-market">
@@ -760,7 +835,7 @@ function Body() {
         <section id="coursework">
           <div className="section-wrap">
             <p className="section-label">Coursework</p>
-            <h2 className="section-title reveal">Top Marks</h2>
+            <Title>Top Marks</Title>
             <div className="grades" id="grades">
               {COURSES.map((c, i) => (
                 <div
@@ -793,7 +868,9 @@ function Body() {
                     <div className="skill-used-label">Used at</div>
                     <ul className="skill-used-list">
                       {used.map((u) => (
-                        <li key={u}>{u}</li>
+                        <li key={u}>
+                          <a href={USED_AT[u]}>{u}</a>
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -803,6 +880,7 @@ function Body() {
           </div>
         </section>
 
+        {CERTS.some((c) => c.status === 'earned') && (
         <section id="certifications">
           <div className="section-wrap">
             <p className="section-label">Certifications</p>
@@ -853,6 +931,7 @@ function Body() {
             })}
           </div>
         </section>
+        )}
 
         <section id="photos">
           <div className="section-wrap">
@@ -963,6 +1042,10 @@ function Body() {
             </div>
             <footer className="foot">
               <span>© 2026 Alex Gaffen</span>
+              <span className="foot-build">
+                build {BUILD.sha}
+                {BUILD.date && ` · ${BUILD.date}`}
+              </span>
               <a href="#hero">Back to top ↑</a>
             </footer>
           </div>
@@ -1001,6 +1084,7 @@ export const index: PageDef = {
     },
     canonical: 'https://alexgaffen.com/',
     themeColor: '#080808',
+    preloadImage: { type: 'image/avif', srcSet: HERO_PHOTO.avif, sizes: '100vw' },
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Person',

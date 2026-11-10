@@ -3002,3 +3002,410 @@ main:not(.cs) .section-label::before {
     display: none;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════════════
+   Interaction layer (client/fx.ts): nav tracking, pointer light, depth and
+   scroll-linked motion. Everything here is additive;
+   without the script, a fine pointer or motion, the page is simply the plainer one.
+   ════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Nav: section crumb, current link, progress line, section menu (phones) ── */
+.nav-id {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.nav-crumb {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.4s var(--ease-out);
+}
+.nav-crumb::before {
+  content: '/';
+  margin-right: 8px;
+  color: var(--accent);
+}
+.nav-crumb.on {
+  opacity: 1;
+  transform: none;
+}
+.nav-link.active {
+  color: var(--text);
+}
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+.nav-progress {
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.scrolled .nav-progress {
+  opacity: 1;
+}
+/* Section menu: a button on phones (where the links don't fit) opening a popover. */
+.nav-menu-btn {
+  display: none;
+  flex: none;
+  align-self: stretch;
+  width: 40px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  border: 1px solid #34342f;
+  border-radius: 2px;
+  background: rgba(8, 8, 8, 0.4);
+  cursor: pointer;
+}
+.nav-menu-btn span {
+  width: 16px;
+  height: 1.5px;
+  background: var(--text);
+  transition: transform 0.3s var(--ease-out);
+}
+nav:has(.nav-menu:popover-open) .nav-menu-btn span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+nav:has(.nav-menu:popover-open) .nav-menu-btn span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+.nav-menu {
+  position: fixed;
+  inset: 68px 12px auto;
+  width: auto;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid #34342f;
+  border-radius: 6px;
+  background: rgba(13, 13, 13, 0.97);
+  color: var(--text);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9), 0 0 70px -30px rgba(var(--accent-rgb), 0.45);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.2s,
+    transform 0.3s var(--ease-out),
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+}
+.nav-menu:popover-open {
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  .nav-menu:popover-open {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+.nav-menu::backdrop {
+  background: rgba(4, 4, 4, 0.55);
+}
+.nav-menu a {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 13px 12px;
+  border-radius: 4px;
+  font: 500 17px/1.3 var(--display);
+  letter-spacing: -0.01em;
+}
+.nav-menu a + a {
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+.nm-num {
+  font: 11.5px/1 var(--mono);
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+.nav-menu a.active {
+  background: rgba(var(--accent-rgb), 0.12);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.nav-menu a.active .nm-num {
+  color: var(--accent);
+}
+.nav-menu a:active {
+  background: rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
+  .nav-menu-btn {
+    display: flex;
+  }
+  .nav-id {
+    gap: 8px;
+  }
+  .nav-crumb {
+    font-size: 11px;
+  }
+  .nav-links {
+    gap: 10px;
+  }
+}
+@media (max-width: 379px) {
+  .nav-crumb {
+    display: none;
+  }
+}
+
+/* ── Section titles: each word rises out of its own line ── */
+.section-title.split .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* Room for descenders inside the clip. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+.section-title.split .w > span {
+  display: inline-block;
+}
+.reveal-on .section-title.split.reveal {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+.reveal-on .section-title.split .w > span {
+  transform: translateY(112%);
+  transition: transform 0.95s var(--ease-out) calc(var(--i) * 80ms);
+}
+.reveal-on .section-title.split.in .w > span {
+  transform: none;
+}
+
+/* ── Experience: the rail fills as you read; linked entries flash on arrival ── */
+.exp-list {
+  position: relative;
+}
+.exp-progress {
+  position: absolute;
+  left: 32px;
+  top: 64px;
+  width: 1px;
+  height: var(--reach, 0px);
+  background: linear-gradient(rgba(var(--accent-rgb), 0.5), var(--accent));
+  pointer-events: none;
+  transition: height 0.3s ease-out;
+}
+.exp-progress::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  bottom: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px 2px rgba(var(--accent-rgb), 0.7);
+}
+.exp-mark {
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.exp-item.lit .exp-mark {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.07);
+}
+.exp-item {
+  scroll-margin-top: 96px;
+}
+.exp-item:target {
+  animation: target-flash 2.4s ease-out;
+}
+@keyframes target-flash {
+  0%,
+  30% {
+    background: rgba(var(--accent-rgb), 0.1);
+  }
+}
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
+  .exp-progress {
+    display: none;
+  }
+}
+
+/* ── Skills: "used at" chips lead to the role or project ── */
+.skill-used-list li {
+  position: relative;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.skill-used-list a::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+}
+.skill-used-list li:hover,
+.skill-used-list li:focus-within {
+  color: var(--text);
+  border-color: rgba(var(--accent-rgb), 0.55);
+  background: rgba(var(--accent-rgb), 0.1);
+}
+
+/* ── Pointer light: a soft glow follows the cursor over cards, and their edge catches it ── */
+.skill-cell,
+.honour {
+  position: relative;
+}
+.spot {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(280px circle at var(--sx, 50%) var(--sy, 50%), rgba(var(--spot-rgb, 255, 255, 255), 0.07), transparent 65%);
+}
+.spot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: radial-gradient(200px circle at var(--sx, 50%) var(--sy, 50%), rgba(var(--spot-rgb, 255, 255, 255), 0.6), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+:is(.skill-cell, .honour, .contact-card, .cert, .project-card):hover > .spot {
+  opacity: 1;
+}
+.honour {
+  --spot-rgb: var(--accent-rgb);
+}
+.contact-card.tint {
+  --spot-rgb: var(--tint);
+}
+.cert {
+  --spot-rgb: 76, 194, 255;
+}
+/* Bordered cards: the lit edge sits on the border itself. */
+.contact-card > .spot,
+.cert > .spot {
+  inset: -1px;
+}
+.project-card > .spot {
+  z-index: 3;
+  background: radial-gradient(460px circle at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, 0.11), transparent 60%);
+  mix-blend-mode: screen;
+}
+.project-card > .spot::before {
+  display: none;
+}
+
+/* ── Project cards lean toward the pointer ── */
+.projects-grid {
+  perspective: 1400px;
+}
+.project-card {
+  rotate: var(--ax, 1) var(--ay, 0) 0 var(--ang, 0deg);
+  transition: rotate 0.6s var(--ease-out);
+}
+.project-card:hover {
+  z-index: 2;
+  transition-duration: 0.14s;
+}
+
+/* ── Hero depth: photo and figure shift against each other with the pointer ── */
+.sheet {
+  overflow: clip;
+}
+.sheet-photo {
+  scale: 1.06;
+  translate: calc(var(--px, 0) * -12px) calc(var(--py, 0) * -8px);
+  transition: translate 1s var(--ease-out);
+}
+.dwg {
+  translate: calc(var(--px, 0) * 6px) calc(var(--py, 0) * 4px);
+  transition: translate 1s var(--ease-out);
+}
+
+/* ── Touch: cards give a little under the finger ── */
+@media (hover: none) {
+  .contact-card,
+  .project-card {
+    transition: scale 0.2s var(--ease-out);
+  }
+  .contact-card:active,
+  .project-card:active {
+    scale: 0.985;
+  }
+}
+
+/* ── Footer build stamp ── */
+.foot-build {
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
+  /* Phones keep the footer to its one row. */
+  .foot-build {
+    display: none;
+  }
+}
+
+/* ── Anything that loops is paused while it's off screen ── */
+[data-off],
+[data-off] *,
+[data-off] *::before,
+[data-off] *::after {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll-linked depth, run by the compositor (no script): the hero photo falls
+     behind the page as it leaves, and project images drift inside their frames. */
+  @supports (animation-timeline: scroll()) {
+    .sheet-photo {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100svh;
+    }
+    @keyframes hero-drift {
+      to {
+        transform: translateY(4%) scale(1.09);
+      }
+    }
+    .project-card-bg {
+      top: -5%;
+      height: 110%;
+      animation: card-drift linear both;
+      animation-timeline: view();
+    }
+    @keyframes card-drift {
+      from {
+        translate: 0 -4%;
+      }
+      to {
+        translate: 0 4%;
+      }
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet-photo,
+  .dwg {
+    translate: none;
+    transition: none;
+  }
+  .project-card {
+    rotate: none;
+  }
+  .exp-progress {
+    transition: none;
+  }
+}

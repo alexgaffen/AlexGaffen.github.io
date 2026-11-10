@@ -6,6 +6,7 @@
  *   4. prerender      -> dist/*.html  (static HTML for every page)
  */
 import { build } from 'vite';
+import { execSync } from 'node:child_process';
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -62,6 +63,13 @@ function assetsFor(manifest: Manifest, entryKey: string, early: string, consoleC
 
 async function main() {
   const t0 = performance.now();
+  // Stamp the footer with the commit and day this build came from.
+  try {
+    process.env.BUILD_SHA ??= execSync('git rev-parse --short HEAD', { cwd: root }).toString().trim();
+  } catch {
+    // Not a git checkout (a tarball, say): the footer just says "dev".
+  }
+  process.env.BUILD_DATE ??= new Date().toISOString().slice(0, 10);
   rmSync(ssrDir, { recursive: true, force: true });
 
   console.log('client bundle');
