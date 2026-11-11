@@ -48,10 +48,10 @@ const EXPERIENCE: Job[] = [
     badge: 'Incoming',
     mark: { mono: 'PCC', tone: 'pcc' },
     bullets: [
-      'Site reliability for PointClickCare’s cloud health-record platform, used across long-term and post-acute care.',
-      'Troubleshooting incidents that affect the platform’s availability and tracing them to their root causes.',
-      'Automating manual processes and streamlining workflows to cut operational toil.',
-      'Working with software engineering, SRE, architecture and SaaS operations teams on Azure, Kubernetes and CI/CD.',
+      'Will work on site reliability for PointClickCare’s cloud health-record platform, used across long-term and post-acute care.',
+      'Will troubleshoot incidents that affect the platform’s availability and trace them to their root causes.',
+      'Will automate manual processes and streamline workflows to cut operational toil.',
+      'Will work with software engineering, SRE, architecture and SaaS operations teams on Azure, Kubernetes and CI/CD.',
     ],
   },
   {
