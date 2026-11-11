@@ -27,19 +27,33 @@ const BAND = [
   ['2022-09', 'mcmaster', 'Honours Computer Science Co-op', 'running'],
 ] as const;
 
-type Mark = { img: string } | { mono: string } | { violin: true };
+type Mark = { img: string } | { mono: string; tone?: string };
 
 interface Job {
   company: string;
   where: string;
-  role: string;
-  date: string;
+  /** Left out until known (an incoming role before its title and dates are set). */
+  role?: string;
+  date?: string;
   bullets: string[];
   badge?: string;
   mark: Mark;
 }
 
 const EXPERIENCE: Job[] = [
+  {
+    company: 'PointClickCare',
+    where: 'Mississauga, ON',
+    role: 'Process Engineer · 4-month co-op',
+    badge: 'Incoming',
+    mark: { mono: 'PCC', tone: 'pcc' },
+    bullets: [
+      'Will work on site reliability for PointClickCare’s cloud health-record platform, used across long-term and post-acute care.',
+      'Will troubleshoot incidents that affect the platform’s availability and trace them to their root causes.',
+      'Will automate manual processes and streamline workflows to cut operational toil.',
+      'Will work with software engineering, SRE, architecture and SaaS operations teams on Azure, Kubernetes and CI/CD.',
+    ],
+  },
   {
     company: 'Adaptron Inc',
     where: 'Ottawa, ON',
@@ -72,14 +86,6 @@ const EXPERIENCE: Job[] = [
     date: 'May 2024 – Jul 2024',
     mark: { img: '/assets/logos/bonbon.png' },
     bullets: ['Collaborated with a cross-functional team to build and deploy web components in Svelte, reporting to the CTO.'],
-  },
-  {
-    company: 'McMaster Symphony Orchestra',
-    where: 'Hamilton, ON',
-    role: 'Violinist',
-    date: 'Sept 2022 – Apr 2026',
-    mark: { violin: true },
-    bullets: ['Four-year member with Level 10 RCM Violin; mentor to students at OrKidstra.'],
   },
 ];
 
@@ -262,43 +268,11 @@ function Diagram() {
   );
 }
 
-/** Line-drawn violin; its strings shimmer and the bow draws while the row is on screen. */
-function Violin() {
-  const strings = [
-    [28, 25.5, 27.5],
-    [29.3, 28.5, 29.2],
-    [30.7, 31.5, 30.8],
-    [32, 34.5, 32.5],
-  ];
-  return (
-    <svg className="violin" viewBox="0 0 60 150" aria-hidden="true">
-      <path className="v-line" d="M30 34C18 34 10 40 10 52C10 62 18 66 20 72C21 77 14 82 10 92C6 104 8 128 30 132C52 128 54 104 50 92C46 82 39 77 40 72C42 66 50 62 50 52C50 40 42 34 30 34Z" />
-      <path className="v-line" d="M27 36V12H33V36" />
-      <circle className="v-line" cx="30" cy="8" r="4" />
-      <path className="v-line" d="M21 86c3 6 3 14 0 20M39 86c-3 6-3 14 0 20" />
-      <path className="v-line" d="M23 110H37M26 118L30 128L34 118Z" />
-      {strings.map(([top, bridge, tail], i) => (
-        <path key={i} className="v-string" d={`M${top} 12L${bridge} 110L${tail} 118`} style={{ ['--s' as string]: i }} />
-      ))}
-      <g className="v-bow">
-        <path d="M-6 104L66 90" />
-        <path className="v-hair" d="M-6 107L66 93" />
-      </g>
-    </svg>
-  );
-}
-
 function JobMark({ mark }: { mark: Mark }) {
   if ('img' in mark) return <img className="exp-mark" src={mark.img} alt="" width="72" height="72" loading="lazy" />;
-  if ('mono' in mark)
-    return (
-      <span className="exp-mark mono" aria-hidden="true">
-        {mark.mono}
-      </span>
-    );
   return (
-    <span className="exp-mark">
-      <Violin />
+    <span className={`exp-mark mono${mark.tone ? ` ${mark.tone}` : ''}`} aria-hidden="true">
+      {mark.mono}
     </span>
   );
 }
@@ -490,7 +464,7 @@ function Body() {
                     </div>
                   </div>
                   <div className="exp-role">
-                    <strong>{e.role}</strong>
+                    {e.role && <strong>{e.role}</strong>}
                     <ul>
                       {e.bullets.map((b) => (
                         <li key={b}>{b}</li>
@@ -498,8 +472,8 @@ function Body() {
                     </ul>
                   </div>
                   <div className="exp-meta">
-                    <span className="exp-date">{e.date}</span>
-                    {e.badge && <span className="exp-badge current">{e.badge}</span>}
+                    {e.date && <span className="exp-date">{e.date}</span>}
+                    {e.badge && <span className={`exp-badge ${e.badge.toLowerCase()}`}>{e.badge}</span>}
                   </div>
                 </article>
               ))}
@@ -515,6 +489,10 @@ function Body() {
                   <strong>Honours Computer Science Co-op (B.A.Sc.)</strong>
                   <ul>
                     <li>4th year. Dean&rsquo;s Honour List (2023).</li>
+                    <li>
+                      Violinist in the McMaster Symphony Orchestra (Sept 2022 – Apr 2026): four-year member with Level 10 RCM
+                      Violin, and mentor to students at OrKidstra.
+                    </li>
                   </ul>
                 </div>
                 <div className="exp-meta">
