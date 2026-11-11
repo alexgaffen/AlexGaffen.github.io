@@ -350,6 +350,136 @@ body.portfolio {
 .hero-name .word + .word {
   animation-delay: calc(var(--t0) + 0.4s);
 }
+/* ── The name's three treatments (class on #hero) ── */
+.hero-name .n2 {
+  position: relative;
+  display: inline-block;
+}
+.name-eyebrow,
+.hero-name .brace,
+.scribble {
+  display: none;
+}
+
+/* A: a hand-drawn accent stroke under the surname, drawn in once the name has risen. */
+.name-a .scribble {
+  display: block;
+  position: absolute;
+  left: -2%;
+  right: -4%;
+  top: 86%;
+  width: 106%;
+  height: 0.26em;
+  overflow: visible;
+}
+.scribble path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 0.075em;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 10px rgba(var(--accent-rgb), 0.45));
+  animation: scribble 0.9s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--t0) + 1.15s) forwards;
+}
+@keyframes scribble {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.name-a #hero-meta {
+  margin-top: calc(var(--name-fs) * 0.24);
+}
+
+/* B: code braces around the name, light and in the accent, easing in from the sides. */
+.name-b .hero-name .word {
+  font-size: 0.82em;
+}
+.name-b .hero-name .brace {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 300;
+  letter-spacing: 0;
+  opacity: 0;
+  animation: brace-l 0.8s var(--ease-out) calc(var(--t0) + 0.9s) forwards;
+}
+.name-b #hero-meta {
+  margin-top: calc(var(--name-fs) * 0.2);
+}
+.name-b .hero-name .brace:first-child {
+  margin-right: 0.12em;
+}
+.name-b .hero-name .brace:last-child {
+  margin-left: 0.12em;
+  animation-name: brace-r;
+}
+@keyframes brace-l {
+  from {
+    opacity: 0;
+    transform: translateX(0.25em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes brace-r {
+  from {
+    opacity: 0;
+    transform: translateX(-0.25em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* C: a small eyebrow line ties the name to the page, and the surname takes the accent. */
+.name-c .name-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  margin-bottom: 1.2em;
+  font-family: var(--mono);
+  font-size: max(12px, calc(var(--name-fs) * 0.085));
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #d6d5ce;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: rise 0.9s var(--ease-out) calc(var(--t0) + 0.15s) forwards;
+}
+.name-c .name-eyebrow::before {
+  content: '';
+  width: 2.6em;
+  height: 1px;
+  background: var(--accent);
+}
+.name-c .name-eyebrow i {
+  font-style: normal;
+  color: var(--accent);
+}
+.name-c .hero-name .n2 {
+  color: var(--accent);
+  text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scribble path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .name-b .hero-name .brace,
+  .name-c .name-eyebrow {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 @keyframes cursor-blink {
   50% {
     opacity: 0;
