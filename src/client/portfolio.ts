@@ -6,6 +6,8 @@ const root = document.documentElement;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Seconds the intro holds the hero back (0 when the intro is skipped). */
 const t0 = () => parseFloat(getComputedStyle(root).getPropertyValue('--t0')) || 0;
+/** The hero opening's speed factor (--pace in portfolio.css). */
+const pace = () => parseFloat(getComputedStyle(root).getPropertyValue('--pace')) || 1;
 
 /** The console bar's clock: Eastern time (EST/EDT), ticking every second. */
 function initClock(): void {
@@ -25,7 +27,7 @@ function initClock(): void {
 }
 
 /** Plotter-style text: random glyphs settle into the real text left to right. */
-function scramble(el: HTMLElement, delay: number): void {
+function scramble(el: HTMLElement, delay: number, step = 34): void {
   const final = el.textContent ?? '';
   const frames = 16;
   let f = 0;
@@ -33,7 +35,7 @@ function scramble(el: HTMLElement, delay: number): void {
     el.textContent = [...final]
       .map((c, i) => (c === ' ' || i < (f / frames) * final.length ? c : GLYPHS[(Math.random() * GLYPHS.length) | 0]))
       .join('');
-    if (++f <= frames) setTimeout(tick, 34);
+    if (++f <= frames) setTimeout(tick, step);
     else el.textContent = final;
   }, delay);
 }
@@ -208,9 +210,12 @@ export function initPortfolio(): void {
 
   if (!reduced) {
     const base = t0() * 1000;
+    const k = pace();
     // In step with the CSS: deploy rows print from 2.15s (two cells a row), node fields from 3.15s.
-    document.querySelectorAll<HTMLElement>('.rev [data-scramble]').forEach((el, i) => scramble(el, base + 2150 + (i >> 1) * 120));
-    document.querySelectorAll<HTMLElement>('.tb [data-scramble]').forEach((el, i) => scramble(el, base + 3150 + i * 70));
+    document
+      .querySelectorAll<HTMLElement>('.rev [data-scramble]')
+      .forEach((el, i) => scramble(el, base + (2150 + (i >> 1) * 120) * k, 34 * k));
+    document.querySelectorAll<HTMLElement>('.tb [data-scramble]').forEach((el, i) => scramble(el, base + (3150 + i * 70) * k, 34 * k));
   }
 
   const nav = document.getElementById('nav');

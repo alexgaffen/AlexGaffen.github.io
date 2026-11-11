@@ -163,6 +163,8 @@ type Pt = [number, number];
    at T.start; each layer lights as it arrives and draws its connections onward; it
    passes BUILD, TEST and DEPLOY in turn, then fans out to the replicas. At T.live the
    status bar flips to operational and the looping traffic takes over. */
+/** The opening's speed, as --pace in portfolio.css (keep the two equal). */
+const PACE = 1.3;
 const STEP = 0.22;
 const T = {
   start: 1.1,
@@ -231,7 +233,8 @@ function Diagram() {
           style={{ ['--d' as string]: secs(T.stage(0)), ['--dur' as string]: secs(T.stage(2) - T.stage(0)) }}
         />
         {ROUTES.map((r, i) => {
-          const begin = `${T.live + 0.1 + i * 0.85}s`;
+          // SMIL can't read the CSS --pace, so the same factor is applied here.
+          const begin = `${+((T.live + 0.1) * PACE + i * 0.85).toFixed(2)}s`;
           const dur = `${5 + (i % 3) * 0.6}s`;
           return (
             <circle key={`p${i}`} className="pulse" r="3.2" opacity="0" cx={pct(r[0][0])} cy={pct(r[0][1])}>

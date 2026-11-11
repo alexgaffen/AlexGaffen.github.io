@@ -35,6 +35,9 @@
 /* --t0: offset every hero entrance animation starts from. */
 html.portfolio-root {
   --t0: 0s;
+  /* --pace: the hero opening's speed. Every entrance delay and duration is scaled by
+     it (1 = the original timing); the loops that follow keep their own speed. */
+  --pace: 1.3;
   scroll-behavior: smooth;
   background: #080808;
   /* site.css hides scrollbars everywhere; this page uses the browser's normal one. */
@@ -241,7 +244,7 @@ body.portfolio {
   transition: border-color 0.3s, background 0.3s, backdrop-filter 0.3s;
   opacity: 0;
   transform: translateY(-12px);
-  animation: rise 0.8s var(--ease-out) calc(var(--t0) + 0.9s) forwards;
+  animation: rise calc(0.8s * var(--pace)) var(--ease-out) calc(var(--t0) + (0.9s) * var(--pace)) forwards;
 }
 .portfolio nav.scrolled {
   background: rgba(8, 8, 8, 0.85);
@@ -350,14 +353,14 @@ body.portfolio {
   display: inline-block;
   opacity: 0;
   transform: translateY(0.3em);
-  animation: rise 1s var(--ease-out) calc(var(--t0) + 0.75s) forwards;
+  animation: rise calc(1s * var(--pace)) var(--ease-out) calc(var(--t0) + (0.75s) * var(--pace)) forwards;
 }
 .hero-name .surname {
   color: var(--accent);
   text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.35);
   animation:
-    rise 1s var(--ease-out) calc(var(--t0) + 0.95s) forwards,
-    name-glow 1.4s ease-out calc(var(--t0) + 1.4s);
+    rise calc(1s * var(--pace)) var(--ease-out) calc(var(--t0) + (0.95s) * var(--pace)) forwards,
+    name-glow calc(1.4s * var(--pace)) ease-out calc(var(--t0) + (1.4s) * var(--pace));
 }
 @keyframes name-glow {
   30% {
@@ -377,7 +380,7 @@ body.portfolio {
   max-width: calc(100% - var(--tbw) - 56px);
   opacity: 0;
   transform: translateY(24px);
-  animation: rise 0.9s var(--ease-out) calc(var(--t0) + 1.15s) forwards;
+  animation: rise calc(0.9s * var(--pace)) var(--ease-out) calc(var(--t0) + (1.15s) * var(--pace)) forwards;
 }
 .hero-role {
   /* Keeps pace with the name on big screens, where --ui alone leaves it small. */
@@ -423,7 +426,7 @@ body.portfolio {
   pointer-events: none;
   z-index: 1;
   clip-path: inset(0 100% 100% 0 round 6px);
-  animation: sheet-draw 1.3s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--t0) + 0.05s) forwards;
+  animation: sheet-draw calc(1.3s * var(--pace)) cubic-bezier(0.65, 0, 0.35, 1) calc(var(--t0) + (0.05s) * var(--pace)) forwards;
 }
 .sheet::before {
   content: '';
@@ -446,7 +449,7 @@ body.portfolio {
 .sheet-photo {
   object-fit: cover;
   object-position: 50% 42%;
-  animation: photo-in 1.8s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--t0) + 0.1s) both;
+  animation: photo-in calc(1.8s * var(--pace)) cubic-bezier(0.22, 1, 0.36, 1) calc(var(--t0) + (0.1s) * var(--pace)) both;
 }
 /* The view starts a little close and soft, and settles as the window finishes drawing. */
 @keyframes photo-in {
@@ -513,16 +516,17 @@ body.portfolio {
 }
 .con-ok-wait {
   grid-column: 2;
-  animation: con-out 0.01s steps(1) calc(var(--t0) + var(--live)) forwards;
+  animation: con-out calc(0.25s * var(--pace)) ease calc(var(--t0) + (var(--live)) * var(--pace)) forwards;
 }
 .con-ok-live {
   grid-column: 2;
   opacity: 0;
-  animation: con-in 0.4s ease calc(var(--t0) + var(--live)) forwards;
+  animation: con-in calc(0.4s * var(--pace)) ease calc(var(--t0) + (var(--live)) * var(--pace)) forwards;
 }
 @keyframes con-out {
   to {
-    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
   }
 }
 @keyframes con-in {
@@ -544,8 +548,8 @@ body.portfolio {
   box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.9);
   /* Quick while deploying, the usual slow blink once live. */
   animation:
-    blink 0.5s ease-in-out 6,
-    blink 1.6s ease-in-out calc(var(--t0) + var(--live)) infinite;
+    blink calc(0.5s * var(--pace)) ease-in-out 6,
+    blink 1.6s ease-in-out calc(var(--t0) + (var(--live)) * var(--pace)) infinite;
 }
 .con-clock b {
   font-weight: 400;
@@ -560,7 +564,7 @@ body.portfolio {
   /* Typed width is counted in ch, so no extra tracking. */
   letter-spacing: 0;
   opacity: 0;
-  animation: dwg-fade 0.01s calc(var(--t0) + var(--at) - 0.15s) forwards;
+  animation: dwg-fade calc(0.01s * var(--pace)) calc(var(--t0) + (var(--at) - 0.15s) * var(--pace)) forwards;
 }
 .cmd-line .ps {
   color: var(--accent);
@@ -570,7 +574,7 @@ body.portfolio {
   vertical-align: bottom;
   overflow: hidden;
   width: 0;
-  animation: boot-type calc(var(--n) * 40ms) steps(var(--n)) calc(var(--t0) + var(--at)) forwards;
+  animation: boot-type calc(var(--n) * 40ms * var(--pace)) steps(var(--n)) calc(var(--t0) + (var(--at)) * var(--pace)) forwards;
 }
 @keyframes boot-type {
   to {
@@ -604,7 +608,7 @@ body.portfolio {
 /* Rows print one after another once "git log --deploys" has typed (1.4s + 17 keys). */
 .rev tr {
   opacity: 0;
-  animation: dwg-fade 0.01s calc(var(--t0) + 2.15s + var(--r, 0) * 0.12s) forwards;
+  animation: dwg-fade calc(0.01s * var(--pace)) calc(var(--t0) + (2.15s + var(--r, 0) * 0.12s) * var(--pace)) forwards;
 }
 .rev thead tr {
   --r: -1;
@@ -727,8 +731,8 @@ body.portfolio {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation:
-    band-draw var(--dur) linear calc(var(--t0) + var(--d)) forwards,
-    band-cool 0.9s ease calc(var(--t0) + var(--d) + var(--dur)) both;
+    band-draw calc(var(--dur) * var(--pace)) linear calc(var(--t0) + (var(--d)) * var(--pace)) forwards,
+    band-cool calc(0.9s * var(--pace)) ease calc(var(--t0) + (var(--d) + var(--dur)) * var(--pace)) both;
 }
 @keyframes band-draw {
   to {
@@ -751,7 +755,7 @@ body.portfolio {
   transform-box: fill-box;
   transform-origin: center;
   opacity: 0;
-  animation: node-hit 0.6s var(--ease-out) calc(var(--t0) + var(--d)) forwards;
+  animation: node-hit calc(0.6s * var(--pace)) var(--ease-out) calc(var(--t0) + (var(--d)) * var(--pace)) forwards;
 }
 /* A node lights orange as the signal arrives, then settles white. */
 @keyframes node-hit {
@@ -784,7 +788,7 @@ body.portfolio {
   transform-origin: left center;
   transform: scaleX(0);
   animation:
-    pipe-grow var(--dur) linear calc(var(--t0) + var(--d)) forwards,
+    pipe-grow calc(var(--dur) * var(--pace)) linear calc(var(--t0) + (var(--d)) * var(--pace)) forwards,
     dwg-flow 0.9s linear infinite;
 }
 @keyframes pipe-grow {
@@ -813,10 +817,10 @@ body.portfolio {
    like a run going green step by step. */
 .dwg .stage {
   opacity: 0;
-  animation: pop-in 0.45s var(--ease-out) calc(var(--t0) + var(--d)) forwards;
+  animation: pop-in calc(0.45s * var(--pace)) var(--ease-out) calc(var(--t0) + (var(--d)) * var(--pace)) forwards;
 }
 .dwg .stage rect {
-  animation: stage-pass 0.8s ease-out calc(var(--t0) + var(--d)) both;
+  animation: stage-pass calc(0.8s * var(--pace)) ease-out calc(var(--t0) + (var(--d)) * var(--pace)) both;
 }
 @keyframes stage-pass {
   from {
@@ -834,7 +838,7 @@ body.portfolio {
   }
 }
 .dwg .stage .led {
-  animation: dwg-led 3s steps(1) calc(var(--t0) + 3.1s + var(--s) * 1s) infinite;
+  animation: dwg-led 3s steps(1) calc(var(--t0) + (3.1s + var(--s) * 1s) * var(--pace)) infinite;
 }
 @keyframes dwg-led {
   0% {
@@ -855,16 +859,16 @@ body.portfolio {
    update drains, restarts and brings back one at a time. */
 .dwg .pod {
   opacity: 0;
-  animation: pop-in 0.45s var(--ease-out) calc(var(--t0) + var(--d)) forwards;
+  animation: pop-in calc(0.45s * var(--pace)) var(--ease-out) calc(var(--t0) + (var(--d)) * var(--pace)) forwards;
 }
 .dwg .pod .led {
   opacity: 0;
   animation:
-    dwg-fade 0.2s ease calc(var(--t0) + var(--d) + 0.2s) forwards,
-    dwg-roll 8s ease calc(var(--t0) + 4.2s + var(--p) * 1.1s) infinite;
+    dwg-fade calc(0.2s * var(--pace)) ease calc(var(--t0) + (var(--d) + 0.2s) * var(--pace)) forwards,
+    dwg-roll 8s ease calc(var(--t0) + (4.2s + var(--p) * 1.1s) * var(--pace)) infinite;
 }
 .dwg .pod rect {
-  animation: dwg-roll 8s ease calc(var(--t0) + 4.2s + var(--p) * 1.1s) infinite;
+  animation: dwg-roll 8s ease calc(var(--t0) + (4.2s + var(--p) * 1.1s) * var(--pace)) infinite;
 }
 @keyframes dwg-roll {
   0%,
@@ -907,11 +911,11 @@ body.portfolio {
   opacity: 0;
   transform-box: view-box;
   /* Linear, so it keeps pace with the signal across the figure. */
-  animation: dwg-scan 1.72s linear calc(var(--t0) + var(--d)) forwards;
+  animation: dwg-scan calc(1.72s * var(--pace)) linear calc(var(--t0) + (var(--d)) * var(--pace)) forwards;
 }
 .dwg .late {
   opacity: 0;
-  animation: dwg-fade 0.7s ease calc(var(--t0) + var(--d, 1.9s)) forwards;
+  animation: dwg-fade calc(0.7s * var(--pace)) ease calc(var(--t0) + (var(--d, 1.9s)) * var(--pace)) forwards;
 }
 /* Narrow figure: smaller stage chips without names, no column labels. */
 @container (max-width: 640px) {
@@ -968,7 +972,7 @@ body.portfolio {
   font-family: var(--mono);
   text-transform: uppercase;
   opacity: 0;
-  animation: dwg-fade 0.3s ease calc(var(--t0) + 1.75s) forwards;
+  animation: dwg-fade calc(0.3s * var(--pace)) ease calc(var(--t0) + (1.75s) * var(--pace)) forwards;
 }
 .tb > div {
   background: var(--bg);
@@ -977,7 +981,7 @@ body.portfolio {
 }
 .tb > div:not(.tb-cmd) > * {
   opacity: 0;
-  animation: dwg-fade 0.01s calc(var(--t0) + 3.15s + var(--i, 0) * 0.07s) forwards;
+  animation: dwg-fade calc(0.01s * var(--pace)) calc(var(--t0) + (3.15s + var(--i, 0) * 0.07s) * var(--pace)) forwards;
 }
 .tb > .tb-cmd {
   grid-column: 1 / -1;
