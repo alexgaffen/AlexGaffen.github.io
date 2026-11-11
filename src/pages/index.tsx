@@ -27,19 +27,31 @@ const BAND = [
   ['2022-09', 'mcmaster', 'Honours Computer Science Co-op', 'running'],
 ] as const;
 
-type Mark = { img: string } | { mono: string } | { violin: true };
+type Mark = { img: string } | { mono: string; tone?: string } | { violin: true };
 
 interface Job {
   company: string;
   where: string;
-  role: string;
-  date: string;
+  /** Left out until known (an incoming role before its title and dates are set). */
+  role?: string;
+  date?: string;
   bullets: string[];
   badge?: string;
   mark: Mark;
 }
 
 const EXPERIENCE: Job[] = [
+  {
+    company: 'PointClickCare',
+    where: 'Mississauga, ON',
+    badge: 'Incoming',
+    mark: { mono: 'PCC', tone: 'pcc' },
+    bullets: [
+      'Canadian healthcare technology company, headquartered in Mississauga and founded in 2000.',
+      'Builds a cloud-based electronic health record platform for long-term and post-acute care: skilled nursing, senior living and home health.',
+      'Its care-collaboration network connects those providers with hospitals, health plans and pharmacies.',
+    ],
+  },
   {
     company: 'Adaptron Inc',
     where: 'Ottawa, ON',
@@ -292,7 +304,7 @@ function JobMark({ mark }: { mark: Mark }) {
   if ('img' in mark) return <img className="exp-mark" src={mark.img} alt="" width="72" height="72" loading="lazy" />;
   if ('mono' in mark)
     return (
-      <span className="exp-mark mono" aria-hidden="true">
+      <span className={`exp-mark mono${mark.tone ? ` ${mark.tone}` : ''}`} aria-hidden="true">
         {mark.mono}
       </span>
     );
@@ -490,7 +502,7 @@ function Body() {
                     </div>
                   </div>
                   <div className="exp-role">
-                    <strong>{e.role}</strong>
+                    {e.role && <strong>{e.role}</strong>}
                     <ul>
                       {e.bullets.map((b) => (
                         <li key={b}>{b}</li>
@@ -498,8 +510,8 @@ function Body() {
                     </ul>
                   </div>
                   <div className="exp-meta">
-                    <span className="exp-date">{e.date}</span>
-                    {e.badge && <span className="exp-badge current">{e.badge}</span>}
+                    {e.date && <span className="exp-date">{e.date}</span>}
+                    {e.badge && <span className={`exp-badge ${e.badge.toLowerCase()}`}>{e.badge}</span>}
                   </div>
                 </article>
               ))}

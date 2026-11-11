@@ -1185,6 +1185,19 @@ main:not(.cs) .section-label::before {
   line-height: 1;
   color: var(--text);
 }
+/* PointClickCare's own pairing: lime lettering on an olive tile. */
+.exp-mark.mono.pcc {
+  background: #435030;
+  border-color: #5a6b40;
+  color: #e7feb6;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+}
+.exp-badge.incoming {
+  background: rgba(231, 254, 182, 0.08);
+  color: #e7feb6;
+  border: 1px solid rgba(231, 254, 182, 0.3);
+}
 .exp-company {
   font-family: var(--display);
   font-weight: 700;
