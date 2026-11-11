@@ -44,6 +44,7 @@ const EXPERIENCE: Job[] = [
   {
     company: 'PointClickCare',
     where: 'Mississauga, ON',
+    role: 'Process Engineer · 4-month co-op',
     badge: 'Incoming',
     mark: { mono: 'PCC', tone: 'pcc' },
     bullets: [
