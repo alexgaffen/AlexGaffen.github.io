@@ -89,17 +89,18 @@ const EXPERIENCE: Job[] = [
   },
 ];
 
-/* Deploy history = career history, oldest first; the last one is live. */
+/* Deploy history = career history, oldest first: shipped, the live one, then what's queued. */
 const DEPLOYS = [
-  ['3f9a1c2', 'bonbon/front-end-intern', '2024-05'],
-  ['a71e0d4', 'medicine/ml-research-eng', '2026-01'],
-  ['c4b28e9', 'adaptron/ai-research-eng', '2026-05'],
+  ['3f9a1c2', 'bonbon/front-end-intern', '2024-05', 'shipped'],
+  ['a71e0d4', 'medicine/ml-research-eng', '2026-01', 'shipped'],
+  ['c4b28e9', 'adaptron/ai-research-eng', '2026-05', 'current'],
+  ['e81f5b7', 'pointclickcare/process-eng', 'queued', 'queued'],
 ] as const;
 
-/* The hero loads like a terminal session: the deploy table and the node card each
-   type their command (at s) and print, while the figure scans in on its own. */
-const DEPLOYS_CMD = ['git log --deploys', 2.6] as const;
-const NODE_CMD = ['kubectl describe node a.gaffen', 3.9] as const;
+/* While the figure comes up, the deploy table and the node card each type their
+   command (at s) and print alongside it. */
+const DEPLOYS_CMD = ['git log --deploys', 1.4] as const;
+const NODE_CMD = ['kubectl describe node a.gaffen', 1.9] as const;
 
 /** A prompt whose command types itself out at `at` seconds. */
 function Typed({ cmd, at }: { cmd: string; at: number }) {
@@ -157,13 +158,32 @@ const PIPE_Y = 48;
 const nodeY = (n: number, i: number) => 11 + ((i + 0.5) * 74) / n;
 const pct = (v: number) => `${+v.toFixed(2)}%`;
 type Pt = [number, number];
-const EDGES: [Pt, Pt][] = [];
+
+/* The opening, in seconds: one signal brings the figure up. It enters the input layer
+   at T.start; each layer lights as it arrives and draws its connections onward; it
+   passes BUILD, TEST and DEPLOY in turn, then fans out to the replicas. At T.live the
+   status bar flips to operational and the looping traffic takes over. */
+const STEP = 0.22;
+const T = {
+  start: 1.1,
+  layer: (l: number) => 1.1 + l * STEP,
+  stage: (i: number) => 1.1 + 3 * STEP + 0.2 + i * 0.22,
+  pods: 1.1 + 3 * STEP + 0.2 + 2 * 0.22 + 0.25,
+  live: 2.8,
+};
+const secs = (v: number) => `${+v.toFixed(2)}s`;
+
+/** Every connection, with when it starts drawing and how long it takes. */
+const EDGES: { a: Pt; b: Pt; at: number; dur: number }[] = [];
 LAYERS.slice(0, -1).forEach((n, l) => {
   for (let a = 0; a < n; a++)
-    for (let b = 0; b < LAYERS[l + 1]; b++) EDGES.push([[LX[l], nodeY(n, a)], [LX[l + 1], nodeY(LAYERS[l + 1], b)]]);
+    for (let b = 0; b < LAYERS[l + 1]; b++)
+      EDGES.push({ a: [LX[l], nodeY(n, a)], b: [LX[l + 1], nodeY(LAYERS[l + 1], b)], at: T.layer(l), dur: STEP });
 });
-for (let a = 0; a < LAYERS[3]; a++) EDGES.push([[LX[3], nodeY(LAYERS[3], a)], [STAGES[0][1], PIPE_Y]]);
-for (let p = 0; p < PODS; p++) EDGES.push([[STAGES[2][1], PIPE_Y], [POD_X, nodeY(PODS, p)]]);
+for (let a = 0; a < LAYERS[3]; a++)
+  EDGES.push({ a: [LX[3], nodeY(LAYERS[3], a)], b: [STAGES[0][1], PIPE_Y], at: T.layer(3), dur: 0.2 });
+for (let p = 0; p < PODS; p++)
+  EDGES.push({ a: [STAGES[2][1], PIPE_Y], b: [POD_X, nodeY(PODS, p)], at: T.stage(2), dur: 0.25 });
 const ROUTES: Pt[][] = [
   [0, 1, 2, 0, 1],
   [3, 4, 3, 2, 3],
@@ -183,17 +203,35 @@ const GROUPS = [
   ['PROD', POD_X - 4.5, POD_X + 4.5],
 ] as const;
 const late = (d: string) => ({ ['--d' as string]: d });
+/** When each group's dimension line appears: with the first thing it spans. */
+const GROUP_AT = [T.layer(0), T.stage(0), T.pods];
 
 function Diagram() {
   return (
     <figure className="dwg" aria-hidden="true">
       <svg>
-        {EDGES.map(([[x1, y1], [x2, y2]], i) => (
-          <line key={i} className="band" x1={pct(x1)} y1={pct(y1)} x2={pct(x2)} y2={pct(y2)} style={{ ['--b' as string]: i % 24 }} />
+        {EDGES.map(({ a: [x1, y1], b: [x2, y2], at, dur }, i) => (
+          <line
+            key={i}
+            className="band"
+            pathLength={1}
+            x1={pct(x1)}
+            y1={pct(y1)}
+            x2={pct(x2)}
+            y2={pct(y2)}
+            style={{ ['--d' as string]: secs(at), ['--dur' as string]: secs(dur) }}
+          />
         ))}
-        <line className="pipe late" x1={pct(STAGES[0][1])} x2={pct(STAGES[2][1])} y1={pct(PIPE_Y)} y2={pct(PIPE_Y)} style={late('1.6s')} />
+        <line
+          className="pipe"
+          x1={pct(STAGES[0][1])}
+          x2={pct(STAGES[2][1])}
+          y1={pct(PIPE_Y)}
+          y2={pct(PIPE_Y)}
+          style={{ ['--d' as string]: secs(T.stage(0)), ['--dur' as string]: secs(T.stage(2) - T.stage(0)) }}
+        />
         {ROUTES.map((r, i) => {
-          const begin = `${3.4 + i * 0.85}s`;
+          const begin = `${T.live + 0.1 + i * 0.85}s`;
           const dur = `${5 + (i % 3) * 0.6}s`;
           return (
             <circle key={`p${i}`} className="pulse" r="3.2" opacity="0" cx={pct(r[0][0])} cy={pct(r[0][1])}>
@@ -206,12 +244,12 @@ function Diagram() {
         })}
         {LAYERS.map((n, l) =>
           Array.from({ length: n }, (_, i) => (
-            <circle key={`${l}-${i}`} className="node late" cx={pct(LX[l])} cy={pct(nodeY(n, i))} r="6" style={late(`${1.2 + l * 0.18}s`)} />
+            <circle key={`${l}-${i}`} className="node" cx={pct(LX[l])} cy={pct(nodeY(n, i))} r="6" style={late(secs(T.layer(l)))} />
           )),
         )}
         {STAGES.map(([name, x], i) => (
           <svg key={name} x={pct(x)} y={pct(PIPE_Y)} overflow="visible">
-            <g className="stage late" style={{ ...late(`${1.9 + i * 0.12}s`), ['--s' as string]: i }}>
+            <g className="stage" style={{ ...late(secs(T.stage(i))), ['--s' as string]: i }}>
               <rect x="-30" y="-13" width="60" height="26" rx="2" />
               <circle className="led" cx="-21" cy="0" r="2.2" />
               <text x="5" y="3.5" textAnchor="middle" fontSize="9">
@@ -222,7 +260,7 @@ function Diagram() {
         ))}
         {Array.from({ length: PODS }, (_, p) => (
           <svg key={`pod${p}`} x={pct(POD_X)} y={pct(nodeY(PODS, p))} overflow="visible">
-            <g className="pod late" style={{ ...late(`${2.3 + p * 0.1}s`), ['--p' as string]: p }}>
+            <g className="pod" style={{ ...late(secs(T.pods + p * 0.06)), ['--p' as string]: p }}>
               <rect x="-15" y="-10" width="30" height="20" rx="2" />
               <circle className="led" cx="9" cy="-4" r="2" />
               <path d="M-9 1H3M-9 5H0" />
@@ -230,7 +268,7 @@ function Diagram() {
           </svg>
         ))}
         {LX.map((x, l) => (
-          <g key={l} className="col-label late" style={late('2.2s')}>
+          <g key={l} className="col-label late" style={late(secs(T.layer(l)))}>
             <line className="g-dim" x1={pct(x)} x2={pct(x)} y1={pct(91)} y2={pct(94)} />
             <svg x={pct(x)} y="100%" overflow="visible">
               <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
@@ -239,7 +277,7 @@ function Diagram() {
             </svg>
           </g>
         ))}
-        <g className="col-label late" style={late('2.2s')}>
+        <g className="col-label late" style={late(secs(T.pods))}>
           <line className="g-dim" x1={pct(POD_X)} x2={pct(POD_X)} y1={pct(91)} y2={pct(94)} />
           <svg x={pct(POD_X)} y="100%" overflow="visible">
             <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
@@ -247,8 +285,8 @@ function Diagram() {
             </text>
           </svg>
         </g>
-        {GROUPS.map(([name, a, b]) => (
-          <g key={name} className="dim late" style={late('2s')}>
+        {GROUPS.map(([name, a, b], i) => (
+          <g key={name} className="dim late" style={late(secs(GROUP_AT[i]))}>
             <line x1={pct(a)} x2={pct(b)} y1="12" y2="12" />
             <line x1={pct(a)} x2={pct(a)} y1="7" y2="17" />
             <line x1={pct(b)} x2={pct(b)} y1="7" y2="17" />
@@ -262,7 +300,8 @@ function Diagram() {
             </text>
           </g>
         ))}
-        <line className="scan" x1="0" x2="0" y1="0" y2="100%" />
+        {/* A line sweeps along with the signal, right edge to edge. */}
+        <line className="scan" x1="0" x2="0" y1="0" y2="100%" style={late(secs(T.start - 0.06))} />
       </svg>
     </figure>
   );
@@ -281,10 +320,13 @@ function JobMark({ mark }: { mark: Mark }) {
 }
 
 /** Name on two lines, each line rising in as a whole word. */
+/** The name on one line, the surname in the accent. */
 function HeroName() {
   return (
     <h1 className="hero-name">
-      <span className="word">Alex Gaffen</span>
+      <span className="word">
+        <span className="n1">Alex</span> <span className="surname">Gaffen</span>
+      </span>
     </h1>
   );
 }
@@ -381,7 +423,11 @@ function Body() {
               <span className="con-path">
                 alexgaffen.com <span>/ portfolio</span>
               </span>
-              <span className="con-ok">All systems operational</span>
+              {/* Reads "Deploying" while the figure comes up, then flips once it's live. */}
+              <span className="con-ok" style={{ ['--live' as string]: secs(T.live) }}>
+                <span className="con-ok-wait">Deploying…</span>
+                <span className="con-ok-live">All systems operational</span>
+              </span>
               <span className="con-clock">
                 <b id="clock">--:--:-- EST</b>
               </span>
@@ -400,8 +446,8 @@ function Body() {
               </tr>
             </thead>
             <tbody>
-              {DEPLOYS.map(([h, d, t], i) => (
-                <tr key={h} className={i === DEPLOYS.length - 1 ? 'current' : undefined} style={{ ['--r' as string]: i }}>
+              {DEPLOYS.map(([h, d, t, state], i) => (
+                <tr key={h} className={state === 'shipped' ? undefined : state} style={{ ['--r' as string]: i }}>
                   <td>
                     <span className="dot" />
                   </td>
