@@ -281,27 +281,12 @@ function JobMark({ mark }: { mark: Mark }) {
 }
 
 /** Name on two lines, each line rising in as a whole word. */
-/* Three treatments for the name, picked by a class on #hero (name-a/b/c): a drawn
-   underline, code braces, or an eyebrow line with the surname in the accent. The parts
-   a treatment doesn't use stay hidden. */
+/** The name on one line, the surname in the accent. */
 function HeroName() {
   return (
-    <h1 className="hero-name" aria-label="Alex Gaffen">
-      <span className="name-eyebrow" aria-hidden="true">
-        AI research <i>·</i> Site reliability
-      </span>
-      <span className="word" aria-hidden="true">
-        <span className="brace">{'{'}</span>
-        <span className="n1">Alex</span> <span className="n2">
-          Gaffen
-          <svg className="scribble" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true">
-            <path
-              pathLength="1"
-              d="M6 26C58 15 118 10 178 12C226 13.6 262 17 292 22C246 21 196 22.5 146 27C110 30.5 76 33 48 34"
-            />
-          </svg>
-        </span>
-        <span className="brace">{'}'}</span>
+    <h1 className="hero-name">
+      <span className="word">
+        Alex <span className="surname">Gaffen</span>
       </span>
     </h1>
   );
@@ -391,7 +376,7 @@ function Body() {
       <SiteNav />
 
       <main id="main">
-        <section id="hero" className="name-a">
+        <section id="hero">
           <div className="sheet" id="sheet" aria-hidden="true">
             <img className="sheet-photo" src="/photography/DSLR/banffgondolasunisset.webp" alt="" />
             <span className="sheet-scrim" />
