@@ -1296,58 +1296,6 @@ main:not(.cs) .section-label::before {
   border: 1px solid var(--border);
 }
 
-/* Violin: the bow draws across and the strings shimmer while the row is visible. */
-.violin {
-  width: auto;
-  height: 46px;
-  overflow: visible;
-}
-.violin path,
-.violin circle {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.v-line {
-  stroke: rgba(237, 236, 234, 0.75);
-  stroke-width: 2.2;
-}
-.v-string {
-  stroke: var(--accent);
-  stroke-width: 0.9;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.v-bow path {
-  stroke: rgba(237, 236, 234, 0.85);
-  stroke-width: 2.4;
-}
-.v-bow .v-hair {
-  stroke: rgba(var(--accent-rgb), 0.7);
-  stroke-width: 1;
-}
-.in .v-bow,
-.exp-item:hover .v-bow {
-  animation: bow 2.2s ease-in-out infinite alternate;
-}
-.in .v-string,
-.exp-item:hover .v-string {
-  animation: string 0.09s linear calc(var(--s) * 0.02s) infinite alternate;
-}
-@keyframes bow {
-  from {
-    transform: translate(-14px, 2.6px);
-  }
-  to {
-    transform: translate(14px, -2.6px);
-  }
-}
-@keyframes string {
-  to {
-    transform: translateX(0.6px);
-  }
-}
-
 /* ── Projects ── */
 #projects .section-wrap {
   padding-bottom: 8px;
@@ -2504,9 +2452,6 @@ main:not(.cs) .section-label::before {
   .exp-mark.mono {
     font-size: 24px;
   }
-  .violin {
-    height: 38px;
-  }
   .project-card-content {
     padding: 28px 24px;
   }
@@ -2705,9 +2650,7 @@ main:not(.cs) .section-label::before {
   .status-band-inner,
   .marquee-track,
   .grade-float,
-  .patch-grid rect,
-  .v-bow,
-  .v-string {
+  .patch-grid rect {
     animation: none !important;
   }
   .dwg .pulse {
