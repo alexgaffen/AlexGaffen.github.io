@@ -1185,6 +1185,18 @@ main:not(.cs) .section-label::before {
   line-height: 1;
   color: var(--text);
 }
+/* McMaster's marks (the crest, and the liver lobule for the Department of Medicine)
+   sit on the university's maroon. */
+.exp-mark.mac {
+  background: #7a003c;
+  border-color: #8e2a55;
+}
+.exp-mark.mac[src$='.svg'] {
+  padding: 5px;
+}
+.exp-item:hover .exp-mark.mac {
+  border-color: #b04a78;
+}
 /* PointClickCare's own pairing: lime lettering on an olive tile. */
 .exp-mark.mono.pcc {
   background: #435030;
