@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A liver lobule, as seen down the microscope: a hexagon of hepatocyte plates
+       radiating from the central vein, with a portal triad at each corner. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 7 53.65 19.5v25L32 57 10.35 44.5v-25Z" stroke="#fcba3d" stroke-width="2.6"/>
+    <g stroke="#fcba3d" stroke-opacity="0.7" stroke-width="1.6">
+      <path d="M32 26.5V12.5M36.76 29.25l12.13-7M36.76 34.75l12.13 7M32 37.5v14M27.24 34.75l-12.13 7M27.24 29.25l-12.13-7"/>
+      <path d="M34.6 27.3 41.2 16.6M37.4 32h12.5M34.6 36.7l6.6 10.7M29.4 36.7l-6.6 10.7M26.6 32H14.1M29.4 27.3 22.8 16.6"/>
+    </g>
+    <circle cx="32" cy="32" r="5" stroke="#fcba3d" stroke-width="2.4"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="32" cy="7" r="2.6"/><circle cx="53.65" cy="19.5" r="2.6"/><circle cx="53.65" cy="44.5" r="2.6"/>
+    <circle cx="32" cy="57" r="2.6"/><circle cx="10.35" cy="44.5" r="2.6"/><circle cx="10.35" cy="19.5" r="2.6"/>
+  </g>
+</svg>

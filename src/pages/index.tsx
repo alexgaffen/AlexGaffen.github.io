@@ -27,7 +27,7 @@ const BAND = [
   ['2022-09', 'mcmaster', 'Honours Computer Science Co-op', 'running'],
 ] as const;
 
-type Mark = { img: string } | { mono: string; tone?: string };
+type Mark = { img: string; tone?: string } | { mono: string; tone?: string };
 
 interface Job {
   company: string;
@@ -48,7 +48,7 @@ const EXPERIENCE: Job[] = [
     badge: 'Incoming',
     mark: { mono: 'PCC', tone: 'pcc' },
     bullets: [
-      'Will work on site reliability for PointClickCare’s cloud health-record platform, used across long-term and post-acute care.',
+      'Will work on site reliability for PointClickCare’s cloud health-record platform, the leading platform for long-term and post-acute care across North America.',
       'Will troubleshoot incidents that affect the platform’s availability and trace them to their root causes.',
       'Will automate manual processes and streamline workflows to cut operational toil.',
       'Will work with software engineering, SRE, architecture and SaaS operations teams on Azure, Kubernetes and CI/CD.',
@@ -72,7 +72,7 @@ const EXPERIENCE: Job[] = [
     where: 'Hamilton, ON',
     role: 'Biomedical ML Research Engineer',
     date: 'Jan 2026 – May 2026',
-    mark: { img: '/assets/mcmaster.png' },
+    mark: { img: '/assets/logos/medicine.svg', tone: 'mac' },
     bullets: [
       'First author on a manuscript in preparation for an AI clinical tool: a patch-based medical imaging pipeline with VGG16 feature extraction and FCM clustering that quantifies and stages liver fibrosis.',
       'Engineered a rate-of-change descent thresholding algorithm with automated brightness normalization, halving the margin of error on fibrosis quantification, plus a human-in-the-loop editor for pathologists.',
@@ -269,7 +269,10 @@ function Diagram() {
 }
 
 function JobMark({ mark }: { mark: Mark }) {
-  if ('img' in mark) return <img className="exp-mark" src={mark.img} alt="" width="72" height="72" loading="lazy" />;
+  if ('img' in mark)
+    return (
+      <img className={`exp-mark${mark.tone ? ` ${mark.tone}` : ''}`} src={mark.img} alt="" width="72" height="72" loading="lazy" />
+    );
   return (
     <span className={`exp-mark mono${mark.tone ? ` ${mark.tone}` : ''}`} aria-hidden="true">
       {mark.mono}
@@ -479,7 +482,7 @@ function Body() {
               ))}
               <article className="exp-item reveal">
                 <div className="exp-company-col">
-                  <img className="exp-mark" src="/assets/mcmaster.png" alt="" width="72" height="72" loading="lazy" />
+                  <img className="exp-mark mac" src="/assets/logos/mcmaster.png" alt="" width="72" height="72" loading="lazy" />
                   <div>
                     <div className="exp-company">McMaster University</div>
                     <div className="exp-company-sub">Hamilton, ON</div>
