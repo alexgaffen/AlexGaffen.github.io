@@ -205,7 +205,7 @@ const GROUPS = [
   ['PROD', POD_X - 4.5, POD_X + 4.5],
 ] as const;
 const late = (d: string) => ({ ['--d' as string]: d });
-/** When each group's dimension line appears: with the first thing it spans. */
+/** When each group's label appears: with the first thing it names. */
 const GROUP_AT = [T.layer(0), T.stage(0), T.pods];
 
 function Diagram() {
@@ -272,7 +272,6 @@ function Diagram() {
         ))}
         {LX.map((x, l) => (
           <g key={l} className="col-label late" style={late(secs(T.layer(l)))}>
-            <line className="g-dim" x1={pct(x)} x2={pct(x)} y1={pct(91)} y2={pct(94)} />
             <svg x={pct(x)} y="100%" overflow="visible">
               <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
                 {LABELS[l]}
@@ -281,7 +280,6 @@ function Diagram() {
           </g>
         ))}
         <g className="col-label late" style={late(secs(T.pods))}>
-          <line className="g-dim" x1={pct(POD_X)} x2={pct(POD_X)} y1={pct(91)} y2={pct(94)} />
           <svg x={pct(POD_X)} y="100%" overflow="visible">
             <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
               REPLICAS ×{PODS}
@@ -290,14 +288,6 @@ function Diagram() {
         </g>
         {GROUPS.map(([name, a, b], i) => (
           <g key={name} className="dim late" style={late(secs(GROUP_AT[i]))}>
-            <line x1={pct(a)} x2={pct(b)} y1="12" y2="12" />
-            <line x1={pct(a)} x2={pct(a)} y1="7" y2="17" />
-            <line x1={pct(b)} x2={pct(b)} y1="7" y2="17" />
-            {/* A separate dark copy underneath knocks the line out. Outlining the label
-                itself let WebKit paint each letter's outline over its neighbour. */}
-            <text className="knock" x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
-              {name}
-            </text>
             <text x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
               {name}
             </text>
