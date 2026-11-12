@@ -745,9 +745,6 @@ body.portfolio {
     stroke-width: 1.1;
   }
 }
-.dwg .g-dim {
-  stroke: rgba(237, 236, 234, 0.55);
-}
 .dwg .node {
   fill: rgba(8, 8, 8, 0.65);
   stroke: rgba(237, 236, 234, 0.9);
@@ -886,20 +883,14 @@ body.portfolio {
     opacity: 1;
   }
 }
-.dwg .dim line {
-  stroke: rgba(var(--accent-rgb), 0.6);
-  stroke-width: 1;
-}
 .dwg .dim text {
   fill: var(--text);
+  letter-spacing: 0.14em;
 }
-/* Knocks the dimension line out behind the label (drawn first, under it). */
-.dwg .dim .knock {
-  /* Over the photo: a soft dark break in the line rather than a solid patch. */
-  fill: rgba(8, 8, 8, 0.55);
-  stroke: rgba(8, 8, 8, 0.55);
-  stroke-width: 7px;
-  stroke-linejoin: round;
+/* Labels sit straight on the photo: a soft shadow keeps them readable. */
+.dwg .dim text,
+.dwg .t-label {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85));
 }
 .dwg .pulse {
   fill: var(--accent);
