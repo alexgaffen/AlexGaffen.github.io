@@ -689,27 +689,45 @@ body.portfolio {
   container-type: size;
 }
 /* Absolute so its % height resolves against the box even when the box is only
-   stretched by flex (phones). Capped on tall, narrow boxes and centred there. */
+   stretched by flex (phones). Small bands above and below leave the labels room on
+   short figures (they hang off the outer rows of nodes). Capped on tall, narrow boxes
+   and centred there. */
 .dwg > svg {
+  --band-t: 26px;
+  --band-b: 12px;
   position: absolute;
-  inset: 0;
+  inset: var(--band-t) 0 var(--band-b);
   margin: auto 0;
   width: 100%;
-  height: min(100%, 90cqw);
+  height: min(calc(100% - var(--band-t) - var(--band-b)), 90cqw);
 }
 .dwg svg {
   display: block;
   overflow: visible;
 }
-.dwg text {
+.dwg text,
+.dwg .lbl {
   font-family: var(--mono);
   font-size: max(11px, calc(var(--ui) * 0.9));
+}
+.dwg text {
   fill: var(--muted);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+}
+/* Each label's accent underline draws itself in just after the label appears. */
+.dwg .lbl-u {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: butt;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.55));
+  animation: band-draw calc(0.5s * var(--pace)) var(--ease-out) calc(var(--t0) + (var(--d) + 0.15s) * var(--pace)) forwards;
 }
 /* Stage chips and pods are drawn at a fixed size, so they scale as a whole. */
 .dwg .stage text {
   font-size: 10px;
+  letter-spacing: 0.08em;
 }
 .dwg .stage,
 .dwg .pod {
@@ -885,7 +903,6 @@ body.portfolio {
 }
 .dwg .dim text {
   fill: var(--text);
-  letter-spacing: 0.14em;
 }
 /* Labels sit straight on the photo: a soft shadow keeps them readable. */
 .dwg .dim text,
@@ -917,11 +934,9 @@ body.portfolio {
   .dwg .col-label {
     display: none;
   }
-  /* The bottom ~16% of the figure is the hidden labels' band: draw it that much
-     taller from the top, so the drawing sits evenly in its box instead of over a gap. */
+  /* No bottom labels here, so no band for them. */
   .dwg > svg {
-    margin: 0;
-    height: calc(min(100%, 90cqw) * 1.19);
+    --band-b: 0px;
   }
   .dwg .pod {
     transform: scale(calc(var(--k) * 0.75));
