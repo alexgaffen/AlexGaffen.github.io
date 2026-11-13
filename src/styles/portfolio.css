@@ -693,8 +693,8 @@ body.portfolio {
    short figures (they hang off the outer rows of nodes). Capped on tall, narrow boxes
    and centred there. */
 .dwg > svg {
-  --band-t: 26px;
-  --band-b: 12px;
+  --band-t: 34px;
+  --band-b: 16px;
   position: absolute;
   inset: var(--band-t) 0 var(--band-b);
   margin: auto 0;
@@ -710,6 +710,22 @@ body.portfolio {
   font-family: var(--mono);
   font-size: max(11px, calc(var(--ui) * 0.9));
 }
+/* Figure tags: bold, bright text on a dark chip, the accent rule along its bottom. */
+.dwg .lbl {
+  font-size: max(11.5px, calc(var(--ui) * 0.98));
+}
+.dwg .lbl text {
+  font-weight: 700;
+  fill: var(--text);
+}
+.dwg .lbl-bottom text {
+  fill: #cfcec7;
+}
+.dwg .lbl-chip {
+  fill: rgba(8, 8, 8, 0.82);
+  stroke: rgba(237, 236, 234, 0.12);
+  stroke-width: 1;
+}
 .dwg text {
   fill: var(--muted);
   letter-spacing: 0.12em;
@@ -717,7 +733,7 @@ body.portfolio {
 /* Each label's accent underline draws itself in just after the label appears. */
 .dwg .lbl-u {
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 2;
   stroke-linecap: butt;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
@@ -733,9 +749,7 @@ body.portfolio {
 .dwg .pod {
   transform: scale(var(--k));
 }
-.dwg .t-label {
-  fill: var(--faint);
-}
+
 .dwg path,
 .dwg line {
   fill: none;
@@ -901,14 +915,7 @@ body.portfolio {
     opacity: 1;
   }
 }
-.dwg .dim text {
-  fill: var(--text);
-}
-/* Labels sit straight on the photo: a soft shadow keeps them readable. */
-.dwg .dim text,
-.dwg .t-label {
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85));
-}
+
 .dwg .pulse {
   fill: var(--accent);
   filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.95));

@@ -209,33 +209,41 @@ const late = (d: string) => ({ ['--d' as string]: d });
 /** When each group's label appears: with the first thing it names. */
 const GROUP_AT = [T.layer(0), T.stage(0), T.pods];
 
-/* Figure labels hang a fixed distance (GAP px) off the drawing's top and bottom rows of
-   nodes, not off the box edges, so the space between a label and what it names is the
-   same at every size. Each gets an accent underline exactly as wide as the word: the
-   font is monospaced, so the width is the character count times its advance, plus the
-   tracking between letters. */
+/* Figure labels are small tags: bold text on a dark chip with an accent rule along its
+   bottom edge, so they read on any part of the photo. They hang a fixed distance (GAP
+   px) off the drawing's top and bottom rows of nodes, not off the box edges, so the
+   space between a tag and what it names is the same at every size. The font is
+   monospaced, so a word's width is its character count times the advance, plus the
+   tracking between letters; the chip is that plus its padding. All in em, so the tags
+   scale with the label size. */
 const ADVANCE = 0.612;
 const TRACKING = 0.12;
+const PAD_X = 0.6;
+const CHIP_H = 1.8;
+/** Capital height: the text's baseline sits this far under the middle of the chip. */
+const CAP = 0.72;
 const GAP = 14;
 const NODE_R = 6;
 const ROW_TOP = nodeY(Math.max(...LAYERS), 0);
 const ROW_BOTTOM = nodeY(Math.max(...LAYERS), Math.max(...LAYERS) - 1);
+const em = (v: number) => `${+v.toFixed(3)}em`;
 function Label({ text, x, at }: { text: string; x: number; at: 'top' | 'bottom' }) {
   const n = [...text].length;
-  const w = n * ADVANCE + (n - 1) * TRACKING;
+  const w = n * ADVANCE + (n - 1) * TRACKING + 2 * PAD_X;
   // Tracking also follows the last letter, so the ink sits that much left of the anchor.
   const c = -TRACKING / 2;
-  const u = { className: 'lbl-u', pathLength: 1, x1: `${(c - w / 2).toFixed(3)}em`, x2: `${(c + w / 2).toFixed(3)}em` };
   const top = at === 'top';
-  // Above: underline GAP over the top nodes, words 6px over that. Below: capitals start
-  // GAP under the bottom nodes (0.72em is the capital height), underline 6px under them.
+  // The chip's top edge, relative to the anchor GAP off the outer node row.
+  const y0 = top ? -CHIP_H : 0;
+  const base = y0 + CHIP_H / 2 + CAP / 2;
   return (
-    <svg className="lbl" x={pct(x)} y={pct(top ? ROW_TOP : ROW_BOTTOM)} overflow="visible">
+    <svg className={`lbl ${top ? 'lbl-top' : 'lbl-bottom'}`} x={pct(x)} y={pct(top ? ROW_TOP : ROW_BOTTOM)} overflow="visible">
       <g transform={`translate(0 ${top ? -(NODE_R + GAP) : NODE_R + GAP})`}>
-        <text className={top ? undefined : 't-label'} y={top ? -6 : '0.72em'} textAnchor="middle">
+        <rect className="lbl-chip" x={em(c - w / 2)} y={em(y0)} width={em(w)} height={em(CHIP_H)} rx="2" />
+        <text y={em(base)} textAnchor="middle">
           {text}
         </text>
-        <line {...u} y1={top ? 0 : '1.2em'} y2={top ? 0 : '1.2em'} />
+        <line className="lbl-u" pathLength={1} x1={em(c - w / 2)} x2={em(c + w / 2)} y1={em(y0 + CHIP_H)} y2={em(y0 + CHIP_H)} />
       </g>
     </svg>
   );
