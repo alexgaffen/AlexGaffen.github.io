@@ -45,6 +45,7 @@ const EXPERIENCE: Job[] = [
     company: 'PointClickCare',
     where: 'Mississauga, ON',
     role: 'Process Engineer · 4-month co-op',
+    date: 'Jan 2027 – Apr 2027',
     badge: 'Incoming',
     mark: { mono: 'PCC', tone: 'pcc' },
     bullets: [
@@ -208,6 +209,38 @@ const late = (d: string) => ({ ['--d' as string]: d });
 /** When each group's label appears: with the first thing it names. */
 const GROUP_AT = [T.layer(0), T.stage(0), T.pods];
 
+/* Figure labels hang a fixed distance (GAP px) off the drawing's top and bottom rows of
+   nodes, not off the box edges, so the space between a label and what it names is the
+   same at every size. Each gets an accent underline exactly as wide as the word: the
+   font is monospaced, so the width is the character count times its advance, plus the
+   tracking between letters. */
+const ADVANCE = 0.612;
+const TRACKING = 0.12;
+const GAP = 14;
+const NODE_R = 6;
+const ROW_TOP = nodeY(Math.max(...LAYERS), 0);
+const ROW_BOTTOM = nodeY(Math.max(...LAYERS), Math.max(...LAYERS) - 1);
+function Label({ text, x, at }: { text: string; x: number; at: 'top' | 'bottom' }) {
+  const n = [...text].length;
+  const w = n * ADVANCE + (n - 1) * TRACKING;
+  // Tracking also follows the last letter, so the ink sits that much left of the anchor.
+  const c = -TRACKING / 2;
+  const u = { className: 'lbl-u', pathLength: 1, x1: `${(c - w / 2).toFixed(3)}em`, x2: `${(c + w / 2).toFixed(3)}em` };
+  const top = at === 'top';
+  // Above: underline GAP over the top nodes, words 6px over that. Below: capitals start
+  // GAP under the bottom nodes (0.72em is the capital height), underline 6px under them.
+  return (
+    <svg className="lbl" x={pct(x)} y={pct(top ? ROW_TOP : ROW_BOTTOM)} overflow="visible">
+      <g transform={`translate(0 ${top ? -(NODE_R + GAP) : NODE_R + GAP})`}>
+        <text className={top ? undefined : 't-label'} y={top ? -6 : '0.72em'} textAnchor="middle">
+          {text}
+        </text>
+        <line {...u} y1={top ? 0 : '1.2em'} y2={top ? 0 : '1.2em'} />
+      </g>
+    </svg>
+  );
+}
+
 function Diagram() {
   return (
     <figure className="dwg" aria-hidden="true">
@@ -272,25 +305,15 @@ function Diagram() {
         ))}
         {LX.map((x, l) => (
           <g key={l} className="col-label late" style={late(secs(T.layer(l)))}>
-            <svg x={pct(x)} y="100%" overflow="visible">
-              <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
-                {LABELS[l]}
-              </text>
-            </svg>
+            <Label text={LABELS[l]} x={x} at="bottom" />
           </g>
         ))}
         <g className="col-label late" style={late(secs(T.pods))}>
-          <svg x={pct(POD_X)} y="100%" overflow="visible">
-            <text className="t-label" y="-2" textAnchor="middle" fontSize="9">
-              REPLICAS ×{PODS}
-            </text>
-          </svg>
+          <Label text={`REPLICAS ×${PODS}`} x={POD_X} at="bottom" />
         </g>
         {GROUPS.map(([name, a, b], i) => (
           <g key={name} className="dim late" style={late(secs(GROUP_AT[i]))}>
-            <text x={pct((a + b) / 2)} y="15" textAnchor="middle" fontSize="9">
-              {name}
-            </text>
+            <Label text={name} x={(a + b) / 2} at="top" />
           </g>
         ))}
         {/* A line sweeps along with the signal, right edge to edge. */}
