@@ -1739,7 +1739,7 @@ main:not(.cs) .section-label::before {
 .about-body {
   padding: 80px 48px 0;
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 224px 1fr;
   gap: 80px;
   align-items: start;
 }
@@ -1748,7 +1748,7 @@ main:not(.cs) .section-label::before {
 }
 .about-headshot {
   width: 100%;
-  height: 440px;
+  height: 308px;
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -2515,7 +2515,7 @@ main:not(.cs) .section-label::before {
   }
   /* Same 320:440 frame (so the same crop) as desktop, just smaller. */
   .about-headshot {
-    width: min(260px, 70vw);
+    width: min(182px, 49vw);
     height: auto;
     aspect-ratio: 320 / 440;
     margin: 0 auto;
