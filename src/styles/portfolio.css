@@ -1739,7 +1739,7 @@ main:not(.cs) .section-label::before {
 .about-body {
   padding: 80px 48px 0;
   display: grid;
-  grid-template-columns: 224px 1fr;
+  grid-template-columns: 288px 1fr;
   gap: 80px;
   align-items: start;
 }
@@ -1748,11 +1748,12 @@ main:not(.cs) .section-label::before {
 }
 .about-headshot {
   width: 100%;
-  height: 308px;
+  aspect-ratio: 1;
   object-fit: cover;
-  object-position: center top;
+  /* Zoom to head and shoulders, LinkedIn-style; without object-view-box support it's the full-width crop. */
+  object-view-box: inset(22.2% 10% 20.4% 10%);
   display: block;
-  border-radius: 3px;
+  border-radius: 50%;
   filter: grayscale(12%) brightness(0.9) contrast(1.05);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04),
     0 0 40px rgba(var(--accent-rgb), 0.1);
@@ -2513,11 +2514,8 @@ main:not(.cs) .section-label::before {
     gap: 40px;
     padding: 56px 20px 0;
   }
-  /* Same 320:440 frame (so the same crop) as desktop, just smaller. */
   .about-headshot {
-    width: min(182px, 49vw);
-    height: auto;
-    aspect-ratio: 320 / 440;
+    width: min(240px, 65vw);
     margin: 0 auto;
   }
   .honours {

@@ -650,7 +650,7 @@ function Body() {
           </div>
           <div className="about-body">
             <div className="about-image-col reveal">
-              <img className="about-headshot" src="/assets/frontheadshot.jpg" alt="Alex Gaffen" width="224" height="308" loading="lazy" />
+              <img className="about-headshot" src="/assets/frontheadshot.jpg" alt="Alex Gaffen" width="288" height="288" loading="lazy" />
             </div>
             <div className="about-text reveal">
               <p>
