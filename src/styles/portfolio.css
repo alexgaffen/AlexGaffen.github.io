@@ -1743,25 +1743,32 @@ main:not(.cs) .section-label::before {
   gap: 80px;
   align-items: start;
 }
+/* Circle crop of the head and shoulders (LinkedIn-style). The photo is oversized and offset inside the
+   clipping circle, so it works in every browser. 1.25 = zoom on the 1836x2560 photo; the margins place the
+   crop (10% in from the left, 22.2% down), as percentages of the circle's width. */
 .about-image-col {
   position: relative;
-}
-.about-headshot {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  /* Zoom to head and shoulders, LinkedIn-style; without object-view-box support it's the full-width crop. */
-  object-view-box: inset(22.2% 10% 20.4% 10%);
-  display: block;
+  overflow: hidden;
   border-radius: 50%;
-  filter: grayscale(12%) brightness(0.9) contrast(1.05);
+  aspect-ratio: 1;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04),
     0 0 40px rgba(var(--accent-rgb), 0.1);
-  transition: filter 0.5s, transform 0.5s var(--ease-out);
+  transition: transform 0.5s var(--ease-out);
 }
-.about-headshot:hover {
-  filter: none;
+.about-image-col:hover {
   transform: scale(1.015) translateY(-2px);
+}
+.about-headshot {
+  display: block;
+  width: 125%;
+  height: auto;
+  max-width: none;
+  margin: -38.7% 0 0 -12.5%;
+  filter: grayscale(12%) brightness(0.9) contrast(1.05);
+  transition: filter 0.5s;
+}
+.about-image-col:hover .about-headshot {
+  filter: none;
 }
 .about-text {
   font-size: clamp(16px, 1.25vw, 19px);
@@ -2514,7 +2521,7 @@ main:not(.cs) .section-label::before {
     gap: 40px;
     padding: 56px 20px 0;
   }
-  .about-headshot {
+  .about-image-col {
     width: min(240px, 65vw);
     margin: 0 auto;
   }
