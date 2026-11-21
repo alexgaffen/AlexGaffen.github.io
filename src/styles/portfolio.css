@@ -1229,10 +1229,24 @@ body.portfolio {
   line-height: 1.1;
   color: #f0efec;
   margin-bottom: 56px;
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 4px;
-  text-underline-offset: 0.14em;
+  /* A highlighter stroke behind the lower half of the lettering. */
+  width: fit-content;
+  background: linear-gradient(
+      100deg,
+      transparent 0.4em,
+      rgba(var(--accent-rgb), 0.5) 0.4em calc(100% - 0.4em),
+      transparent calc(100% - 0.4em)
+    )
+    0 72% / 100% 30% no-repeat;
+}
+/* ...swept in left to right once the title scrolls into view. */
+.reveal-on .section-title.reveal {
+  background-size: 0% 30%;
+  transition: opacity 0.8s ease, transform 0.9s var(--ease-out), filter 0.8s ease,
+    background-size 0.9s var(--ease-out) 0.35s;
+}
+.reveal-on .section-title.reveal.in {
+  background-size: 100% 30%;
 }
 #experience,
 #projects,
