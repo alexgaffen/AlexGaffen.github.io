@@ -1221,17 +1221,6 @@ body.portfolio {
   align-items: center;
   gap: 16px;
 }
-.section-label::before {
-  content: '//';
-  color: var(--accent);
-}
-main:not(.cs) {
-  counter-reset: sec;
-}
-main:not(.cs) .section-label::before {
-  counter-increment: sec;
-  content: counter(sec, decimal-leading-zero) ' //';
-}
 .section-title {
   font-family: var(--display);
   font-weight: 700;
@@ -1240,6 +1229,10 @@ main:not(.cs) .section-label::before {
   line-height: 1.1;
   color: #f0efec;
   margin-bottom: 56px;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 0.14em;
 }
 #experience,
 #projects,

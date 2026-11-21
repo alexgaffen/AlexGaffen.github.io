@@ -523,7 +523,6 @@ function Body() {
         <section id="experience">
           <div className="section-wrap">
             <div className="exp-header">
-              <p className="section-label">Experience</p>
               <h2 className="section-title reveal">Work &amp; Education</h2>
             </div>
             <div className="exp-list">
@@ -579,7 +578,6 @@ function Body() {
 
         <section id="projects">
           <div className="section-wrap">
-            <p className="section-label">Projects</p>
             <h2 className="section-title reveal">Selected Work</h2>
           </div>
           <div className="projects-grid">
@@ -673,7 +671,6 @@ function Body() {
 
         <section id="honours">
           <div className="section-wrap">
-            <p className="section-label">Honours &amp; Awards</p>
             <h2 className="section-title reveal">Recognition</h2>
             <div className="honours">
               <article className="honour feature reveal">
@@ -724,7 +721,6 @@ function Body() {
 
         <section id="coursework">
           <div className="section-wrap">
-            <p className="section-label">Coursework</p>
             <h2 className="section-title reveal">Top Marks</h2>
             <div className="grades" id="grades">
               {COURSES.map((c, i) => (
@@ -748,7 +744,6 @@ function Body() {
 
         <section id="skills">
           <div className="section-wrap">
-            <p className="section-label">Technical Skills</p>
             <h2 className="section-title reveal">Toolkit</h2>
             <div className="skills-grid reveal">
               {SKILLS.map(([name, type, used]) => (
@@ -773,7 +768,6 @@ function Body() {
           <div className="section-wrap">
             <div className="ph-head">
               <div>
-                <p className="section-label">Photography</p>
                 <h2 className="section-title reveal">Through My Lens</h2>
               </div>
               <div className="ph-filters" role="group" aria-label="Filter photos by place">
@@ -829,7 +823,6 @@ function Body() {
 
         <section id="contact">
           <div className="section-wrap contact-wrap">
-            <p className="section-label">Contact</p>
             <div className="contact-grid">
               <h2 className="contact-headline reveal">
                 Let’s build<span className="stop">.</span>
