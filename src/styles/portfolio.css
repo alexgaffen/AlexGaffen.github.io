@@ -1343,7 +1343,7 @@ main:not(.cs) .section-label::before {
   display: grid;
   place-items: center;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 0;
   border: 1px solid var(--border);
   padding: 8px;
   background: #121212;
