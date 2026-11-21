@@ -331,7 +331,7 @@ function Diagram() {
   );
 }
 
-/** A section heading that decodes in like console output, a thin cursor riding its end. */
+/** A section heading that decodes in like console output; the cursor after it settles into a full stop. */
 function SectionTitle({ children }: { children: string }) {
   return (
     <h2 className="section-title reveal">

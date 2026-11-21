@@ -1230,29 +1230,45 @@ body.portfolio {
   color: #f0efec;
   margin-bottom: 56px;
 }
-/* A thin accent cursor rides the end of the title while it decodes, blinks once
-   when the text lands, then fades. Hidden unless the reveal script is running. */
+/* The title ends on the accent full stop, like "Let's build." and the hero's surname.
+   An empty inline-block sits on the baseline, so the stop and the cursor share it. */
 .st-caret {
   display: inline-block;
-  width: 0.06em;
-  height: 0.74em;
-  margin-left: 0.08em;
+  width: 0.16em;
+  height: 0.16em;
+  margin-left: 0.05em;
+  border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
-  opacity: 0;
+  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.45);
 }
+/* While the text decodes, the stop is a glowing block cursor... */
 .reveal-on .section-title:not(.done) .st-caret {
-  opacity: 1;
+  width: 0.5em;
+  height: 0.74em;
+  margin-left: 0.1em;
+  border-radius: 0;
+  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
 }
+/* ...which blinks twice once the text lands, then rounds off into the stop. */
 .reveal-on .section-title.done .st-caret {
-  animation: st-out 0.9s ease-out;
+  animation: st-settle 1.1s var(--ease-out);
 }
-@keyframes st-out {
+@keyframes st-settle {
   0%,
-  45% {
+  62% {
+    width: 0.5em;
+    height: 0.74em;
+    margin-left: 0.1em;
+    border-radius: 0;
+    box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
+  }
+  0%,
+  30%,
+  62% {
     opacity: 1;
   }
-  20% {
+  15%,
+  46% {
     opacity: 0;
   }
 }

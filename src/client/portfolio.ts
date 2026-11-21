@@ -65,7 +65,7 @@ function initReveals(): void {
         if (!e.isIntersecting) continue;
         e.target.classList.add('in');
         e.target.querySelectorAll<HTMLElement>('[data-count]').forEach(countUp);
-        // Section titles decode in, then their cursor blinks out.
+        // Section titles decode in, then their cursor settles into a full stop.
         const text = e.target.querySelector<HTMLElement>('.st-text');
         if (text) scramble(text, 150, 42, () => e.target.classList.add('done'));
         io.unobserve(e.target);
