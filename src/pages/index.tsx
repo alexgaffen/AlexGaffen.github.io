@@ -331,6 +331,16 @@ function Diagram() {
   );
 }
 
+/** A section heading that decodes in like console output; the cursor after it settles into a full stop. */
+function SectionTitle({ children }: { children: string }) {
+  return (
+    <h2 className="section-title reveal">
+      <span className="st-text">{children}</span>
+      <span className="st-caret" aria-hidden="true" />
+    </h2>
+  );
+}
+
 function JobMark({ mark }: { mark: Mark }) {
   if ('img' in mark)
     return (
@@ -523,7 +533,7 @@ function Body() {
         <section id="experience">
           <div className="section-wrap">
             <div className="exp-header">
-              <h2 className="section-title reveal">Work &amp; Education</h2>
+              <SectionTitle>{'Work & Education'}</SectionTitle>
             </div>
             <div className="exp-list">
               {EXPERIENCE.map((e) => (
@@ -578,7 +588,7 @@ function Body() {
 
         <section id="projects">
           <div className="section-wrap">
-            <h2 className="section-title reveal">Selected Work</h2>
+            <SectionTitle>Selected Work</SectionTitle>
           </div>
           <div className="projects-grid">
             <a className="project-card reveal" href="/mock-market">
@@ -671,7 +681,7 @@ function Body() {
 
         <section id="honours">
           <div className="section-wrap">
-            <h2 className="section-title reveal">Recognition</h2>
+            <SectionTitle>Recognition</SectionTitle>
             <div className="honours">
               <article className="honour feature reveal">
                 <div className="honour-amount">
@@ -721,7 +731,7 @@ function Body() {
 
         <section id="coursework">
           <div className="section-wrap">
-            <h2 className="section-title reveal">Top Marks</h2>
+            <SectionTitle>Top Marks</SectionTitle>
             <div className="grades" id="grades">
               {COURSES.map((c, i) => (
                 <div
@@ -744,7 +754,7 @@ function Body() {
 
         <section id="skills">
           <div className="section-wrap">
-            <h2 className="section-title reveal">Toolkit</h2>
+            <SectionTitle>Toolkit</SectionTitle>
             <div className="skills-grid reveal">
               {SKILLS.map(([name, type, used]) => (
                 <div key={name} className="skill-cell">
@@ -768,7 +778,7 @@ function Body() {
           <div className="section-wrap">
             <div className="ph-head">
               <div>
-                <h2 className="section-title reveal">Through My Lens</h2>
+                <SectionTitle>Through My Lens</SectionTitle>
               </div>
               <div className="ph-filters" role="group" aria-label="Filter photos by place">
                 {FILTERS.map((f, i) => (

@@ -1229,24 +1229,45 @@ body.portfolio {
   line-height: 1.1;
   color: #f0efec;
   margin-bottom: 56px;
-  /* A highlighter stroke behind the lower half of the lettering. */
-  width: fit-content;
-  background: linear-gradient(
-      100deg,
-      transparent 0.4em,
-      rgba(var(--accent-rgb), 0.5) 0.4em calc(100% - 0.4em),
-      transparent calc(100% - 0.4em)
-    )
-    0 72% / 100% 30% no-repeat;
 }
-/* ...swept in left to right once the title scrolls into view. */
-.reveal-on .section-title.reveal {
-  background-size: 0% 30%;
-  transition: opacity 0.8s ease, transform 0.9s var(--ease-out), filter 0.8s ease,
-    background-size 0.9s var(--ease-out) 0.35s;
+/* The title ends on the accent full stop, like "Let's build." and the hero's surname.
+   An empty inline-block sits on the baseline, so the stop and the cursor share it. */
+.st-caret {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin-left: 0.05em;
+  background: var(--accent);
+  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.45);
 }
-.reveal-on .section-title.reveal.in {
-  background-size: 100% 30%;
+/* While the text decodes, the stop is a glowing block cursor... */
+.reveal-on .section-title:not(.done) .st-caret {
+  width: 0.5em;
+  height: 0.74em;
+  margin-left: 0.1em;
+  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
+}
+/* ...which blinks twice once the text lands, then collapses into the stop. */
+.reveal-on .section-title.done .st-caret {
+  animation: st-settle 1.1s var(--ease-out);
+}
+@keyframes st-settle {
+  0%,
+  62% {
+    width: 0.5em;
+    height: 0.74em;
+    margin-left: 0.1em;
+    box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
+  }
+  0%,
+  30%,
+  62% {
+    opacity: 1;
+  }
+  15%,
+  46% {
+    opacity: 0;
+  }
 }
 #experience,
 #projects,
@@ -1265,7 +1286,6 @@ body.portfolio {
   transform: translateY(28px);
   transition: opacity 0.8s ease, transform 0.9s var(--ease-out), filter 0.8s ease;
 }
-.reveal-on .section-title.reveal,
 .reveal-on .contact-headline.reveal {
   filter: blur(10px);
   transform: translateY(0.35em);

@@ -27,7 +27,7 @@ function initClock(): void {
 }
 
 /** Plotter-style text: random glyphs settle into the real text left to right. */
-function scramble(el: HTMLElement, delay: number, step = 34): void {
+function scramble(el: HTMLElement, delay: number, step = 34, done?: () => void): void {
   const final = el.textContent ?? '';
   const frames = 16;
   let f = 0;
@@ -36,7 +36,10 @@ function scramble(el: HTMLElement, delay: number, step = 34): void {
       .map((c, i) => (c === ' ' || i < (f / frames) * final.length ? c : GLYPHS[(Math.random() * GLYPHS.length) | 0]))
       .join('');
     if (++f <= frames) setTimeout(tick, step);
-    else el.textContent = final;
+    else {
+      el.textContent = final;
+      done?.();
+    }
   }, delay);
 }
 
@@ -62,6 +65,9 @@ function initReveals(): void {
         if (!e.isIntersecting) continue;
         e.target.classList.add('in');
         e.target.querySelectorAll<HTMLElement>('[data-count]').forEach(countUp);
+        // Section titles decode in, then their cursor settles into a full stop.
+        const text = e.target.querySelector<HTMLElement>('.st-text');
+        if (text) scramble(text, 150, 42, () => e.target.classList.add('done'));
         io.unobserve(e.target);
       }
     },
