@@ -124,6 +124,8 @@ body.portfolio {
   --bg: #080808;
   --surface: #111111;
   --border: #242424;
+  /* Section and row dividers: a warm mid-grey, clearly drawn (liamboone.ca's rule). */
+  --rule: #786f66;
   --accent: #f97316;
   --accent-hi: #fb923c;
   --accent-rgb: 249, 115, 22;
@@ -1230,16 +1232,6 @@ body.portfolio {
   color: #f0efec;
   margin-bottom: 56px;
 }
-/* The title ends on a round accent full stop, like "Let's build." An empty
-   inline-block sits on the baseline. */
-.st-dot {
-  display: inline-block;
-  width: 0.16em;
-  height: 0.16em;
-  margin-left: 0.05em;
-  border-radius: 50%;
-  background: var(--accent);
-}
 #experience,
 #projects,
 #about,
@@ -1248,7 +1240,7 @@ body.portfolio {
 #skills,
 #photos,
 #contact {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--rule);
 }
 
 /* Scroll reveal (only armed once the script runs). Titles un-blur, blocks rise. */
@@ -1291,10 +1283,10 @@ body.portfolio {
   align-items: start;
   gap: 32px;
   padding: 32px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
 }
 .exp-item:first-child {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--rule);
 }
 /* A rail through every logo, like commits on a branch. */
 .exp-item::before {
@@ -2474,7 +2466,7 @@ body.portfolio {
 .foot {
   margin-top: 64px;
   padding-top: 24px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--rule);
   display: flex;
   justify-content: space-between;
   font-family: var(--mono);
