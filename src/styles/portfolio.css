@@ -1230,6 +1230,32 @@ body.portfolio {
   color: #f0efec;
   margin-bottom: 56px;
 }
+/* A thin accent cursor rides the end of the title while it decodes, blinks once
+   when the text lands, then fades. Hidden unless the reveal script is running. */
+.st-caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.74em;
+  margin-left: 0.08em;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
+  opacity: 0;
+}
+.reveal-on .section-title:not(.done) .st-caret {
+  opacity: 1;
+}
+.reveal-on .section-title.done .st-caret {
+  animation: st-out 0.9s ease-out;
+}
+@keyframes st-out {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+}
 #experience,
 #projects,
 #about,
@@ -1247,7 +1273,6 @@ body.portfolio {
   transform: translateY(28px);
   transition: opacity 0.8s ease, transform 0.9s var(--ease-out), filter 0.8s ease;
 }
-.reveal-on .section-title.reveal,
 .reveal-on .contact-headline.reveal {
   filter: blur(10px);
   transform: translateY(0.35em);
