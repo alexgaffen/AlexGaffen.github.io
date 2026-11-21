@@ -331,12 +331,12 @@ function Diagram() {
   );
 }
 
-/** A section heading that decodes in like console output; the cursor after it settles into a full stop. */
+/** A section heading ending on the accent full stop. */
 function SectionTitle({ children }: { children: string }) {
   return (
     <h2 className="section-title reveal">
-      <span className="st-text">{children}</span>
-      <span className="st-caret" aria-hidden="true" />
+      {children}
+      <span className="st-dot" aria-hidden="true" />
     </h2>
   );
 }

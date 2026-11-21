@@ -1230,47 +1230,15 @@ body.portfolio {
   color: #f0efec;
   margin-bottom: 56px;
 }
-/* The title ends on the accent full stop, like "Let's build." and the hero's surname.
-   An empty inline-block sits on the baseline, so the stop and the cursor share it. */
-.st-caret {
+/* The title ends on a round accent full stop, like "Let's build." An empty
+   inline-block sits on the baseline. */
+.st-dot {
   display: inline-block;
   width: 0.16em;
   height: 0.16em;
   margin-left: 0.05em;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.45);
-}
-/* While the text decodes, the stop is a glowing block cursor... */
-.reveal-on .section-title:not(.done) .st-caret {
-  width: 0.5em;
-  height: 0.74em;
-  margin-left: 0.1em;
-  border-radius: 0;
-  box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
-}
-/* ...which blinks twice once the text lands, then rounds off into the stop. */
-.reveal-on .section-title.done .st-caret {
-  animation: st-settle 1.1s var(--ease-out);
-}
-@keyframes st-settle {
-  0%,
-  62% {
-    width: 0.5em;
-    height: 0.74em;
-    margin-left: 0.1em;
-    border-radius: 0;
-    box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.7), 0 0 60px rgba(var(--accent-rgb), 0.3);
-  }
-  0%,
-  30%,
-  62% {
-    opacity: 1;
-  }
-  15%,
-  46% {
-    opacity: 0;
-  }
 }
 #experience,
 #projects,
@@ -1289,6 +1257,7 @@ body.portfolio {
   transform: translateY(28px);
   transition: opacity 0.8s ease, transform 0.9s var(--ease-out), filter 0.8s ease;
 }
+.reveal-on .section-title.reveal,
 .reveal-on .contact-headline.reveal {
   filter: blur(10px);
   transform: translateY(0.35em);
